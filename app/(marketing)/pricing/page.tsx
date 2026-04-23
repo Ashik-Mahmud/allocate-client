@@ -5,6 +5,14 @@ export default function PricingPage() {
       <p className="text-slate-600">
         Keep marketing and growth pages under app/(marketing).
       </p>
+
+      <button className="bg-brand-secondary text-brand-dark font-bold px-4 py-2 rounded-lg">
+        Top Up Credits
+      </button>
+
+      <div className="bg-brand-primary text-white p-4">
+        <h1 className="text-xl font-bold">Allocate Admin</h1>
+      </div>
     </main>
   );
 }

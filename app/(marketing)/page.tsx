@@ -1,6 +1,6 @@
 export default function MarketingLandingPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-50 px-6 text-center">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-50 px-6 text-center ">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
         Allocate Platform
       </p>
