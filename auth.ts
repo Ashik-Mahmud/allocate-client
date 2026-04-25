@@ -7,7 +7,21 @@ const DEFAULT_API_BASE_URL = "http://localhost:4000";
 const ACCESS_TOKEN_REFRESH_BUFFER_SECONDS = 30;
 
 type AuthApiPayload = {
-  user?: { id?: string; email?: string; name?: string; role?: string | null };
+  user?: {
+    id?: string;
+    email?: string;
+    name?: string;
+    role?: string | null;
+    credits?: number | null;
+    unreadNotifications?: number | null;
+    notifications?: Array<{
+      id?: string;
+      title?: string;
+      message?: string;
+      createdAt?: string;
+      read?: boolean;
+    }>;
+  };
   token?: string;
   accessToken?: string;
   refreshToken?: string;
@@ -126,6 +140,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: resolvedEmail,
           name: user?.name ?? "",
           role: normalizeRole(user?.role),
+          credits: typeof user?.credits === "number" ? user.credits : null,
+          unreadNotifications:
+            typeof user?.unreadNotifications === "number" ? user.unreadNotifications : null,
+          notifications: Array.isArray(user?.notifications)
+            ? user.notifications
+                .filter((item) => item && typeof item.title === "string" && item.title.trim().length > 0)
+                .map((item, index) => ({
+                  id: item.id ?? `${resolvedEmail}-${index}`,
+                  title: item.title ?? "Notification",
+                  message: item.message,
+                  createdAt: item.createdAt,
+                  read: item.read,
+                }))
+            : [],
           accessToken: payload.accessToken ?? payload.token ?? null,
           refreshToken: payload.refreshToken ?? null,
           accessTokenExpires: parseJwtExp(payload.accessToken ?? payload.token ?? null),
@@ -139,6 +167,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.accessToken = (user as { accessToken?: string | null }).accessToken ?? null;
         token.refreshToken = (user as { refreshToken?: string | null }).refreshToken ?? null;
         token.role = (user as { role?: string | null }).role ?? null;
+        token.credits = (user as { credits?: number | null }).credits ?? null;
+        token.unreadNotifications =
+          (user as { unreadNotifications?: number | null }).unreadNotifications ?? null;
+        token.notifications =
+          (user as { notifications?: unknown[] }).notifications ?? [];
         token.accessTokenExpires =
           (user as { accessTokenExpires?: number | null }).accessTokenExpires ??
           parseJwtExp((user as { accessToken?: string | null }).accessToken ?? null);
@@ -173,9 +206,42 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as { id?: string; role?: string | null }).id = token.sub ?? undefined;
-        (session.user as { id?: string; role?: string | null }).role =
+        (session.user as {
+          id?: string;
+          role?: string | null;
+          credits?: number | null;
+          unreadNotifications?: number | null;
+          notifications?: unknown[];
+        }).id = token.sub ?? undefined;
+        (session.user as {
+          id?: string;
+          role?: string | null;
+          credits?: number | null;
+          unreadNotifications?: number | null;
+          notifications?: unknown[];
+        }).role =
           (token.role as string | null | undefined) ?? null;
+        (session.user as {
+          id?: string;
+          role?: string | null;
+          credits?: number | null;
+          unreadNotifications?: number | null;
+          notifications?: unknown[];
+        }).credits = (token.credits as number | null | undefined) ?? null;
+        (session.user as {
+          id?: string;
+          role?: string | null;
+          credits?: number | null;
+          unreadNotifications?: number | null;
+          notifications?: unknown[];
+        }).unreadNotifications = (token.unreadNotifications as number | null | undefined) ?? null;
+        (session.user as {
+          id?: string;
+          role?: string | null;
+          credits?: number | null;
+          unreadNotifications?: number | null;
+          notifications?: unknown[];
+        }).notifications = (token.notifications as unknown[] | undefined) ?? [];
       }
 
       (session as { accessToken?: string | null }).accessToken =

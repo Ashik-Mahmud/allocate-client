@@ -37,7 +37,7 @@ export default function RootLayout({
           {`(function(){try{var key='allocate.theme';var stored=localStorage.getItem(key);var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var theme=stored==='light'||stored==='dark'?stored:(prefersDark?'dark':'light');document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.style.colorScheme=theme;}catch(e){}})();`}
         </Script>
         <GlobalBentoBackground />
-        <ThemeToggle />
+       
         <Providers>
           <div className="relative z-10 flex min-h-full flex-col">{children}</div>
         </Providers>

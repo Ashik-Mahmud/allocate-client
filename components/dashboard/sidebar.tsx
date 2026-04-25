@@ -20,6 +20,14 @@ type DashboardUser = {
     name?: string | null;
     email?: string | null;
     role?: AppRole | null;
+    credits?: number | null;
+    unreadNotifications?: number | null;
+    notifications?: Array<{
+        id?: string;
+        title?: string;
+        message?: string;
+        read?: boolean;
+    }>;
 };
 
 type DashboardSidebarProps = {
@@ -113,7 +121,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                 </div>
             </div>
 
-            <aside className="hidden md:block md:sticky md:top-6 md:h-[calc(100vh-3rem)] md:self-start">
+            <aside className="hidden md:block md:sticky  md:h-[calc(100dvh)] md:self-start">
                 <SidebarContent
                     user={user}
                     pathname={pathname}
@@ -141,7 +149,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                     )}
                 >
                     <div className="flex h-full flex-col gap-4 bg-transparent p-4">
-                        <div className="flex items-center justify-between rounded-[1.5rem] border border-slate-200/80 bg-white/95 px-4 py-3 shadow-xl shadow-slate-900/10 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95">
+                        <div className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white/95 px-4 py-3 shadow-xl shadow-slate-900/10 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/95">
                             <div className="min-w-0">
                                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Dashboard</p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">Navigation menu</p>
