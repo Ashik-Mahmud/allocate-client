@@ -4,4 +4,28 @@ export const ROUTES = {
   signIn: "/sign-in",
   signUp: "/sign-up",
   dashboard: "/dashboard",
+  dashboardAdmin: {
+    overview: "/dashboard/overview",
+    users: "/dashboard/users",
+    organizations: "/dashboard/organizations",
+    settings: "/dashboard/settings",
+    subscriptions: "/dashboard/subscriptions",
+  },
+  dashboardOrgAdmin: {
+    bookingManagement: "/dashboard/booking-management",
+    bookingStats: "/dashboard/booking-stats",
+    resourcesManagement: "/dashboard/resources-management",
+    staffManagement: "/dashboard/staff-management",
+  },
+  dashboardStaff: {
+    workQueue: "/dashboard/work-queue",
+    dailyPlan: "/dashboard/daily-plan",
+  },
+  dashboardCommon: {
+    bookingAvailability: "/dashboard/booking-availability",
+    bookings: "/dashboard/bookings",
+    myBookings: "/dashboard/my-bookings",
+    resources: "/dashboard/resources",
+    profile: "/dashboard/profile",
+  },
 } as const;

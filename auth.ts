@@ -1,11 +1,13 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
+import { normalizeRole } from "@/lib/constants/roles";
+
 const DEFAULT_API_BASE_URL = "http://localhost:4000";
 const ACCESS_TOKEN_REFRESH_BUFFER_SECONDS = 30;
 
 type AuthApiPayload = {
-  user?: { id?: string; email?: string; name?: string };
+  user?: { id?: string; email?: string; name?: string; role?: string | null };
   token?: string;
   accessToken?: string;
   refreshToken?: string;
@@ -123,6 +125,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user?.id ?? resolvedEmail,
           email: resolvedEmail,
           name: user?.name ?? "",
+          role: normalizeRole(user?.role),
           accessToken: payload.accessToken ?? payload.token ?? null,
           refreshToken: payload.refreshToken ?? null,
           accessTokenExpires: parseJwtExp(payload.accessToken ?? payload.token ?? null),
@@ -135,6 +138,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.accessToken = (user as { accessToken?: string | null }).accessToken ?? null;
         token.refreshToken = (user as { refreshToken?: string | null }).refreshToken ?? null;
+        token.role = (user as { role?: string | null }).role ?? null;
         token.accessTokenExpires =
           (user as { accessTokenExpires?: number | null }).accessTokenExpires ??
           parseJwtExp((user as { accessToken?: string | null }).accessToken ?? null);
@@ -169,7 +173,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as { id?: string }).id = token.sub ?? undefined;
+        (session.user as { id?: string; role?: string | null }).id = token.sub ?? undefined;
+        (session.user as { id?: string; role?: string | null }).role =
+          (token.role as string | null | undefined) ?? null;
       }
 
       (session as { accessToken?: string | null }).accessToken =

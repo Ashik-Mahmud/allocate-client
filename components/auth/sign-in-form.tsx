@@ -22,7 +22,7 @@ const SignInForm = (props: Props) => {
 
     const onSubmit = handleSubmit(async (data) => {
         await loginMutation.mutateAsync(data);
-        // router.push(ROUTES.dashboard);
+        router.push(ROUTES.dashboard);
     })
 
     const errorMessage =

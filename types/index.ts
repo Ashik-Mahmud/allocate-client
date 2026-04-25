@@ -1,3 +1,5 @@
+import type { AppRole } from "@/lib/constants/roles";
+
 export interface ApiErrorBody {
 	message?: string;
 	error?: string;
@@ -8,6 +10,7 @@ export interface AuthUser {
 	id?: string;
 	email: string;
 	name?: string;
+	role?: AppRole | null;
 }
 
 export interface RegisterPayload {
