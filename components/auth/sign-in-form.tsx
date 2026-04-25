@@ -1,14 +1,17 @@
 "use client";
 import React from 'react'
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form'
 import PasswordField from '../ui/passwordField';
 import { Button } from '../ui/button';
-import { useRegisterMutation, useSignInMutation } from '@/features/auth';
+import { useSignInMutation } from '@/features/auth';
+import { ROUTES } from '@/lib/constants/routes';
+import { getApiErrorMessage } from '@/lib/services';
 
 type Props = {}
 
 const SignInForm = (props: Props) => {
-
+    const router = useRouter();
     const loginMutation = useSignInMutation();
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -17,9 +20,14 @@ const SignInForm = (props: Props) => {
         }
     })
 
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
+    const onSubmit = handleSubmit(async (data) => {
+        await loginMutation.mutateAsync(data);
+        // router.push(ROUTES.dashboard);
     })
+
+    const errorMessage =
+        loginMutation.error &&
+        getApiErrorMessage(loginMutation.error, "Unable to sign in right now.");
 
     return (
         <div>
@@ -33,6 +41,11 @@ const SignInForm = (props: Props) => {
                     </p>
 
                 </div>
+                {errorMessage && (
+                    <p className="text-sm text-red-500">
+                        {errorMessage}
+                    </p>
+                )}
                 <div className="input-group">
                     <label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
                     <input
@@ -69,6 +82,8 @@ const SignInForm = (props: Props) => {
                 <Button type="submit" className="w-full cursor-pointer py-5!" disabled={loginMutation.isPending}>
                     {loginMutation.isPending ? "Signing in..." : "Sign in"}
                 </Button>
+
+
 
                 <p className="text-sm text-center text-slate-600">
                     Don't have an account? <a href="/sign-up" className="text-slate-900 dark:text-slate-400 hover:underline">Sign up</a>

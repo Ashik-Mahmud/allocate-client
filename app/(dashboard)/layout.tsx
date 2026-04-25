@@ -1,8 +1,19 @@
-export default function DashboardLayout({
+import { redirect } from "next/navigation";
+
+import { auth } from "@/auth";
+import { ROUTES } from "@/lib/constants/routes";
+
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    redirect(ROUTES.signIn);
+  }
+
   return (
     <div className="min-h-screen bg-transparent">
       <header className="border-b border-slate-200/75 bg-white/75 px-6 py-4 backdrop-blur-md dark:border-slate-700/60 dark:bg-slate-900/65">

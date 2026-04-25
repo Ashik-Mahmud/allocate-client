@@ -19,8 +19,6 @@ const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(({ label,
         number: false,
         specialChar: false,
     })
-
-
     return (
         <div>
             <div className={cn("input-group relative ", props.className)}>

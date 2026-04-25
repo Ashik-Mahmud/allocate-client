@@ -20,6 +20,9 @@ export class ApiError extends Error {
     this.name = "ApiError";
     this.status = status;
     this.body = body;
+
+    // Set the prototype explicitly to maintain instanceof checks
+    Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
 
@@ -40,7 +43,41 @@ async function parseResponseBody(response: Response): Promise<unknown> {
 function getErrorMessage(status: number, body: unknown) {
   if (body && typeof body === "object") {
     const typed = body as ApiErrorBody;
-    return typed.message ?? typed.error ?? `Request failed with status ${status}`;
+    const withUnknownFields = body as { error?: unknown; details?: unknown };
+
+    if (typeof typed.message === "string" && typed.message.trim().length > 0) {
+      return typed.message;
+    }
+
+    if (typeof withUnknownFields.error === "string" && withUnknownFields.error.trim().length > 0) {
+      return withUnknownFields.error;
+    }
+
+    if (
+      withUnknownFields.error &&
+      typeof withUnknownFields.error === "object" &&
+      "message" in withUnknownFields.error &&
+      typeof withUnknownFields.error.message === "string" &&
+      withUnknownFields.error.message.trim().length > 0
+    ) {
+      return withUnknownFields.error.message;
+    }
+
+    if (typeof withUnknownFields.details === "string" && withUnknownFields.details.trim().length > 0) {
+      return withUnknownFields.details;
+    }
+
+    if (
+      withUnknownFields.details &&
+      typeof withUnknownFields.details === "object" &&
+      "message" in withUnknownFields.details &&
+      typeof withUnknownFields.details.message === "string" &&
+      withUnknownFields.details.message.trim().length > 0
+    ) {
+      return withUnknownFields.details.message;
+    }
+
+    return `Request failed with status ${status}`;
   }
 
   if (typeof body === "string" && body.trim().length > 0) {
@@ -63,6 +100,8 @@ export async function apiRequest<TResponse>(
   });
 
   const body = await parseResponseBody(response);
+
+
 
   if (!response.ok) {
     throw new ApiError(
