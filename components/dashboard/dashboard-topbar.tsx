@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { Bell, ChevronDown, CircleDollarSign, LayoutDashboard } from "lucide-react";
+import { CircleDollarSign, LayoutDashboard } from "lucide-react";
 
 import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
-import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import NotificationPopover from "./notifcationPopover";
 
 type DashboardNotification = {
@@ -28,27 +27,29 @@ type DashboardTopbarProps = {
 
 export function DashboardTopbar({ user }: DashboardTopbarProps) {
     const role = user?.role ?? null;
-    const unreadCount = 50;
-    const notifications = Array.isArray(user?.notifications) ? user.notifications.slice(0, 4) : [];
+    const notifications = Array.isArray(user?.notifications) ? user.notifications : [];
+    const unreadCount = 10; /* typeof user?.unreadNotifications === "number"
+        ? Math.max(user.unreadNotifications, 0)
+        : notifications.filter((item) => !item?.read).length */
 
     return (
-        <div className="rounded  bg-white/90 px-4 py-1 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-950/88 md:px-5 md:py-2 border-b border-b-slate-200">
+        <div className="rounded-xl border-0 border-slate-200   py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                    {/* <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/80 text-white shadow-lg shadow-slate-900/15 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
                         <LayoutDashboard className="size-5" />
-                    </div> */}
+                    </div>
 
-                    <div className="min-w-0 hidden">
+                    <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <p className="text-base font-semibold text-slate-900 dark:text-slate-100">Dashboard</p>
                         </div>
                         <span
                             className={cn(
-                                "inline-flex items-center gap-2 rounded-full border-0   text-[11px] font-semibold text-secondary-foreground",
+                                "inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold",
                                 role === APP_ROLES.ADMIN
-                                    ? "border-slate-900/10  text-white dark:border-slate-100/10 dark:bg-slate-100 dark:text-slate-900"
-                                    : "border-slate-200  text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                                    ? "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                                    : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                             )}
                         >
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -58,14 +59,17 @@ export function DashboardTopbar({ user }: DashboardTopbarProps) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200">
+                    <span className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 font-mono!">
                         <CircleDollarSign className="size-4 text-emerald-500" />
-                        {typeof user?.credits === "number" ? user.credits.toLocaleString() : "0"} credits
+                        {typeof user?.credits === "number" ? user.credits.toLocaleString() : "100"} credits
                     </span>
 
-                    <div>
-                        <NotificationPopover unreadCount={unreadCount} />
-                    </div>
+                    <NotificationPopover unreadCount={unreadCount} notifications={notifications} />
+
+                    <ThemeToggle
+                        floating={false}
+                        className="h-10 w-10 rounded-xl border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    />
 
 
                 </div>

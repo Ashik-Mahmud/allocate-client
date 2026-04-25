@@ -4,6 +4,7 @@ import { MoonStar, SunMedium } from "lucide-react";
 import { useSyncExternalStore } from "react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type ThemeMode = "light" | "dark";
 
@@ -40,7 +41,12 @@ function subscribeToThemeChanges(onStoreChange: () => void) {
   };
 }
 
-export function ThemeToggle() {
+type ThemeToggleProps = {
+  floating?: boolean;
+  className?: string;
+};
+
+export function ThemeToggle({ floating = true, className }: ThemeToggleProps) {
   const theme = useSyncExternalStore(
     subscribeToThemeChanges,
     getThemeSnapshot,
@@ -58,18 +64,22 @@ export function ThemeToggle() {
   const isDark = theme === "dark";
 
   return (
-    <Button
+    <button
       type="button"
-      variant="outline"
-      size="icon"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       aria-pressed={isDark}
       onClick={handleToggle}
-      className="fixed right-4 top-4 z-50 h-11 w-11 rounded-full border-slate-200/80 bg-white/35 text-slate-700 opacity-40 shadow-lg shadow-slate-900/10 backdrop-blur-md transition-all duration-200 hover:opacity-100 hover:shadow-slate-900/15 focus-visible:opacity-100 dark:border-slate-700/70 dark:bg-slate-950/35 dark:text-slate-100 dark:shadow-black/30"
+      className={cn(
+        "h-10 w-10 border-slate-200/80 rounded-full bg-white/35 text-slate-700 shadow-sm shadow-slate-900/10 backdrop-blur-md transition-all duration-200 grid place-items-center hover:shadow-slate-900/15 dark:border-slate-700/70 dark:bg-slate-950/35 dark:text-slate-100 dark:shadow-black/30",
+        floating
+          ? "fixed right-4 top-4 z-50 rounded-full opacity-40 hover:opacity-100 focus-visible:opacity-100"
+          : "rounded-full! opacity-100",
+        className
+      )}
     >
       <SunMedium className="size-4 rotate-0 scale-100 transition-all duration-200 dark:-rotate-90 dark:scale-0" />
       <MoonStar className="absolute size-4 rotate-90 scale-0 transition-all duration-200 dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Toggle theme</span>
-    </Button>
+    </button>
   );
 }

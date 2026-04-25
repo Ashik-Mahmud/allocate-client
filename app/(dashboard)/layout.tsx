@@ -37,20 +37,18 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="relative h-dvh overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(148,163,184,0.18),transparent_46%),linear-gradient(180deg,rgba(248,250,252,0.98),rgba(241,245,249,0.94))] dark:bg-[radial-gradient(circle_at_top,rgba(148,163,184,0.12),transparent_46%),linear-gradient(180deg,rgba(2,6,23,0.98),rgba(15,23,42,0.92))]" />
-
+    <div className="h-dvh overflow-hidden bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="grid h-full md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
         <DashboardSidebar user={dashboardUser} />
 
-        <main className="min-w-0 overflow-hidden border-l border-slate-200/70 bg-white/55 dark:border-slate-800/70 dark:bg-slate-900/40">
+        <main className="min-w-0 overflow-hidden border-l border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex h-full min-h-0 flex-col pt-20 md:pt-0">
-            <div className="">
+            <div className="border-b border-slate-200 bg-white px-3 py-1 dark:border-slate-800 dark:bg-slate-950 md:px-5 md:py-1">
               <DashboardTopbar user={dashboardUser} />
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]  md:pb-5 [&::-webkit-scrollbar]:hidden">
-              <div className="min-h-full border border-white/70 bg-white/80 p-4 shadow-[0_20px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-900/75 md:p-8">
+            <div className="min-h-0 flex-1 overflow-y-auto p-3 [scrollbar-width:none] md:p-3 [&::-webkit-scrollbar]:hidden">
+              <div className="min-h-full rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 md:p-8">
                 {children}
               </div>
             </div>
