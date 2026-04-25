@@ -2,18 +2,20 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import PasswordField from '../ui/passwordField';
+import { Button } from '../ui/button';
+import { useRegisterMutation, useSignInMutation } from '@/features/auth';
 
 type Props = {}
 
 const SignInForm = (props: Props) => {
 
+    const loginMutation = useSignInMutation();
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             email: '',
             password: ''
         }
     })
-
 
     const onSubmit = handleSubmit((data) => {
         console.log(data);
@@ -25,20 +27,20 @@ const SignInForm = (props: Props) => {
                 onSubmit={onSubmit}
             >
                 <div className="title">
-                    <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Sign in</h1>
-                    <p className="text-sm text-slate-600">
+                    <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Sign in</h1>
+                    <p className="text-sm text-slate-600 dark:text-slate-500">
                         Use your email and password to sign in.
                     </p>
 
                 </div>
                 <div className="input-group">
-                    <label htmlFor="email" className="text-sm font-medium text-slate-700">Email</label>
+                    <label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
                     <input
                         id="email"
                         type="email"
                         autoComplete="email"
                         placeholder="Enter your email"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 dark:placeholder:text-slate-500 dark:text-slate-400"
                         {...register("email", {
                             required: "Email is required",
                             pattern: {
@@ -55,7 +57,6 @@ const SignInForm = (props: Props) => {
                     placeholder="Enter your password"
                     error={errors?.password?.message}
                     showPasswordToggle={true}
-                    // showPasswordStrength={false}
                     {...register("password", {
                         required: "Password is required",
                         minLength: {
@@ -63,15 +64,14 @@ const SignInForm = (props: Props) => {
                             message: "Password must be at least 6 characters",
                         },
                     })}
-
-
                 />
 
-                <button type="submit" className="w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">
-                    Sign in
-                </button>
+                <Button type="submit" className="w-full cursor-pointer py-5!" disabled={loginMutation.isPending}>
+                    {loginMutation.isPending ? "Signing in..." : "Sign in"}
+                </Button>
+
                 <p className="text-sm text-center text-slate-600">
-                    Don't have an account? <a href="/sign-up" className="text-slate-900 hover:underline">Sign up</a>
+                    Don't have an account? <a href="/sign-up" className="text-slate-900 dark:text-slate-400 hover:underline">Sign up</a>
                 </p>
             </form>
         </div>

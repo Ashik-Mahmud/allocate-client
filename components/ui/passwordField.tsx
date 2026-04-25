@@ -10,7 +10,7 @@ interface PasswordFieldProps extends InputHTMLAttributes<HTMLInputElement> {
     showPasswordStrength?: boolean;
     id: string;
 }
-const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(({label,error, showPasswordStrength, showPasswordToggle, id ,...props }, ref) => {
+const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(({ label, error, showPasswordStrength, showPasswordToggle, id, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false);
     const [pwdValidation, setPwdValidation] = React.useState({
         length: false,
@@ -24,29 +24,28 @@ const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(({label,e
     return (
         <div>
             <div className={cn("input-group relative ", props.className)}>
-               {label ? <label htmlFor={id} className="text-sm font-medium text-slate-700">{label}</label> : null}
+                {label ? <label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-300">{label}</label> : null}
                 <div className='relative'>
                     <input
                         id={id}
                         type={showPassword ? "text" : "password"}
                         autoComplete="current-password"
                         placeholder={props.placeholder}
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200   dark:placeholder:text-slate-500 dark:text-slate-400"
                         value={props.value}
-                        onChange={
-                            (e) => {
-                                const value = e.target.value;
-                                setPwdValidation({
-                                    length: value.length >= 6,
-                                    uppercase: /[A-Z]/.test(value),
-                                    lowercase: /[a-z]/.test(value),
-                                    number: /[0-9]/.test(value),
-                                    specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(value),
-                                })
-                            }
-                        }
                         ref={ref}
                         {...props}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setPwdValidation({
+                                length: value.length >= 6,
+                                uppercase: /[A-Z]/.test(value) && /[a-z]/.test(value),
+                                lowercase: /[a-z]/.test(value) && /[A-Z]/.test(value),
+                                number: /\d/.test(value),
+                                specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(value),
+                            })
+                            props.onChange && props.onChange(e);
+                        }}
                     />
                     {showPasswordToggle && (
                         <button
