@@ -9,6 +9,7 @@ import { useRegisterMutation } from "@/features/auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { getApiErrorMessage } from "@/lib/services";
 import type { RegisterPayload } from "@/types";
+import PasswordField from "../ui/passwordField";
 
 type RegisterFormValues = RegisterPayload;
 
@@ -25,11 +26,13 @@ export function SignUpForm() {
       email: "",
       name: "",
       password: "",
+      terms: false,
     },
   });
 
   const onSubmit = handleSubmit(async (values) => {
-    await registerMutation.mutateAsync(values);
+    const { terms, ...payload } = values;
+    await registerMutation.mutateAsync(payload);
     router.push(ROUTES.dashboard);
   });
 
@@ -52,6 +55,7 @@ export function SignUpForm() {
           id="name"
           type="text"
           autoComplete="name"
+          placeholder="Enter your name"
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
           {...register("name", {
             required: "Name is required",
@@ -72,6 +76,7 @@ export function SignUpForm() {
           id="email"
           type="email"
           autoComplete="email"
+          placeholder="Enter your email"
           className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
           {...register("email", {
             required: "Email is required",
@@ -85,26 +90,44 @@ export function SignUpForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-700" htmlFor="password">
-          Password
-        </label>
-        <input
+        <PasswordField
           id="password"
-          type="password"
-          autoComplete="new-password"
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+          label="Password"
+          placeholder="Enter your password"
+          error={errors?.password?.message}
+          showPasswordToggle
+          showPasswordStrength
           {...register("password", {
             required: "Password is required",
             minLength: {
-              value: 8,
-              message: "Password should be at least 8 characters",
+              value: 6,
+              message: "Password must be at least 6 characters",
             },
           })}
         />
-        {errors.password ? <p className="text-xs text-red-600">{errors.password.message}</p> : null}
       </div>
 
-      {errorMessage ? <p className="rounded-md bg-red-50 p-2 text-sm text-red-700">{errorMessage}</p> : null}
+
+
+      {/* checkbox to accept terms */}
+      <div className="flex items-center space-x-2">
+        <input
+          id="terms"
+          type="checkbox"
+          className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-200"
+          {...register("terms", {
+            required: "You must accept the terms and conditions",
+          })}
+        />
+        <label htmlFor="terms" className="text-sm text-slate-600">
+          I agree to the{" "}
+          <a href="#" className="text-slate-900 underline">
+            terms and conditions
+          </a>
+          .
+        </label>
+      </div>
+      {errors.terms ? <p className="text-xs text-red-600">{errors.terms.message}</p> : null}
 
       <Button type="submit" className="w-full cursor-pointer py-5!" disabled={registerMutation.isPending}>
         {registerMutation.isPending ? "Creating account..." : "Create account"}
