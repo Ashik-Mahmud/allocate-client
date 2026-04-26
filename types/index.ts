@@ -98,3 +98,21 @@ export interface StaffDailyPlanResponse {
 export interface UpdateStaffWorkQueueStatusPayload {
 	status: "pending" | "in_progress" | "completed";
 }
+
+// Define what a "Paginated Response" looks like
+
+export interface PaginatedResponse<T> {
+	data: T[];
+	meta: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	};
+}
+
+export interface ApiResponse<T> {
+	success: true;
+	data: T;
+	timestamp: string;
+}

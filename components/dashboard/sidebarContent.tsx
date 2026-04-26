@@ -34,7 +34,7 @@ const navigation: NavItem[] = [
     //     href: ROUTES.dashboard,
     //     icon: LayoutDashboard,
     // },
-    
+
     // {
     //     label: "Public site",
     //     description: "Jump back to the landing page",
@@ -84,18 +84,6 @@ const adminNavigation: NavItem[] = [
 
 const orgAdminNavigation: NavItem[] = [
     {
-        label: "Booking management",
-        description: "Control booking operations",
-        href: ROUTES.dashboardOrgAdmin.bookingManagement,
-        icon: BriefcaseBusiness,
-    },
-    {
-        label: "Booking stats",
-        description: "Track organization booking metrics",
-        href: ROUTES.dashboardOrgAdmin.bookingStats,
-        icon: CalendarCheck,
-    },
-    {
         label: "Resources",
         description: "Manage company resources",
         href: ROUTES.dashboardOrgAdmin.resourcesManagement,
@@ -107,6 +95,19 @@ const orgAdminNavigation: NavItem[] = [
         href: ROUTES.dashboardOrgAdmin.staffManagement,
         icon: Users,
     },
+    {
+        label: "Booking management",
+        description: "Control booking operations",
+        href: ROUTES.dashboardOrgAdmin.bookingManagement,
+        icon: BriefcaseBusiness,
+    },
+    {
+        label: "Booking stats",
+        description: "Track organization booking metrics",
+        href: ROUTES.dashboardOrgAdmin.bookingStats,
+        icon: CalendarCheck,
+    },
+
 ];
 
 const staffNavigation: NavItem[] = [
@@ -219,8 +220,8 @@ const SidebarContent = ({
                                 key={item.href}
                                 href={item.href}
                                 onClick={onNavigate}
-                                    className={cn(
-                                        "group flex items-center gap-3 border px-3 py-3 transition-all duration-200 rounded-lg",
+                                className={cn(
+                                    "group flex items-center gap-3 border px-3 py-3 transition-all duration-200 rounded-lg",
                                     active
                                         ? "border-primary bg-primary text-white shadow-lg shadow-slate-900/15 dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
                                         : "border-transparent bg-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-800 dark:hover:bg-slate-900/60 dark:hover:text-slate-100"

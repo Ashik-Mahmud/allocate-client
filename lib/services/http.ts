@@ -1,6 +1,7 @@
 import type { ApiErrorBody } from "@/types";
 
 const DEFAULT_API_BASE_URL = "http://localhost:4000";
+const AUTH_STORAGE_KEY = "allocate.auth.session";
 
 function getBaseUrl() {
   const fromEnv = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -9,6 +10,27 @@ function getBaseUrl() {
   }
 
   return fromEnv.replace(/\/$/, "");
+}
+
+function getAccessTokenFromStorage() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw) as { accessToken?: unknown };
+    return typeof parsed.accessToken === "string" && parsed.accessToken.trim().length > 0
+      ? parsed.accessToken
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 export class ApiError extends Error {
@@ -91,12 +113,20 @@ export async function apiRequest<TResponse>(
   path: string,
   init?: RequestInit
 ): Promise<TResponse> {
+  const token = getAccessTokenFromStorage();
+  const headers = new Headers(init?.headers);
+
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
   const response = await fetch(`${getBaseUrl()}${path}`, {
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
+    headers,
   });
 
   const body = await parseResponseBody(response);
