@@ -1,9 +1,11 @@
+"use client";
 import { CircleDollarSign, LayoutDashboard } from "lucide-react";
 
 import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import NotificationPopover from "./notifcationPopover";
+import { useCurrentUser } from "@/features/auth";
 
 type DashboardNotification = {
     id?: string;
@@ -25,7 +27,8 @@ type DashboardTopbarProps = {
     user: DashboardUser | null;
 };
 
-export function DashboardTopbar({ user }: DashboardTopbarProps) {
+export function DashboardTopbar() {
+    const { user } = useCurrentUser();
     const role = user?.role ?? null;
     const notifications = Array.isArray(user?.notifications) ? user.notifications : [];
     const unreadCount = 10; /* typeof user?.unreadNotifications === "number"
@@ -61,7 +64,7 @@ export function DashboardTopbar({ user }: DashboardTopbarProps) {
                 <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 font-mono!">
                         <CircleDollarSign className="size-4 text-emerald-500" />
-                        {typeof user?.credits === "number" ? user.credits.toLocaleString() : "100"} credits
+                        {typeof user?.personal_credits === "number" ? user.personal_credits.toLocaleString() : "0"} credits
                     </span>
 
                     <NotificationPopover unreadCount={unreadCount} notifications={notifications} />

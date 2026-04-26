@@ -1,4 +1,5 @@
 import type { AppRole } from "@/lib/constants/roles";
+import { Organizations } from "./organization";
 
 export interface ApiErrorBody {
 	message?: string;
@@ -11,7 +12,7 @@ export interface AuthUser {
 	email: string;
 	name?: string;
 	role?: AppRole | null;
-	credits?: number | null;
+	personal_?: number | null;
 	unreadNotifications?: number | null;
 	notifications?: NotificationItem[];
 }
@@ -115,4 +116,39 @@ export interface ApiResponse<T> {
 	success: true;
 	data: T;
 	timestamp: string;
+}
+
+// profile user
+export enum Role {
+	SUPER_ADMIN = 'SUPER_ADMIN',
+	ORG_ADMIN = 'ORG_ADMIN',
+	USER = 'USER',
+	// Add other roles as defined in your prisma enum
+}
+
+export interface User {
+	id: string;
+	email: string;
+	// password is usually omitted from frontend types for security, 
+	// but included here to match your model
+	password?: string;
+	name: string;
+	photo: string | null;
+	personal_credits: number | null;
+	role: Role;
+	last_login: Date | string | null;
+	is_verified: boolean | null;
+	verification_token: string | null;
+	token_expiry: Date | string | null;
+	deletedAt: Date | string | null;
+	createdAt: Date | string | null;
+	updatedAt: Date | string | null;
+	org_id: string | null;
+
+	// Optional Relations
+	organization?: Organizations; // Replace with your Organizations interface
+	notifications?: any[];
+	bookings?: any[];
+	createdBookings?: any[];
+	creditTransactions?: any[];
 }

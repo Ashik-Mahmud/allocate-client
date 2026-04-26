@@ -2,6 +2,16 @@ import type { ApiErrorBody } from "@/types";
 
 const DEFAULT_API_BASE_URL = "http://localhost:4000";
 const AUTH_STORAGE_KEY = "allocate.auth.session";
+const AUTH_SESSION_EXPIRED_EVENT = "auth:session-expired";
+const REFRESH_TOKEN_PATH = "/auth/refresh-token";
+
+type StoredAuthSession = {
+  user?: unknown;
+  accessToken?: string | null;
+  refreshToken?: string | null;
+};
+
+let refreshAccessTokenPromise: Promise<string | null> | null = null;
 
 function getBaseUrl() {
   const fromEnv = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -33,6 +43,140 @@ function getAccessTokenFromStorage() {
   }
 }
 
+function getAuthSessionFromStorage(): StoredAuthSession | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+
+    if (!raw) {
+      return null;
+    }
+
+    return JSON.parse(raw) as StoredAuthSession;
+  } catch {
+    return null;
+  }
+}
+
+function saveAuthSessionToStorage(session: StoredAuthSession) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+}
+
+function clearAuthSessionStorage() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(AUTH_STORAGE_KEY);
+}
+
+function emitAuthSessionExpired() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
+}
+
+function extractTokensFromRefreshBody(body: unknown) {
+  if (!body || typeof body !== "object") {
+    return null;
+  }
+
+  const typed = body as {
+    token?: unknown;
+    accessToken?: unknown;
+    refreshToken?: unknown;
+    data?: {
+      token?: unknown;
+      accessToken?: unknown;
+      refreshToken?: unknown;
+    };
+  };
+
+  const payload = typed.data ?? typed;
+
+  const nextAccessToken =
+    typeof payload.accessToken === "string"
+      ? payload.accessToken : null;
+
+  const nextRefreshToken =
+    typeof payload.refreshToken === "string" ? payload.refreshToken : null;
+
+  if (!nextAccessToken) {
+    return null;
+  }
+
+  return {
+    accessToken: nextAccessToken,
+    refreshToken: nextRefreshToken,
+  };
+}
+
+async function refreshAccessTokenIfNeeded() {
+  const currentSession = getAuthSessionFromStorage();
+  const refreshToken = currentSession?.refreshToken;
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  if (refreshAccessTokenPromise) {
+    return refreshAccessTokenPromise;
+  }
+
+  refreshAccessTokenPromise = (async () => {
+    try {
+      const response = await fetch(`${getBaseUrl()}${REFRESH_TOKEN_PATH}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      const body = await parseResponseBody(response);
+
+      if (!response.ok) {
+        clearAuthSessionStorage();
+        emitAuthSessionExpired();
+        return null;
+      }
+
+      const tokens = extractTokensFromRefreshBody(body);
+
+      if (!tokens?.accessToken) {
+        clearAuthSessionStorage();
+        emitAuthSessionExpired();
+        return null;
+      }
+
+      saveAuthSessionToStorage({
+        ...currentSession,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken ?? refreshToken,
+      });
+
+      return tokens.accessToken;
+    } catch {
+      return null;
+    }
+  })();
+
+  try {
+    return await refreshAccessTokenPromise;
+  } finally {
+    refreshAccessTokenPromise = null;
+  }
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly body: ApiErrorBody | null;
@@ -47,6 +191,8 @@ export class ApiError extends Error {
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
+
+// Parses the response body as JSON if possible, otherwise returns the raw text
 
 async function parseResponseBody(response: Response): Promise<unknown> {
   const rawText = await response.text();
@@ -111,7 +257,8 @@ function getErrorMessage(status: number, body: unknown) {
 
 export async function apiRequest<TResponse>(
   path: string,
-  init?: RequestInit
+  init?: RequestInit,
+  allowRetry = true
 ): Promise<TResponse> {
   const token = getAccessTokenFromStorage();
   const headers = new Headers(init?.headers);
@@ -128,6 +275,21 @@ export async function apiRequest<TResponse>(
     ...init,
     headers,
   });
+
+  if (
+    response.status === 401 &&
+    allowRetry &&
+    path !== REFRESH_TOKEN_PATH
+  ) {
+    const nextAccessToken = await refreshAccessTokenIfNeeded();
+
+    if (nextAccessToken) {
+      return apiRequest<TResponse>(path, init, false);
+    }
+
+    clearAuthSessionStorage();
+    emitAuthSessionExpired();
+  }
 
   const body = await parseResponseBody(response);
 

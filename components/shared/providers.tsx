@@ -1,8 +1,10 @@
 "use client";
 
+import { AuthProfileSync } from "@/features/auth/auth-profile-sync";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
+
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -26,7 +28,10 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <SessionProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProfileSync />
+        {children}
+      </QueryClientProvider>
     </SessionProvider>
   );
 }

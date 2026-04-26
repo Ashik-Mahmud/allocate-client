@@ -14,24 +14,13 @@ import type { AppRole } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import SidebarContent from "./sidebarContent";
+import { User } from "@/types";
 
 
-type DashboardUser = {
-    name?: string | null;
-    email?: string | null;
-    role?: AppRole | null;
-    credits?: number | null;
-    unreadNotifications?: number | null;
-    notifications?: Array<{
-        id?: string;
-        title?: string;
-        message?: string;
-        read?: boolean;
-    }>;
-};
+
 
 type DashboardSidebarProps = {
-    user: DashboardUser | null;
+    user: User | null;
 };
 
 

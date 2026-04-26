@@ -5,6 +5,7 @@ import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BriefcaseBusiness, CalendarCheck, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { User } from '@/types';
 type DashboardUser = {
     name?: string | null;
     email?: string | null;
@@ -12,7 +13,7 @@ type DashboardUser = {
 };
 
 type Props = {
-    user: DashboardUser | null;
+    user: User | null;
     pathname: string;
     onNavigate?: () => void;
     onSignOut: () => void;
@@ -166,8 +167,10 @@ const SidebarContent = ({
     signingOut,
     compact,
 }: Props) => {
+    console.log(user, 'user')
     const initials = getInitials(user);
     const role = user?.role ?? null;
+
     const roleNavigation =
         role === APP_ROLES.ADMIN
             ? adminNavigation
@@ -344,7 +347,7 @@ const SidebarContent = ({
     );
 }
 
-function getInitials(user: DashboardUser | null) {
+function getInitials(user: User | null) {
     const source = user?.name?.trim() || user?.email?.trim() || "A";
     const parts = source.split(/\s+/).filter(Boolean);
 

@@ -131,7 +131,7 @@ export function ResourcesPanel() {
           ) : null}
         </div>
 
-        {resourcesQuery.isError ? (
+        {resourcesQuery?.isError ? (
           <ResourceErrorState
             message={resourcesQuery.error instanceof Error ? resourcesQuery.error.message : "Could not load resources."}
           />
