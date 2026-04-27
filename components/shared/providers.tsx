@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import type { Session } from "next-auth";
+import { CurrentUserProvider } from "@/features/auth/current-user-context";
 
 
 type ProvidersProps = {
@@ -37,7 +38,9 @@ export function Providers({ children, session }: ProvidersProps) {
       storageKey="allocate.theme"
     >
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <CurrentUserProvider>{children}</CurrentUserProvider>
+        </QueryClientProvider>
       </SessionProvider>
     </ThemeProvider>
   );

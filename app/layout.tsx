@@ -5,6 +5,7 @@ import { GlobalBentoBackground } from "@/components/shared/global-bento-backgrou
 import { Providers } from "@/components/shared/providers";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import '../bones/registry'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -10,7 +10,6 @@ const VerifyEmail = () => {
 
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
-    console.log(token, 'token')
 
 
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')

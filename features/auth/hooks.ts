@@ -11,6 +11,7 @@ import {
     saveAuthSession,
 } from "./storage";
 import type { User } from "@/types";
+import { useCurrentUserContext } from "./current-user-context";
 
 export type CurrentUser = User;
 
@@ -23,14 +24,7 @@ export function useNextAuthSession() {
 }
 
 export function useCurrentUser() {
-    const sessionQuery = useAuthSession();
-    const user = sessionQuery.data?.user ?? null;
-    return {
-        user,
-        isLoading: sessionQuery.status === "loading",
-        isFetching: false,
-        error: null,
-    };
+    return useCurrentUserContext();
 }
 
 export function useRegisterMutation() {
