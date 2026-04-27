@@ -39,8 +39,8 @@ export function CurrentUserProvider({ children }: { children: React.ReactNode })
     queryKey: ["auth", "current-user"],
     queryFn: getProfile,
     enabled: isAuthenticated,
-    staleTime: 5_000,
-    refetchInterval: isAuthenticated ? 15_000 : false,
+    staleTime: 5_000, // 5 seconds stale time to reduce unnecessary refetches
+    refetchInterval: isAuthenticated ? false : false, // Poll every 15 seconds when authenticated
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,

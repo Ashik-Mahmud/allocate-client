@@ -308,8 +308,14 @@ const SidebarContent = ({
                             {initials}
                         </div>
                         <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
-                                {user?.name?.trim() || "Workspace user"}
+                            <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1">
+                                {user?.name?.trim() || "Workspace user"}  {
+                                    user?.is_verified ? (
+                                        <small title='Verified'>
+                                            <ShieldCheck className="size-3 text-emerald-500 inline-block" />
+                                        </small>
+                                    ) : null
+                                }
                             </p>
                             <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                                 {user?.email ?? "Signed in session"}

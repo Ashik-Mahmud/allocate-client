@@ -1,16 +1,19 @@
 "use client";
-import { CircleDollarSign, LayoutDashboard } from "lucide-react";
+import { Building2, CircleDollarSign, LayoutDashboard, User } from "lucide-react";
 
 import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import NotificationPopover from "./notifcationPopover";
 import { useCurrentUser } from "@/features/auth";
+import Link from "next/link";
+import { ROUTES } from "@/lib/constants/routes";
 
 export function DashboardTopbar() {
     const { user } = useCurrentUser();
     const role = user?.role ?? null;
 
+    console.log(user, 'user')
     return (
         <div className="rounded-xl border-0 border-slate-200   py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -38,10 +41,47 @@ export function DashboardTopbar() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 font-mono!">
-                        <CircleDollarSign className="size-4 text-emerald-500" />
-                        {typeof user?.personal_credits === "number" ? user.personal_credits.toLocaleString() : "0"} credits
-                    </span>
+               
+
+                    <div className="flex flex-wrap items-center gap-4">
+                        {/* Organization Credits Chip */}
+                        {user?.role === APP_ROLES.ORG_ADMIN && (
+                            <Link href={ROUTES.dashboardOrgAdmin.creditManagement} className="group relative flex items-center gap-2 rounded-2xl border border-emerald-200/60 bg-emerald-50/50 pl-2 pr-4 py-0.5 transition-all hover:bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/5 dark:hover:bg-emerald-500/10">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-500/20">
+                                    <Building2 className="size-4 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700/70 dark:text-emerald-400/70">
+                                        Org Credits
+                                    </span>
+                                    <span className="flex items-center gap-1.5 font-mono text-sm font-bold text-emerald-900 dark:text-emerald-100">
+                                        {typeof user?.organization?.credit_pool === "number"
+                                            ? user.organization?.credit_pool.toLocaleString()
+                                            : "0"}
+                                        <span className="text-[10px] font-medium opacity-70">CR</span>
+                                    </span>
+                                </div>
+                            </Link>
+                        )}
+
+                        {/* Personal Credits Chip */}
+                        <div className="group relative flex items-center gap-2 rounded-2xl border border-slate-200 bg-white pl-2 pr-4 py-0.5 transition-all hover:border-slate-300 dark:border-slate-800 dark:bg-zinc-950 dark:hover:border-slate-700">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 dark:bg-zinc-800">
+                                <User className="size-4 text-slate-600 dark:text-slate-400" />
+                            </div>
+                            <div className="flex flex-col items-start">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
+                                    Personal
+                                </span>
+                                <span className="flex items-center gap-1.5 font-mono text-sm font-bold text-slate-900 dark:text-slate-100">
+                                    {typeof user?.personal_credits === "number"
+                                        ? user.personal_credits.toLocaleString()
+                                        : "0"}
+                                    <span className="text-[10px] font-medium opacity-60">CR</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
                     <NotificationPopover unreadCount={10} notifications={[]} />
 
