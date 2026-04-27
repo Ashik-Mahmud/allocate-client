@@ -146,10 +146,17 @@
   * {
     @apply border-border outline-ring/50;
   }
+  *::-webkit-scrollbar {
+    display: none;
+  }
   body {
     @apply bg-background text-foreground;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   html {
     @apply font-sans;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

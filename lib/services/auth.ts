@@ -30,3 +30,20 @@ export function getProfileWithToken(accessToken: string) {
     },
   });
 }
+
+type SendVerificationEmailResponse = {
+  success?: boolean;
+  message?: string;
+};
+
+export function sendVerificationEmail() {
+  return apiRequest<SendVerificationEmailResponse>("/auth/send-verification-email", {
+    method: "POST",
+  });
+}
+
+export function verifyEmail(token: string) {
+  return apiRequest<ApiResponse<{ success: boolean; message?: string }>>(`/auth/verify?token=${token}`, {
+    method: "GET",
+  });
+}

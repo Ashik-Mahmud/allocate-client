@@ -204,7 +204,7 @@ const SidebarContent = ({
                 ) : null}
             </div>
             <div className="min-h-0 flex-1 overflow-hidden pt-4">
-                <nav className="h-full space-y-2 overflow-y-auto pr-2 [scrollbar-color:rgba(100,116,139,0.55)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300/80 [&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-slate-700/80 [&::-webkit-scrollbar]:w-1.5">
+                <nav className="h-full space-y-2 overflow-y-auto pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     <p className="sticky top-0 z-10 bg-white/90 px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 backdrop-blur-sm dark:bg-slate-950/80 dark:text-slate-400">
                         Navigation
                     </p>

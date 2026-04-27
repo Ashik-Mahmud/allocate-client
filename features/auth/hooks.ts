@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession } from "next-auth/react";
 
-import { login, register } from "@/lib/services/auth";
+import { login, register, sendVerificationEmail } from "@/lib/services/auth";
 
 import {
     buildAuthSession,
@@ -70,4 +70,10 @@ export function useSignOut() {
         clearAuthSession();
         await nextAuthSignOut({ redirect: false });
     };
+}
+
+export function useSendVerificationEmailMutation() {
+    return useMutation({
+        mutationFn: sendVerificationEmail,
+    });
 }

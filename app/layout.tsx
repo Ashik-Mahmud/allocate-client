@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { GlobalBentoBackground } from "@/components/shared/global-bento-background";
 import { Providers } from "@/components/shared/providers";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,7 @@ export default async function RootLayout({
     >
       <body className="font-gist-sans flex min-h-full flex-col bg-background dark:bg-foreground">
         <GlobalBentoBackground />
-
+        <Toaster />
         <Providers session={session}>
           <div className="relative z-10 flex min-h-full flex-col">{children}</div>
         </Providers>

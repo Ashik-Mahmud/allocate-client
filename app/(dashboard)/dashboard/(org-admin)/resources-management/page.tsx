@@ -1,6 +1,17 @@
+import { auth } from "@/auth";
 import { ResourcesPanel } from "@/components/dashboard/resources";
+import VerifyLoggedInUser from "@/components/shared/verify-user";
 
-export default function ResourcesManagementPage() {
+export default async function ResourcesManagementPage() {
+  const session = await auth();
+  const isVerified = Boolean(session?.user?.is_verified);
+
+  if (!isVerified) {
+    return (
+       <VerifyLoggedInUser className="mx-auto w-full" pageName="Resources Management" type="page"/>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="space-y-1">
@@ -11,7 +22,6 @@ export default function ResourcesManagementPage() {
           Manage organization resources, availability, and booking rules.
         </p>
       </div>
-
       <ResourcesPanel />
     </div>
   );
