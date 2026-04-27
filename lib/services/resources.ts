@@ -75,7 +75,7 @@ export function updateResource(resourceId: string, payload: UpdateResourcePayloa
 
 export function deleteResource(resourceId: string) {
     return apiRequest<ApiResponse<Resource>>(`/resources/delete/${resourceId}`, {
-        method: "PATCH",
+        method: "DELETE",
     });
 }
 

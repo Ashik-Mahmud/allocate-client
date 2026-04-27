@@ -18,7 +18,7 @@ type Props = {
 
 export function ResourceMetadataFields({ fields, onAdd, onUpdate, onRemove }: Props) {
   return (
-    <section className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-900/40">
+    <section className="space-y-3  rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-900/40">
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Metadata</h3>
@@ -26,12 +26,12 @@ export function ResourceMetadataFields({ fields, onAdd, onUpdate, onRemove }: Pr
             Default fields are prefilled for the selected type and can still be removed.
           </p>
         </div>
-        <Button type="button" size="sm" variant="outline" onClick={onAdd}>
+        <Button type="button" size="sm" variant="outline" className="dark:text-white" onClick={onAdd}>
           Add metadata
         </Button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-90 overflow-auto">
         {fields.map((field) => (
           <div key={field.id} className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
             <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
@@ -56,7 +56,7 @@ export function ResourceMetadataFields({ fields, onAdd, onUpdate, onRemove }: Pr
             </label>
 
             <div className="flex items-end">
-              <Button type="button" size="sm" variant="ghost" onClick={() => onRemove(field.id)}>
+              <Button type="button" size="sm" variant="ghost" className="dark:text-white" onClick={() => onRemove(field.id)}>
                 Remove
               </Button>
             </div>

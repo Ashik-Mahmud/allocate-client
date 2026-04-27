@@ -32,6 +32,8 @@ import { ResourceFilterForm } from "@/components/dashboard/resources/resource-fi
 import { ResourceListTable } from "@/components/dashboard/resources/resource-list-table";
 import { ResourcePagination } from "@/components/dashboard/resources/resource-pagination";
 import { ResourceRulesForm } from "@/components/dashboard/resources/resource-rules-form";
+import { toast } from "sonner";
+import ConfirmationAlert from "@/components/shared/confirmationAlert";
 
 export function ResourcesPanel() {
   const [search, setSearch] = useState("");
@@ -155,7 +157,10 @@ export function ResourcesPanel() {
                 payload: { is_active: !resource.is_active },
               })
             }
-            onDelete={(resource) => deleteMutation.mutate(resource.id)}
+            onDelete={(resource) => {
+              deleteMutation.mutate(resource.id);
+              toast.success(`Resource "${resource.name}" has been deleted.`);
+            }}
           />
         )}
 

@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     <div className="h-dvh  bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="grid h-full md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
         <DashboardSidebar />
-       
+
 
         <main className="min-w-0  border-l border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex h-full min-h-0 flex-col pt-20 md:pt-0">
@@ -31,9 +31,11 @@ export default async function DashboardLayout({
               <DashboardTopbar />
             </div>
 
-            <div className="min-h-0 flex-1 overflow-hidden p-3 md:p-3">
-              <div className="min-h-full rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 md:p-8">
-                {children}
+            <div className="h-full flex-1   p-4">
+              <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+                <div className="min-h-full w-full h-full md:absolute inset-0 p-4 md:p-6">
+                  {children}
+                </div>
               </div>
             </div>
           </div>
