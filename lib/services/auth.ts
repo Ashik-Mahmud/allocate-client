@@ -21,3 +21,12 @@ export function getProfile() {
     method: "GET",
   });
 }
+
+export function getProfileWithToken(accessToken: string) {
+  return apiRequest<ApiResponse<User>>("/auth/profile", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}

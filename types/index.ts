@@ -1,5 +1,5 @@
 import type { AppRole } from "@/lib/constants/roles";
-import { Organizations } from "./organization";
+import type { Organizations } from "./organization";
 
 export interface ApiErrorBody {
 	message?: string;
@@ -7,15 +7,28 @@ export interface ApiErrorBody {
 	details?: unknown;
 }
 
-export interface AuthUser {
+export interface User {
 	id?: string;
 	email: string;
-	name?: string;
+	name?: string | null;
 	role?: AppRole | null;
-	personal_?: number | null;
-	unreadNotifications?: number | null;
-	notifications?: NotificationItem[];
+	photo?: string | null;
+	personal_credits?: number | null;
+	last_login?: Date | string | null;
+	is_verified?: boolean | null;
+	verification_token?: string | null;
+	token_expiry?: Date | string | null;
+	deletedAt?: Date | string | null;
+	createdAt?: Date | string | null;
+	updatedAt?: Date | string | null;
+	org_id?: string | null;
+	organization?: Organizations | null;
+	bookings?: unknown[];
+	createdBookings?: unknown[];
+	creditTransactions?: unknown[];
 }
+
+export type AuthUser = User;
 
 export interface NotificationItem {
 	id: string;
@@ -38,12 +51,12 @@ export interface LoginPayload {
 }
 
 export interface AuthResponse {
-	user?: AuthUser;
+	user?: User;
 	token?: string;
 	accessToken?: string;
 	refreshToken?: string;
 	data?: {
-		user?: AuthUser;
+		user?: User;
 		token?: string;
 		accessToken?: string;
 		refreshToken?: string;
@@ -52,7 +65,7 @@ export interface AuthResponse {
 }
 
 export interface AuthSession {
-	user: AuthUser | null;
+	user: User | null;
 	accessToken: string | null;
 	refreshToken: string | null;
 }
@@ -126,29 +139,3 @@ export enum Role {
 	// Add other roles as defined in your prisma enum
 }
 
-export interface User {
-	id: string;
-	email: string;
-	// password is usually omitted from frontend types for security, 
-	// but included here to match your model
-	password?: string;
-	name: string;
-	photo: string | null;
-	personal_credits: number | null;
-	role: Role;
-	last_login: Date | string | null;
-	is_verified: boolean | null;
-	verification_token: string | null;
-	token_expiry: Date | string | null;
-	deletedAt: Date | string | null;
-	createdAt: Date | string | null;
-	updatedAt: Date | string | null;
-	org_id: string | null;
-
-	// Optional Relations
-	organization?: Organizations; // Replace with your Organizations interface
-	notifications?: any[];
-	bookings?: any[];
-	createdBookings?: any[];
-	creditTransactions?: any[];
-}

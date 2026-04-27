@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { ROUTES } from "@/lib/constants/routes";
-import { redirect } from "next/dist/client/components/navigation";
+import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
   children,

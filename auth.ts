@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { normalizeRole } from "@/lib/constants/roles";
+import { getProfileWithToken } from "@/lib/services/auth";
+import type { User } from "@/types";
 
 const DEFAULT_API_BASE_URL = "http://localhost:4000";
 const ACCESS_TOKEN_REFRESH_BUFFER_SECONDS = 30;
@@ -12,15 +14,6 @@ type AuthApiPayload = {
     email?: string;
     name?: string;
     role?: string | null;
-    credits?: number | null;
-    unreadNotifications?: number | null;
-    notifications?: Array<{
-      id?: string;
-      title?: string;
-      message?: string;
-      createdAt?: string;
-      read?: boolean;
-    }>;
   };
   token?: string;
   accessToken?: string;
@@ -30,6 +23,73 @@ type AuthApiPayload = {
 type AuthApiResponse = AuthApiPayload & {
   data?: AuthApiPayload;
 };
+
+type SessionTokenUser = Pick<
+  User,
+  |
+    "id"
+    | "email"
+    | "name"
+    | "role"
+    | "photo"
+    | "personal_credits"
+    | "last_login"
+    | "is_verified"
+    | "verification_token"
+    | "token_expiry"
+    | "deletedAt"
+    | "createdAt"
+    | "updatedAt"
+    | "org_id"
+    | "organization"
+    | "bookings"
+    | "createdBookings"
+    | "creditTransactions"
+> & {
+  accessToken?: string | null;
+  refreshToken?: string | null;
+  accessTokenExpires?: number | null;
+};
+
+type SessionToken = SessionTokenUser & {
+  id?: string;
+  sub?: string;
+  error?: string;
+};
+
+
+function buildSessionUser(user: User): SessionTokenUser | null {
+  if (!user) {
+    return null;
+  }
+
+  const resolvedEmail = user.email?.trim();
+
+  if (!resolvedEmail) {
+    return null;
+  }
+
+  return {
+    id: user.id ?? resolvedEmail,
+    email: resolvedEmail,
+    name: user.name ?? null,
+    role: normalizeRole(user.role),
+    photo: user.photo ?? null,
+    personal_credits: user.personal_credits ?? null,
+    last_login: user.last_login ?? null,
+    is_verified: user.is_verified ?? null,
+    verification_token: user.verification_token ?? null,
+    token_expiry: user.token_expiry ?? null,
+    deletedAt: user.deletedAt ?? null,
+    createdAt: user.createdAt ?? null,
+    updatedAt: user.updatedAt ?? null,
+    org_id: user.org_id ?? null,
+    organization: user.organization ?? null,
+    bookings: user.bookings ?? [],
+    createdBookings: user.createdBookings ?? [],
+    creditTransactions: user.creditTransactions ?? [],
+  };
+}
 
 function parseJwtExp(token: string | null | undefined): number | null {
   if (!token) {
@@ -128,35 +188,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const body = (await response.json()) as AuthApiResponse;
 
         const payload = body.data ?? body;
-        const user = payload.user;
-        const resolvedEmail = user?.email ?? email;
+        const accessToken = payload.accessToken ?? null;
 
-        if (!resolvedEmail) {
+        if (!accessToken) {
+          return null;
+        }
+
+        const profileResponse = await getProfileWithToken(accessToken);
+        const profileUser = profileResponse.data;
+        const sessionUser = buildSessionUser(profileUser);
+
+        if (!sessionUser) {
           return null;
         }
 
         return {
-          id: user?.id ?? resolvedEmail,
-          email: resolvedEmail,
-          name: user?.name ?? "",
-          role: normalizeRole(user?.role),
-          credits: typeof user?.credits === "number" ? user.credits : null,
-          unreadNotifications:
-            typeof user?.unreadNotifications === "number" ? user.unreadNotifications : null,
-          notifications: Array.isArray(user?.notifications)
-            ? user.notifications
-                .filter((item) => item && typeof item.title === "string" && item.title.trim().length > 0)
-                .map((item, index) => ({
-                  id: item.id ?? `${resolvedEmail}-${index}`,
-                  title: item.title ?? "Notification",
-                  message: item.message,
-                  createdAt: item.createdAt,
-                  read: item.read,
-                }))
-            : [],
-          accessToken: payload.accessToken ?? payload.token ?? null,
+          ...sessionUser,
+          accessToken,
           refreshToken: payload.refreshToken ?? null,
-          accessTokenExpires: parseJwtExp(payload.accessToken ?? payload.token ?? null),
+          accessTokenExpires: parseJwtExp(accessToken),
         };
       },
     }),
@@ -164,92 +214,89 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = (user as { accessToken?: string | null }).accessToken ?? null;
-        token.refreshToken = (user as { refreshToken?: string | null }).refreshToken ?? null;
-        token.role = (user as { role?: string | null }).role ?? null;
-        token.credits = (user as { credits?: number | null }).credits ?? null;
-        token.unreadNotifications =
-          (user as { unreadNotifications?: number | null }).unreadNotifications ?? null;
-        token.notifications =
-          (user as { notifications?: unknown[] }).notifications ?? [];
-        token.accessTokenExpires =
-          (user as { accessTokenExpires?: number | null }).accessTokenExpires ??
-          parseJwtExp((user as { accessToken?: string | null }).accessToken ?? null);
+        const sessionUser = user as SessionTokenUser;
+        const nextToken = token as SessionToken;
+        nextToken.id = sessionUser.id ?? nextToken.id;
+        nextToken.sub = sessionUser.id ?? nextToken.sub;
+        nextToken.accessToken = sessionUser.accessToken ?? null;
+        nextToken.refreshToken = sessionUser.refreshToken ?? null;
+        nextToken.role = sessionUser.role ?? null;
+        nextToken.photo = sessionUser.photo ?? null;
+        nextToken.personal_credits = sessionUser.personal_credits ?? null;
+        nextToken.last_login = sessionUser.last_login ?? null;
+        nextToken.is_verified = sessionUser.is_verified ?? null;
+        nextToken.verification_token = sessionUser.verification_token ?? null;
+        nextToken.token_expiry = sessionUser.token_expiry ?? null;
+        nextToken.deletedAt = sessionUser.deletedAt ?? null;
+        nextToken.createdAt = sessionUser.createdAt ?? null;
+        nextToken.updatedAt = sessionUser.updatedAt ?? null;
+        nextToken.org_id = sessionUser.org_id ?? null;
+        nextToken.organization = sessionUser.organization ?? null;
+        nextToken.bookings = sessionUser.bookings ?? [];
+        nextToken.createdBookings = sessionUser.createdBookings ?? [];
+        nextToken.creditTransactions = sessionUser.creditTransactions ?? [];
+        nextToken.accessTokenExpires =
+          sessionUser.accessTokenExpires ?? parseJwtExp(sessionUser.accessToken ?? null);
 
-        return token;
+        return nextToken;
       }
 
-      if (isAccessTokenValid(token.accessTokenExpires as number | null | undefined)) {
-        return token;
+      const nextToken = token as SessionToken;
+
+      if (isAccessTokenValid(nextToken.accessTokenExpires ?? null)) {
+        return nextToken;
       }
 
-      const currentRefreshToken = token.refreshToken as string | null | undefined;
+      const currentRefreshToken = nextToken.refreshToken ?? null;
 
       if (!currentRefreshToken) {
-        token.error = "RefreshAccessTokenError";
-        return token;
+        nextToken.error = "RefreshAccessTokenError";
+        return nextToken;
       }
 
       const refreshed = await refreshAccessToken(currentRefreshToken);
 
       if (!refreshed?.accessToken) {
-        token.error = "RefreshAccessTokenError";
-        return token;
+        nextToken.error = "RefreshAccessTokenError";
+        return nextToken;
       }
 
-      token.accessToken = refreshed.accessToken;
-      token.refreshToken = refreshed.refreshToken;
-      token.accessTokenExpires = refreshed.accessTokenExpires;
-      token.error = undefined;
+      nextToken.accessToken = refreshed.accessToken;
+      nextToken.refreshToken = refreshed.refreshToken;
+      nextToken.accessTokenExpires = refreshed.accessTokenExpires;
+      nextToken.error = undefined;
 
-      return token;
+      return nextToken;
     },
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as {
-          id?: string;
-          role?: string | null;
-          credits?: number | null;
-          unreadNotifications?: number | null;
-          notifications?: unknown[];
-        }).id = token.sub ?? undefined;
-        (session.user as {
-          id?: string;
-          role?: string | null;
-          credits?: number | null;
-          unreadNotifications?: number | null;
-          notifications?: unknown[];
-        }).role =
-          (token.role as string | null | undefined) ?? null;
-        (session.user as {
-          id?: string;
-          role?: string | null;
-          credits?: number | null;
-          unreadNotifications?: number | null;
-          notifications?: unknown[];
-        }).credits = (token.credits as number | null | undefined) ?? null;
-        (session.user as {
-          id?: string;
-          role?: string | null;
-          credits?: number | null;
-          unreadNotifications?: number | null;
-          notifications?: unknown[];
-        }).unreadNotifications = (token.unreadNotifications as number | null | undefined) ?? null;
-        (session.user as {
-          id?: string;
-          role?: string | null;
-          credits?: number | null;
-          unreadNotifications?: number | null;
-          notifications?: unknown[];
-        }).notifications = (token.notifications as unknown[] | undefined) ?? [];
-      }
+      const nextToken = token as SessionToken;
 
-      (session as { accessToken?: string | null }).accessToken =
-        (token.accessToken as string | null | undefined) ?? null;
-      (session as { refreshToken?: string | null }).refreshToken =
-        (token.refreshToken as string | null | undefined) ?? null;
-      (session as { error?: string }).error =
-        (token.error as string | undefined) ?? undefined;
+      session.user = {
+        id: nextToken.id ?? nextToken.sub ?? "",
+        email: nextToken.email ?? session.user?.email ?? "",
+        name: nextToken.name ?? session.user?.name ?? null,
+        image: null,
+        emailVerified: null,
+        role: nextToken.role ?? null,
+        photo: nextToken.photo ?? null,
+        personal_credits: nextToken.personal_credits ?? null,
+        last_login: nextToken.last_login ?? null,
+        is_verified: nextToken.is_verified ?? null,
+        verification_token: nextToken.verification_token ?? null,
+        token_expiry: nextToken.token_expiry ?? null,
+        deletedAt: nextToken.deletedAt ?? null,
+        createdAt: nextToken.createdAt ?? null,
+        updatedAt: nextToken.updatedAt ?? null,
+        org_id: nextToken.org_id ?? null,
+        organization: nextToken.organization ?? null,
+        bookings: nextToken.bookings ?? [],
+        createdBookings: nextToken.createdBookings ?? [],
+        creditTransactions: nextToken.creditTransactions ?? [],
+      } as typeof session.user;
+
+      session.accessToken = nextToken.accessToken ?? null;
+      session.refreshToken = nextToken.refreshToken ?? null;
+      session.error = nextToken.error;
 
       return session;
     },

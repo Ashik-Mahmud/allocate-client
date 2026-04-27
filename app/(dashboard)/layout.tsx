@@ -4,8 +4,6 @@ import { auth } from "@/auth";
 import { DashboardTopbar } from "@/components/dashboard/dashboard-topbar";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { ROUTES } from "@/lib/constants/routes";
-import { normalizeRole } from "@/lib/constants/roles";
-import { useCurrentUser } from "@/features/auth";
 
 export default async function DashboardLayout({
   children,
@@ -23,7 +21,7 @@ export default async function DashboardLayout({
   return (
     <div className="h-dvh overflow-hidden bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="grid h-full md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
-        <DashboardSidebar  />
+        <DashboardSidebar />
 
         <main className="min-w-0 overflow-hidden border-l border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
           <div className="flex h-full min-h-0 flex-col pt-20 md:pt-0">

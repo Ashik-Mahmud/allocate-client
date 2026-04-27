@@ -1,16 +1,11 @@
 import React from 'react'
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
+import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BriefcaseBusiness, CalendarCheck, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
-import { User } from '@/types';
-type DashboardUser = {
-    name?: string | null;
-    email?: string | null;
-    role?: AppRole | null;
-};
+import type { User } from '@/types';
 
 type Props = {
     user: User | null;
@@ -167,7 +162,6 @@ const SidebarContent = ({
     signingOut,
     compact,
 }: Props) => {
-    console.log(user, 'user')
     const initials = getInitials(user);
     const role = user?.role ?? null;
 

@@ -7,33 +7,9 @@ import { ThemeToggle } from "@/components/shared/theme-toggle";
 import NotificationPopover from "./notifcationPopover";
 import { useCurrentUser } from "@/features/auth";
 
-type DashboardNotification = {
-    id?: string;
-    title?: string;
-    message?: string;
-    read?: boolean;
-};
-
-type DashboardUser = {
-    name?: string | null;
-    email?: string | null;
-    role?: AppRole | null;
-    credits?: number | null;
-    unreadNotifications?: number | null;
-    notifications?: DashboardNotification[];
-};
-
-type DashboardTopbarProps = {
-    user: DashboardUser | null;
-};
-
 export function DashboardTopbar() {
     const { user } = useCurrentUser();
     const role = user?.role ?? null;
-    const notifications = Array.isArray(user?.notifications) ? user.notifications : [];
-    const unreadCount = 10; /* typeof user?.unreadNotifications === "number"
-        ? Math.max(user.unreadNotifications, 0)
-        : notifications.filter((item) => !item?.read).length */
 
     return (
         <div className="rounded-xl border-0 border-slate-200   py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
@@ -67,7 +43,7 @@ export function DashboardTopbar() {
                         {typeof user?.personal_credits === "number" ? user.personal_credits.toLocaleString() : "0"} credits
                     </span>
 
-                    <NotificationPopover unreadCount={unreadCount} notifications={notifications} />
+                    <NotificationPopover unreadCount={10} notifications={[]} />
 
                     <ThemeToggle
                         floating={false}
