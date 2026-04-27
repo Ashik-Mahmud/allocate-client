@@ -27,7 +27,7 @@ const NotificationPopover = ({ unreadCount, notifications }: Props) => {
                 <button
                     type="button"
                     className={cn(
-                        "h-10 w-10 border-slate-200/80 rounded-full bg-white/35 text-slate-700 shadow-sm shadow-slate-900/10 backdrop-blur-md transition-all duration-200 grid place-items-center hover:shadow-slate-900/15 dark:border-slate-700/70 dark:bg-slate-700/35 dark:text-slate-100 dark:shadow-black/30",
+                        "h-10 w-10 cursor-pointer border-slate-200/80 rounded-full bg-white/35 text-slate-700 shadow-sm shadow-slate-900/10 backdrop-blur-md transition-all duration-200 grid place-items-center hover:shadow-slate-900/15 dark:border-slate-700/70 dark:bg-slate-700/35 dark:text-slate-100 dark:shadow-black/30",
                         "rounded-full! opacity-100",
 
                     )}

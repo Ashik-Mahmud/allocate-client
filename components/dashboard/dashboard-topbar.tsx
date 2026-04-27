@@ -8,8 +8,12 @@ import NotificationPopover from "./notifcationPopover";
 import { useCurrentUser } from "@/features/auth";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
-
-export function DashboardTopbar() {
+import { PlanType } from "@/types/organization";
+const planStyles = {
+    [PlanType.FREE]: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-zinc-900 dark:text-zinc-400",
+    [PlanType.PRO]: "border-indigo-200 bg-indigo-50/50 text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/5 dark:text-indigo-300 shadow-sm shadow-indigo-500/5",
+    [PlanType.ENTERPRISE]: "border-amber-200 bg-amber-50/50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/5 dark:text-amber-300 shadow-sm shadow-amber-500/10",
+}; export function DashboardTopbar() {
     const { user } = useCurrentUser();
     const role = user?.role ?? null;
 
@@ -17,7 +21,7 @@ export function DashboardTopbar() {
     return (
         <div className="rounded-xl border-0 border-slate-200   py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex min-w-0 items-center gap-3">
+                <div className=" min-w-0 items-center gap-3 hidden md:flex">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
                         <LayoutDashboard className="size-5" />
                     </div>
@@ -29,9 +33,8 @@ export function DashboardTopbar() {
                         <span
                             className={cn(
                                 "inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold",
-                                role === APP_ROLES.ADMIN
-                                    ? "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                                    : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                                "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+
                             )}
                         >
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -41,9 +44,30 @@ export function DashboardTopbar() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-               
 
                     <div className="flex flex-wrap items-center gap-4">
+                        {/* Show the current Plan for organization */}
+                        {user?.role === APP_ROLES.ORG_ADMIN && (
+                            <Link href={ROUTES.dashboardOrgAdmin.billing} className={
+                                cn(
+                                    "group relative flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:shadow-md",
+                                    planStyles[user.organization?.plan_type || PlanType.FREE]
+                                )
+                            }>
+                                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800">
+                                    <CircleDollarSign className="size-4 text-slate-600 dark:text-slate-400" />
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
+                                        Current Plan
+                                    </span>
+                                    <span className="font-mono text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        {user.organization?.plan_type || "Free"}
+                                    </span>
+                                </div>
+                            </Link>
+                        )}
+
                         {/* Organization Credits Chip */}
                         {user?.role === APP_ROLES.ORG_ADMIN && (
                             <Link href={ROUTES.dashboardOrgAdmin.creditManagement} className="group relative flex items-center gap-2 rounded-2xl border border-emerald-200/60 bg-emerald-50/50 pl-2 pr-4 py-0.5 transition-all hover:bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/5 dark:hover:bg-emerald-500/10">

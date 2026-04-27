@@ -17,6 +17,7 @@ export const ROUTES = {
     resourcesManagement: "/dashboard/resources-management",
     staffManagement: "/dashboard/staff-management",
     creditManagement: "/dashboard/credit-management",
+    billing: "/dashboard/billing",
   },
   dashboardStaff: {
     workQueue: "/dashboard/work-queue",
