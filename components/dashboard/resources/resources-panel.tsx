@@ -120,8 +120,8 @@ export function ResourcesPanel() {
 
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Resources</h2>
+          <div className="hidden">
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Resources</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Manage resources, edit details, and update booking rules.
             </p>
@@ -183,7 +183,7 @@ export function ResourcesPanel() {
         }}
       >
         <DialogContent>
-          <DialogHeader>
+          <DialogHeader className="mb-4">
             <DialogTitle>Edit resource</DialogTitle>
             <DialogDescription>
               {selectedResource ? `Update details for ${selectedResource.name}.` : "Update resource details."}

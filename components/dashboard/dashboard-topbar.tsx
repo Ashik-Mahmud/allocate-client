@@ -17,7 +17,6 @@ const planStyles = {
     const { user } = useCurrentUser();
     const role = user?.role ?? null;
 
-    console.log(user, 'user')
     return (
         <div className="rounded-xl border-0 border-slate-200   py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
