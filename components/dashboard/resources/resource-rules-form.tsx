@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { getApiErrorMessage } from "@/lib/services/http";
@@ -22,6 +22,7 @@ type Props = {
   isSubmitting: boolean;
   onSuccess?: () => void;
   className?: string;
+  defaultValues?: UpdateResourceRulesPayload | null;
 };
 
 export function ResourceRulesForm({
@@ -30,6 +31,7 @@ export function ResourceRulesForm({
   isSubmitting,
   onSuccess,
   className,
+  defaultValues,
 }: Props) {
   const [maxBookingHours, setMaxBookingHours] = useState("4");
   const [minLeadTime, setMinLeadTime] = useState("1");
@@ -53,6 +55,19 @@ export function ResourceRulesForm({
       current.includes(day) ? current.filter((item) => item !== day) : [...current, day]
     );
   }
+
+  useEffect(() => {
+    if (defaultValues) {
+      setMaxBookingHours(defaultValues.max_booking_hours?.toString() ?? "4");
+      setMinLeadTime(defaultValues.min_lead_time?.toString() ?? "1");
+      setBufferTime(defaultValues.buffer_time?.toString() ?? "0.5");
+      setOpeningHours(defaultValues.opening_hours?.toString() ?? "9");
+      setClosingHours(defaultValues.closing_hours?.toString() ?? "18");
+      setSlotDurationMin(defaultValues.slot_duration_min?.toString() ?? "30");
+      setIsWeekendAllowed(defaultValues.is_weekend_allowed ?? false);
+      setAvailableDays(defaultValues.availableDays ?? ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
+    }
+  }, [defaultValues]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,7 +95,7 @@ export function ResourceRulesForm({
 
   return (
     <form onSubmit={handleSubmit} className={className ?? "space-y-3"}>
-      <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Update booking rules</h2>
+      {/* <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Update booking rules</h2> */}
 
       <div className="grid gap-3 md:grid-cols-3">
         <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300">

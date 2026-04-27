@@ -6,6 +6,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BriefcaseBusiness, CalendarCheck, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
+import { PlanType } from '@/types/organization';
 
 type Props = {
     user: User | null;
@@ -201,7 +202,15 @@ const SidebarContent = ({
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                         Live
                     </span>
-                ) : null}
+                ) : (
+                    <Link href={ROUTES.dashboardOrgAdmin.billing}  onClick={onNavigate} className={
+                        cn(
+                            "inline-flex rounded-2xl items-center gap-2 border px-3 py-1 text-xs font-medium",
+                            "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200",
+                            user?.organization?.plan_type === PlanType.ENTERPRISE ? "border-emerald-500 bg-emerald-500/10 text-emerald-300" : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                        )
+                    }>
+                        {user?.organization?.plan_type}</Link>)}
             </div>
             <div className="min-h-0 flex-1 overflow-hidden pt-4">
                 <nav className="h-full space-y-2 overflow-y-auto pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

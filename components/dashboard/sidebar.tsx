@@ -10,6 +10,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 
 import SidebarContent from "./sidebarContent";
+import { ThemeToggle } from "../shared/theme-toggle";
 
 export function DashboardSidebar() {
   const { user } = useCurrentUser();
@@ -128,7 +129,10 @@ export function DashboardSidebar() {
                 <p className="text-xs text-slate-500 dark:text-slate-400">Navigation menu</p>
               </div>
 
-              <button
+             
+              <div className="flex  items-center gap-3">
+                <ThemeToggle floating={false} className=" opacity-100 sm:hidden" />
+               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50 text-slate-700 transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
@@ -136,6 +140,7 @@ export function DashboardSidebar() {
               >
                 <X className="size-4" />
               </button>
+              </div>
             </div>
 
             <SidebarContent

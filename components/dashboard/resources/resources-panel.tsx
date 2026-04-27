@@ -149,6 +149,7 @@ export function ResourcesPanel() {
             onUpdateRules={(resource) => {
               setSelectedResourceId(resource.id);
               setSelectedResourceName(resource.name);
+              setSelectedResource(resource);
               setRulesOpen(true);
             }}
             onToggleActive={(resource) =>
@@ -230,7 +231,7 @@ export function ResourcesPanel() {
         }}
       >
         <DialogContent>
-          <DialogHeader>
+          <DialogHeader className="mb-4">
             <DialogTitle>Update booking rules</DialogTitle>
             <DialogDescription>
               {selectedResourceName
@@ -248,6 +249,7 @@ export function ResourcesPanel() {
               isSubmitting={rulesMutation.isPending}
               onSuccess={() => setRulesOpen(false)}
               className="space-y-4"
+              defaultValues={selectedResource?.resourcesRules?.[0]}
             />
           ) : null}
         </DialogContent>

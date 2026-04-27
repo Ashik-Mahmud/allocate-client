@@ -49,7 +49,7 @@ const planStyles = {
                         {user?.role === APP_ROLES.ORG_ADMIN && (
                             <Link href={ROUTES.dashboardOrgAdmin.billing} className={
                                 cn(
-                                    "group relative flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:shadow-md",
+                                    "group relative  items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-300 hover:shadow-md hidden md:flex",
                                     planStyles[user.organization?.plan_type || PlanType.FREE]
                                 )
                             }>
@@ -110,7 +110,7 @@ const planStyles = {
 
                     <ThemeToggle
                         floating={false}
-                        className="h-10 w-10 rounded-xl border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                        className="hidden sm:block h-10 w-10 rounded-xl border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                     />
 
 

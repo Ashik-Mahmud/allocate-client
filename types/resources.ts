@@ -33,6 +33,7 @@ export interface Resource {
 	deletedAt?: string | null;
 	createdAt: string;
 	updatedAt: string;
+	resourcesRules?: ResourceRule[];
 }
 
 export interface ResourceRule {
