@@ -22,7 +22,7 @@ const NotificationPopover = ({ unreadCount, notifications }: Props) => {
     const items = notifications.slice(0, 6);
 
     return (
-        <Popover>
+        <Popover >
             <PopoverTrigger asChild>
                 <button
                     type="button"
