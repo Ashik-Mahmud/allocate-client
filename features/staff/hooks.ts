@@ -93,7 +93,7 @@ export const useCreateStaffByOrgAdminMutation = () => {
 export const useUpdateStaffDetailsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ staffId, payload }: { staffId: string; payload: StaffManagementFormValues }) => updateStaffDetails(staffId, payload),
+    mutationFn: ({ staffId, payload }: { staffId: string; payload: Partial<StaffManagementFormValues> }) => updateStaffDetails(staffId, payload),
     onSuccess: async () => {
       void Promise.all([
         queryClient.invalidateQueries({ queryKey: ["staffs"] }),

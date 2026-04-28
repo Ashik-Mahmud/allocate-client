@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Loader2, UserPlus, Save, Mail, User, Lock, ImageIcon } from "lucide-react"
 import { cn } from '@/lib/utils'
+import { User as UserType } from '@/types'
 
 // 1. Validation Schema
 const staffSchema = z.object({
@@ -18,7 +19,7 @@ const staffSchema = z.object({
 export type StaffFormValues = z.infer<typeof staffSchema>
 
 type Props = {
-    initialData?: Partial<StaffFormValues> ;
+    initialData?: Partial<UserType>;
     onSubmit: (values: StaffFormValues) => void;
     isLoading?: boolean;
     isEdit?: boolean;
@@ -39,12 +40,16 @@ const StaffManagementForm = ({ initialData, onSubmit, isLoading, isEdit, errorMe
             name: '',
             password: '',
             photo: '',
-            ...initialData
         },
     })
 
     useEffect(() => {
-        if (initialData) reset(initialData);
+        if (initialData) reset({
+            email: initialData.email || '',
+            name: initialData.name || '',
+            password: '',
+            photo: initialData.photo || '',
+        });
     }, [initialData, reset]);
 
     return (
@@ -71,7 +76,7 @@ const StaffManagementForm = ({ initialData, onSubmit, isLoading, isEdit, errorMe
             {/* Email Address */}
             <div className="space-y-1.5">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <Mail className="size-3.5" /> Email Address 
+                    <Mail className="size-3.5" /> Email Address
                     <span className="text-red-500 ">*</span>
                 </label>
                 <input

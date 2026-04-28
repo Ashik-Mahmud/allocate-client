@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { useCreateStaffByOrgAdminMutation, useDeleteStaffMutation, useGetStaffsQuery } from '@/features/staff'
+import { useCreateStaffByOrgAdminMutation, useDeleteStaffMutation, useGetStaffsQuery, useUpdateStaffDetailsMutation } from '@/features/staff'
 
 import { Button } from '@/components/ui/button'
 import { Search, ChevronLeft, ChevronRight, Loader2, Plus } from 'lucide-react'
@@ -42,7 +42,8 @@ const StaffMain = () => {
         search: debouncedSearch,
     });
 
-    const createStaff = useCreateStaffByOrgAdminMutation()
+    const createStaff = useCreateStaffByOrgAdminMutation();
+    const updateStaff = useUpdateStaffDetailsMutation();
     const deleteStaff = useDeleteStaffMutation()
     const handlePageChange = (newPage: number) => {
         setFilters((prev) => ({ ...prev, page: newPage }));
@@ -52,14 +53,30 @@ const StaffMain = () => {
     // 4. Handle Form Submission (for Add/Edit)
     const handleOnSubmit = async (values: StaffManagementFormValues) => {
         // Implement your add/edit logic here
-        const response = await createStaff.mutate(values)
-        console.log(response, "response")
-        toast.success("Staff member added successfully!")
-        setIsDialogOpen(false);
-
+        const response = await createStaff.mutateAsync(values)
+        if (response?.success) {
+            toast.success("Staff member added successfully!")
+            setIsDialogOpen(false);
+        }
     };
 
+    // 5. Handle Edit Submission
+    const handleOnEditSubmit = async (values: StaffManagementFormValues) => {
+        if (!selectedStaff?.id) return;
+        const changedFields: Partial<StaffManagementFormValues> = {};
+        if (values.name !== selectedStaff.name) changedFields.name = values.name;
+        if (values.email !== selectedStaff.email) changedFields.email = values.email;
+        if (values.photo !== selectedStaff.photo) changedFields.photo = values.photo;
+        if (values.password) changedFields.password = values.password; // Only include password if it's provided
 
+        const response = await updateStaff.mutateAsync({ staffId: selectedStaff.id, payload: changedFields })
+        if (response?.success) {
+            toast.success("Staff member updated successfully!")
+            setIsDialogOpen(false);
+            setSelectedStaff(null);
+        }
+    };
+    // 6. Handle Delete Confirmation
     const handleDeleteConfirm = async () => {
         // Implement your delete logic here, using selectedStaff state to identify which staff to delete
         if (selectedStaff) {
@@ -176,22 +193,33 @@ const StaffMain = () => {
                     </div>
                 )}
             </div>
-            <DialogPopup open={isDialogOpen} onOpenChange={setIsDialogOpen} title="Add Staff" description="Fill in the details to add a new staff member.">
+            {/* Dialog Popup for adding/editing staff */}
+            <DialogPopup
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                title={selectedStaff?.id ? "Edit Staff" : "Add Staff"}
+                description={selectedStaff?.id ? "Fill in the details to edit this staff member." : "Fill in the details to add a new staff member."}
+            >
                 <StaffManagementForm
-                    onSubmit={handleOnSubmit}
-                    isLoading={createStaff.isPending}
-                    errorMessage={createStaff.isError ? createStaff?.error?.message : ''}
+                    onSubmit={
+                        selectedStaff?.id ? handleOnEditSubmit : handleOnSubmit
+                    }
+                    isLoading={createStaff.isPending || updateStaff.isPending}
+                    errorMessage={createStaff.isError || updateStaff.isError ? createStaff?.error?.message || updateStaff?.error?.message : ''}
+                    initialData={selectedStaff || undefined}
+                    isEdit={!!selectedStaff?.id}
                 />
             </DialogPopup>
-
+            {/* Confirmation Dialog for deleting staff */}
             <AllocateConfirmationAlert
                 open={isConfirmationOpen}
-                title="Delete User"
+                title="Delete Staff Member"
                 description={`Are you sure you want to delete ${selectedStaff?.name}? This action cannot be undone.`}
                 variant='destructive'
+                errorMessage={deleteStaff.isError ? deleteStaff?.error?.message : ''}
                 onOpenChange={() => {
-                    setSelectedStaff(null);
                     setIsConfirmationOpen(false);
+                    setTimeout(() => setSelectedStaff(null), 300); // Clear selected staff after closing the dialog
                 }}
                 onConfirm={handleDeleteConfirm}
             />

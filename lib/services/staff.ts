@@ -59,10 +59,10 @@ export function updateStaffWorkQueueStatus(
 
 
 export const createStaffByOrgAdmin = (payload: StaffManagementFormValues) => {
-  return apiRequest(`/staff/create`, {
+  return apiRequest<ApiResponse<StaffDetails>>(`/staff/create`, {
     method: "POST",
     body: JSON.stringify(payload),
-  }, true, true);
+  });
 }
 
 // Get staff list (this is a placeholder and should be replaced with the actual endpoint when available)
@@ -89,8 +89,8 @@ export const getStaffList = (filters?: StaffListFilters) => {
 };
 
 // Update staff details by ID
-export const updateStaffDetails = (staffId: string, payload: StaffManagementFormValues) => {
-  return apiRequest(`/staff/update/${staffId}`, {
+export const updateStaffDetails = (staffId: string, payload: Partial<StaffManagementFormValues>) => {
+  return apiRequest<ApiResponse<StaffDetails>>(`/staff/${staffId}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
   });
@@ -98,7 +98,7 @@ export const updateStaffDetails = (staffId: string, payload: StaffManagementForm
 
 // Get staff details by ID (
 export const getStaffDetails = (staffId: string) => {
-  return apiRequest(`/staff/${staffId}`, {
+  return apiRequest<ApiResponse<StaffDetails>>(`/staff/${staffId}`, {
     method: "GET",
   });
 }

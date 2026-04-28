@@ -24,6 +24,7 @@ type Props = {
     confirmButtonClassName?: string;
     variant?: 'destructive' | 'warning' | 'default';
     icon?: React.ReactNode;
+    errorMessage?: string;
 }
 
 const AllocateConfirmationAlert = ({
@@ -36,7 +37,8 @@ const AllocateConfirmationAlert = ({
     onConfirm,
     confirmButtonClassName,
     variant = 'destructive',
-    icon
+    icon,
+    errorMessage
 }: Props) => {
 
     // Logic to determine icon color based on variant
@@ -58,6 +60,11 @@ const AllocateConfirmationAlert = ({
                         {description}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+                {errorMessage && (
+                    <div className="p-4 mt-4 bg-red-50 text-red-700 rounded-md">
+                        <p className="text-sm">{errorMessage}</p>
+                    </div>
+                )}
                 <AlertDialogFooter>
                     <AlertDialogCancel
                         onClick={() => onOpenChange(false)}
