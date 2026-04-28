@@ -71,8 +71,9 @@ export const useGetStaffsQuery = (filters?: StaffListFilters) => {
 // Get Staff by ID
 export const useGetStaffByIdQuery = (staffId?: string) => {
   return useQuery({
-    queryKey: staffKeys.byId(staffId!),
-    queryFn: () => getStaffDetails(staffId!),
+    queryKey: staffKeys.byId(staffId ?? ""),
+    queryFn: () => getStaffDetails(staffId ?? ""),
+    enabled: Boolean(staffId),
   });
 };
 // Create Staff by Org Admin

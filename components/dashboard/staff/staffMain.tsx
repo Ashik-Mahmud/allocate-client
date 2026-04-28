@@ -14,6 +14,9 @@ import { StaffDetails, StaffManagementFormValues } from '@/types/staff'
 import { toast } from 'sonner'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { is } from 'zod/v4/locales'
+import { Router } from 'next/router'
+import { useRouter } from 'next/navigation'
+import { ROUTES } from '@/lib/constants/routes'
 
 export interface StaffListFilters {
     page?: number;
@@ -23,6 +26,7 @@ export interface StaffListFilters {
 }
 
 const StaffMain = () => {
+    const router = useRouter();
     // 1. Local State for Filters
     const [filters, setFilters] = useState<StaffListFilters>({
         page: 1,
@@ -151,6 +155,18 @@ const StaffMain = () => {
                                         setIsConfirmationOpen(true);
                                     }}
 
+                                    onAssignCredits={() => {
+
+                                    }}
+
+                                    onRevokeCredits={() => {
+
+                                    }}
+
+                                    onViewDetails={() => {
+                                        console.log('Trigger')
+                                        router.push(`${ROUTES.dashboardOrgAdmin.staffManagement}/${staff.id}`) // Assuming you have a staff details page set up
+                                    }}
 
 
                                 />

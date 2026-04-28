@@ -20,11 +20,14 @@ interface UserProps {
     user: StaffDetails
     onEdit?: (user: StaffDetails) => void;
     onDelete?: (userId?: string) => void;
+    onViewDetails?: (user: StaffDetails) => void;
+    onAssignCredits?: (user: StaffDetails) => void;
+    onRevokeCredits?: (user: StaffDetails) => void;
 }
 
 
 
-const StaffUserCard = ({ user, onEdit, onDelete }: UserProps) => {
+const StaffUserCard = ({ user, onEdit, onDelete, onViewDetails, onAssignCredits, onRevokeCredits }: UserProps) => {
 
     // delete and edit handlers would go here, for now we will just log the actions
     const deleteStaff =useDeleteStaffMutation()
@@ -75,12 +78,28 @@ const StaffUserCard = ({ user, onEdit, onDelete }: UserProps) => {
 
 
                 <AllocateDropdown dropdownOptions={[
-                    // {
-                    //     label: isActive ? 'Deactivate' : 'Activate',
-                    //     onClick: () => {
-                    //         // Handle activate/deactivate logic here
-                    //     }
-                    // },
+                    {
+                        label:'View Details',
+                        onClick: () => {
+                            // Handle activate/deactivate logic here
+                            onViewDetails && onViewDetails(user);
+                        }
+                    },
+                    {
+                        label: "Assign credits",
+                        onClick: () => {
+                            // Handle activate/deactivate logic here
+                            onAssignCredits && onAssignCredits(user);
+                        },
+                     
+                    },
+                    {
+                        label: "Revoke credits",
+                        onClick: () => {
+                            // Handle activate/deactivate logic here
+                            onRevokeCredits && onRevokeCredits(user);
+                        }
+                    },
                     {
                         label: 'Edit User',
                         onClick: () => {
