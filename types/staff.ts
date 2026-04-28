@@ -26,3 +26,10 @@ export interface GetStaffCreditLogFilter {
     staffId?: string;
     search?: string;
 }
+
+export interface StaffManagementFormValues {
+    name: string;
+    email: string;
+    password?: string;
+    photo?: string;
+}

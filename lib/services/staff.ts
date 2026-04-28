@@ -1,4 +1,6 @@
 import type {
+  ApiResponse,
+  PaginatedResponse,
   StaffDailyPlanResponse,
   StaffWorkQueueFilters,
   StaffWorkQueueResponse,
@@ -6,7 +8,7 @@ import type {
 } from "@/types";
 
 import { apiRequest } from "./http";
-import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffListFilters } from "@/types/staff";
+import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffDetails, StaffListFilters, StaffManagementFormValues } from "@/types/staff";
 
 function buildQueryString(filters?: StaffWorkQueueFilters) {
   if (!filters) {
@@ -56,11 +58,11 @@ export function updateStaffWorkQueueStatus(
 }
 
 
-export const createStaffByOrgAdmin = (payload: Record<string, unknown>) => {
+export const createStaffByOrgAdmin = (payload: StaffManagementFormValues) => {
   return apiRequest(`/staff/create`, {
     method: "POST",
     body: JSON.stringify(payload),
-  });
+  }, true, true);
 }
 
 // Get staff list (this is a placeholder and should be replaced with the actual endpoint when available)
@@ -81,13 +83,13 @@ export const getStaffList = (filters?: StaffListFilters) => {
   }
   const query = params.toString();
 
-  return apiRequest(`/staff/list${query ? `?${query}` : ''}`, {
+  return apiRequest<PaginatedResponse<StaffDetails>>(`/staff/list${query ? `?${query}` : ''}`, {
     method: "GET",
   });
 };
 
 // Update staff details by ID
-export const updateStaffDetails = (staffId: string, payload: Record<string, unknown>) => {
+export const updateStaffDetails = (staffId: string, payload: StaffManagementFormValues) => {
   return apiRequest(`/staff/update/${staffId}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
@@ -103,7 +105,7 @@ export const getStaffDetails = (staffId: string) => {
 
 // Delete staff member by ID 
 export const deleteStaff = (staffId: string) => {
-  return apiRequest(`/staff/delete/${staffId}`, {
+  return apiRequest<ApiResponse<StaffDetails>>(`/staff/${staffId}/delete`, {
     method: "DELETE",
   });
 }

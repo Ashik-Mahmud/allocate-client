@@ -258,7 +258,8 @@ function getErrorMessage(status: number, body: unknown) {
 export async function apiRequest<TResponse>(
   path: string,
   init?: RequestInit,
-  allowRetry = true
+  allowRetry = true,
+  skipResponseBody = false
 ): Promise<TResponse> {
   const token = getAccessTokenFromStorage();
   const headers = new Headers(init?.headers);
@@ -289,6 +290,14 @@ export async function apiRequest<TResponse>(
 
     clearAuthSessionStorage();
     emitAuthSessionExpired();
+  }
+
+  if (skipResponseBody) {
+    if (!response.ok) {
+      throw new ApiError(getErrorMessage(response.status, null), response.status, null);
+    }
+
+    return undefined as TResponse;
   }
 
   const body = await parseResponseBody(response);

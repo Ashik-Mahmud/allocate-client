@@ -17,10 +17,10 @@ import {
   updateStaffWorkQueueStatus,
 } from "@/lib/services/staff";
 import type { StaffWorkQueueFilters, UpdateStaffWorkQueueStatusPayload } from "@/types";
-import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffCreditLogEntry, StaffListFilters } from "@/types/staff";
+import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffCreditLogEntry, StaffListFilters, StaffManagementFormValues } from "@/types/staff";
 
 export const staffKeys = {
-  all: ["staffs"] as const,
+  all: (filters?: StaffListFilters) => ["staffs", filters ?? {}] as const,
   byId: (staffId: string) => ["staff", staffId] as const,
   workQueue: (filters?: StaffWorkQueueFilters) =>
     ["staff", "work-queue", filters ?? {}] as const,
@@ -64,7 +64,7 @@ export function useUpdateStaffWorkQueueStatusMutation() {
 // Get Staff List
 export const useGetStaffsQuery = (filters?: StaffListFilters) => {
   return useQuery({
-    queryKey: staffKeys.all,
+    queryKey: staffKeys.all(filters),
     queryFn: () => getStaffList(filters),
   });
 };
@@ -79,9 +79,12 @@ export const useGetStaffByIdQuery = (staffId?: string) => {
 export const useCreateStaffByOrgAdminMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: Record<string, unknown>) => createStaffByOrgAdmin(payload),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+    mutationFn: (payload: StaffManagementFormValues) => createStaffByOrgAdmin(payload),
+    onSuccess: () => {
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     },
   });
 };
@@ -90,9 +93,12 @@ export const useCreateStaffByOrgAdminMutation = () => {
 export const useUpdateStaffDetailsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ staffId, payload }: { staffId: string; payload: Record<string, unknown> }) => updateStaffDetails(staffId, payload),
+    mutationFn: ({ staffId, payload }: { staffId: string; payload: StaffManagementFormValues }) => updateStaffDetails(staffId, payload),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     },
   });
 };
@@ -103,7 +109,10 @@ export const useDeleteStaffMutation = () => {
   return useMutation({
     mutationFn: (staffId: string) => deleteStaff(staffId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     },
   });
 };
@@ -115,7 +124,10 @@ export const useAssignCreditsToStaffMutation = () => {
   return useMutation({
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => assignCreditsToStaff(staffId, credits),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     },
   });
 }
@@ -127,7 +139,10 @@ export const useAssignCreditsToMultipleStaffMutation = () => {
   return useMutation({
     mutationFn: (payload: AssignMultipleStaffCreditsPayload) => assignCreditsToMultipleStaff(payload),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     },
   });
 }
@@ -139,7 +154,10 @@ export const useRevokeCreditsFromStaffMutation = () => {
   return useMutation({
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => revokeCreditsFromStaff(staffId, credits),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["staff"] });
+      void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
+        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+      ]);
     }
   });
 }
