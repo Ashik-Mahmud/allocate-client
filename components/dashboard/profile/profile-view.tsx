@@ -179,7 +179,7 @@ export default function ProfileView({ user }: Props) {
                                         : "A minimal account overview with your linked organization details."}
                                 </p>
 
-                                {!isOrgAdmin && (
+                                {!isOrgAdmin && !isAdmin && (
                                     <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/75">
                                         <Mail className="size-3.5" />
                                         {supportEmail}
@@ -241,11 +241,21 @@ export default function ProfileView({ user }: Props) {
                                     icon={<BadgeCheck className="size-3.5" />}
                                 />
                             </div>
-                        ) : null}
+                        ) : !isAdmin && <StatCard
+                            label="Account credits"
+                            value={`${currentCredits.toLocaleString()} CR`}
+                            helper="Your personal balance"
+                            icon={<CreditCard className="size-3.5" />}
+                        />}
                     </div>
                 </div>
 
-                <div className="grid gap-4 px-6 py-6 lg:grid-cols-2">
+                <div className={
+                    cn(
+                        "grid gap-4 px-6 py-6 lg:grid-cols-2",
+                        isAdmin ? " lg:grid-cols-1" : ''
+                    )
+                }>
                     {isOrgAdmin ? (
                         <SectionCard className="border shadow-sm relative" title="Organization overview" subtitle="All important organization details in one view.">
 
@@ -313,7 +323,7 @@ export default function ProfileView({ user }: Props) {
                             )}
                         </SectionCard>
                     ) : (
-                        <SectionCard title="Linked organization" subtitle="Only the most relevant organization details are shown here.">
+                        !isAdmin && <SectionCard className="border-0 shadow-none border-r rounded-none" title="Linked organization" subtitle="Only the most relevant organization details are shown here.">
 
                             {organization ? (
                                 <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/30">
@@ -351,7 +361,11 @@ export default function ProfileView({ user }: Props) {
                         </SectionCard>
                     )}
 
-                    <SectionCard className="relative" title="Account details" subtitle="Identity and profile metadata for the current user.">
+                    <SectionCard className={cn(
+                        "relative",
+                        isOrgAdmin ? "border shadow-sm" : "border-0 shadow-none  rounded-none",
+                        isAdmin ? "w-full" : ''
+                    )} title="Account details" subtitle="Identity and profile metadata for the current user." >
                         <button className="flex items-center absolute right-7 top-7 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 gap-2 cursor-pointer" >
                             <Edit className="size-4 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200" />
                             Edit
