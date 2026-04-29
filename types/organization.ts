@@ -1,6 +1,22 @@
 import { User } from ".";
 import { Resources, ResourcesRule } from "./resources";
 
+export interface OrgAddress {
+  street?: string;
+  line2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
+export interface OrgNotificationPreference {
+  email: boolean;
+  sms: boolean;
+  push: boolean;
+  inApp: boolean;
+}
+
 export enum PlanType {
   FREE = 'FREE',
   PRO = 'PRO',
@@ -9,12 +25,7 @@ export enum PlanType {
 }
 
 export interface OrgSettings {
-  notificationPreference: {
-    email: boolean;
-    sms: boolean;
-    push: boolean;
-    inApp: boolean;
-  };
+  notificationPreference: OrgNotificationPreference;
 }
 
 export interface Organizations {
@@ -28,10 +39,10 @@ export interface Organizations {
   credit_pool: number | null;
   is_active: boolean | null;
   timezone: string;
-  address: any | null; // Can be typed specifically if you have a consistent address structure
+  address: OrgAddress | string | null;
   business_email: string | null;
   needUpdateOrg: boolean | null;
-  settings: OrgSettings | any; 
+  settings: OrgSettings | null;
   isVerified: boolean | null;
   deletedAt: Date | string | null;
   createdAt: Date | string | null;

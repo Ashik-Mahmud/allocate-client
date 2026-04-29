@@ -59,6 +59,31 @@ function formatAddress(address: unknown) {
     return String(address);
 }
 
+function formatNotificationPreferences(settings: unknown) {
+    if (!settings || typeof settings !== "object") {
+        return "Default preferences";
+    }
+
+    const notificationPreference = (settings as { notificationPreference?: Record<string, boolean> }).notificationPreference;
+
+    if (!notificationPreference) {
+        return "Default preferences";
+    }
+
+    const preferenceLabels: Record<string, string> = {
+        email: "Email",
+        sms: "SMS",
+        push: "Push",
+        inApp: "In-app",
+    };
+
+    const enabled = Object.entries(notificationPreference)
+        .filter(([, value]) => Boolean(value))
+        .map(([key]) => preferenceLabels[key] ?? key);
+
+    return enabled.length > 0 ? enabled.join(", ") : "All notifications off";
+}
+
 function getRoleLabel(role?: string | null) {
     if (role === APP_ROLES.ADMIN) return "System Admin";
     if (role === APP_ROLES.ORG_ADMIN) return "Organization Admin";
@@ -314,6 +339,7 @@ export default function ProfileView({ user }: Props) {
                                         <LabelValue label="Organization type" value={organization.org_type ?? "N/A"} />
                                         <LabelValue label="Timezone" value={organization.timezone || "N/A"} />
                                         <LabelValue label="Address" value={formatAddress(organization.address)} />
+                                        <LabelValue label="Notifications" value={formatNotificationPreferences(organization.settings)} />
                                     </div>
                                 </div>
                             ) : (
@@ -351,6 +377,7 @@ export default function ProfileView({ user }: Props) {
                                     <div className="grid gap-3 sm:grid-cols-2">
                                         <LabelValue label="Support email" value={supportEmail} />
                                         <LabelValue label="Timezone" value={organization.timezone || "N/A"} />
+                                        <LabelValue label="Notifications" value={formatNotificationPreferences(organization.settings)} />
                                     </div>
                                 </div>
                             ) : (

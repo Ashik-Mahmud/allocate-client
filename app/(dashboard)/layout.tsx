@@ -26,7 +26,7 @@ export default async function DashboardLayout({
     <div className="h-dvh  bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       {
         session?.user?.organization?.needUpdateOrg && (
-          <UpdateOrganizationDrawer />
+          <UpdateOrganizationDrawer organization={session.user.organization} />
         )
       }
 
