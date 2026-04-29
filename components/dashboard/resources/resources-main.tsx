@@ -6,6 +6,7 @@ import React from 'react'
 import { ResourcesPanel } from './resources-panel';
 import Loader from '@/components/shared/loader';
 import { Skeleton } from 'boneyard-js/react'
+import AllocateDrawer from '@/components/shared/allocate-drawer';
 
 type Props = {}
 
@@ -26,6 +27,7 @@ const ResourcesMain = (props: Props) => {
 
     return (
         <div className="relative">
+           
             <Skeleton name="resources-main" loading={isLoading}>
                 <div className="space-y-4">
                     <div>

@@ -5,6 +5,9 @@ import { DashboardTopbar } from "@/components/dashboard/dashboard-topbar";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { ROUTES } from "@/lib/constants/routes";
 import { Toaster } from "@/components/ui/sonner";
+import AllocateDrawer from "@/components/shared/allocate-drawer";
+import UpdateProfile from "@/components/dashboard/profile/update-profile";
+import UpdateOrganizationDrawer from "@/components/dashboard/update-org-drawer";
 
 export default async function DashboardLayout({
   children,
@@ -21,6 +24,13 @@ export default async function DashboardLayout({
 
   return (
     <div className="h-dvh  bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      {
+        session?.user?.organization?.needUpdateOrg && (
+          <UpdateOrganizationDrawer />
+        )
+      }
+
+
       <div className="grid h-full md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
         <DashboardSidebar />
 
@@ -42,6 +52,7 @@ export default async function DashboardLayout({
 
         </main>
       </div>
+
     </div>
   );
 }
