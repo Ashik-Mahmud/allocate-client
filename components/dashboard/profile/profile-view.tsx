@@ -295,6 +295,10 @@ export default function ProfileView({ user }: Props) {
                             {organization ? (
                                 <div className="space-y-4 rounded-2xl border-0 border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/30">
                                     <div className="flex flex-wrap items-center gap-2">
+                                        {
+                                            organization?.photo && <img src={organization.photo} alt={organization.name ?? "Organization Logo"} className="h-10 w-10 rounded-full object-cover" />
+                                            
+                                        }
                                         <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{orgName}</h3>
 
                                         <span className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-medium text-slate-500 dark:border-slate-800 dark:text-slate-400">

@@ -20,16 +20,15 @@ const UpdateOrganizationDrawer = ({ organization }: Props) => {
     const handleUpdateOrg = async (data: Partial<Organizations>) => {
         // After successful update, you can close the drawer
         const result = await organizationFn.mutateAsync({ payload: data });
-
         if (result.success) {
             setOpen(false);
             toast.success("Organization updated successfully");
         }
     }
 
-    // if (user?.organization?.needUpdateOrg === false) {
-    //     return null;
-    // }
+    if (user?.organization?.needUpdateOrg === false) {
+        return null;
+    }
     return (
         <div>
             <AllocateDrawer open={open} onOpenChange={setOpen} title="Update Organization" description="Update your organization details" position="bottom" className="max-w-5xl" showHeader={false} showHandler={false}

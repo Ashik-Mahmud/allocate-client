@@ -181,7 +181,7 @@ function mapToOrganizationPayload(values: OrgFormValues): Partial<Organizations>
         tagline: cleanOptionalText(values.tagline ?? ''),
         business_email: cleanOptionalText(values.business_email ?? ''),
         timezone: values.timezone,
-        photo: cleanOptionalText(values.photo ?? ''),
+        photo: cleanOptionalText(values.photo ?? '') || '',
         is_active: values.is_active,
         address: {
             street: cleanOptionalText(values.address.street ?? ''),
