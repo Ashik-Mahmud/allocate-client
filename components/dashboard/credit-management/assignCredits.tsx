@@ -12,7 +12,7 @@ import {
     ArrowRight,
     Wallet,
     UserCheck,
-    
+
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import AllocateDrawer from '@/components/shared/allocate-drawer'
@@ -38,6 +38,7 @@ type Props = {
     onSubmit: (data: FormValues) => void;
     isLoading?: boolean;
     orgCreditPool?: number;
+    position?: "top" | "bottom" | "left" | "right";
 }
 
 const AssignCredits = ({
@@ -46,7 +47,9 @@ const AssignCredits = ({
     selectedStaffIds,
     onSubmit,
     isLoading,
+    position = "left",
     orgCreditPool = 10000 // Replace with real data from your Org hook
+
 }: Props) => {
 
     const { data: staffData, isLoading: isFetching } = useGetStaffsQuery({ limit: 9999 });
@@ -89,12 +92,12 @@ const AssignCredits = ({
     // 2. Load ONLY selected staff into the form
     useEffect(() => {
         if (staffData?.data && open) {
-            const selectedStaffData = staffData.data.filter((s: any) =>
+            const selectedStaffData = selectedStaffIds?.length > 0 ? staffData.data.filter((s: any) =>
                 selectedStaffIds.includes(s.id)
-            );
+            ) : staffData?.data;
 
             reset({
-                staffCredits: staffData.data.map((s: any) => ({
+                staffCredits: selectedStaffData.map((s: any) => ({
                     staff_id: s.id,
                     name: s.name,
                     current_credits: s.personal_credits || 0,
@@ -127,7 +130,7 @@ const AssignCredits = ({
             title="Allocate Credits"
             description="Manage and distribute credits to selected team members."
             className="max-w-xl"
-            position='left'
+            position={position}
 
             footer={
                 <div>
@@ -144,7 +147,7 @@ const AssignCredits = ({
                             </div>
                         </div>
                     )}
-                                    
+
                     <button
                         type="submit"
                         form={formId}

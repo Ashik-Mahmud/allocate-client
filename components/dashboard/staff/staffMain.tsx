@@ -17,6 +17,8 @@ import { is } from 'zod/v4/locales'
 import { Router } from 'next/router'
 import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/lib/constants/routes'
+import AssignCredits from '../credit-management/assignCredits'
+import { useCurrentUser } from '@/features/auth'
 
 export interface StaffListFilters {
     page?: number;
@@ -26,8 +28,8 @@ export interface StaffListFilters {
 }
 
 const StaffMain = () => {
-    const router = useRouter();
     // 1. Local State for Filters
+    const router = useRouter();
     const [filters, setFilters] = useState<StaffListFilters>({
         page: 1,
         limit: 6,
@@ -36,6 +38,8 @@ const StaffMain = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState<StaffDetails | null>(null); // Replace 'any' with your staff type
+    const [assignOpen, setAssignOpen] = useState(false);
+    const [selectedStaffIds, setSelectedStaffIds] = useState<string[]>([]); // For multiple staff selection in credit allocation
 
     // 2. Debounce Search to avoid excessive API calls
     const debouncedSearch = useDebounce(filters.search, 500);
@@ -45,6 +49,7 @@ const StaffMain = () => {
         ...filters,
         search: debouncedSearch,
     });
+    const { user } = useCurrentUser();
 
     const createStaff = useCreateStaffByOrgAdminMutation();
     const updateStaff = useUpdateStaffDetailsMutation();
@@ -91,6 +96,12 @@ const StaffMain = () => {
                 setSelectedStaff(null);
             }
         }
+    }
+
+    // 7. Handle Credit Allocation (for single or multiple staff)
+    const onSubmit = (data: any) => {
+        console.log("Form Data: ", data);
+        // Here you would call your mutation to assign credits
     }
 
     return (
@@ -156,7 +167,8 @@ const StaffMain = () => {
                                     }}
 
                                     onAssignCredits={() => {
-
+                                        setSelectedStaffIds([staff.id || '']);
+                                        setAssignOpen(true);
                                     }}
 
                                     onRevokeCredits={() => {
@@ -238,6 +250,16 @@ const StaffMain = () => {
                     setTimeout(() => setSelectedStaff(null), 300); // Clear selected staff after closing the dialog
                 }}
                 onConfirm={handleDeleteConfirm}
+            />
+
+            <AssignCredits
+                open={assignOpen}
+                onOpenChange={setAssignOpen}
+                selectedStaffIds={selectedStaffIds} // You can pass selected staff IDs here based on your implementation
+                onSubmit={onSubmit}
+                isLoading={false}
+                orgCreditPool={user?.organization?.credit_pool || 0}
+                position="bottom"
             />
         </div>
     )

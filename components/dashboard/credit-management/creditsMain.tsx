@@ -6,8 +6,9 @@ import { useCurrentUser } from '@/features/auth'
 type Props = {}
 
 const CreditManagementMain = (props: Props) => {
-    const {user} = useCurrentUser();
+    const { user } = useCurrentUser();
     const [assignOpen, setAssignOpen] = React.useState(false);
+    const [selectedStaffIds, setSelectedStaffIds] = React.useState<string[]>([]);
     const onSubmit = (data: any) => {
         console.log("Form Data: ", data);
         // Here you would call your mutation to assign credits
@@ -19,17 +20,29 @@ const CreditManagementMain = (props: Props) => {
                 <p >Manage your organization's credits, view credit usage, and allocate credits to your team members.</p>
             </div>
             <button
-                onClick={() => setAssignOpen(true)}
+                onClick={() => {
+                    setAssignOpen(true);
+                    setSelectedStaffIds(["cmokje2lp0008yov5vn23akxl"]);
+                }}
                 className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-primary/80 cursor-pointer disabled:opacity-50 gap-1">
                 Allocate Credits
             </button>
+            <button className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-2.5 text-sm font-bold text-white transition-all hover:bg-primary/80 cursor-pointer disabled:opacity-50 gap-1"
+                onClick={() => {
+                    setAssignOpen(true);
+                    setSelectedStaffIds([]);
+                }}>
+                Allocate Credits For Multiple users
+            </button>
+            {/* Assign Credits Drawer */}
             <AssignCredits
                 open={assignOpen}
                 onOpenChange={setAssignOpen}
-                selectedStaffIds={[]} // You can pass selected staff IDs here based on your implementation
+                selectedStaffIds={selectedStaffIds} // You can pass selected staff IDs here based on your implementation
                 onSubmit={onSubmit}
                 isLoading={false}
                 orgCreditPool={user?.organization?.credit_pool || 0}
+                position='bottom'
             />
         </div>
     )
