@@ -82,7 +82,7 @@ const getTimezoneOptions = () => {
     return [...FALLBACK_TIMEZONES]
 }
 
-const TIMEZONE_GROUPS = getTimezoneOptions().reduce<Record<string, string[]>>((groups, timeZone) => {
+export const TIMEZONE_GROUPS = getTimezoneOptions().reduce<Record<string, string[]>>((groups, timeZone) => {
     const region = timeZone.includes('/') ? timeZone.split('/')[0] : 'Other'
     if (!groups[region]) {
         groups[region] = []

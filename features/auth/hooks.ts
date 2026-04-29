@@ -1,9 +1,9 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession } from "next-auth/react";
 
-import { login, register, sendVerificationEmail } from "@/lib/services/auth";
+import { login, register, sendVerificationEmail, UpdateProfileService } from "@/lib/services/auth";
 
 import {
     buildAuthSession,
@@ -69,5 +69,17 @@ export function useSignOut() {
 export function useSendVerificationEmailMutation() {
     return useMutation({
         mutationFn: sendVerificationEmail,
+    });
+}
+
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: UpdateProfileService,
+        onSuccess: async () => {
+            await Promise.all([
+                await queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+            ]);
+        },
     });
 }

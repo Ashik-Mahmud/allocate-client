@@ -30,12 +30,9 @@ const UpdateOrganizationDrawer = ({ organization, isOpen , setIsOpen }: Props) =
         }
     }
 
-    console.log(isOpen, "isOpen")
     if ((user?.organization?.needUpdateOrg === false || isLoading || !user?.organization) && !isOpen ) {
         return null;
     }
-
-
     return (
         <div>
             <AllocateDrawer open={open || isOpen || false} onOpenChange={()=>{

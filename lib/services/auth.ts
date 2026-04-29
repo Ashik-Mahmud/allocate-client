@@ -47,3 +47,11 @@ export function verifyEmail(token: string) {
     method: "GET",
   });
 }
+
+export const UpdateProfileService = async (payload: Partial<User>) => {
+  return apiRequest<ApiResponse<User>>("/auth/profile", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+
+  });
+}

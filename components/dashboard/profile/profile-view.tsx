@@ -28,6 +28,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { is } from "zod/v4/locales";
 import UpdateOrganizationDrawer from "../update-org-drawer";
 import { useState } from "react";
+import AllocateDrawer from "@/components/shared/allocate-drawer";
+import UpdateProfile from "./update-profile";
 
 type Props = {
     user: User;
@@ -167,6 +169,7 @@ export default function ProfileView({ user }: Props) {
     const router = useRouter();
 
     const [isOpenOrgEdit, setIsOpenOrgEdit] = useState(false);
+    const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
     return (
         <div className="space-y-6">
             <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/50">
@@ -402,7 +405,9 @@ export default function ProfileView({ user }: Props) {
                         isOrgAdmin ? "border shadow-sm" : "border-0 shadow-none  rounded-none",
                         isAdmin ? "w-full" : ''
                     )} title="Account details" subtitle="Identity and profile metadata for the current user." >
-                        <button className="flex items-center absolute right-7 top-7 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 gap-2 cursor-pointer" >
+                        <button
+                            onClick={() => setIsUpdateProfileOpen(true)}
+                            className="flex items-center absolute right-7 top-7 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 gap-2 cursor-pointer" >
                             <Edit className="size-4 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200" />
                             Edit
                         </button>
@@ -458,7 +463,13 @@ export default function ProfileView({ user }: Props) {
             ) : null}
 
             {/* Open Allocate Drawer */}
-           {isOpenOrgEdit && <UpdateOrganizationDrawer isOpen={isOpenOrgEdit} setIsOpen={setIsOpenOrgEdit} />} 
+            {isOpenOrgEdit && <UpdateOrganizationDrawer isOpen={isOpenOrgEdit} setIsOpen={setIsOpenOrgEdit} />}
+            {/* Open Update Profile Drawer */}
+            <UpdateProfile
+            isOpen={isUpdateProfileOpen}
+            setIsOpen={setIsUpdateProfileOpen}
+            user={user}
+            />
         </div>
     );
 }

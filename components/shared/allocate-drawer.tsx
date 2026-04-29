@@ -48,7 +48,7 @@ const AllocateDrawer = ({
                 <div className="flex h-full flex-col">
                     
                         <DrawerHeader className={
-                            cn("text-left px-6 pt-0", !showHeader && "hidden")
+                            cn("text-left px-6 pt-5 border-b", !showHeader && "hidden")
                         }>
                             <div className="flex items-center justify-between">
                                 <div className='flex flex-col space-y-0.5'>
