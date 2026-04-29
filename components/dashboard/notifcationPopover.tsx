@@ -70,7 +70,7 @@ const NotificationPopover = () => {
                 </div>
 
                 {/* List Area */}
-                <div className="max-h-[400px] overflow-y-auto p-2 scrollbar-hide">
+                <div className="max-h-100 overflow-y-auto p-2 scrollbar-hide">
                     {items.length > 0 ? (
                         <div className="flex flex-col gap-1">
                             {items.map((item) => {
