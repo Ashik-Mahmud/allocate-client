@@ -30,5 +30,6 @@ export const ROUTES = {
     myBookings: "/dashboard/my-bookings",
     resources: "/dashboard/resources",
     profile: "/dashboard/profile",
+    notifications: "/dashboard/notifications",
   },
 } as const;

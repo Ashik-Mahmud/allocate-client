@@ -106,7 +106,7 @@ const planStyles = {
                         </div>
                     </div>
 
-                    <NotificationPopover unreadCount={10} notifications={[]} />
+                    <NotificationPopover  />
 
                     <ThemeToggle
                         floating={false}
