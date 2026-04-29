@@ -83,8 +83,9 @@ const NotificationMain = () => {
                     >
                         <button
 
-                            disabled={markAllRead.isPending}
-                            className="cursor-pointer flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition-all hover:bg-slate-200 dark:bg-zinc-900 dark:text-slate-400 dark:hover:bg-zinc-800 disabled:opacity-50"
+                            disabled={markAllRead.isPending || unreadCount === 0}
+                            className="cursor-pointer flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 transition-all hover:bg-slate-200 dark:bg-zinc-900 dark:text-slate-400 dark:hover:bg-zinc-800 disabled:opacity-50 disabled:pointer-events-none"
+
                         >
                             {markAllRead.isPending ? <Loader2 className="size-4 animate-spin" /> : <CheckCheck className="size-4" />}
                             Mark all read
@@ -101,8 +102,8 @@ const NotificationMain = () => {
                     >
 
                         <button
-                            disabled={clearAll.isPending}
-                            className="cursor-pointer flex items-center gap-2 rounded-xl bg-rose-50 px-4 py-2 text-xs font-bold text-rose-600 transition-all hover:bg-rose-100 dark:bg-rose-500/10 disabled:opacity-50"
+                            disabled={clearAll.isPending || notifications?.data.length === 0}
+                            className="cursor-pointer flex items-center gap-2 rounded-xl bg-rose-50 px-4 py-2 text-xs font-bold text-rose-600 transition-all hover:bg-rose-100 dark:bg-rose-500/10 disabled:opacity-50 disabled:pointer-events-none"
                         >
                             {clearAll.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
                             Clear all
@@ -117,7 +118,7 @@ const NotificationMain = () => {
                     <button
                         onClick={() => handleTabChange('all')}
                         className={cn(
-                            "flex-1 sm:flex-none rounded-xl px-6 py-2 text-xs font-bold transition-all",
+                            "flex-1 sm:flex-none rounded-xl px-6 py-2 text-xs font-bold transition-all cursor-pointer",
                             activeTab === 'all' ? "bg-white text-slate-900 shadow-sm dark:bg-zinc-800 dark:text-slate-50" : "text-slate-500"
                         )}
                     >
@@ -126,7 +127,7 @@ const NotificationMain = () => {
                     <button
                         onClick={() => handleTabChange('unread')}
                         className={cn(
-                            "flex-1 sm:flex-none rounded-xl px-6 py-2 text-xs font-bold transition-all",
+                            "flex-1 sm:flex-none rounded-xl px-6 py-2 text-xs font-bold transition-all cursor-pointer",
                             activeTab === 'unread' ? "bg-white text-slate-900 shadow-sm dark:bg-zinc-800 dark:text-slate-50" : "text-slate-500"
                         )}
                     >

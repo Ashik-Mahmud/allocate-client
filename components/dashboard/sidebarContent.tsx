@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
-import { ArrowRight, BriefcaseBusiness, CalendarCheck, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 
@@ -99,12 +99,29 @@ const orgAdminNavigation: NavItem[] = [
         icon: BriefcaseBusiness,
     },
     {
+        label: "Credit management",
+        description: "Control credit operations",
+        href: ROUTES.dashboardOrgAdmin.creditManagement,
+        icon: Coins,
+    },
+    {
+        label: "Credit History",
+        description: "View credit transaction history",
+        href: ROUTES.dashboardOrgAdmin.creditHistory,
+        icon: CreditCard,
+    },
+    {
         label: "Booking stats",
         description: "Track organization booking metrics",
         href: ROUTES.dashboardOrgAdmin.bookingStats,
         icon: CalendarCheck,
     },
-
+    {
+        label: "Billing Management",
+        description: "Manage billing and subscription details",
+        href: ROUTES.dashboardOrgAdmin.billing,
+        icon: Sparkles,
+    },
 ];
 
 const staffNavigation: NavItem[] = [
@@ -203,7 +220,7 @@ const SidebarContent = ({
                         Live
                     </span>
                 ) : (
-                    <Link href={ROUTES.dashboardOrgAdmin.billing}  onClick={onNavigate} className={
+                    <Link href={ROUTES.dashboardOrgAdmin.billing} onClick={onNavigate} className={
                         cn(
                             "inline-flex rounded-2xl items-center gap-2 border px-3 py-1 text-xs font-medium",
                             "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200",
