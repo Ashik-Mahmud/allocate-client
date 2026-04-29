@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import {
@@ -11,10 +11,8 @@ import {
     Hash,
     Image as ImageIcon,
     Info,
-    Loader2,
     Mail,
     MapPin,
-    Save,
     ShieldCheck,
     ToggleLeft,
 } from 'lucide-react'
@@ -133,7 +131,7 @@ export type OrgFormValues = z.infer<typeof orgSchema>
 type Props = {
     data?: Partial<Organizations>;
     onSubmit: (values: Partial<Organizations>) => void;
-    isLoading?: boolean;
+    formId?: string;
 }
 
 function getDefaultFormValues(data?: Partial<Organizations>): OrgFormValues {
@@ -202,7 +200,7 @@ function mapToOrganizationPayload(values: OrgFormValues): Partial<Organizations>
     }
 }
 
-const UpdateOrganization = ({ data, onSubmit, isLoading }: Props) => {
+const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
     const [countries, setCountries] = useState<CountryOption[]>([])
     const [countryStatus, setCountryStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -210,7 +208,7 @@ const UpdateOrganization = ({ data, onSubmit, isLoading }: Props) => {
         register,
         handleSubmit,
         reset,
-        watch,
+        control,
         formState: { errors },
     } = useForm<OrgFormValues>({
         resolver: zodResolver(orgSchema as any),
@@ -260,12 +258,12 @@ const UpdateOrganization = ({ data, onSubmit, isLoading }: Props) => {
         return () => controller.abort()
     }, [])
 
-    const watchedName = watch('name')
-    const watchedSlug = watch('slug')
-    const watchedOrgType = watch('org_type')
-    const watchedTimezone = watch('timezone')
-    const watchedCountry = watch('address.country')
-    const watchedActive = watch('is_active')
+    const watchedName = useWatch({ control, name: 'name' })
+    const watchedSlug = useWatch({ control, name: 'slug' })
+    const watchedOrgType = useWatch({ control, name: 'org_type' })
+    const watchedTimezone = useWatch({ control, name: 'timezone' })
+    const watchedCountry = useWatch({ control, name: 'address.country' })
+    const watchedActive = useWatch({ control, name: 'is_active' })
     const slugPreview = watchedSlug.trim() || slugify(watchedName)
 
     const handleFormSubmit = (values: OrgFormValues) => {
@@ -273,8 +271,8 @@ const UpdateOrganization = ({ data, onSubmit, isLoading }: Props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 relative no-scrollbar overflow-y-auto px-0">
-            <section className="overflow-auto rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/60">
+        <form id={formId} onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6 relative no-scrollbar overflow-y-auto px-0">
+            <section className="overflow-auto rounded-tl-3xl rounded-tr-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/60">
                 <div className="bg-linear-to-r from-slate-950 via-slate-900 to-slate-700 px-6 py-5 text-white">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div className="max-w-2xl space-y-3">
@@ -535,11 +533,19 @@ const UpdateOrganization = ({ data, onSubmit, isLoading }: Props) => {
                                         ['push', 'Push'],
                                         ['inApp', 'In-app'],
                                     ] as Array<[keyof NotificationPreferences, string]>).map(([key, label]) => (
-                                        <label key={key} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm dark:border-slate-800 dark:bg-zinc-950">
+                                        <label key={key} className={
+                                            cn(
+                                                "flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm dark:border-slate-800 dark:bg-zinc-950",
+                                                key === 'sms' || key === 'push' ? 'opacity-50 cursor-not-allowed' : ''
+                                            )
+                                        }
+                                        title={key === 'sms' || key === 'push' ? 'SMS and Push notifications are not available in this version.' : undefined}
+                                        >
                                             <span className="font-medium text-slate-700 dark:text-slate-200">{label}</span>
                                             <input
                                                 {...register(`settings.notificationPreference.${key}` as const)}
                                                 type="checkbox"
+                                                disabled={key === 'sms' || key === 'push'}
                                                 className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                                             />
                                         </label>
