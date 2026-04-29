@@ -26,6 +26,8 @@ import AllocateDropdown from "@/components/shared/dropdown";
 import { useRouter } from "next/navigation";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { is } from "zod/v4/locales";
+import UpdateOrganizationDrawer from "../update-org-drawer";
+import { useState } from "react";
 
 type Props = {
     user: User;
@@ -164,6 +166,7 @@ export default function ProfileView({ user }: Props) {
     const currentCredits = typeof user.personal_credits === "number" ? user.personal_credits : 0;
     const router = useRouter();
 
+    const [isOpenOrgEdit, setIsOpenOrgEdit] = useState(false);
     return (
         <div className="space-y-6">
             <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/50">
@@ -285,7 +288,9 @@ export default function ProfileView({ user }: Props) {
                         <SectionCard className="border shadow-sm relative" title="Organization overview" subtitle="All important organization details in one view.">
 
                             {
-                                isOrgAdmin && (<button className="flex items-center absolute right-7 top-7 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 gap-2 cursor-pointer" >
+                                isOrgAdmin && (<button
+                                    onClick={() => setIsOpenOrgEdit(true)}
+                                    className="flex items-center absolute right-7 top-7 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 gap-2 cursor-pointer" >
                                     <Edit className="size-4 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200" />
                                     Edit
                                 </button>)
@@ -297,7 +302,7 @@ export default function ProfileView({ user }: Props) {
                                     <div className="flex flex-wrap items-center gap-2">
                                         {
                                             organization?.photo && <img src={organization.photo} alt={organization.name ?? "Organization Logo"} className="h-10 w-10 rounded-full object-cover" />
-                                            
+
                                         }
                                         <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{orgName}</h3>
 
@@ -451,6 +456,9 @@ export default function ProfileView({ user }: Props) {
                     </article>
                 </section>
             ) : null}
+
+            {/* Open Allocate Drawer */}
+           {isOpenOrgEdit && <UpdateOrganizationDrawer isOpen={isOpenOrgEdit} setIsOpen={setIsOpenOrgEdit} />} 
         </div>
     );
 }

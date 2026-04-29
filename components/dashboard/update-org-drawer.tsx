@@ -7,13 +7,16 @@ import { useUpdateOrganization } from '@/features/organization';
 import { toast } from 'sonner';
 import { Loader, Save } from 'lucide-react';
 import { useCurrentUser } from '@/features/auth';
+import { set } from 'zod';
 
 type Props = {
     organization?: Partial<Organizations> | null;
+    isOpen?: boolean;
+    setIsOpen?: (open: boolean) => void;
 }
 
-const UpdateOrganizationDrawer = ({ organization }: Props) => {
-    const { user } = useCurrentUser();
+const UpdateOrganizationDrawer = ({ organization, isOpen , setIsOpen }: Props) => {
+    const { user, isLoading } = useCurrentUser();
     const [open, setOpen] = React.useState(true);
     const formId = React.useId();
     const organizationFn = useUpdateOrganization();
@@ -22,16 +25,25 @@ const UpdateOrganizationDrawer = ({ organization }: Props) => {
         const result = await organizationFn.mutateAsync({ payload: data });
         if (result.success) {
             setOpen(false);
+            setIsOpen && setIsOpen(false);
             toast.success("Organization updated successfully");
         }
     }
 
-    if (user?.organization?.needUpdateOrg === false) {
+    console.log(isOpen, "isOpen")
+    if ((user?.organization?.needUpdateOrg === false || isLoading || !user?.organization) && !isOpen ) {
         return null;
     }
+
+
     return (
         <div>
-            <AllocateDrawer open={open} onOpenChange={setOpen} title="Update Organization" description="Update your organization details" position="bottom" className="max-w-5xl" showHeader={false} showHandler={false}
+            <AllocateDrawer open={open || isOpen || false} onOpenChange={()=>{
+                setOpen(false);
+                if(setIsOpen) {
+                    setIsOpen(false);
+                }
+            }} title="Update Organization" description="Update your organization details" position="bottom" className="max-w-5xl" showHeader={false} showHandler={false}
                 footer={
                     <div> {
                         organizationFn?.isError && (
