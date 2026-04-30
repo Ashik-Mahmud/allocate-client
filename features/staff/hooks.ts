@@ -22,44 +22,10 @@ import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffCredit
 export const staffKeys = {
   all: (filters?: StaffListFilters) => ["staffs", filters ?? {}] as const,
   byId: (staffId: string) => ["staff", staffId] as const,
-  workQueue: (filters?: StaffWorkQueueFilters) =>
-    ["staff", "work-queue", filters ?? {}] as const,
-  dailyPlan: (date?: string) => ["staff", "daily-plan", date ?? "today"] as const,
+  creditLogs: (filters?: GetStaffCreditLogFilter) => ["staff", "credits-log", filters ?? {}] as const,
+ 
 };
 
-export function useStaffWorkQueueQuery(filters?: StaffWorkQueueFilters) {
-  return useQuery({
-    queryKey: staffKeys.workQueue(filters),
-    queryFn: () => getStaffWorkQueue(filters),
-  });
-}
-
-export function useStaffDailyPlanQuery(date?: string) {
-  return useQuery({
-    queryKey: staffKeys.dailyPlan(date),
-    queryFn: () => getStaffDailyPlan(date),
-  });
-}
-
-type UpdateStaffWorkQueueStatusVariables = {
-  workItemId: string;
-  payload: UpdateStaffWorkQueueStatusPayload;
-};
-
-export function useUpdateStaffWorkQueueStatusMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ workItemId, payload }: UpdateStaffWorkQueueStatusVariables) =>
-      updateStaffWorkQueueStatus(workItemId, payload),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["staff", "work-queue"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff", "daily-plan"] }),
-      ]);
-    },
-  });
-}
 
 // Get Staff List
 export const useGetStaffsQuery = (filters?: StaffListFilters) => {
@@ -83,8 +49,8 @@ export const useCreateStaffByOrgAdminMutation = () => {
     mutationFn: (payload: StaffManagementFormValues) => createStaffByOrgAdmin(payload),
     onSuccess: () => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }), // Invalidate the staff by ID query to ensure fresh data when navigating to a staff member's details page
       ]);
     },
   });
@@ -97,8 +63,8 @@ export const useUpdateStaffDetailsMutation = () => {
     mutationFn: ({ staffId, payload }: { staffId: string; payload: Partial<StaffManagementFormValues> }) => updateStaffDetails(staffId, payload),
     onSuccess: async () => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
       ]);
     },
   });
@@ -111,8 +77,8 @@ export const useDeleteStaffMutation = () => {
     mutationFn: (staffId: string) => deleteStaff(staffId),
     onSuccess: async () => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
       ]);
     },
   });
@@ -127,8 +93,9 @@ export const useAssignCreditsToStaffMutation = () => {
     onSuccess: async () => {
       void Promise.all([
         queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
       ]);
     },
   });
@@ -143,8 +110,9 @@ export const useAssignCreditsToMultipleStaffMutation = () => {
     onSuccess: async () => {
       void Promise.all([
         queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
       ]);
     },
   });
@@ -156,11 +124,13 @@ export const useRevokeCreditsFromStaffMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => revokeCreditsFromStaff(staffId, credits),
-    onSuccess: async () => {
-      void Promise.all([
+    onSuccess: async (_data, variables) => {
+      return await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
-        queryClient.invalidateQueries({ queryKey: ["staffs"] }),
-        queryClient.invalidateQueries({ queryKey: ["staff"] }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
+        queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
+        // 3. Target ONLY the specific staff member modified
+        queryClient.invalidateQueries({ queryKey: staffKeys.byId(variables.staffId) }),
       ]);
     }
   });
@@ -169,7 +139,7 @@ export const useRevokeCreditsFromStaffMutation = () => {
 // Get Staff Credits logs
 export const useGetStaffCreditLogQuery = (filters?: GetStaffCreditLogFilter) => {
   return useQuery({
-    queryKey: ["staff", "credits-log", filters ?? {}],
+    queryKey: staffKeys.creditLogs(filters),
     queryFn: () => getStaffCreditsLogs(filters as GetStaffCreditLogFilter),
   });
 };

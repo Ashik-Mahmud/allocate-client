@@ -121,7 +121,7 @@ export const assignCreditsToStaff = (staffId: string, credits: number) => {
 
 // Assign credits to multiple staff members
 export const assignCreditsToMultipleStaff = (payload: AssignMultipleStaffCreditsPayload) => {
-  return apiRequest(`/staff/credits`, {
+  return apiRequest<ApiResponse<CreditTransaction>>(`/staff/credits`, {
     method: "POST",
     body: JSON.stringify(payload),
   });
@@ -152,7 +152,7 @@ export const getStaffCreditsLogs = (payload: GetStaffCreditLogFilter) => {
   }
   const query = params.toString();
 
-  return apiRequest(`/staff/credits/logs${query ? `?${query}` : ''}`, {
+  return apiRequest<PaginatedResponse<CreditTransaction>>(`/staff/credits/logs${query ? `?${query}` : ''}`, {
     method: "GET",
   });
 }

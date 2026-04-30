@@ -1,3 +1,5 @@
+import { User } from "next-auth";
+
 export enum TransactionType {
     FREE_ALLOCATION = "FREE_ALLOCATION",
     ALLOCATE = "ALLOCATE",
@@ -26,6 +28,7 @@ export interface CreditTransaction {
     currency: string | null;
     status: string | null;
     createdAt: Date;
+    user?: Partial<User>;
 }
 
 /**

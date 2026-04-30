@@ -21,6 +21,7 @@ import { useGetStaffsQuery } from '@/features/staff'
 import { ROUTES } from '@/lib/constants/routes'
 import NextLink from 'next/link' // Aliased to avoid conflict with Lucide Link icon
 import Link from 'next/link'
+import FeatureGuard from '@/components/shared/FeatureGuard'
 
 export const ManageMultipleStaffCreditsSchema = z.object({
     staffCredits: z.array(z.object({
@@ -136,6 +137,7 @@ const AssignCredits = ({
             position={position}
             showHandler={false}
             footer={
+
                 <div className="w-full space-y-4">
                     {!isRevoke && totalAllocating > orgCreditPool && (
                         <div className="flex items-center gap-2 rounded-lg bg-rose-50 p-2 text-[11px] font-bold text-rose-600 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
@@ -177,6 +179,7 @@ const AssignCredits = ({
                         {isRevoke ? "Confirm Revocation" : "Confirm & Distribute Credits"}
                     </button>
                 </div>
+
             }
         >
             <div className="p-5 space-y-6">
