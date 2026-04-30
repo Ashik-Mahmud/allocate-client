@@ -59,7 +59,7 @@ const NotificationMain = () => {
 
     // 4. get unread count for header
     const unreadCount = useMemo(() => {
-        return notifications?.data.filter((n) => !n.is_read).length || 0;
+        return notifications?.metadata?.unreadCount || 0;
     }, [notifications]);
 
     return (
@@ -102,7 +102,7 @@ const NotificationMain = () => {
                     >
 
                         <button
-                            disabled={clearAll.isPending || notifications?.data.length === 0}
+                            disabled={clearAll.isPending || notifications?.data?.length === 0}
                             className="cursor-pointer flex items-center gap-2 rounded-xl bg-rose-50 px-4 py-2 text-xs font-bold text-rose-600 transition-all hover:bg-rose-100 dark:bg-rose-500/10 disabled:opacity-50 disabled:pointer-events-none"
                         >
                             {clearAll.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}

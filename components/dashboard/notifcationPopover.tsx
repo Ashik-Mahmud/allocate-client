@@ -8,25 +8,26 @@ import { formatDistanceToNow } from "date-fns";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useGetNotification, useMarkAllNotificationsAsRead, useMarkNotificationAsRead } from "@/features/notifications";
+import { useGetNotification, useGetUnreadNotificationsCount, useMarkAllNotificationsAsRead, useMarkNotificationAsRead } from "@/features/notifications";
 import { NotificationConfig } from "@/lib/utils/global";
 import { NotificationType } from "@/types/notification";
+import { useRouter } from "next/navigation";
 
 const NotificationPopover = () => {
+    const router = useRouter();
     const { data } = useGetNotification({ limit: 5, page: 1 });
     const markAllAsReadMutation = useMarkAllNotificationsAsRead();
     const markAsReadMutation = useMarkNotificationAsRead();
-
-    const unreadCount = data?.data.filter((item) => !item.is_read).length || 0;
+    //  const unreadCountData = useGetUnreadNotificationsCount();
+    const unreadCount = data?.metadata?.unreadCount || 0;
     const items = data?.data || [];
-
     const markAllAsRead = async () => {
         await markAllAsReadMutation.mutateAsync();
     };
-
     const markAsRead = async (id: string) => {
         await markAsReadMutation.mutateAsync({ notificationId: id });
     };
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -90,6 +91,7 @@ const NotificationPopover = () => {
                                             if (!item.is_read) {
                                                 markAsRead(item.id);
                                             }
+                                            router.push(ROUTES.dashboardCommon.notifications)
                                         }}
                                     >
                                         {/* Icon Section */}

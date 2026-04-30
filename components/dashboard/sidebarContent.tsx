@@ -81,7 +81,7 @@ const adminNavigation: NavItem[] = [
 
 const orgAdminNavigation: NavItem[] = [
     {
-        label: "Resources",
+        label: "Resources management",
         description: "Manage company resources",
         href: ROUTES.dashboardOrgAdmin.resourcesManagement,
         icon: UserCog,
@@ -104,12 +104,12 @@ const orgAdminNavigation: NavItem[] = [
         href: ROUTES.dashboardOrgAdmin.creditManagement,
         icon: Coins,
     },
-    {
-        label: "Credit History",
-        description: "View credit transaction history",
-        href: ROUTES.dashboardOrgAdmin.creditHistory,
-        icon: CreditCard,
-    },
+    // {
+    //     label: "Credit History",
+    //     description: "View credit transaction history",
+    //     href: ROUTES.dashboardOrgAdmin.creditHistory,
+    //     icon: CreditCard,
+    // },
     {
         label: "Booking stats",
         description: "Track organization booking metrics",
@@ -141,6 +141,12 @@ const staffNavigation: NavItem[] = [
 
 const commonNavigation: NavItem[] = [
     {
+        label: "Resources",
+        description: "Browse shared resources",
+        href: ROUTES.dashboardCommon.resources,
+        icon: BriefcaseBusiness,
+    },
+    {
         label: "Availability",
         description: "Check available booking slots",
         href: ROUTES.dashboardCommon.bookingAvailability,
@@ -158,12 +164,7 @@ const commonNavigation: NavItem[] = [
         href: ROUTES.dashboardCommon.myBookings,
         icon: CalendarCheck,
     },
-    {
-        label: "Resources",
-        description: "Browse shared resources",
-        href: ROUTES.dashboardCommon.resources,
-        icon: BriefcaseBusiness,
-    },
+
     // {
     //     label: "Profile",
     //     description: "Manage your profile details",

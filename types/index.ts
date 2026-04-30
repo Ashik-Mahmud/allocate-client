@@ -115,20 +115,20 @@ export interface UpdateStaffWorkQueueStatusPayload {
 
 // Define what a "Paginated Response" looks like
 
-export interface PaginatedResponse<T> {
-	data: T[];
+export interface ApiResponse<T> {
+	success: boolean;
+	data?: T;
+	timestamp: string;
+	metadata?: Record<string, any>;
+}
+
+export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 	pagination: {
 		total: number;
 		page: number;
 		limit: number;
 		totalPages: number;
 	};
-}
-
-export interface ApiResponse<T> {
-	success: true;
-	data: T;
-	timestamp: string;
 }
 
 // profile user

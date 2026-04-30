@@ -144,8 +144,8 @@ export const getStaffCreditsLogs = (payload: GetStaffCreditLogFilter) => {
   if (typeof payload.limit === "number") {
     params.set("limit", String(payload.limit));
   }
-  if (payload.staffId) {
-    params.set("staffId", payload.staffId);
+  if (payload.type) {
+    params.set("type", payload.type);
   }
   if (payload.search) {
     params.set("search", payload.search);

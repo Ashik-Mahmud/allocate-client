@@ -1,6 +1,6 @@
 import { Notification, notificationFilters } from "@/types/notification";
 import { apiRequest } from "./http";
-import { PaginatedResponse } from "@/types";
+import { ApiResponse, PaginatedResponse } from "@/types";
 
 
 export const getAllNotifications = async (filters: notificationFilters) => {
@@ -44,7 +44,7 @@ export const clearAllNotifications = async () => {
 
 // get unread notifications count
 export const getUnreadNotificationsCount = async () => {
-    return apiRequest<{ count: number }>(`/inbox/notifications/unread-count`, {
+    return apiRequest<ApiResponse<{ unreadCount: number }>>(`/inbox/notifications/unread-count`, {
         method: "GET",
     });
 }

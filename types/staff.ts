@@ -15,7 +15,7 @@ export interface StaffCreditLogEntry {
 
 export interface AssignMultipleStaffCreditsPayload {
     staffCredits: {
-        staffId: string;
+        staff_id: string;
         credits: number;
     }[];
 }
@@ -23,8 +23,8 @@ export interface AssignMultipleStaffCreditsPayload {
 export interface GetStaffCreditLogFilter {
     page?: number;
     limit?: number;
-    staffId?: string;
     search?: string;
+    type?: string;
 }
 
 export interface StaffManagementFormValues {
