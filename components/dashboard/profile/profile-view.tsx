@@ -388,8 +388,9 @@ export default function ProfileView({ user }: Props) {
 
                                     <div className="grid gap-3 sm:grid-cols-2">
                                         <LabelValue label="Support email" value={supportEmail} />
+                                        <LabelValue label="Organization type" value={organization.org_type ?? "N/A"} />
                                         <LabelValue label="Timezone" value={organization.timezone || "N/A"} />
-                                        <LabelValue label="Notifications" value={formatNotificationPreferences(organization.settings)} />
+                                        <LabelValue label="Address" value={formatAddress(organization.address)} />
                                     </div>
                                 </div>
                             ) : (
@@ -466,9 +467,9 @@ export default function ProfileView({ user }: Props) {
             {isOpenOrgEdit && <UpdateOrganizationDrawer isOpen={isOpenOrgEdit} setIsOpen={setIsOpenOrgEdit} />}
             {/* Open Update Profile Drawer */}
             <UpdateProfile
-            isOpen={isUpdateProfileOpen}
-            setIsOpen={setIsUpdateProfileOpen}
-            user={user}
+                isOpen={isUpdateProfileOpen}
+                setIsOpen={setIsUpdateProfileOpen}
+                user={user}
             />
         </div>
     );

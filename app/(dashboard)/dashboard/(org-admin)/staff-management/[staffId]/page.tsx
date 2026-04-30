@@ -8,7 +8,7 @@ import { useGetStaffByIdQuery } from "@/features/staff";
 import type { StaffDetails as StaffRecord } from "@/types/staff";
 
 import StaffDetailsPanel from "@/components/dashboard/staff/staff-details-panel";
-import type { StaffCreditTransaction } from "@/components/dashboard/staff/staff-credit-transactions-table";
+import { CreditTransaction } from "@/types/credits";
 
 export default function StaffDetailsPage() {
   const params = useParams<{ staffId?: string | string[] }>();
@@ -31,7 +31,7 @@ export default function StaffDetailsPage() {
   }, [staffQuery.data]);
 
     console.log(staff, 'staff')
-  const demoTransactions = useMemo<StaffCreditTransaction[]>(() => {
+  const demoTransactions = useMemo(() => {
     const balance = staff?.personal_credits ?? 0;
 
     return [
@@ -112,5 +112,5 @@ export default function StaffDetailsPage() {
     );
   }
 
-  return <StaffDetailsPanel staff={staff} transactions={demoTransactions} />;
+  return <StaffDetailsPanel staff={staff} transactions={(staff?.creditTransactions ?? []) as CreditTransaction[]} />;
 }

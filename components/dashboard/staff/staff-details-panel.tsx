@@ -19,12 +19,14 @@ import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
 import type { StaffDetails } from "@/types/staff";
 
-import StaffCreditTransactionsTable, { type StaffCreditTransaction } from "./staff-credit-transactions-table";
+import StaffCreditTransactionsTable from "./staff-credit-transactions-table";
 import AllocateDropdown from "@/components/shared/dropdown";
+import { CreditTransaction, TransactionType } from "@/types/credits";
+import FeatureGuard from "@/components/shared/FeatureGuard";
 
 type Props = {
     staff: StaffDetails;
-    transactions: StaffCreditTransaction[];
+    transactions: CreditTransaction[];
     backHref?: string;
 };
 
@@ -49,10 +51,10 @@ function buildStatCard(label: string, value: string, helper: string, accent: str
 export default function StaffDetailsPanel({ staff, transactions, backHref = ROUTES.dashboardOrgAdmin.staffManagement }: Props) {
     const currentBalance = staff.personal_credits ?? 0;
     const totalCreditsAdded = transactions
-        .filter((transaction) => transaction.type === "credit")
+        .filter((transaction: CreditTransaction) => transaction.type === TransactionType.ALLOCATE)
         .reduce((sum, transaction) => sum + transaction.amount, 0);
     const totalCreditsSpent = transactions
-        .filter((transaction) => transaction.type === "debit")
+        .filter((transaction: CreditTransaction) => transaction.type === TransactionType.SPEND)
         .reduce((sum, transaction) => sum + transaction.amount, 0);
 
     const roleLabel = staff.role ? staff.role.replaceAll("_", " ") : "Staff";
@@ -120,7 +122,7 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
             </div>
 
             <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
-                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 px-6 py-8 text-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+                <div className="bg-linear-to-r from-slate-900 via-slate-800 to-slate-700 px-6 py-8 text-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
                     <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                         <div className="flex items-center gap-4">
                             <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/10 text-xl font-bold">
@@ -153,8 +155,8 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
 
                         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                             {buildStatCard("Current balance", `${currentBalance.toLocaleString()} CR`, "Available personal credits", "text-emerald-600 dark:text-emerald-300")}
-                            {buildStatCard("Added credits", `${totalCreditsAdded.toLocaleString()} CR`, "Demo inflow from adjustments", "text-sky-600 dark:text-sky-300")}
-                            {buildStatCard("Spent credits", `${totalCreditsSpent.toLocaleString()} CR`, "Demo outflow from usage", "text-rose-600 dark:text-rose-300")}
+                            {buildStatCard("Added credits", `${totalCreditsAdded.toLocaleString()} CR`, "Allocated credits to staff", "text-sky-600 dark:text-sky-300")}
+                            {buildStatCard("Spent credits", `${totalCreditsSpent.toLocaleString()} CR`, "Credits used for services", "text-rose-600 dark:text-rose-300")}
                             {buildStatCard("Last login", lastLogin, "Most recent activity", "text-amber-600 dark:text-amber-300")}
                         </div>
                     </div>
@@ -194,7 +196,14 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
                 </div>
             </div>
 
-            <StaffCreditTransactionsTable transactions={transactions} />
+            <FeatureGuard
+                mode="blur"
+                //isPremium={false}
+                title="Credit transactions"
+                description="View the history of credit allocations and spending for this staff member. Upgrade to access detailed transaction records."
+            >
+                <StaffCreditTransactionsTable transactions={transactions} />
+            </FeatureGuard>
         </section>
     );
 }

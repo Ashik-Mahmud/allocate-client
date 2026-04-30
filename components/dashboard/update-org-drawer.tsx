@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { Loader, Save } from 'lucide-react';
 import { useCurrentUser } from '@/features/auth';
 import { set } from 'zod';
+import { Role } from '@/types';
 
 type Props = {
     organization?: Partial<Organizations> | null;
@@ -30,7 +31,7 @@ const UpdateOrganizationDrawer = ({ organization, isOpen , setIsOpen }: Props) =
         }
     }
 
-    if ((user?.organization?.needUpdateOrg === false || isLoading || !user?.organization) && !isOpen ) {
+    if (((user?.organization?.needUpdateOrg === false || isLoading || !user?.organization || user?.role !== Role.ORG_ADMIN) ) && !isOpen  ) {
         return null;
     }
     return (

@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import type { Session } from "next-auth";
 import { CurrentUserProvider } from "@/features/auth/current-user-context";
+import { TooltipProvider } from "../ui/tooltip";
 
 
 type ProvidersProps = {
@@ -38,9 +39,11 @@ export function Providers({ children, session }: ProvidersProps) {
       storageKey="allocate.theme"
     >
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <QueryClientProvider client={queryClient}>
-          <CurrentUserProvider>{children}</CurrentUserProvider>
-        </QueryClientProvider>
+        <TooltipProvider>
+          <QueryClientProvider client={queryClient}>
+            <CurrentUserProvider>{children}</CurrentUserProvider>
+          </QueryClientProvider>
+        </TooltipProvider>
       </SessionProvider>
     </ThemeProvider>
   );
