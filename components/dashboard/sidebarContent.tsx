@@ -125,18 +125,18 @@ const orgAdminNavigation: NavItem[] = [
 ];
 
 const staffNavigation: NavItem[] = [
-    {
-        label: "Work queue",
-        description: "See your assigned work",
-        href: ROUTES.dashboardStaff.workQueue,
-        icon: BriefcaseBusiness,
-    },
-    {
-        label: "Daily plan",
-        description: "Check your day schedule",
-        href: ROUTES.dashboardStaff.dailyPlan,
-        icon: CalendarCheck,
-    },
+    // {
+    //     label: "Work queue",
+    //     description: "See your assigned work",
+    //     href: ROUTES.dashboardStaff.workQueue,
+    //     icon: BriefcaseBusiness,
+    // },
+    // {
+    //     label: "Daily plan",
+    //     description: "Check your day schedule",
+    //     href: ROUTES.dashboardStaff.dailyPlan,
+    //     icon: CalendarCheck,
+    // },
 ];
 
 const commonNavigation: NavItem[] = [
@@ -232,9 +232,13 @@ const SidebarContent = ({
             </div>
             <div className="min-h-0 flex-1 overflow-hidden pt-4">
                 <nav className="h-full space-y-2 overflow-y-auto pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    <p className="sticky top-0 z-10 bg-white/90 px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 backdrop-blur-sm dark:bg-slate-950/80 dark:text-slate-400">
-                        Navigation
-                    </p>
+                    {
+                        [...roleNavigation, ...navigation].length > 0 && (
+                            <p className="sticky top-0 z-10 bg-white/90 px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 backdrop-blur-sm dark:bg-slate-950/80 dark:text-slate-400">
+                                Navigation
+                            </p>
+                        )
+                    }
                     {[...roleNavigation, ...navigation].map((item) => {
                         const Icon = item.icon;
                         const active = isActiveRoute(pathname, item.href);
