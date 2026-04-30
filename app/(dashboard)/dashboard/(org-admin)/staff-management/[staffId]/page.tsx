@@ -30,7 +30,6 @@ export default function StaffDetailsPage() {
     return data as StaffRecord;
   }, [staffQuery.data]);
 
-    console.log(staff, 'staff')
   const demoTransactions = useMemo(() => {
     const balance = staff?.personal_credits ?? 0;
 

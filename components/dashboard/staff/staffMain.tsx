@@ -204,7 +204,6 @@ const StaffMain = () => {
                                     }}
 
                                     onViewDetails={() => {
-                                        console.log('Trigger')
                                         router.push(`${ROUTES.dashboardOrgAdmin.staffManagement}/${staff.id}`) // Assuming you have a staff details page set up
                                     }}
 

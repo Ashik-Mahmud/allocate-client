@@ -17,12 +17,21 @@ import {
 
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
-import type { StaffDetails } from "@/types/staff";
+import type { StaffDetails, StaffManagementFormValues } from "@/types/staff";
 
 import StaffCreditTransactionsTable from "./staff-credit-transactions-table";
 import AllocateDropdown from "@/components/shared/dropdown";
 import { CreditTransaction, TransactionType } from "@/types/credits";
 import FeatureGuard from "@/components/shared/FeatureGuard";
+import { useAssignCreditsToStaffMutation, useDeleteStaffMutation, useRevokeCreditsFromStaffMutation, useUpdateStaffDetailsMutation } from "@/features/staff";
+import { useState } from "react";
+import { toast } from "sonner";
+import DialogPopup from "@/components/shared/dialog-popup";
+import StaffManagementForm from "./staff-manage-form";
+import AllocateConfirmationAlert from "@/components/shared/TriggerConfirmation";
+import AssignCredits from "../credit-management/assignCredits";
+import { useCurrentUser } from "@/features/auth";
+import { useRouter } from "next/navigation";
 
 type Props = {
     staff: StaffDetails;
@@ -49,6 +58,21 @@ function buildStatCard(label: string, value: string, helper: string, accent: str
 }
 
 export default function StaffDetailsPanel({ staff, transactions, backHref = ROUTES.dashboardOrgAdmin.staffManagement }: Props) {
+
+    const router = useRouter();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+    const [selectedStaff, setSelectedStaff] = useState<StaffDetails | null>(null); // Replace 'any' with your staff type
+    const [assignOpen, setAssignOpen] = useState(false);
+    const [selectedStaffIds, setSelectedStaffIds] = useState<string[]>([]); // For multiple staff selection in credit allocation
+    const [creditType, setCreditType] = useState<"assign" | "revoke">("assign");
+
+    const updateStaff = useUpdateStaffDetailsMutation();
+    const deleteStaff = useDeleteStaffMutation()
+    const assignCredits = useAssignCreditsToStaffMutation();
+    const revokeCredits = useRevokeCreditsFromStaffMutation();
+    const { user } = useCurrentUser();
+
     const currentBalance = staff.personal_credits ?? 0;
     const totalCreditsAdded = transactions
         .filter((transaction: CreditTransaction) => transaction.type === TransactionType.ALLOCATE)
@@ -65,6 +89,67 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
     const initials = (staff.name ?? staff.email ?? "ST")
         .slice(0, 2)
         .toUpperCase();
+
+
+
+    // 5. Handle Edit Submission
+    const handleOnEditSubmit = async (values: StaffManagementFormValues) => {
+        if (!selectedStaff?.id) return;
+        const changedFields: Partial<StaffManagementFormValues> = {};
+        if (values.name !== selectedStaff.name) changedFields.name = values.name;
+        if (values.email !== selectedStaff.email) changedFields.email = values.email;
+        if (values.photo !== selectedStaff.photo) changedFields.photo = values.photo;
+        if (values.password) changedFields.password = values.password; // Only include password if it's provided
+
+        const response = await updateStaff.mutateAsync({ staffId: selectedStaff.id, payload: changedFields })
+        if (response?.success) {
+            toast.success("Staff member updated successfully!")
+            setIsDialogOpen(false);
+            setSelectedStaff(null);
+        }
+    };
+    // 6. Handle Delete Confirmation
+    const handleDeleteConfirm = async () => {
+        // Implement your delete logic here, using selectedStaff state to identify which staff to delete
+        if (selectedStaff) {
+            const result = await deleteStaff.mutateAsync(selectedStaff?.id || '');
+            if (result?.success) {
+                setIsConfirmationOpen(false);
+                toast.success("Staff member deleted successfully!")
+                setSelectedStaff(null);
+                router.push(ROUTES.dashboardOrgAdmin.staffManagement);
+            }
+        }
+    }
+
+    // 7. Handle Credit Allocation/Revocation (for single or multiple staff)
+    const onSubmit = async (data: any) => {
+        // Here you would call your mutation to assign credits
+        if (creditType === "assign") {
+            const result = await assignCredits.mutateAsync({
+                staffId: data?.staffCredits[0]?.staff_id,
+                credits: data?.staffCredits[0]?.credits
+            })
+
+            if (result.success) {
+                toast.success("Credits assigned successfully!")
+                setAssignOpen(false);
+                setSelectedStaffIds([]);
+            }
+        } else {
+            const result = await revokeCredits.mutateAsync({
+                staffId: data?.staffCredits[0]?.staff_id,
+                credits: data?.staffCredits[0]?.credits
+            })
+            if (result.success) {
+                toast.success("Credits revoked successfully!")
+                setAssignOpen(false);
+                setSelectedStaffIds([]);
+            }
+        }
+    }
+
+    const allowcateRevokeError = assignCredits?.error?.message || revokeCredits?.error?.message || '';
 
     return (
         <section className="space-y-6">
@@ -87,7 +172,9 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
                         label: "Assign credits",
                         onClick: () => {
                             // Handle activate/deactivate logic here
-
+                            setSelectedStaffIds([staff.id || '']);
+                            setAssignOpen(true);
+                            setCreditType("assign");
                         },
 
                     },
@@ -95,13 +182,17 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
                         label: "Revoke credits",
                         onClick: () => {
                             // Handle activate/deactivate logic here
-
+                            setSelectedStaffIds([staff.id || '']);
+                            setAssignOpen(true);
+                            setCreditType("revoke");
                         }
                     },
                     {
                         label: 'Edit User',
                         onClick: () => {
                             // Handle edit user logic here
+                            setSelectedStaff(staff);
+                            setIsDialogOpen(true);
 
                         }
                     },
@@ -109,7 +200,8 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
                         label: 'Delete User',
                         onClick: () => {
                             // Handle delete user logic here
-
+                            setSelectedStaff(staff);
+                            setIsConfirmationOpen(true);
                         },
                         destructive: true
                     }
@@ -195,7 +287,48 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
                     </article>
                 </div>
             </div>
+            {/* Dialog Popup for adding/editing staff */}
+            <DialogPopup
+                open={isDialogOpen}
+                onOpenChange={setIsDialogOpen}
+                title={selectedStaff?.id ? "Edit Staff" : "Add Staff"}
+                description={selectedStaff?.id ? "Fill in the details to edit this staff member." : "Fill in the details to add a new staff member."}
+            >
+                <StaffManagementForm
+                    onSubmit={
+                        handleOnEditSubmit
+                    }
+                    isLoading={updateStaff.isPending}
+                    errorMessage={updateStaff.isError ? updateStaff?.error?.message : ''}
+                    initialData={selectedStaff || undefined}
+                    isEdit={!!selectedStaff?.id}
+                />
+            </DialogPopup>
+            {/* Confirmation Dialog for deleting staff */}
+            <AllocateConfirmationAlert
+                open={isConfirmationOpen}
+                title="Delete Staff Member"
+                description={`Are you sure you want to delete ${selectedStaff?.name}? This action cannot be undone.`}
+                variant='destructive'
+                errorMessage={deleteStaff.isError ? deleteStaff?.error?.message : ''}
+                onOpenChange={() => {
+                    setIsConfirmationOpen(false);
+                    setTimeout(() => setSelectedStaff(null), 300); // Clear selected staff after closing the dialog
+                }}
+                onConfirm={handleDeleteConfirm}
+            />
 
+            <AssignCredits
+                open={assignOpen}
+                onOpenChange={setAssignOpen}
+                selectedStaffIds={selectedStaffIds} // You can pass selected staff IDs here based on your implementation
+                onSubmit={onSubmit}
+                isLoading={assignCredits.isPending || revokeCredits.isPending}
+                orgCreditPool={user?.organization?.credit_pool || 0}
+                position="bottom"
+                type={creditType}
+                error={allowcateRevokeError}
+            />
             <FeatureGuard
                 mode="blur"
                 //isPremium={false}
@@ -204,6 +337,8 @@ export default function StaffDetailsPanel({ staff, transactions, backHref = ROUT
             >
                 <StaffCreditTransactionsTable transactions={transactions} />
             </FeatureGuard>
+
+
         </section>
     );
 }
