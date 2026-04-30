@@ -26,6 +26,7 @@ export interface Resource {
 	name: string;
 	type: ResourceType | string;
 	hourly_rate: number | string;
+	photo?: string;
 	metadata: ResourceMetadata | null;
 	is_available: boolean;
 	is_active: boolean;

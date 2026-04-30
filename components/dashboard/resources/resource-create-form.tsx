@@ -7,6 +7,7 @@ import { getApiErrorMessage } from "@/lib/services/http";
 import type { CreateResourcePayload, Resource, ResourceType } from "@/types/resources";
 
 import { ResourceMetadataFields } from "@/components/dashboard/resources/resource-metadata-fields";
+import { set } from "date-fns";
 
 const resourceTypes: ResourceType[] = [
   "MEETING_ROOM",
@@ -103,6 +104,7 @@ export function ResourceCreateForm({
   const [name, setName] = useState("");
   const [type, setType] = useState<ResourceType>("MEETING_ROOM");
   const [hourlyRate, setHourlyRate] = useState("25");
+  const [photo, setPhoto] = useState<string>('');
   const [metadataFields, setMetadataFields] = useState<MetadataField[]>(
     buildDefaultMetadataFields("MEETING_ROOM")
   );
@@ -129,6 +131,7 @@ export function ResourceCreateForm({
 
     setName(initialValues.name);
     setType(nextType);
+    setPhoto(initialValues.photo || '');
     setHourlyRate(String(initialValues.hourly_rate));
     setMetadataFields(metadataFromResource.length > 0 ? metadataFromResource : buildDefaultMetadataFields(nextType));
     setIsAvailable(Boolean(initialValues.is_available));
@@ -208,6 +211,7 @@ export function ResourceCreateForm({
       await onSubmit({
         name: name.trim(),
         type,
+        ...(photo ? { photo: photo.trim() } : {}),
         hourly_rate: numericRate,
         metadata: payloadMetadata,
         is_available: isAvailable,
@@ -223,6 +227,7 @@ export function ResourceCreateForm({
       setIsAvailable(true);
       setIsActive(true);
       setIsMaintenance(false);
+      setPhoto('');
       onSuccess?.();
     } catch (submitError) {
       setError(getApiErrorMessage(submitError, "Failed to create resource."));
@@ -261,7 +266,7 @@ export function ResourceCreateForm({
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
-        <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
+        <label className="space-y-1 col-span-2 text-sm text-slate-700 dark:text-slate-300">
           <span>Hourly rate</span>
           <input
             value={hourlyRate}
@@ -269,6 +274,17 @@ export function ResourceCreateForm({
             type="number"
             min="0"
             step="0.01"
+            className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950"
+          />
+        </label>
+
+        <label className="space-y-1 col-span-2 text-sm text-slate-700 dark:text-slate-300">
+          <span>Photo</span>
+          <input
+            value={photo}
+            onChange={(event) => setPhoto(event.target.value)}
+            type="url"
+            placeholder="https://example.com/photo.jpg"
             className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950"
           />
         </label>

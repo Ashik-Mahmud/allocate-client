@@ -72,8 +72,7 @@ export function ResourcesPanel() {
   const rulesMutation = useUpdateResourceRulesMutation();
 
   const items = resourcesQuery.data?.data ?? [];
-  const meta = (resourcesQuery.data as { meta?: { total?: number; page?: number; totalPages?: number } } | undefined)
-    ?.meta;
+  const meta = resourcesQuery.data?.pagination
   const total = meta?.total ?? items.length;
   const currentPage = meta?.page ?? page;
   const totalPages = Math.max(meta?.totalPages ?? 1, 1);
@@ -139,7 +138,7 @@ export function ResourcesPanel() {
           />
         ) : (
           <ResourceListTable
-            items={items}
+            items={Array.isArray(items) ? items.flat() : items ?? []}
             isLoading={resourcesQuery.isLoading}
             activeResourceId={selectedResource?.id ?? selectedResourceId}
             onEdit={(resource) => {

@@ -6,7 +6,7 @@ export function GlobalBentoBackground() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(45,212,191,0.14),transparent_40%),radial-gradient(circle_at_88%_20%,rgba(26,54,93,0.14),transparent_38%),linear-gradient(to_bottom,#f8fafc,#eef4ff)] dark:bg-[radial-gradient(circle_at_15%_10%,rgba(45,212,191,0.20),transparent_40%),radial-gradient(circle_at_88%_20%,rgba(99,102,241,0.20),transparent_38%),linear-gradient(to_bottom,#020617,#0f172a)]" />
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-[size:32px_32px] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.10)_1px,transparent_1px)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.05)_1px,transparent_1px)] bg-size-[32px_32px] dark:bg-[linear-gradient(to_right,rgba(148,163,184,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.10)_1px,transparent_1px)]" />
 
       <div className="absolute left-[7%] top-[14%] h-28 w-28 rounded-3xl border border-slate-200/70 bg-white/45 shadow-[0_14px_40px_-30px_rgba(15,23,42,0.65)] backdrop-blur-md dark:border-slate-700/60 dark:bg-slate-900/35" />
       <div className="absolute right-[12%] top-[19%] h-32 w-44 rounded-3xl border border-cyan-200/70 bg-cyan-100/40 shadow-[0_14px_40px_-32px_rgba(8,145,178,0.85)] backdrop-blur-md dark:border-cyan-500/40 dark:bg-cyan-500/14" />

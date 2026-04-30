@@ -8,7 +8,7 @@ import type {
 } from "@/types/resources";
 
 import { apiRequest } from "./http";
-import { ApiResponse } from "@/types";
+import { ApiResponse, PaginatedResponse } from "@/types";
 
 function buildResourceListQueryString(filters?: ResourceListFilters) {
     if (!filters) {
@@ -80,7 +80,7 @@ export function deleteResource(resourceId: string) {
 }
 
 export function getResourcesList(filters?: ResourceListFilters) {
-    return apiRequest<ApiResponse<Resource[]>>(`/resources/list${buildResourceListQueryString(filters)}`);
+    return apiRequest<PaginatedResponse<Resource>>(`/resources/list${buildResourceListQueryString(filters)}`);
 }
 
 export function getResourceById(resourceId: string) {
