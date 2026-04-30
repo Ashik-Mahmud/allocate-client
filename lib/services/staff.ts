@@ -9,6 +9,7 @@ import type {
 
 import { apiRequest } from "./http";
 import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffDetails, StaffListFilters, StaffManagementFormValues } from "@/types/staff";
+import { CreditTransaction } from "@/types/credits";
 
 function buildQueryString(filters?: StaffWorkQueueFilters) {
   if (!filters) {
@@ -112,7 +113,7 @@ export const deleteStaff = (staffId: string) => {
 
 // Assign credits to staff member
 export const assignCreditsToStaff = (staffId: string, credits: number) => {
-  return apiRequest(`/staff/${staffId}/credits`, {
+  return apiRequest<ApiResponse<CreditTransaction>>(`/staff/${staffId}/credits`, {
     method: "POST",
     body: JSON.stringify({ credits }),
   });
@@ -128,7 +129,7 @@ export const assignCreditsToMultipleStaff = (payload: AssignMultipleStaffCredits
 
 // Revoke credits from staff member
 export const revokeCreditsFromStaff = (staffId: string, credits: number) => {
-  return apiRequest(`/staff/${staffId}/credits/revoke`, {
+  return apiRequest<ApiResponse<CreditTransaction>>(`/staff/${staffId}/credits/revoke`, {
     method: "POST",
     body: JSON.stringify({ credits }),
   });

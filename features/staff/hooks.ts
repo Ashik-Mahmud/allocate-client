@@ -141,6 +141,7 @@ export const useAssignCreditsToMultipleStaffMutation = () => {
     mutationFn: (payload: AssignMultipleStaffCreditsPayload) => assignCreditsToMultipleStaff(payload),
     onSuccess: async () => {
       void Promise.all([
+        queryClient.invalidateQueries({ queryKey:["auth", "current-user"] }),
         queryClient.invalidateQueries({ queryKey: ["staffs"] }),
         queryClient.invalidateQueries({ queryKey: ["staff"] }),
       ]);
@@ -156,6 +157,7 @@ export const useRevokeCreditsFromStaffMutation = () => {
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => revokeCreditsFromStaff(staffId, credits),
     onSuccess: async () => {
       void Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
         queryClient.invalidateQueries({ queryKey: ["staffs"] }),
         queryClient.invalidateQueries({ queryKey: ["staff"] }),
       ]);

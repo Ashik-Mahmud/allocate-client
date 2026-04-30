@@ -42,6 +42,7 @@ const StaffUserCard = ({ user, onEdit, onDelete, onViewDetails, onAssignCredits,
         ? `${formatDistanceToNow(new Date(user.last_login), { addSuffix: true })}`
         : 'Never logged in';
 
+        console.log(user, 'user')
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
 

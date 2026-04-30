@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { useCreateStaffByOrgAdminMutation, useDeleteStaffMutation, useGetStaffsQuery, useUpdateStaffDetailsMutation } from '@/features/staff'
+import { useAssignCreditsToStaffMutation, useCreateStaffByOrgAdminMutation, useDeleteStaffMutation, useGetStaffsQuery, useRevokeCreditsFromStaffMutation, useUpdateStaffDetailsMutation } from '@/features/staff'
 
 import { Button } from '@/components/ui/button'
 import { Search, ChevronLeft, ChevronRight, Loader2, Plus } from 'lucide-react'
@@ -40,7 +40,7 @@ const StaffMain = () => {
     const [selectedStaff, setSelectedStaff] = useState<StaffDetails | null>(null); // Replace 'any' with your staff type
     const [assignOpen, setAssignOpen] = useState(false);
     const [selectedStaffIds, setSelectedStaffIds] = useState<string[]>([]); // For multiple staff selection in credit allocation
-
+    const [creditType, setCreditType] = useState<"assign" | "revoke">("assign"); // To differentiate between assigning and revoking credits
     // 2. Debounce Search to avoid excessive API calls
     const debouncedSearch = useDebounce(filters.search, 500);
 
@@ -54,6 +54,8 @@ const StaffMain = () => {
     const createStaff = useCreateStaffByOrgAdminMutation();
     const updateStaff = useUpdateStaffDetailsMutation();
     const deleteStaff = useDeleteStaffMutation()
+    const assignCredits = useAssignCreditsToStaffMutation();
+    const revokeCredits = useRevokeCreditsFromStaffMutation();
     const handlePageChange = (newPage: number) => {
         setFilters((prev) => ({ ...prev, page: newPage }));
     };
@@ -98,11 +100,34 @@ const StaffMain = () => {
         }
     }
 
-    // 7. Handle Credit Allocation (for single or multiple staff)
-    const onSubmit = (data: any) => {
-        console.log("Form Data: ", data);
+    // 7. Handle Credit Allocation/Revocation (for single or multiple staff)
+    const onSubmit = async (data: any) => {
         // Here you would call your mutation to assign credits
+        if (creditType === "assign") {
+            const result = await assignCredits.mutateAsync({
+                staffId: data?.staffCredits[0]?.staff_id,
+                credits: data?.staffCredits[0]?.credits
+            })
+
+            if (result.success) {
+                toast.success("Credits assigned successfully!")
+                setAssignOpen(false);
+                setSelectedStaffIds([]);
+            }
+        } else {
+            const result = await revokeCredits.mutateAsync({
+                staffId: data?.staffCredits[0]?.staff_id,
+                credits: data?.staffCredits[0]?.credits
+            })
+            if (result.success) {
+                toast.success("Credits revoked successfully!")
+                setAssignOpen(false);
+                setSelectedStaffIds([]);
+            }
+        }
     }
+
+    const allowcateRevokeError = assignCredits?.error?.message || revokeCredits?.error?.message || '';
 
     return (
         <div className="space-y-6">
@@ -169,10 +194,13 @@ const StaffMain = () => {
                                     onAssignCredits={() => {
                                         setSelectedStaffIds([staff.id || '']);
                                         setAssignOpen(true);
+                                        setCreditType("assign");
                                     }}
 
                                     onRevokeCredits={() => {
-
+                                        setSelectedStaffIds([staff.id || '']);
+                                        setAssignOpen(true);
+                                        setCreditType("revoke");
                                     }}
 
                                     onViewDetails={() => {
@@ -257,9 +285,11 @@ const StaffMain = () => {
                 onOpenChange={setAssignOpen}
                 selectedStaffIds={selectedStaffIds} // You can pass selected staff IDs here based on your implementation
                 onSubmit={onSubmit}
-                isLoading={false}
+                isLoading={assignCredits.isPending || revokeCredits.isPending}
                 orgCreditPool={user?.organization?.credit_pool || 0}
                 position="bottom"
+                type={creditType}
+                error={allowcateRevokeError}
             />
         </div>
     )
