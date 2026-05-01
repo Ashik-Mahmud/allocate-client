@@ -3,9 +3,11 @@ import React, { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight } from 'lucide-react'
+import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info } from 'lucide-react'
 import { Resource } from '@/types/resources'
 import { cn, formatTime } from '@/lib/utils'
+import { format } from 'date-fns'
+import { useCurrentUser } from '@/features/auth'
 
 type CreateBookingPayload = {
     resource_id: string;
@@ -21,9 +23,12 @@ type Props = {
     onBack: () => void;
     onSubmit: (data: CreateBookingPayload) => void;
     isSubmitting?: boolean;
+    error?: string | null;
 }
 
-const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting }: Props) => {
+const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting, error }: Props) => {
+
+    const { user } = useCurrentUser();
     const [startTime, setStartTime] = useState(selectedSlot.start);
     const [endTime, setEndTime] = useState(selectedSlot.end);
     const [isEditing, setIsEditing] = useState(false);
@@ -41,6 +46,13 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting 
     }, [startTime, endTime, creditRate]);
 
 
+    const { hasEnoughCredits } = useMemo(() => {
+        if (!user) return {};
+        // If user has insufficient credits, we could disable the submit button and show a warning (not implemented here)
+        const userCredits = user.personal_credits || 0;
+        const hasEnoughCredits = userCredits >= totalCredits;
+        return { hasEnoughCredits };
+    }, [user, totalCredits]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -105,19 +117,49 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting 
                 </div>
 
                 {isEditing && (
-                    <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800 grid grid-cols-2 gap-4 animate-in slide-in-from-top-2">
-                        <input
-                            type="datetime-local"
-                            className="bg-transparent text-xs font-medium focus:outline-none"
-                            value={startTime.slice(0, 16)}
-                            onChange={(e) => setStartTime(new Date(e.target.value).toISOString())}
-                        />
-                        <input
-                            type="datetime-local"
-                            className="bg-transparent text-xs font-medium focus:outline-none text-right"
-                            value={endTime.slice(0, 16)}
-                            onChange={(e) => setEndTime(new Date(e.target.value).toISOString())}
-                        />
+                    <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800 grid grid-cols-2 gap-8 animate-in slide-in-from-top-2">
+                        <div className="flex flex-col gap-2">
+                            <div className="flex justify-between items-center">
+                                <span className="text-[9px] uppercase font-bold text-slate-400">Start (24h UTC)</span>
+                            </div>
+                            <input
+                                type="datetime-local"
+                                // Using UTC ISO string for min prevents timezone "yesterday" bugs
+                                min={format(new Date(), 'yyyy-MM-dd\'T\'HH:mm')}
+                                className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
+                                value={new Date(startTime).toISOString().slice(0, 16)}
+                                onChange={(e) => {
+                                    if (!e.target.value) return;
+                                    const date = new Date(e.target.value + ":00Z"); // Force treat as UTC
+                                    setStartTime(date.toISOString());
+                                    if (date.getTime() >= new Date(endTime).getTime()) {
+                                        setEndTime(new Date(date.getTime() + 30 * 60000).toISOString());
+                                    }
+                                }}
+                            />
+                            <span className="text-[10px] text-emerald-500 font-mono italic">
+                                {new Date(startTime).toISOString().slice(11, 16)} UTC
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <div className="flex justify-between items-center">
+                                <span className="text-[9px] uppercase font-bold text-slate-400">End (24h UTC)</span>
+                            </div>
+                            <input
+                                type="datetime-local"
+                                min={new Date(startTime).toISOString().slice(0, 16)}
+                                className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
+                                value={new Date(endTime).toISOString().slice(0, 16)}
+                                onChange={(e) => {
+                                    if (!e.target.value) return;
+                                    setEndTime(new Date(e.target.value + ":00Z").toISOString());
+                                }}
+                            />
+                            <span className="text-[10px] text-emerald-500 font-mono italic text-right">
+                                {new Date(endTime).toISOString().slice(11, 16)} UTC
+                            </span>
+                        </div>
                     </div>
                 )}
             </section>
@@ -148,6 +190,30 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting 
 
                 {/* Footer Action */}
                 <div className="mt-auto pt-8">
+
+                    {
+                        !hasEnoughCredits && (
+                            <div className='flex items-center bg-rose-50 border border-rose-200 text-rose-600 rounded-lg p-3 mb-6'>
+                                <p className="text-sm text-rose-600  flex items-center gap-1 justify-center">
+                                    <Zap className="w-4 h-4 text-rose-400 fill-rose-400" />
+                                    You need {totalCredits} credits but only you have <b>{user?.personal_credits || 0} Cr</b>.
+                                </p>
+
+                            </div>
+                        )
+                    }
+                    {
+                        error && (
+                            <div className='flex items-center bg-rose-50 border border-rose-200 text-rose-600 rounded-lg p-3 mb-6'>
+                                <p className="text-sm text-rose-600  flex items-center gap-1 justify-center">
+                                    <Info className="w-4 h-4 text-rose-400 fill-rose-400" />
+                                    {error}
+                                </p>
+
+                            </div>
+                        )
+                    }
+
                     <div className="flex items-center justify-between mb-4 px-1">
                         <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
                             <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -157,7 +223,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting 
 
                     <Button
                         type="submit"
-                        disabled={isSubmitting || parseFloat(durationHrs) <= 0}
+                        disabled={isSubmitting || parseFloat(durationHrs) <= 0 || !hasEnoughCredits}
                         className="cursor-pointer w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 rounded-2xl font-bold transition-all shadow-lg active:scale-[0.99]"
                     >
                         {isSubmitting ? "Processing..." : `Confirm Booking`}
@@ -168,7 +234,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting 
                         onClick={onBack}
                         className="w-full mt-4 cursor-pointer text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest"
                     >
-                        View Other Slots    
+                        View Other Slots
                     </button>
                 </div>
             </form>

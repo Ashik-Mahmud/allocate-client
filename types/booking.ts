@@ -59,3 +59,10 @@ export interface getBookingStatsFilters {
     endDate: string;
     groupBy: "day" | "week" | "month";
 }
+
+export interface CreateBookingPayload {
+    resource_id: string;
+    start_time: string; // ISO string
+    end_time: string;   // ISO string
+    notes?: string;
+}

@@ -1,8 +1,8 @@
-import { Booking, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking"
+import { Booking, CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking"
 import { apiRequest } from "./http";
 import { ApiResponse, PaginatedResponse } from "@/types";
 
-export const createBookingService = async (booking: Partial<Booking>) => {
+export const createBookingService = async (booking: CreateBookingPayload) => {
     return apiRequest<ApiResponse<Booking>>(`/bookings/create`, {
         method: "POST",
         body: JSON.stringify(booking),

@@ -5,7 +5,7 @@ import React, { useMemo, useState } from 'react'
 import ResourceCard from './ResourceCard';
 import { useGetBrowseResourcesListQuery } from '@/features/resources';
 import { Resource, ResourceListFilters, ResourceType } from '@/types/resources';
-import { useFetchResourceAvailableSlots } from '@/features/bookings';
+import { useCreateBooking, useFetchResourceAvailableSlots } from '@/features/bookings';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/constants/routes';
 import DialogPopup from '@/components/shared/dialog-popup';
@@ -14,6 +14,8 @@ import { useDebounce } from '@/hooks';
 import ShowAvailableSlots from './showAvailableSlots';
 import { format, toDate } from "date-fns"
 import CreateBooking from './CreateBooking';
+import { Booking, CreateBookingPayload } from '@/types/booking';
+import { toast } from 'sonner';
 
 const quickCategories: { label: string; value: "" | ResourceType }[] = [
   { label: 'All', value: '' },
@@ -67,6 +69,7 @@ const StaffResourcesMain = () => {
   );
 
   const resourcesQuery = useGetBrowseResourcesListQuery(filters);
+  const bookingMutation = useCreateBooking();
 
 
 
@@ -78,16 +81,67 @@ const StaffResourcesMain = () => {
   };
 
   const onReserveResource = (resource: Resource) => {
-    // const query = new URLSearchParams({ resourceId, date: getTodayDate() }).toString();
-    // router.push(`${ROUTES.dashboardCommon.bookingAvailability}?${query}`);
+    const rules = resource?.resourcesRules?.[0];
+    const now = new Date();
+
+
+    const localYear = now.getFullYear();
+    const localMonth = now.getMonth();
+    const localDay = now.getDate();
+
+
+    // Date.UTC creates a timestamp based on these values as if they were UTC
+    const openingUTC = new Date(Date.UTC(
+      localYear,
+      localMonth,
+      localDay,
+      rules?.opening_hours ?? 9, 0, 0
+    ));
+
+    const closingUTC = new Date(Date.UTC(
+      localYear,
+      localMonth,
+      localDay,
+      rules?.closing_hours ?? 18, 0, 0
+    ));
+
+
+    const currentUTC = new Date();
+
+    let finalStart: Date;
+
+    // Logic: If current UTC time is within today's UTC opening/closing window
+    if (currentUTC >= openingUTC && currentUTC < closingUTC) {
+      finalStart = currentUTC;
+    } else {
+      // Otherwise, default to the local "Today's" opening hour in UTC
+      finalStart = openingUTC;
+    }
+
+    const finalEnd = new Date(finalStart.getTime() + 30 * 60 * 1000);
+
     setSelectedSlot({
-      start: new Date().toISOString(),
-      end: new Date(new Date().getTime() + 30 * 60 * 1000).toISOString(), // Default to 30 mins later
-    }); // Reset any previously selected slot
+      // Using .toISOString() is safer than manual formatting for UTC
+      start: finalStart.toISOString(),
+      end: finalEnd.toISOString(),
+    });
+
     setDialogResource(resource);
     setIsOpenBookingDialog(true);
-
   };
+
+
+  // handle booking submission from the CreateBooking component
+  const handleBooking = async (data: CreateBookingPayload) => {
+    const result = await bookingMutation.mutateAsync(data);
+    if (result?.success) {
+      setIsOpenBookingDialog(false);
+      toast.success("Booking created successfully! Redirecting to My Bookings...");
+      setTimeout(() => {
+        router.push(ROUTES.dashboardCommon.myBookings);
+      }, 2000);
+    }
+  }
 
   // get only available categories based on the resources returned from the API
   const getOnlyAvailableCategories = (category: { label: string; value: "" | ResourceType }) => {
@@ -237,13 +291,15 @@ const StaffResourcesMain = () => {
         className='p-0'
       >
         {dialogResource && <CreateBooking
-          onSubmit={(data) => console.log(data)}
+          onSubmit={handleBooking}
           resource={dialogResource}
           selectedSlot={selectedSlot!}
           onBack={() => {
             setIsOpenBookingDialog(false);
             setSlotsDialogOpen(true)
           }}
+          isSubmitting={bookingMutation.isPending}
+          error={bookingMutation?.error?.message ?? ""}
         />}
       </DialogPopup>
 

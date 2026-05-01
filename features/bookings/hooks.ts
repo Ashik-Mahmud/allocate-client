@@ -1,5 +1,5 @@
 import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots } from "@/lib/services/booking";
-import { Booking, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
+import { Booking, CreateBookingPayload, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
@@ -16,7 +16,7 @@ export const BookingKeys = {
 export const useCreateBooking = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (booking: Partial<Booking>) => createBookingService(booking),
+        mutationFn: (booking: CreateBookingPayload) => createBookingService(booking),
         onSuccess: async () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
