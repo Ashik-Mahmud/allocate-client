@@ -30,13 +30,16 @@ export const fetchResourceAvailableSlots = async (resourceId: string, date: stri
 
 // Service to fetch my bookings
 export const fetchMyBookings = async (filters?: FetchMyBookingsFilters) => {
-    const query = new URLSearchParams({
-        page: String(filters?.page ?? 1),
-        limit: String(filters?.limit ?? 10),
-        status: filters?.status ?? "",
-        search: filters?.search ?? "",
-    }).toString();
-    return apiRequest<PaginatedResponse<Booking[]>>(`/bookings/my-bookings?${query}`, {
+    const query = new URLSearchParams();
+
+    if(filters?.limit) query.append("limit", String(filters.limit));
+    if(filters?.page) query.append("page", String(filters.page));
+    if(filters?.status) query.append("status", filters.status);
+    if(filters?.search) query.append("search", filters.search);
+    
+   const sendingQuery = query.toString();
+
+    return apiRequest<PaginatedResponse<Booking[]>>(`/bookings/my-bookings${sendingQuery ? `?${sendingQuery}` : ''}`, {
         method: "GET",
     });
 }
