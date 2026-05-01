@@ -1,15 +1,15 @@
-import { Calendar, Clock, Info, MapPin, ShieldAlert, Zap } from "lucide-react";
-import ResourceStatus from "./ResourceStatus";
+import { Calendar, Clock, Info, ShieldAlert, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Resource } from "@/types/resources";
 
 type ResourceCardProps = {
     resource: Resource;
     onBook: (id: string) => void;
+    onShowSlots: (id: string) => void;
     view: 'grid' | 'list';
 };
 
-const ResourceCard = ({ resource, onBook, view }: ResourceCardProps) => {
+const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps) => {
     const isListView = view === 'list';
 
     const rules = resource.resourcesRules ? resource.resourcesRules[0] : null; // Assuming one set of rules per resource for simplicity
@@ -117,19 +117,33 @@ const ResourceCard = ({ resource, onBook, view }: ResourceCardProps) => {
                     </div>
                 </div>
 
-                <button
-                    onClick={() => onBook(resource.id)}
-                    className={cn(
-                        "w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
-                        "bg-slate-900 dark:bg-white text-white dark:text-slate-900 group-hover:bg-blue-600 group-hover:text-white",
-                        !resource.is_available || resource.is_maintenance ? "cursor-not-allowed opacity-50 hidden" : "hover:bg-blue-600 hover:text-white",
-                        view === 'list' ? "items-start! self-start! w-auto px-6" : ""
-                    )}
-                    type="button"
-                    disabled={!resource.is_available || resource.is_maintenance}
-                >
-                    Reserve Now
-                </button>
+                <div className={cn("flex gap-2", isListView ? "w-full md:w-auto" : "w-full")}>
+                    <button
+                        onClick={() => onShowSlots(resource.id)}
+                        className={cn(
+                            "py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
+                            "border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900",
+                            isListView ? "w-full md:w-auto px-5" : "flex-1"
+                        )}
+                        type="button"
+                    >
+                        Show Slots
+                    </button>
+
+                    <button
+                        onClick={() => onBook(resource.id)}
+                        className={cn(
+                            "py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
+                            "bg-slate-900 dark:bg-white text-white dark:text-slate-900 group-hover:bg-blue-600 group-hover:text-white",
+                            !resource.is_available || resource.is_maintenance ? "cursor-not-allowed opacity-50" : "hover:bg-blue-600 hover:text-white",
+                            isListView ? "w-full md:w-auto px-6" : "flex-1"
+                        )}
+                        type="button"
+                        disabled={!resource.is_available || resource.is_maintenance}
+                    >
+                        Quick Book
+                    </button>
+                </div>
             </div>
         </div>
     );

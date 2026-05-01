@@ -1,7 +1,6 @@
 import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots } from "@/lib/services/booking";
 import { Booking, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { date } from "zod";
 
 
 export const BookingKeys = {
@@ -14,7 +13,7 @@ export const BookingKeys = {
 };
 
 // Hook to create a new booking
-export const useCreateBooking = async () => {
+export const useCreateBooking = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (booking: Partial<Booking>) => createBookingService(booking),
@@ -43,11 +42,19 @@ export const useChangeBookingStatus = () => {
 };
 
 // Hook to get booking availability slot for a resource
-export const useFetchResourceAvailableSlots = ({ resourceId, date }: { resourceId: string; date: string }) => {
+export const useFetchResourceAvailableSlots = ({
+    resourceId,
+    date,
+    enabled = true,
+}: {
+    resourceId?: string;
+    date: string;
+    enabled?: boolean;
+}) => {
     return useQuery({
-        queryKey: BookingKeys.availability(resourceId, date),
-        queryFn: () => fetchResourceAvailableSlots(resourceId, date),
-        enabled: false, // Disable automatic query on mount
+        queryKey: BookingKeys.availability(resourceId ?? "", date),
+        queryFn: () => fetchResourceAvailableSlots(resourceId as string, date),
+        enabled: enabled && Boolean(resourceId && date),
         refetchOnWindowFocus: false,
     });
 };

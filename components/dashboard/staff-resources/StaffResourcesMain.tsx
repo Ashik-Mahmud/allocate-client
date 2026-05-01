@@ -1,46 +1,90 @@
 "use client";
 import { cn } from '@/lib/utils';
 import { Clock, DatabaseSearch, LayoutGrid, List, Search } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import ResourceCard from './ResourceCard';
-import { useGetBrowseResourcesListQuery, useResourcesListQuery } from '@/features/resources';
+import { useGetBrowseResourcesListQuery } from '@/features/resources';
 import { Resource, ResourceListFilters, ResourceType } from '@/types/resources';
+import { useFetchResourceAvailableSlots } from '@/features/bookings';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/constants/routes';
+import DialogPopup from '@/components/shared/dialog-popup';
+import { Button } from '@/components/ui/button';
+import { useDebounce } from '@/hooks';
+import ShowAvailableSlots from './showAvailableSlots';
+import { format, toDate } from "date-fns"
 
-type Props = {}
+const quickCategories: { label: string; value: "" | ResourceType }[] = [
+  { label: 'All', value: '' },
+  { label: 'Rooms', value: 'MEETING_ROOM' },
+  { label: 'Workstations', value: 'WORKSTATION' },
+  { label: 'Equipment', value: 'EQUIPMENT' },
+  { label: 'Parking', value: 'PARKING' },
+  { label: 'Collaboration Space', value: 'COLLABORATION_SPACE' },
+  { label: 'IT Infrastructure', value: 'IT_INFRASTRUCTURE' },
+  { label: 'Lockers', value: 'LOCKER' },
+  { label: 'Kitchen Facilities', value: 'KITCHEN_FACILITY' },
+  { label: 'Virtual License', value: 'VIRTUAL_LICENSE' },
+  { label: 'Vehicles', value: 'VEHICLE' },
+  { label: 'Health Safety', value: 'HEALTH_SAFETY' },
+  { label: 'Other', value: 'OTHER' },
+];
 
-const StaffResourcesMain = (props: Props) => {
+
+// use date-fns to get today's date in yyyy-mm-dd format
+const getTodayDate = () => {
+  return format(new Date(), 'yyyy-MM-dd');;
+};
+
+
+const StaffResourcesMain = () => {
+  const router = useRouter();
   const [view, setView] = React.useState<'grid' | 'list'>('grid');
   const [search, setSearch] = useState("");
   const [type, setType] = useState<"" | ResourceType>("");
-  const [isAvailable, setIsAvailable] = useState<"" | "true" | "false">("");
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [createOpen, setCreateOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const [rulesOpen, setRulesOpen] = useState(false);
-  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
-  const [selectedResourceId, setSelectedResourceId] = useState<string | null>(null);
-  const [selectedResourceName, setSelectedResourceName] = useState<string>("");
+  const [slotsDialogOpen, setSlotsDialogOpen] = useState(false);
+  const [dialogResource, setDialogResource] = useState<Resource | null>(null);
+  const [dialogDate, setDialogDate] = useState(
+    getTodayDate()
+  );
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, type, isAvailable, limit]);
+  const debouncedSearch = useDebounce(search, 500);
 
   const filters = useMemo<ResourceListFilters>(
     () => ({
-      page,
-      limit,
-      search: search || undefined,
+      page: 1,
+      limit: 24,
+      search: debouncedSearch || undefined,
       type: type || undefined,
-      is_available: isAvailable === "" ? undefined : isAvailable === "true",
       sortBy: "createdAt",
       sortOrder: "desc",
     }),
-    [isAvailable, limit, page, search, type]
+    [debouncedSearch, type]
   );
 
   const resourcesQuery = useGetBrowseResourcesListQuery(filters);
 
+
+
+  const onShowSlots = (resourceId: string) => {
+    const selected = resourcesQuery.data?.data?.find((item: Resource) => item.id === resourceId) ?? null;
+    setDialogResource(selected);
+    setDialogDate(getTodayDate());
+    setSlotsDialogOpen(true);
+  };
+
+  const onReserveResource = (resourceId: string) => {
+    const query = new URLSearchParams({ resourceId, date: getTodayDate() }).toString();
+    router.push(`${ROUTES.dashboardCommon.bookingAvailability}?${query}`);
+  };
+
+  // get only available categories based on the resources returned from the API
+  const getOnlyAvailableCategories = (category: { label: string; value: "" | ResourceType }) => {
+    if (category.value === "") {
+      return true;
+    }
+    return resourcesQuery.data?.metadata?.categories?.some((type: string) => type === category.value);
+  };
 
   return (
     <div className="mx-auto  space-y-8">
@@ -51,15 +95,27 @@ const StaffResourcesMain = (props: Props) => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-slate-400" />
             <input
               placeholder="Search meeting rooms, equipment, or parking slots..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
               className="w-full h-14 pl-12 pr-4 bg-white dark:bg-slate-950 border-2 border-slate-100 dark:border-slate-800 rounded-2xl focus:border-blue-500 outline-none transition-all shadow-sm"
             />
           </div>
 
           {/* Quick Category Toggles */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {['All', 'Rooms', 'Laptops', 'Studio', 'Parking'].map(cat => (
-              <button key={cat} className="px-5 py-2 rounded-full border border-slate-200 dark:border-slate-800 text-sm font-bold whitespace-nowrap hover:bg-slate-50 dark:hover:bg-slate-900">
-                {cat}
+            {quickCategories.filter(getOnlyAvailableCategories).map((category) => (
+              <button
+                key={category.label}
+                type="button"
+                onClick={() => setType(category.value)}
+                className={cn(
+                  "px-5 py-2 rounded-full border text-sm font-bold whitespace-nowrap transition-all",
+                  category.value === type
+                    ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                    : "border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900"
+                )}
+              >
+                {category.label}
               </button>
             ))}
           </div>
@@ -75,8 +131,11 @@ const StaffResourcesMain = (props: Props) => {
         </div>
       </div>
 
+
+      {/* Slots dialog is used instead of inline availability panel */}
+
       {/* Stats / Info Bar */}
-      <div className="flex items-center gap-6 p-4 rounded-2xl bg-primary/90 text-white shadow-lg shadow-blue-500/20">
+      {/* <div className="flex items-center gap-6 p-4 rounded-2xl bg-primary/90 text-white shadow-lg shadow-blue-500/20">
         <div className="flex -space-x-3">
           {[1, 2, 3].map(i => (
             <div key={i} className="size-8 rounded-full border-2 border-primary bg-slate-200 overflow-hidden">
@@ -91,7 +150,7 @@ const StaffResourcesMain = (props: Props) => {
           <Clock className="size-3" />
           Next Free Slot: 2:00 PM
         </div>
-      </div>
+      </div> */}
 
       {/* The Grid */}
       <div className={cn(
@@ -110,7 +169,8 @@ const StaffResourcesMain = (props: Props) => {
                 key={resource.id}
                 resource={resource as Resource}
                 view={view}
-                onBook={() => { }}
+                onBook={onReserveResource}
+                onShowSlots={onShowSlots}
               />
             ))) : (
             <div className="col-span-full text-center py-20">
@@ -124,6 +184,33 @@ const StaffResourcesMain = (props: Props) => {
 
 
       </div>
+      {/* Slots Dialog */}
+      <DialogPopup
+        open={slotsDialogOpen}
+        onOpenChange={(open) => {
+          setSlotsDialogOpen(open);
+          if (!open) {
+            setDialogResource(null);
+          }
+        }}
+        title={dialogResource ? `Available slots — ${dialogResource.name}` : "Available slots"}
+        description={dialogResource ? `Pick a date to view available slots for ${dialogResource.name}.` : "Pick a resource and date to view slots."}
+        size="md"
+        className='p-0'
+      >
+        <ShowAvailableSlots
+          onSlotConfirm={
+            (date) => {
+              console.log(date, 'selected slot')
+            }
+          }
+          dialogResource={dialogResource}
+          dialogDate={dialogDate}
+          setDialogDate={setDialogDate}
+          setSlotsDialogOpen={setSlotsDialogOpen}
+          slotsDialogOpen={slotsDialogOpen}
+        />
+      </DialogPopup>
     </div>
   );
 }
