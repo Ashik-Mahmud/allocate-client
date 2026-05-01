@@ -277,7 +277,7 @@ export function ResourceCreateForm({
 
       <div className="grid gap-3 md:grid-cols-2">
         <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
-          <span>Name</span>
+          <span>Name <small className="text-red-500"> *</small></span>
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -287,7 +287,7 @@ export function ResourceCreateForm({
         </label>
 
         <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
-          <span>Type</span>
+          <span>Type <small className="text-red-500"> *</small></span>
           <select
             value={type}
             onChange={(event) => handleTypeChange(event.target.value as ResourceType)}
@@ -304,15 +304,21 @@ export function ResourceCreateForm({
 
       <div className="grid gap-3 md:grid-cols-2">
         <label className="space-y-1 col-span-2 text-sm text-slate-700 dark:text-slate-300">
-          <span>Hourly rate</span>
+          <span>Hourly rate <small className="text-red-500"> *</small></span>
           <input
             value={hourlyRate}
             onChange={(event) => setHourlyRate(event.target.value)}
             type="number"
             min="0"
-            step="0.01"
+            step="5"
+            max={"100"}
+            // no decimal input, only multiples of 5
+            placeholder="25"
             className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950"
           />
+          <small className="text-[10px] text-slate-500 dark:text-slate-400">
+             *Set only float values that are multiples of 5, e.g. 0, 5, 10, 15, etc. This will determine the credit cost for booking this resource per hour.
+          </small>
         </label>
 
         <label className="space-y-1 col-span-2 text-sm text-slate-700 dark:text-slate-300">

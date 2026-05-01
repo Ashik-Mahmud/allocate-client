@@ -58,7 +58,7 @@ const DialogPopup = ({
                 </DialogHeader>
 
                 {/* Content Section - Scrollable */}
-                <div className="flex-1 overflow-y-auto p-6 max-h-[70vh]">
+                <div className="flex-1 overflow-y-auto p-4 max-h-[80vh]">
                     {children}
                 </div>
 

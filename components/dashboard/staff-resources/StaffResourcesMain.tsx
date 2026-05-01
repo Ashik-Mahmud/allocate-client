@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks';
 import ShowAvailableSlots from './showAvailableSlots';
 import { format, toDate } from "date-fns"
+import CreateBooking from './CreateBooking';
 
 const quickCategories: { label: string; value: "" | ResourceType }[] = [
   { label: 'All', value: '' },
@@ -47,6 +48,9 @@ const StaffResourcesMain = () => {
   const [dialogDate, setDialogDate] = useState(
     getTodayDate()
   );
+  const [selectedSlot, setSelectedSlot] = useState<{ start: string; end: string } | null>(null);
+  const [isOpenBookingDialog, setIsOpenBookingDialog] = useState(false);
+
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -73,9 +77,16 @@ const StaffResourcesMain = () => {
     setSlotsDialogOpen(true);
   };
 
-  const onReserveResource = (resourceId: string) => {
-    const query = new URLSearchParams({ resourceId, date: getTodayDate() }).toString();
-    router.push(`${ROUTES.dashboardCommon.bookingAvailability}?${query}`);
+  const onReserveResource = (resource: Resource) => {
+    // const query = new URLSearchParams({ resourceId, date: getTodayDate() }).toString();
+    // router.push(`${ROUTES.dashboardCommon.bookingAvailability}?${query}`);
+    setSelectedSlot({
+      start: new Date().toISOString(),
+      end: new Date(new Date().getTime() + 30 * 60 * 1000).toISOString(), // Default to 30 mins later
+    }); // Reset any previously selected slot
+    setDialogResource(resource);
+    setIsOpenBookingDialog(true);
+
   };
 
   // get only available categories based on the resources returned from the API
@@ -169,7 +180,9 @@ const StaffResourcesMain = () => {
                 key={resource.id}
                 resource={resource as Resource}
                 view={view}
-                onBook={onReserveResource}
+                onBook={
+                  (id: string) => onReserveResource(resource)
+                }
                 onShowSlots={onShowSlots}
               />
             ))) : (
@@ -201,7 +214,9 @@ const StaffResourcesMain = () => {
         <ShowAvailableSlots
           onSlotConfirm={
             (date) => {
-              console.log(date, 'selected slot')
+              setSlotsDialogOpen(false);
+              setSelectedSlot(date);
+              setIsOpenBookingDialog(true);
             }
           }
           dialogResource={dialogResource}
@@ -211,6 +226,29 @@ const StaffResourcesMain = () => {
           slotsDialogOpen={slotsDialogOpen}
         />
       </DialogPopup>
+
+      {/* Create booking dialog */}
+      <DialogPopup
+        open={isOpenBookingDialog}
+        onOpenChange={setIsOpenBookingDialog}
+        title="Confirm Booking"
+        description="Review the details and confirm your booking."
+        size="md"
+        className='p-0'
+      >
+        {dialogResource && <CreateBooking
+          onSubmit={(data) => console.log(data)}
+          resource={dialogResource}
+          selectedSlot={selectedSlot!}
+          onBack={() => {
+            setIsOpenBookingDialog(false);
+            setSlotsDialogOpen(true)
+          }}
+        />}
+      </DialogPopup>
+
+
+
     </div>
   );
 }

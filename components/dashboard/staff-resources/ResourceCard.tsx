@@ -121,7 +121,7 @@ const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps
                     <button
                         onClick={() => onShowSlots(resource.id)}
                         className={cn(
-                            "py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
+                            "cursor-pointer py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
                             "border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900",
                             isListView ? "w-full md:w-auto px-5" : "flex-1"
                         )}
@@ -133,9 +133,9 @@ const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps
                     <button
                         onClick={() => onBook(resource.id)}
                         className={cn(
-                            "py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
-                            "bg-slate-900 dark:bg-white text-white dark:text-slate-900 group-hover:bg-blue-600 group-hover:text-white",
-                            !resource.is_available || resource.is_maintenance ? "cursor-not-allowed opacity-50" : "hover:bg-blue-600 hover:text-white",
+                            "cursor-pointer py-3 rounded-xl text-sm font-bold transition-all active:scale-95 flex items-center justify-center gap-2",
+                            "bg-slate-900 dark:bg-white text-white dark:text-slate-900 group-hover:bg-primary group-hover:text-white",
+                            !resource.is_available || resource.is_maintenance ? "cursor-not-allowed opacity-50" : "hover:bg-primary hover:text-white",
                             isListView ? "w-full md:w-auto px-6" : "flex-1"
                         )}
                         type="button"
