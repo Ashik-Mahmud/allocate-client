@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Clock, DatabaseSearch, LayoutGrid, List, Search } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react'
 import ResourceCard from './ResourceCard';
-import { useResourcesListQuery } from '@/features/resources';
+import { useGetBrowseResourcesListQuery, useResourcesListQuery } from '@/features/resources';
 import { Resource, ResourceListFilters, ResourceType } from '@/types/resources';
 
 type Props = {}
@@ -39,7 +39,7 @@ const StaffResourcesMain = (props: Props) => {
     [isAvailable, limit, page, search, type]
   );
 
-  const resourcesQuery = useResourcesListQuery(filters);
+  const resourcesQuery = useGetBrowseResourcesListQuery(filters);
 
 
   return (

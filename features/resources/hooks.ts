@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	createResource,
 	deleteResource,
+	getBrowseResourcesList,
 	getResourceById,
 	getResourcesList,
 	updateResource,
@@ -18,7 +19,7 @@ import type {
 } from "@/types/resources";
 
 export const resourceKeys = {
-	all: ["resources"] as const,
+	all: (filters?: ResourceListFilters) => ["resources", filters ?? {}] as const,
 	list: (filters?: ResourceListFilters) => ["resources", "list", filters ?? {}] as const,
 	detail: (resourceId: string) => ["resources", "detail", resourceId] as const,
 	rules: (resourceId: string) => ["resources", "rules", resourceId] as const,
@@ -28,6 +29,13 @@ export function useResourcesListQuery(filters?: ResourceListFilters) {
 	return useQuery({
 		queryKey: resourceKeys.list(filters),
 		queryFn: () => getResourcesList(filters),
+	});
+}
+
+export function useGetBrowseResourcesListQuery(filters?: ResourceListFilters) {
+	return useQuery({
+		queryKey: resourceKeys.all(filters),
+		queryFn: () => getBrowseResourcesList(filters),
 	});
 }
 

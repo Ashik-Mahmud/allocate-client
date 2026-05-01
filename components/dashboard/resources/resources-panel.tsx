@@ -34,11 +34,13 @@ import { ResourcePagination } from "@/components/dashboard/resources/resource-pa
 import { ResourceRulesForm } from "@/components/dashboard/resources/resource-rules-form";
 import { toast } from "sonner";
 import ConfirmationAlert from "@/components/shared/confirmationAlert";
+import DialogPopup from "@/components/shared/dialog-popup";
 
 export function ResourcesPanel() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState<"" | ResourceType>("");
-  const [isAvailable, setIsAvailable] = useState<"" | "true" | "false">("");
+  const [isActive, setIsActive] = useState<"" | "true" | "false">("");
+  const [isMaintenance, setIsMaintenance] = useState<"" | "true" | "false">("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [createOpen, setCreateOpen] = useState(false);
@@ -50,7 +52,7 @@ export function ResourcesPanel() {
 
   useEffect(() => {
     setPage(1);
-  }, [search, type, isAvailable, limit]);
+  }, [search, type, isActive, isMaintenance, limit]);
 
   const filters = useMemo<ResourceListFilters>(
     () => ({
@@ -58,11 +60,12 @@ export function ResourcesPanel() {
       limit,
       search: search || undefined,
       type: type || undefined,
-      is_available: isAvailable === "" ? undefined : isAvailable === "true",
+      is_active: isActive === "" ? undefined : isActive === "true" ? 'true' : 'false',
+      is_maintenance: isMaintenance === "" ? undefined : isMaintenance === "true" ? 'true' : 'false',
       sortBy: "createdAt",
       sortOrder: "desc",
     }),
-    [isAvailable, limit, page, search, type]
+    [isActive, isMaintenance, limit, page, search, type]
   );
 
   const resourcesQuery = useResourcesListQuery(filters);
@@ -82,7 +85,7 @@ export function ResourcesPanel() {
   const createDialogTrigger = (
     <Dialog open={createOpen} onOpenChange={setCreateOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">Create resource</Button>
+        <Button size="sm" className="cursor-pointer">Create resource</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -110,13 +113,15 @@ export function ResourcesPanel() {
       <ResourceFilterForm
         search={search}
         type={type}
-        isAvailable={isAvailable}
+        isActive={isActive}
         limit={limit}
         onSearchChange={setSearch}
         onTypeChange={setType}
-        onAvailabilityChange={setIsAvailable}
+        onActivityChange={setIsActive}
         onLimitChange={setLimit}
-        actions={createDialogTrigger}
+        onCreate={() => setCreateOpen(true)}
+        isMaintenance={isMaintenance}
+        onMaintenanceChange={setIsMaintenance}
       />
 
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
@@ -177,8 +182,28 @@ export function ResourcesPanel() {
         </div>
       </div>
 
-      <Dialog
+      <DialogPopup
+        open={createOpen}
+        title="Create organization resource"
+        description="Fill resource details and save it as a reusable booking asset."
+        onOpenChange={setCreateOpen}
+        size="lg"
+      >
+        <ResourceCreateForm
+          onSubmit={async (payload: CreateResourcePayload) => {
+            await createMutation.mutateAsync(payload);
+          }}
+          isSubmitting={createMutation.isPending}
+          onSuccess={() => setCreateOpen(false)}
+          className="space-y-4 mt-5"
+          mode="create"
+        />
+      </DialogPopup>
+
+      <DialogPopup
         open={editOpen}
+        title="Edit organization resource"
+        description="Fill resource details and save it as a reusable booking asset."
         onOpenChange={(open) => {
           setEditOpen(open);
 
@@ -186,39 +211,31 @@ export function ResourcesPanel() {
             setSelectedResource(null);
           }
         }}
+        size="lg"
       >
-        <DialogContent>
-          <DialogHeader className="mb-4">
-            <DialogTitle>Edit resource</DialogTitle>
-            <DialogDescription>
-              {selectedResource ? `Update details for ${selectedResource.name}.` : "Update resource details."}
-            </DialogDescription>
-          </DialogHeader>
+        {selectedResource ? (
+          <ResourceCreateForm
+            initialValues={selectedResource}
+            mode="edit"
+            submitLabel="Save changes"
+            onSubmit={async (payload: CreateResourcePayload) => {
+              const updatePayload: UpdateResourcePayload = {
+                ...payload,
+              };
 
-          {selectedResource ? (
-            <ResourceCreateForm
-              initialValues={selectedResource}
-              mode="edit"
-              submitLabel="Save changes"
-              onSubmit={async (payload: CreateResourcePayload) => {
-                const updatePayload: UpdateResourcePayload = {
-                  ...payload,
-                };
+              await updateMutation.mutateAsync({
+                resourceId: selectedResource.id,
+                payload: updatePayload,
+              });
+            }}
+            isSubmitting={updateMutation.isPending}
+            onSuccess={() => setEditOpen(false)}
+            className="space-y-4"
+          />
+        ) : null}
+      </DialogPopup>
 
-                await updateMutation.mutateAsync({
-                  resourceId: selectedResource.id,
-                  payload: updatePayload,
-                });
-              }}
-              isSubmitting={updateMutation.isPending}
-              onSuccess={() => setEditOpen(false)}
-              className="space-y-4"
-            />
-          ) : null}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
+      <DialogPopup
         open={rulesOpen}
         onOpenChange={(open) => {
           setRulesOpen(open);
@@ -228,31 +245,28 @@ export function ResourcesPanel() {
             setSelectedResourceName("");
           }
         }}
+        title="Update booking rules"
+        description={
+          selectedResourceName
+            ? `Adjust booking constraints for ${selectedResourceName}.`
+            : "Adjust booking constraints for this resource."
+        }
+        size="lg"
       >
-        <DialogContent>
-          <DialogHeader className="mb-4">
-            <DialogTitle>Update booking rules</DialogTitle>
-            <DialogDescription>
-              {selectedResourceName
-                ? `Adjust booking constraints for ${selectedResourceName}.`
-                : "Adjust booking constraints for this resource."}
-            </DialogDescription>
-          </DialogHeader>
+        {selectedResourceId ? (
+          <ResourceRulesForm
+            resourceId={selectedResourceId}
+            onSubmit={async (resourceId, payload) => {
+              await rulesMutation.mutateAsync({ resourceId, payload });
+            }}
+            isSubmitting={rulesMutation.isPending}
+            onSuccess={() => setRulesOpen(false)}
+            className="space-y-4"
+            defaultValues={selectedResource?.resourcesRules?.[0]}
+          />
+        ) : null}
+      </DialogPopup>
 
-          {selectedResourceId ? (
-            <ResourceRulesForm
-              resourceId={selectedResourceId}
-              onSubmit={async (resourceId, payload) => {
-                await rulesMutation.mutateAsync({ resourceId, payload });
-              }}
-              isSubmitting={rulesMutation.isPending}
-              onSuccess={() => setRulesOpen(false)}
-              className="space-y-4"
-              defaultValues={selectedResource?.resourcesRules?.[0]}
-            />
-          ) : null}
-        </DialogContent>
-      </Dialog>
     </section>
   );
 }

@@ -7,6 +7,13 @@ export type ResourceType =
 	| "WORKSTATION"
 	| "PARKING"
 	| "EQUIPMENT"
+	| "COLLABORATION_SPACE"
+	| "IT_INFRASTRUCTURE"
+	| "LOCKER"
+	| "KITCHEN_FACILITY"
+	| "VIRTUAL_LICENSE"
+	| "VEHICLE"
+	| "HEALTH_SAFETY"
 	| "OTHER";
 
 export type Weekday =
@@ -82,8 +89,8 @@ export interface ResourceListFilters {
 	search?: string;
 	type?: ResourceType | string;
 	is_available?: boolean;
-	is_active?: boolean;
-	is_maintenance?: boolean;
+	is_active?: "true" | "false" | "";
+	is_maintenance?: "true" | "false" | "";
 	sortBy?: "name" | "hourly_rate" | "createdAt";
 	sortOrder?: "asc" | "desc";
 }

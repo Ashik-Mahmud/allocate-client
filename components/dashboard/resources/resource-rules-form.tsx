@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getApiErrorMessage } from "@/lib/services/http";
 import type { UpdateResourceRulesPayload, Weekday } from "@/types/resources";
+import { is } from "zod/v4/locales";
+import FeatureGuard from "@/components/shared/FeatureGuard";
 
 const days: Weekday[] = [
   "Monday",
@@ -131,14 +133,21 @@ export function ResourceRulesForm({
         </label>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+      <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2">
         <input type="checkbox" checked={isWeekendAllowed} onChange={(event) => setIsWeekendAllowed(event.target.checked)} />
-        <span>Allow weekends</span>
+        <div className="flex flex-col">
+          <span>
+            {isWeekendAllowed ? "Weekend booking allowed" : "Weekend booking not allowed"}
+          </span>
+          <small>
+            (Bookings on Saturday and Sunday)
+          </small>
+        </div>
       </label>
 
-      <div className="space-y-1">
+      <div className="space-y-1 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-2">
         <p className="text-sm text-slate-700 dark:text-slate-300">Available days</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 my-2">
           {days.map((day) => {
             const selected = availableDays.includes(day);
 
@@ -159,9 +168,19 @@ export function ResourceRulesForm({
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
       {success ? <p className="text-sm text-emerald-600 dark:text-emerald-400">{success}</p> : null}
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving rules..." : "Save rules"}
-      </Button>
+      <FeatureGuard 
+        // put title and description cause this org admin is on free plan
+        title="Premium Feature"
+        description="Upgrade to Pro to set custom booking rules for your resources, including lead times, buffer times, and weekend availability."
+        showChildrenInBlur={true}
+        view="table"
+      >
+        <div className="text-right sticky bottom-0  bg-white dark:bg-slate-950 ">
+          <Button type="submit" size={"lg"} disabled={isSubmitting} className="px-5 cursor-pointer">
+            {isSubmitting ? "Saving..." : "Save rules"}
+          </Button>
+        </div>
+      </FeatureGuard>
     </form>
   );
 }

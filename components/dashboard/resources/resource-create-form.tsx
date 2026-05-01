@@ -8,12 +8,20 @@ import type { CreateResourcePayload, Resource, ResourceType } from "@/types/reso
 
 import { ResourceMetadataFields } from "@/components/dashboard/resources/resource-metadata-fields";
 import { set } from "date-fns";
+import { is } from "zod/v4/locales";
 
 const resourceTypes: ResourceType[] = [
   "MEETING_ROOM",
   "WORKSTATION",
   "PARKING",
   "EQUIPMENT",
+  "COLLABORATION_SPACE", // Booths, pods, lounge areas
+  "IT_INFRASTRUCTURE",   // Printers, routers, servers
+  "LOCKER",               // Personal storage
+  "KITCHEN_FACILITY",     // Coffee machines, catering prep areas
+  "VIRTUAL_LICENSE",      // Software seats, Zoom rooms
+  "VEHICLE",              // Company cars, delivery vans
+  "HEALTH_SAFETY",        // First aid kits, AEDs, fire extinguishers
   "OTHER",
 ];
 
@@ -28,21 +36,53 @@ const metadataDefaultsByType: Record<ResourceType, Array<{ key: string; value: s
   MEETING_ROOM: [
     { key: "capacity", value: "8" },
     { key: "floor", value: "2" },
+    { key: "has_vc_hardware", value: "true" },
   ],
   WORKSTATION: [
     { key: "zone", value: "A" },
-    { key: "desk_count", value: "1" },
+    { key: "desk_type", value: "Standing" },
+    { key: "monitor_count", value: "2" },
   ],
   PARKING: [
     { key: "slot_no", value: "P-101" },
-    { key: "covered", value: "false" },
+    { key: "ev_charging", value: "false" },
+    { key: "access_level", value: "Standard" },
   ],
   EQUIPMENT: [
-    { key: "category", value: "projector" },
-    { key: "portable", value: "true" },
+    { key: "serial_number", value: "SN-0000" },
+    { key: "asset_tag", value: "TAG-123" },
+    { key: "warranty_expiry", value: "2025-12-31" },
+  ],
+  COLLABORATION_SPACE: [
+    { key: "type", value: "Phone Booth" },
+    { key: "privacy_glass", value: "true" },
+  ],
+  IT_INFRASTRUCTURE: [
+    { key: "maintenance_contact", value: "it-ops@org.com" },
+    { key: "network_segment", value: "VLAN-10" },
+  ],
+  LOCKER: [
+    { key: "assigned_to", value: "Unassigned" },
+    { key: "location", value: "West Wing" },
+  ],
+  VIRTUAL_LICENSE: [
+    { key: "saas_name", value: "Not Specified" },
+    { key: "cost_center", value: "Operations" },
+  ],
+  VEHICLE: [
+    { key: "odometer", value: "0" },
+    { key: "insurance_provider", value: "AllState" },
+  ],
+  HEALTH_SAFETY: [
+    { key: "safety_type", value: "Fire Extinguisher" },
+    { key: "inspection_frequency", value: "Annual" },
+  ],
+  KITCHEN_FACILITY: [
+    { key: "vendor", value: "Nespresso" },
+    { key: "requires_refill", value: "true" },
   ],
   OTHER: [
-    { key: "label", value: "general" },
+    { key: "description", value: "General Resource" },
   ],
 };
 
@@ -103,12 +143,12 @@ export function ResourceCreateForm({
 }: Props) {
   const [name, setName] = useState("");
   const [type, setType] = useState<ResourceType>("MEETING_ROOM");
-  const [hourlyRate, setHourlyRate] = useState("25");
+  const [hourlyRate, setHourlyRate] = useState("10");
   const [photo, setPhoto] = useState<string>('');
   const [metadataFields, setMetadataFields] = useState<MetadataField[]>(
     buildDefaultMetadataFields("MEETING_ROOM")
   );
-  const [isAvailable, setIsAvailable] = useState(true);
+  // const [isAvailable, setIsAvailable] = useState(true);
   const [isActive, setIsActive] = useState(true);
   const [isMaintenance, setIsMaintenance] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,7 +174,6 @@ export function ResourceCreateForm({
     setPhoto(initialValues.photo || '');
     setHourlyRate(String(initialValues.hourly_rate));
     setMetadataFields(metadataFromResource.length > 0 ? metadataFromResource : buildDefaultMetadataFields(nextType));
-    setIsAvailable(Boolean(initialValues.is_available));
     setIsActive(Boolean(initialValues.is_active));
     setIsMaintenance(Boolean(initialValues.is_maintenance));
     setError(null);
@@ -214,7 +253,6 @@ export function ResourceCreateForm({
         ...(photo ? { photo: photo.trim() } : {}),
         hourly_rate: numericRate,
         metadata: payloadMetadata,
-        is_available: isAvailable,
         is_active: isActive,
         is_maintenance: isMaintenance,
       });
@@ -224,7 +262,6 @@ export function ResourceCreateForm({
       setType("MEETING_ROOM");
       setHourlyRate("25");
       setMetadataFields(buildDefaultMetadataFields("MEETING_ROOM"));
-      setIsAvailable(true);
       setIsActive(true);
       setIsMaintenance(false);
       setPhoto('');
@@ -235,7 +272,7 @@ export function ResourceCreateForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={className ?? "space-y-3 mt-5"}>
+    <form onSubmit={handleSubmit} className={className ?? "space-y-3 mt-5" + " overflow-auto"}>
       {/* <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Create resource</h2> */}
 
       <div className="grid gap-3 md:grid-cols-2">
@@ -298,31 +335,43 @@ export function ResourceCreateForm({
         onRemove={removeMetadataField}
       />
 
-      <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700 dark:text-slate-300">
-        <label className="flex items-center gap-2">
-          <input type="checkbox" checked={isAvailable} onChange={(event) => setIsAvailable(event.target.checked)} />
-          <span>Available</span>
-        </label>
-        <label className="flex items-center gap-2">
+      <div className="flex flex-wrap items-stretch gap-4 text-sm text-slate-700 dark:text-slate-300">
+        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
           <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} />
-          <span>Active</span>
+          <div className="flex flex-col ">
+            <span>
+              {isActive ? "Active (available for booking)" : "Inactive (not available for booking)"}
+            </span>
+            <small>
+              This resource will {isActive ? "be available" : "not be available"} for new bookings, but existing bookings will not be affected.
+            </small>
+          </div>
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
           <input
             type="checkbox"
             checked={isMaintenance}
             onChange={(event) => setIsMaintenance(event.target.checked)}
           />
-          <span>Maintenance</span>
+          <div className="flex flex-col ">
+            <span>
+              {isMaintenance ? "Under maintenance" : "Not under maintenance"}
+            </span>
+            <small>
+              This resource will {isMaintenance ? "be marked as under maintenance" : "not be marked as under maintenance"}, which can be used to prevent bookings during maintenance periods.
+            </small>
+          </div>
         </label>
       </div>
 
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
       {success ? <p className="text-sm text-emerald-600 dark:text-emerald-400">{success}</p> : null}
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : submitLabel ?? (mode === "edit" ? "Save changes" : "Create resource")}
-      </Button>
+      <div className="text-right sticky -bottom-6 p-3 bg-white dark:bg-slate-950 ">
+        <Button type="submit" size={"lg"} disabled={isSubmitting} className="px-5 cursor-pointer">
+          {isSubmitting ? "Saving..." : submitLabel ?? (mode === "edit" ? "Save changes" : "Create resource")}
+        </Button>
+      </div>
     </form>
   );
 }

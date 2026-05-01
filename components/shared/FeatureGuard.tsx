@@ -16,6 +16,8 @@ type FeatureGuardProps = {
     title?: string
     description?: string
     className?: string
+    showChildrenInBlur?: boolean
+    view?: "card" | "table"
 }
 
 export default function FeatureGuard({
@@ -25,6 +27,8 @@ export default function FeatureGuard({
     title = "Premium Feature",
     description = "Upgrade your plan to unlock this information.",
     className,
+    showChildrenInBlur = false,
+    view = "card"
 }: FeatureGuardProps) {
     const currentPlan = useCurrentUser().user?.organization?.plan_type
     const isPremiumUser = useMemo(() => {
@@ -66,31 +70,38 @@ export default function FeatureGuard({
         <div className={cn("relative group overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950", className)}>
 
             {/* 1. Fake UI Background (Non-selectable) */}
-            <div className="p-4 space-y-4 select-none blur-[6px] grayscale opacity-40 pointer-events-none">
-                {/* Fake Header */}
-                <div className="flex items-center justify-between">
-                    <div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
-                    <div className="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700" />
-                </div>
 
-                {/* Fake Table/Rows */}
-                {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex gap-4 items-center">
-                        <div className="h-10 w-10 rounded bg-slate-200 dark:bg-slate-700 shrink-0" />
-                        <div className="flex-1 space-y-2">
-                            <div className="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded" />
-                            <div className="h-3 w-2/3 bg-slate-100 dark:bg-slate-800 rounded" />
-                        </div>
+            {
+                showChildrenInBlur ? (
+                    <div className=" p-4 space-y-4  select-none blur-[6px] grayscale opacity-40 pointer-events-none">
+                        {children}
                     </div>
-                ))}
+                ) : <div className="p-4 space-y-4 select-none blur-[6px] grayscale opacity-40 pointer-events-none">
+                    {/* Fake Header */}
+                    <div className="flex items-center justify-between">
+                        <div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded" />
+                        <div className="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700" />
+                    </div>
 
-                {/* Fake Chart area */}
-                <div className="h-24 w-full bg-slate-100 dark:bg-slate-800 rounded-lg flex items-end p-2 gap-1">
-                    {[40, 70, 45, 90, 65, 80].map((h, i) => (
-                        <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-sm" />
+                    {/* Fake Table/Rows */}
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex gap-4 items-center">
+                            <div className="h-10 w-10 rounded bg-slate-200 dark:bg-slate-700 shrink-0" />
+                            <div className="flex-1 space-y-2">
+                                <div className="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded" />
+                                <div className="h-3 w-2/3 bg-slate-100 dark:bg-slate-800 rounded" />
+                            </div>
+                        </div>
                     ))}
+
+                    {/* Fake Chart area */}
+                    <div className="h-24 w-full bg-slate-100 dark:bg-slate-800 rounded-lg flex items-end p-2 gap-1">
+                        {[40, 70, 45, 90, 65, 80].map((h, i) => (
+                            <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-sm" />
+                        ))}
+                    </div>
                 </div>
-            </div>
+            }
 
             {/* 2. Glassmorphism Overlay */}
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/30 backdrop-blur-[1px] transition-all group-hover:bg-white/30 dark:bg-slate-950/40">
@@ -98,23 +109,33 @@ export default function FeatureGuard({
                 {/* Decorative Glow */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-blue-500/20 blur-[50px] rounded-full pointer-events-none" />
 
-                <div className="relative flex flex-col items-center gap-3">
+                <div className={
+                    cn(
+                        "",
+                        view === 'table' ? "relative flex flex-row w-full items-center justify-start  px-3" : "flex flex-col items-center text-center max-w-60  gap-3",
+                    )
+                }>
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
                         <Lock className="size-4 text-slate-600 dark:text-slate-400" />
                     </div>
 
-                    <div className="text-center space-y-1 px-4">
+                    <div className={
+                        cn(
+                            "space-y-1 px-4",
+                            view === 'table' ? "text-left" : "text-center"
+                        )
+                    }>
                         <h4 className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-white uppercase">
                             {title || "Premium Insights"}
                         </h4>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-45 leading-tight">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400  leading-tight">
                             {description || "Upgrade to a Pro plan to unlock premium insights."}
                         </p>
                     </div>
 
                     <Link
                         href={ROUTES.dashboardOrgAdmin.billing}
-                        className="mt-2 flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-[11px] font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all hover:bg-blue-700 hover:scale-105 active:scale-95"
+                        className="mt-2 flex items-center gap-2 rounded-full whitespace-nowrap bg-blue-600 px-5 py-2 text-[11px] font-bold text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all hover:bg-blue-700 hover:scale-105 active:scale-95"
                     >
                         <Sparkles className="size-3 fill-current" />
                         UPGRADE NOW

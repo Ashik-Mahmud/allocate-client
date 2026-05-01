@@ -38,12 +38,12 @@ function buildResourceListQueryString(filters?: ResourceListFilters) {
         params.set("is_available", String(filters.is_available));
     }
 
-    if (typeof filters.is_active === "boolean") {
-        params.set("is_active", String(filters.is_active));
+    if (typeof filters.is_active === "string") {
+        params.set("is_active", filters.is_active);
     }
 
-    if (typeof filters.is_maintenance === "boolean") {
-        params.set("is_maintenance", String(filters.is_maintenance));
+    if (typeof filters.is_maintenance === "string") {
+        params.set("is_maintenance", filters.is_maintenance);
     }
 
     if (filters.sortBy) {
@@ -55,7 +55,6 @@ function buildResourceListQueryString(filters?: ResourceListFilters) {
     }
 
     const query = params.toString();
-
     return query ? `?${query}` : "";
 }
 
@@ -83,6 +82,9 @@ export function getResourcesList(filters?: ResourceListFilters) {
     return apiRequest<PaginatedResponse<Resource>>(`/resources/list${buildResourceListQueryString(filters)}`);
 }
 
+export function getBrowseResourcesList(filters?: ResourceListFilters) {
+    return apiRequest<PaginatedResponse<Resource>>(`/resources/browse-all${buildResourceListQueryString(filters)}`);
+}
 export function getResourceById(resourceId: string) {
     return apiRequest<ApiResponse<Resource>>(`/resources/${resourceId}`);
 }
