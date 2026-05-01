@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 
-import { BookingStatus } from '@/types/booking'
+import { Booking, BookingStatus } from '@/types/booking'
 import BookingDetailsDialog from './BookingDetailsDialog'
 
 interface BookingCardProps {
-    booking: any;
+    booking: Booking | any;
     onCancel: (id: string) => void;
     onUpdateNotes: (id: string, notes: string) => void;
 }
@@ -32,7 +32,7 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
             <div className="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-5 transition-all hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-none hover:-translate-y-1">
                 {/* Status Badge */}
                 <div className="flex justify-between items-start mb-4">
-                    <span className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter border", statusStyles[booking.status] || statusStyles.PENDING)}>
+                    <span className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter border", statusStyles[booking?.status!] || statusStyles.PENDING)}>
                         {booking.status}
                     </span>
                     <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 text-slate-400" onClick={() => setIsDetailsOpen(true)}>

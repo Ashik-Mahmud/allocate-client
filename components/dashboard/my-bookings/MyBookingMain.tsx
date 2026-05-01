@@ -1,53 +1,122 @@
 "use client"
 import React from 'react'
-import { useFetchMyBookings } from '@/features/bookings'
+import { useFetchMyBookings, useChangeBookingStatus } from '@/features/bookings'
 import BookingCard from './BookingCard'
 import { Input } from '@/components/ui/input'
-import { Search, Filter, CalendarDays } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, Loader2, CalendarDays } from 'lucide-react'
+import { BookingStatus, Booking } from '@/types/booking'
+import { useDebounce } from '@/hooks'
+import { Button } from '@/components/ui/button'
 
 const MyBookingMain = () => {
-    const { data: apiData, isLoading } = useFetchMyBookings({
-        page: 1,
-        limit: 10,
-    });
-    const bookings = apiData?.data || [];
+    const [statusFilter, setStatusFilter] = React.useState<string>("");
+    const [searchTerm, setSearchTerm] = React.useState<string>("");
+    const [limit, setLimit] = React.useState<number>(10);
+    const [page, setPage] = React.useState<number>(1);
 
-    const handleCancel = (id: string) => {
-        // Logic to trigger cancellation API
-        console.log("Cancelling booking:", id);
+    const debouncedSearch = useDebounce(searchTerm, 500);
+    const changeBookingStatus = useChangeBookingStatus();
+
+    const { data: apiData, isLoading, isFetching } = useFetchMyBookings({
+        page,
+        limit,
+        status: statusFilter ? (statusFilter as BookingStatus) : undefined,
+        search: debouncedSearch || undefined,
+    });
+
+    const bookings = apiData?.data || [] as Booking[] | any[];
+    const pagination = apiData?.pagination;
+    const totalPages = pagination?.totalPages ?? 1;
+    const currentPage = pagination?.page ?? page;
+    const total = pagination?.total ?? 0;
+
+    const handleCancel = async (id: string) => {
+        try {
+            await changeBookingStatus.mutateAsync({
+                bookingId: id,
+                payload: { status: BookingStatus.CANCELLED }
+            });
+        } catch (error) {
+            console.error("Failed to cancel booking:", error);
+        }
     };
 
-    console.log(bookings, 'bookings')
-
     return (
-        <div className=" mx-auto px-4 py-8 antialiased">
+        <div className="mx-auto px-4 py-8 antialiased space-y-6">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm uppercase tracking-widest">
-                        <CalendarDays className="w-4 h-4" />
-                        Staff Portal
-                    </div>
-                    <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-                        My Bookings
-                    </h1>
-                    <p className="text-slate-500 text-sm">
-                        Manage your reserved slots and credit consumption.
-                    </p>
+            <div className="space-y-2">
+                <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm uppercase tracking-widest">
+                    <CalendarDays className="w-4 h-4" />
+                    Staff Portal
                 </div>
+                <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+                    My Bookings
+                </h1>
+                <p className="text-slate-500 text-sm">
+                    Manage your reserved slots and credit consumption.
+                </p>
+            </div>
 
-                {/* Quick Filters */}
-                <div className="flex items-center gap-3">
-                    <div className="relative w-64">
+            {/* Filters Section */}
+            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    {/* Search */}
+                    <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <Input
-                            placeholder="Search resources..."
-                            className="pl-10 h-11 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 rounded-2xl focus:ring-slate-200"
+                            placeholder="Search by resource name..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setPage(1);
+                            }}
+                            className="pl-10 h-11 bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 rounded-xl"
                         />
                     </div>
-                    <button className="p-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl hover:bg-slate-50 transition-colors">
-                        <Filter className="w-5 h-5 text-slate-600" />
-                    </button>
+
+                    {/* Status Filter */}
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => {
+                            setStatusFilter(e.target.value);
+                            setPage(1);
+                        }}
+                        className="h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 text-sm font-medium dark:text-slate-100"
+                    >
+                        <option value="">All statuses</option>
+                        <option value={BookingStatus.PENDING}>Pending</option>
+                        <option value={BookingStatus.CONFIRMED}>Confirmed</option>
+                        <option value={BookingStatus.COMPLETED}>Completed</option>
+                        <option value={BookingStatus.CANCELLED}>Cancelled</option>
+                        <option value={BookingStatus.REJECTED}>Rejected</option>
+                    </select>
+
+                    {/* Limit Selector */}
+                    <select
+                        value={limit}
+                        onChange={(e) => {
+                            setLimit(Number(e.target.value));
+                            setPage(1);
+                        }}
+                        className="h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 text-sm font-medium dark:text-slate-100"
+                    >
+                        <option value={5}>5 per page</option>
+                        <option value={10}>10 per page</option>
+                        <option value={25}>25 per page</option>
+                        <option value={50}>50 per page</option>
+                    </select>
+
+                    {/* Info Badge */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                        {isFetching ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
+                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Loading...</span>
+                            </>
+                        ) : (
+                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{total} total</span>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -59,23 +128,57 @@ const MyBookingMain = () => {
                     ))}
                 </div>
             ) : bookings.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {bookings.map((booking: any) => (
-                        <BookingCard
-                            key={booking.id}
-                            booking={booking}
-                            onCancel={handleCancel}
-                            onUpdateNotes={() => { }}
-                        />
-                    ))}
-                </div>
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {
+                            bookings.map((booking: Booking) => (
+                                <BookingCard
+                                    key={booking?.id}
+                                    booking={booking!}
+                                    onCancel={handleCancel}
+                                    onUpdateNotes={() => { }}
+
+                                />
+                            ))
+                        }
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                            <div className="text-sm text-slate-600 dark:text-slate-400">
+                                Page {currentPage} of {totalPages} • Showing {bookings.length} of {total} bookings
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={currentPage === 1 || isFetching}
+                                    onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                                >
+                                    <ChevronLeft className="w-4 h-4" />
+                                    Previous
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={currentPage >= totalPages || isFetching}
+                                    onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                                >
+                                    Next
+                                    <ChevronRight className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </>
             ) : (
                 <div className="flex flex-col items-center justify-center py-24 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[3rem]">
                     <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-full mb-4">
                         <CalendarDays className="w-8 h-8 text-slate-300" />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">No active bookings</h3>
-                    <p className="text-sm text-slate-400">You haven't reserved any resources yet.</p>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">No bookings found</h3>
+                    <p className="text-sm text-slate-400">Try adjusting your filters or make a new reservation.</p>
                 </div>
             )}
         </div>
