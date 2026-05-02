@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Clock, Coins, Info, StickyNote, User, Building2, Save } from 'lucide-react'
+import { Clock, Coins, Info, StickyNote, User, Building2, Save, X, FileWarning } from 'lucide-react'
 import { format } from 'date-fns'
+import { Booking } from '@/types/booking'
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    booking: any;
+    booking: Booking;
     onUpdateNotes: (id: string, notes: string) => void;
 }
 
@@ -25,48 +26,36 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-md rounded-[2.5rem] border-none p-0 overflow-hidden bg-white dark:bg-slate-950">
-                <div className="bg-slate-900 p-8 text-white relative">
-                    <div className="absolute top-4 right-4 opacity-10">
-                        <Info className="w-24 h-24" />
+            <DialogContent className="max-w-md rounded-2xl border-none p-0 overflow-hidden bg-white dark:bg-slate-950">
+                <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4">
+                    <div>
+                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-60 mb-1">Booking Reference</p>
+                        <DialogTitle className="text-xl font-black">{booking.resource?.name || 'Booking'} • #{booking.id.slice(-8).toUpperCase()}</DialogTitle>
+                        <div className="flex items-center gap-4 mt-3">
+                            <div className="text-[11px] text-slate-500">{booking.status}</div>
+                            <div className="text-[11px] text-slate-500">{booking.total_cost} credits</div>
+                        </div>
                     </div>
-                    <p className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-60 mb-1">Booking Reference</p>
-                    <DialogTitle className="text-2xl font-black mb-4">#{booking.id.slice(-8).toUpperCase()}</DialogTitle>
-
-                    <div className="flex gap-6 mt-6">
-                        <div className="flex flex-col">
-                            <span className="text-[9px] uppercase font-bold opacity-50">Usage</span>
-                            <span className="text-sm font-bold flex items-center gap-1.5 mt-1">
-                                <Coins className="w-3.5 h-3.5 text-amber-400" /> {booking.total_cost} Credits
-                            </span>
-                        </div>
-                        <div className="flex flex-col border-l border-white/10 pl-6">
-                            <span className="text-[9px] uppercase font-bold opacity-50">Status</span>
-                            <span className="text-sm font-bold text-emerald-400 mt-1">{booking.status}</span>
-                        </div>
+                    <div>
+                        <Button variant="ghost" size="icon" className="text-slate-400" onClick={onClose}>
+                            <X className="w-4 h-4" />
+                        </Button>
                     </div>
                 </div>
 
-                <div className="p-8 space-y-6">
+                <div className="p-6 space-y-6">
                     {/* Metadata Section */}
-                    <div className="grid grid-cols-2 gap-4">
+                    {booking.cancellation_reason && <div className="relative">
                         <div className="space-y-1">
                             <label className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1.5">
-                                <Building2 className="w-3 h-3" /> Dept
+                                <FileWarning className="w-3 h-3" /> Cancellation Reason
                             </label>
                             <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                {booking.metadata?.dept || "N/A"}
+                                {booking.cancellation_reason || "N/A"}
                             </p>
                         </div>
-                        <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1.5">
-                                <User className="w-3 h-3" /> Purpose
-                            </label>
-                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                {booking.metadata?.purpose || "General Use"}
-                            </p>
-                        </div>
-                    </div>
+
+                    </div>}
 
                     {/* Editable Notes Section */}
                     <div className="space-y-2">
@@ -98,7 +87,7 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
                             onClick={onClose}
                             className="w-full rounded-2xl text-slate-400 font-bold text-xs uppercase tracking-widest"
                         >
-                            Close Details
+                            Close
                         </Button>
                     </div>
                 </div>

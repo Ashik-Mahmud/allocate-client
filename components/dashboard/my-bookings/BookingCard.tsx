@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { Clock, Calendar, MoreVertical, XCircle, Coins, Eye, Edit3 } from 'lucide-react'
+import { Clock, Calendar, XCircle, Coins, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -35,9 +35,6 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
                     <span className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter border", statusStyles[booking?.status!] || statusStyles.PENDING)}>
                         {booking.status}
                     </span>
-                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 text-slate-400" onClick={() => setIsDetailsOpen(true)}>
-                        <MoreVertical className="w-4 h-4" />
-                    </Button>
                 </div>
 
                 {/* Resource Info */}
@@ -77,7 +74,7 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
                         onClick={() => setIsDetailsOpen(true)}
                     >
                         <Eye className="w-3.5 h-3.5" />
-                        View Details
+                        View & Edit details
                     </Button>
 
                     {booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED' && (
