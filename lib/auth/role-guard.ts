@@ -9,7 +9,7 @@ export async function requireRoles(allowedRoles: AppRole[]) {
   const role = normalizeRole((session?.user as { role?: unknown } | undefined)?.role);
 
   if (!session?.user?.email || !isAllowedRole(role, allowedRoles)) {
-    redirect(ROUTES.dashboard);
+    redirect(ROUTES.dashboardCommon.overview);
   }
 
   return {

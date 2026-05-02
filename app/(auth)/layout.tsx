@@ -10,7 +10,7 @@ export default async function AuthLayout({
 }>) {
   const session = await auth();
   if (session?.user?.email) {
-    redirect(ROUTES.dashboard);
+    redirect(ROUTES.dashboardCommon.overview);
   }
   return (
     <main className="flex min-h-screen items-center justify-center px-4">

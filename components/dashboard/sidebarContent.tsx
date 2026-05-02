@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
-import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 
@@ -28,7 +28,7 @@ const navigation: NavItem[] = [
     // {
     //     label: "Workspace",
     //     description: "Open your dashboard overview",
-    //     href: ROUTES.dashboard,
+    //     href: ROUTES.dashboardCommon.overview,
     //     icon: LayoutDashboard,
     // },
 
@@ -48,9 +48,9 @@ const navigation: NavItem[] = [
 
 const adminNavigation: NavItem[] = [
     {
-        label: "Admin overview",
+        label: "Dashboard",
         description: "Monitor the full platform state",
-        href: ROUTES.dashboardAdmin.overview,
+        href: ROUTES.dashboardCommon.overview,
         icon: ShieldCheck,
     },
     {
@@ -80,6 +80,12 @@ const adminNavigation: NavItem[] = [
 ];
 
 const orgAdminNavigation: NavItem[] = [
+     {
+        label: "Dashboard",
+        description: "View your daily work queue and tasks",
+        href: ROUTES.dashboardCommon.overview,
+        icon: LayoutDashboard,
+    },
     {
         label: "Resources management",
         description: "Manage company resources",
@@ -125,18 +131,18 @@ const orgAdminNavigation: NavItem[] = [
 ];
 
 const staffNavigation: NavItem[] = [
-    // {
-    //     label: "Work queue",
-    //     description: "See your assigned work",
-    //     href: ROUTES.dashboardStaff.workQueue,
-    //     icon: BriefcaseBusiness,
-    // },
-    // {
-    //     label: "Daily plan",
-    //     description: "Check your day schedule",
-    //     href: ROUTES.dashboardStaff.dailyPlan,
-    //     icon: CalendarCheck,
-    // },
+    {
+        label: "Dashboard",
+        description: "View your daily work queue and tasks",
+        href: ROUTES.dashboardCommon.overview,
+        icon: LayoutDashboard,
+    },
+    {
+        label: "Request Support",
+        description: "Submit support requests and track their status",
+        href: ROUTES.dashboardStaff.dailyPlan,
+        icon: CalendarCheck,
+    },
 ];
 
 const commonNavigation: NavItem[] = [
@@ -198,7 +204,7 @@ const SidebarContent = ({
         <div className="flex h-full min-h-0 flex-col border rounded-2xl md:rounded-none border-slate-200/80 bg-white/90 p-4 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/80 dark:shadow-black/25">
             <div className="flex items-start justify-between gap-4 border-b border-slate-200/70 pb-4 dark:border-slate-800/70">
                 <Link
-                    href={ROUTES.dashboard}
+                    href={ROUTES.home}
                     onClick={onNavigate}
                     className="group flex items-center gap-3"
                 >

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function MarketingLandingPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6  px-6 text-center ">
@@ -12,12 +14,12 @@ export default function MarketingLandingPage() {
         docs, and SEO-first pages in this segment.
       </p>
       <div className="flex gap-3">
-        <a
+        <Link
           href="/sign-in"
           className="rounded-full bg-slate-900 dark:bg-slate-800 px-5 py-3 text-sm font-semibold text-white"
         >
           Sign in
-        </a>
+        </Link>
         <a
           href="/pricing"
           className="rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 dark:text-slate-800"

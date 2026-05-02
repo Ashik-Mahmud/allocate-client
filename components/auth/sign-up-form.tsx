@@ -33,7 +33,7 @@ export function SignUpForm() {
   const onSubmit = handleSubmit(async (values) => {
     const { terms, ...payload } = values;
     await registerMutation.mutateAsync(payload);
-    router.push(ROUTES.dashboard);
+    router.push(ROUTES.dashboardCommon.overview);
   });
 
   const errorMessage =

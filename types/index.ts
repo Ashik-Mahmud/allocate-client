@@ -133,9 +133,9 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 
 // profile user
 export enum Role {
-	SUPER_ADMIN = 'SUPER_ADMIN',
+	ADMIN = 'ADMIN',
 	ORG_ADMIN = 'ORG_ADMIN',
-	USER = 'USER',
+	STAFF = 'STAFF',
 	// Add other roles as defined in your prisma enum
 }
 

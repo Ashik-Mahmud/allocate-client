@@ -5,7 +5,7 @@ export const ROUTES = {
   signUp: "/sign-up",
   dashboard: "/dashboard",
   dashboardAdmin: {
-    overview: "/dashboard/overview",
+   
     users: "/dashboard/users",
     organizations: "/dashboard/organizations",
     settings: "/dashboard/settings",
@@ -25,6 +25,7 @@ export const ROUTES = {
     dailyPlan: "/dashboard/daily-plan",
   },
   dashboardCommon: {
+     overview: "/dashboard/overview",
     bookingAvailability: "/dashboard/booking-availability",
     bookings: "/dashboard/bookings",
     myBookings: "/dashboard/my-bookings",
