@@ -98,7 +98,7 @@ const ShowAvailableSlots = ({
                     }}
                     min={format(new Date(), 'yyyy-MM-dd')}
 
-                    className="w-full bg-slate-50 dark:bg-slate-900 px-3 py-2 rounded-lg text-xs font-medium outline-none border border-transparent focus:border-slate-200 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 rounded-lg text-xs font-medium outline-none border border-transparent focus:border-slate-200 transition-all"
                 />
             </div>
 

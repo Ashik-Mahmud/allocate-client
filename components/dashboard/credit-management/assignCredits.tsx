@@ -220,7 +220,7 @@ const AssignCredits = ({
                         {/* Quick Apply Buttons */}
                         <div className={cn(
                             "rounded-2xl border p-4 transition-colors",
-                            isRevoke ? "border-rose-100 bg-rose-50/30 dark:border-rose-500/10" : "border-indigo-100 bg-indigo-50/30 dark:border-indigo-500/10"
+                            isRevoke ? "border-rose-100 bg-rose-50/30 dark:bg-rose-500/5 dark:border-rose-500/10" : "border-indigo-100 bg-indigo-50/30 dark:bg-indigo-500/5 dark:border-indigo-500/10"
                         )}>
                             <div className="mb-3 flex items-center gap-2">
                                 <UserCheck className={cn("size-4", isRevoke ? "text-rose-500" : "text-indigo-500")} />
@@ -255,8 +255,8 @@ const AssignCredits = ({
                                             "flex items-center justify-between rounded-xl border p-3 transition-all duration-200",
                                             isInvalid ? "border-rose-500 bg-rose-50 dark:bg-rose-500/10" :
                                                 currentCredits > 0
-                                                    ? (isRevoke ? "border-rose-500/50 bg-rose-50/50" : "border-indigo-500/50 bg-indigo-50/50")
-                                                    : "border-slate-100 bg-slate-50/30 dark:border-zinc-800 dark:bg-gray-800"
+                                                    ? (isRevoke ? "border-rose-500/50 bg-rose-50/50" : "border-indigo-500/50 bg-indigo-50/50 dark:bg-indigo-500/10")
+                                                    : "border-slate-100 bg-slate-50/30 dark:border-zinc-800 dark:bg-slate-800"
                                         )}
                                     >
                                         <div className="flex flex-col gap-0.5">
@@ -273,7 +273,7 @@ const AssignCredits = ({
                                                     type="number"
                                                     {...register(`staffCredits.${index}.credits` as const, { valueAsNumber: true })}
                                                     className={cn(
-                                                        "w-24 h-10 rounded-lg border bg-white pl-8 pr-2 text-sm font-bold focus:ring-2 outline-none transition-all",
+                                                        "w-24 h-10 rounded-lg border bg-white dark:bg-slate-800 pl-8 pr-2 text-sm font-bold focus:ring-2 outline-none transition-all",
                                                         isInvalid ? "border-rose-500 ring-rose-500" : "border-slate-200 focus:ring-indigo-500 dark:bg-slate-950"
                                                     )}
                                                 />
