@@ -3,17 +3,20 @@ import React from 'react'
 import { useFetchMyBookings, useChangeBookingStatus } from '@/features/bookings'
 import BookingCard from './BookingCard'
 import { Input } from '@/components/ui/input'
-import { Search, ChevronLeft, ChevronRight, Loader2, CalendarDays, SlidersHorizontal } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, Loader2, CalendarDays, SlidersHorizontal, FileWarning } from 'lucide-react'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 import { BookingStatus, Booking } from '@/types/booking'
 import { useDebounce } from '@/hooks'
 import { Button } from '@/components/ui/button'
+import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 
 const MyBookingMain = () => {
     const [statusFilter, setStatusFilter] = React.useState<string>("");
     const [searchTerm, setSearchTerm] = React.useState<string>("");
     const [limit, setLimit] = React.useState<number>(10);
     const [page, setPage] = React.useState<number>(1);
+    const [isOpenCancelDialog, setIsOpenCancelDialog] = React.useState(false);
+    const [selectedBookingId, setSelectedBookingId] = React.useState<string | null>(null);
 
     const debouncedSearch = useDebounce(searchTerm, 500);
     const changeBookingStatus = useChangeBookingStatus();
@@ -43,9 +46,8 @@ const MyBookingMain = () => {
     };
 
     return (
-        <div className="mx-auto px-4 py-8 antialiased space-y-6">
+        <div className="mx-auto px-4  antialiased space-y-6">
             {/* Header (title moved into combined header with filters) */}
-
             {/* Title + Filters Popover */}
             <div className="flex items-center gap-4">
                 <div className="flex-1" />
@@ -144,7 +146,10 @@ const MyBookingMain = () => {
                                 <BookingCard
                                     key={booking?.id}
                                     booking={booking!}
-                                    onCancel={handleCancel}
+                                    onCancel={(id) => {
+                                        setSelectedBookingId(id);
+                                        setIsOpenCancelDialog(true);
+                                    }}
                                     onUpdateNotes={() => { }}
 
                                 />
@@ -190,6 +195,29 @@ const MyBookingMain = () => {
                     <p className="text-sm text-slate-400">Try adjusting your filters or make a new reservation.</p>
                 </div>
             )}
+
+            {/* Cancel Confirmation Dialog */}
+            <AllocateConfirmationAlert
+                open={isOpenCancelDialog}
+                onOpenChange={setIsOpenCancelDialog}
+                title="Cancel Booking"
+                description="Are you sure you want to cancel this booking?"
+                confirmText="Yes, cancel it"
+                icon={<FileWarning className="w-4 h-4" />}
+                variant='warning'
+                errorMessage={
+                    changeBookingStatus?.isError ? changeBookingStatus?.error instanceof Error
+                        ? changeBookingStatus.error.message
+                        : "An error occurred while cancelling the booking."
+                        : undefined
+                }
+                onConfirm={() => {
+                    if (selectedBookingId) {
+                        handleCancel(selectedBookingId);
+                    }
+                }}
+            />
+
         </div>
     )
 }
