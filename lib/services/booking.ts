@@ -19,6 +19,14 @@ export const changeBookingStatusService = async (bookingId: string, payload: Upd
     });
 }
 
+// Service to update booking notes
+export const updateBookingService = async (bookingId: string, notes: string) => {
+    const query = new URLSearchParams({ bookingId }).toString();
+    return apiRequest<ApiResponse<Booking>>(`/bookings/details?${query}`, {
+        method: "PATCH",
+        body: JSON.stringify({ notes }),
+    });
+}
 
 // Service to fetch resource available slots for a given time range
 export const fetchResourceAvailableSlots = async (resourceId: string, date: string) => {
@@ -32,12 +40,12 @@ export const fetchResourceAvailableSlots = async (resourceId: string, date: stri
 export const fetchMyBookings = async (filters?: FetchMyBookingsFilters) => {
     const query = new URLSearchParams();
 
-    if(filters?.limit) query.append("limit", String(filters.limit));
-    if(filters?.page) query.append("page", String(filters.page));
-    if(filters?.status) query.append("status", filters.status);
-    if(filters?.search) query.append("search", filters.search);
-    
-   const sendingQuery = query.toString();
+    if (filters?.limit) query.append("limit", String(filters.limit));
+    if (filters?.page) query.append("page", String(filters.page));
+    if (filters?.status) query.append("status", filters.status);
+    if (filters?.search) query.append("search", filters.search);
+
+    const sendingQuery = query.toString();
 
     return apiRequest<PaginatedResponse<Booking[]>>(`/bookings/my-bookings${sendingQuery ? `?${sendingQuery}` : ''}`, {
         method: "GET",

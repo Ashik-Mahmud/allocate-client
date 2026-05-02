@@ -1,4 +1,4 @@
-import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots } from "@/lib/services/booking";
+import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
 import { CreateBookingPayload, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -32,6 +32,21 @@ export const useChangeBookingStatus = () => {
     return useMutation({
         mutationFn: async ({ bookingId, payload }: { bookingId: string; payload: UpdateBookingStatusPayload }) =>
             changeBookingStatusService(bookingId, payload),
+        onSuccess: async () => {
+            return await Promise.all([
+                queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
+            ]);
+        }
+    });
+};
+
+// Hook to update booking notes
+export const useUpdateBooking = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ bookingId, notes }: { bookingId: string; notes: string }) =>
+            updateBookingService(bookingId, notes), // Assuming the same service can be used to update notes
         onSuccess: async () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),

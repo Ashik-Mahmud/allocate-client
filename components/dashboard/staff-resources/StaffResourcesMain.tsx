@@ -299,7 +299,7 @@ const StaffResourcesMain = () => {
             setSlotsDialogOpen(true)
           }}
           isSubmitting={bookingMutation.isPending}
-          error={bookingMutation?.error?.message ?? ""}
+          error={bookingMutation?.isError ? bookingMutation?.error?.message ?? "" : undefined}
         />}
       </DialogPopup>
 
