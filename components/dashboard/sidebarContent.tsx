@@ -159,8 +159,8 @@ const commonNavigation: NavItem[] = [
         icon: CalendarCheck,
     },
     {
-        label: "Bookings",
-        description: "Review all booking entries",
+        label: "Bookings Calendar",
+        description: "View and manage your bookings availability",
         href: ROUTES.dashboardCommon.bookings,
         icon: CalendarCheck,
     },
