@@ -7,14 +7,17 @@ import { formatDistanceToNow } from "date-fns";
 
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils";
+import { getNotificationRedirectRoute } from "@/lib/utils/notification-routing";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useGetNotification, useGetUnreadNotificationsCount, useMarkAllNotificationsAsRead, useMarkNotificationAsRead } from "@/features/notifications";
 import { NotificationConfig } from "@/lib/utils/global";
 import { NotificationType } from "@/types/notification";
 import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/features/auth";
 
 const NotificationPopover = () => {
     const router = useRouter();
+    const { user } = useCurrentUser();
     const { data } = useGetNotification({ limit: 5, page: 1 });
     const markAllAsReadMutation = useMarkAllNotificationsAsRead();
     const markAsReadMutation = useMarkNotificationAsRead();
@@ -26,6 +29,15 @@ const NotificationPopover = () => {
     };
     const markAsRead = async (id: string) => {
         await markAsReadMutation.mutateAsync({ notificationId: id });
+    };
+
+    const handleNotificationClick = (notification: any) => {
+        if (!notification.is_read) {
+            markAsRead(notification.id);
+        }
+        // Get the redirect route based on user role and notification type
+        const redirectRoute = getNotificationRedirectRoute(notification.type, user?.role);
+        router.push(redirectRoute);
     };
 
     return (
@@ -87,12 +99,7 @@ const NotificationPopover = () => {
                                                 ? "hover:bg-slate-50 dark:hover:bg-zinc-900/50"
                                                 : "bg-indigo-50/30 dark:bg-indigo-500/5 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/10"
                                         )}
-                                        onClick={() => {
-                                            if (!item.is_read) {
-                                                markAsRead(item.id);
-                                            }
-                                            router.push(ROUTES.dashboardCommon.notifications)
-                                        }}
+                                        onClick={() => handleNotificationClick(item)}
                                     >
                                         {/* Icon Section */}
                                         <div className={cn(
