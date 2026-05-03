@@ -9,6 +9,7 @@ import {
 	getResourceById,
 	getResourcesList,
 	updateResource,
+	updateResourceMaintenance,
 	updateResourceRules,
 } from "@/lib/services/resources";
 import type {
@@ -17,6 +18,7 @@ import type {
 	UpdateResourcePayload,
 	UpdateResourceRulesPayload,
 } from "@/types/resources";
+import { currentUserQueryKey } from "../auth";
 
 export const resourceKeys = {
 	all: (filters?: ResourceListFilters) => ["resources", filters ?? {}] as const,
@@ -53,7 +55,7 @@ export function useCreateResourceMutation() {
 	return useMutation({
 		mutationFn: (payload: CreateResourcePayload) => createResource(payload),
 		onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: ["resources", "list"] });
+			await queryClient.invalidateQueries({ queryKey: resourceKeys.list() });
 		},
 	});
 }
@@ -71,10 +73,24 @@ export function useUpdateResourceMutation() {
 			updateResource(resourceId, payload),
 		onSuccess: async (_response, variables) => {
 			await Promise.all([
-				queryClient.invalidateQueries({ queryKey: ["resources", "list"] }),
+				queryClient.invalidateQueries({ queryKey: resourceKeys.list() }),
 				queryClient.invalidateQueries({ queryKey: resourceKeys.detail(variables.resourceId) }),
 			]);
 		},
+	});
+}
+
+export const useResourceUnderMaintenanceMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: ({ resourceId }: { resourceId: string }) => updateResourceMaintenance(resourceId),
+		onSuccess: async (_response, variables) => {
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: resourceKeys.list() }),
+				queryClient.invalidateQueries({ queryKey: resourceKeys.detail(variables.resourceId) }),
+				queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
+			]);
+		}
 	});
 }
 
@@ -85,7 +101,7 @@ export function useDeleteResourceMutation() {
 		mutationFn: (resourceId: string) => deleteResource(resourceId),
 		onSuccess: async (_response, resourceId) => {
 			await Promise.all([
-				queryClient.invalidateQueries({ queryKey: ["resources", "list"] }),
+				queryClient.invalidateQueries({ queryKey: resourceKeys.list() }),
 				queryClient.invalidateQueries({ queryKey: resourceKeys.detail(resourceId) }),
 				queryClient.invalidateQueries({ queryKey: resourceKeys.rules(resourceId) }),
 			]);
@@ -108,7 +124,7 @@ export function useUpdateResourceRulesMutation() {
 			await Promise.all([
 				queryClient.invalidateQueries({ queryKey: resourceKeys.rules(variables.resourceId) }),
 				queryClient.invalidateQueries({ queryKey: resourceKeys.detail(variables.resourceId) }),
-				queryClient.invalidateQueries({ queryKey: ["resources", "list"] }),
+				queryClient.invalidateQueries({ queryKey: resourceKeys.list() }),
 			]);
 		},
 	});

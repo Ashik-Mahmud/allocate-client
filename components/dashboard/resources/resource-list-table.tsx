@@ -16,6 +16,7 @@ type Props = {
   onUpdateRules: (resource: Resource) => void;
   onToggleActive: (resource: Resource) => void;
   onDelete: (resource: Resource) => void;
+  onMarkAsMaintenance: (resource: Resource) => void;
   activeResourceId?: string | null;
 };
 
@@ -62,6 +63,7 @@ export function ResourceListTable({
   onToggleActive,
   onDelete,
   activeResourceId,
+  onMarkAsMaintenance
 }: Props) {
   const { height, containerRef } = useTableHeight(300, 330);
 
@@ -128,6 +130,10 @@ export function ResourceListTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="dark:bg-slate-800">
                       <DropdownMenuItem className="cursor-pointer" onClick={() => onEdit(resource)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer" onClick={() => onMarkAsMaintenance(resource)}>
+                       {/* maintenance mode */}
+                        {resource.is_maintenance ? "Mark as operational" : "Mark as under maintenance"}
+                      </DropdownMenuItem>
                       <DropdownMenuItem className="cursor-pointer" onClick={() => onUpdateRules(resource)}>Update rules</DropdownMenuItem>
                       <DropdownMenuItem className="cursor-pointer" onClick={() => onToggleActive(resource)}>
                         {resource.is_active ? "Disable" : "Enable"}

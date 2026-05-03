@@ -65,6 +65,12 @@ export function createResource(payload: CreateResourcePayload) {
     });
 }
 
+export const updateResourceMaintenance = (resourceId: string) => {
+    return apiRequest<ApiResponse<Resource>>(`/resources/${resourceId}/maintenance`, {
+        method: "PATCH",
+    });
+}
+
 export function updateResource(resourceId: string, payload: UpdateResourcePayload) {
     return apiRequest<ApiResponse<Resource>>(`/resources/update/${resourceId}`, {
         method: "PATCH",

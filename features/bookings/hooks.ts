@@ -1,6 +1,7 @@
 import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
 import { CreateBookingPayload, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { currentUserQueryKey } from "../auth";
 
 
 export const BookingKeys = {
@@ -21,6 +22,8 @@ export const useCreateBooking = () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: currentUserQueryKey }), // Invalidate all availability queries
             ]);
         }
     });

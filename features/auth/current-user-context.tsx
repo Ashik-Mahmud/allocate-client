@@ -31,12 +31,14 @@ function resolveUserFromProfileResponse(response: unknown): User | null {
   return typed.data as User;
 }
 
+export const currentUserQueryKey = ["auth", "current-user"] as const;
+
 export function CurrentUserProvider({ children }: { children: React.ReactNode }) {
   const session = useSession();
   const isAuthenticated = session.status === "authenticated";
 
   const profileQuery = useQuery({
-    queryKey: ["auth", "current-user"],
+    queryKey: currentUserQueryKey,
     queryFn: getProfile,
     enabled: isAuthenticated,
     staleTime: 5_000, // 5 seconds stale time to reduce unnecessary refetches

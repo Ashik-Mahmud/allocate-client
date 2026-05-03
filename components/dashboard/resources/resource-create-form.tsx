@@ -342,7 +342,7 @@ export function ResourceCreateForm({
       />
 
       <div className="flex flex-wrap items-stretch gap-4 text-sm text-slate-700 dark:text-slate-300">
-        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
+        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 ">
           <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} />
           <div className="flex flex-col ">
             <span>
@@ -353,7 +353,9 @@ export function ResourceCreateForm({
             </small>
           </div>
         </label>
-        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
+
+        {/* Turn off under maintenance */}
+        {/* <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
           <input
             type="checkbox"
             checked={isMaintenance}
@@ -367,7 +369,7 @@ export function ResourceCreateForm({
               This resource will {isMaintenance ? "be marked as under maintenance" : "not be marked as under maintenance"}, which can be used to prevent bookings during maintenance periods.
             </small>
           </div>
-        </label>
+        </label> */}
       </div>
 
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}

@@ -18,6 +18,7 @@ import {
 } from "@/lib/services/staff";
 import type { StaffWorkQueueFilters, UpdateStaffWorkQueueStatusPayload } from "@/types";
 import { AssignMultipleStaffCreditsPayload, GetStaffCreditLogFilter, StaffCreditLogEntry, StaffListFilters, StaffManagementFormValues } from "@/types/staff";
+import { currentUserQueryKey } from "../auth";
 
 export const staffKeys = {
   all: (filters?: StaffListFilters) => ["staffs", filters ?? {}] as const,
@@ -92,7 +93,7 @@ export const useAssignCreditsToStaffMutation = () => {
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => assignCreditsToStaff(staffId, credits),
     onSuccess: async () => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+        queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
         queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
         queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
         queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
@@ -109,7 +110,7 @@ export const useAssignCreditsToMultipleStaffMutation = () => {
     mutationFn: (payload: AssignMultipleStaffCreditsPayload) => assignCreditsToMultipleStaff(payload),
     onSuccess: async () => {
       void Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+        queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
         queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
         queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
         queryClient.invalidateQueries({ queryKey: staffKeys.byId("") }),
@@ -126,7 +127,7 @@ export const useRevokeCreditsFromStaffMutation = () => {
     mutationFn: ({ staffId, credits }: { staffId: string; credits: number }) => revokeCreditsFromStaff(staffId, credits),
     onSuccess: async (_data, variables) => {
       return await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+        queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
         queryClient.invalidateQueries({ queryKey: staffKeys.creditLogs() }),
         queryClient.invalidateQueries({ queryKey: staffKeys.all() }),
         // 3. Target ONLY the specific staff member modified

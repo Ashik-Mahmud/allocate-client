@@ -68,7 +68,17 @@ export interface CreateBookingPayload {
     notes?: string;
 }
 
-
+export type BookingCalendarAvailableStatus = "AVAILABLE" | "PARTIALLY_AVAILABLE" | "FULLY_BOOKED" | "OFF_DAY";
+export interface BookingCalendarEntry {
+    date: string; // ISO date string (e.g., "2024-01-01")
+    day: string;  // Day of the week (e.g., "Monday")
+    availableSlotsCount: number;
+    status: BookingCalendarAvailableStatus;
+    slots: {
+        start_time: string; // ISO string
+        end_time: string;   // ISO string
+    }[];
+}
 
 export const BOOKING_STATUS_CONFIG = {
     [BookingStatus.PENDING]: {

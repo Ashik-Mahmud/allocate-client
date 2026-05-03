@@ -27,7 +27,7 @@ export const ROUTES = {
   dashboardCommon: {
      overview: "/dashboard/overview",
     bookingAvailability: "/dashboard/booking-availability",
-    bookings: "/dashboard/bookings",
+    bookings: "/dashboard/bookings-calendar",
     myBookings: "/dashboard/my-bookings",
     resources: "/dashboard/resources",
     profile: "/dashboard/profile",

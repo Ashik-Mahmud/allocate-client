@@ -1,3 +1,6 @@
+import { Booking } from "./booking";
+import { Organizations } from "./organization";
+
 // Shared JSON type for metadata and availableDays
 export type JsonValue = string | number | boolean | { [key: string]: JsonValue } | JsonValue[] | null;
 
@@ -42,6 +45,8 @@ export interface Resource {
 	createdAt: string;
 	updatedAt: string;
 	resourcesRules?: ResourceRule[];
+	bookings?: Partial<Booking>[];
+	organization?: Partial<Organizations>
 }
 
 export interface ResourceRule {

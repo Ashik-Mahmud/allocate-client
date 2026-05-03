@@ -2,6 +2,7 @@ import { updateResource } from "@/lib/services";
 import { updateOrganizationService } from "@/lib/services/organization";
 import { Organizations } from "@/types/organization";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { currentUserQueryKey } from "../auth";
 
 
 export const organizationKeys = {
@@ -19,7 +20,7 @@ export function useUpdateOrganization() {
         onSuccess: async () => {
             void Promise.all([
                 await queryClient.invalidateQueries({ queryKey: organizationKeys.list }),
-                await queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+                await queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
             ]);
         },
     });

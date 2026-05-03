@@ -98,7 +98,7 @@ const planStyles = {
                                 </span>
                                 <span className="flex items-center gap-1.5 font-mono text-sm font-bold text-slate-900 dark:text-slate-100">
                                     {typeof user?.personal_credits === "number"
-                                        ? user.personal_credits.toLocaleString()
+                                        ? user?.personal_credits.toLocaleString()
                                         : "0"}
                                     <span className="text-[10px] font-medium opacity-60">CR</span>
                                 </span>

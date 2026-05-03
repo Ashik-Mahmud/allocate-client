@@ -56,7 +56,7 @@ const AllocateDrawer = ({
                                         {title}
                                     </DrawerTitle>
                                     {description && (
-                                        <DrawerDescription className="text-slate-500 text-sm dark:text-slate-400">
+                                        <DrawerDescription className="text-left text-slate-500 text-sm dark:text-slate-400">
                                             {description}
                                         </DrawerDescription>
                                     )}

@@ -1,8 +1,8 @@
-export type notificationFilters ={
-    limit?: number;
-    page?: number;
-    is_read?: boolean;
-    search?: string;
+export type notificationFilters = {
+  limit?: number;
+  page?: number;
+  is_read?: boolean;
+  search?: string;
 }
 
 export enum NotificationType {
@@ -29,6 +29,9 @@ export enum NotificationType {
   // System
   SYSTEM_ALERT = 'SYSTEM_ALERT',
   MAINTENANCE_NOTICE = 'MAINTENANCE_NOTICE',
+
+  RESOURCE_MAINTENANCE = 'RESOURCE_MAINTENANCE',
+  RESOURCE_AVAILABLE = 'RESOURCE_AVAILABLE',
 }
 
 export interface Notification {

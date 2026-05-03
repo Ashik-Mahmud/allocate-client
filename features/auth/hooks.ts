@@ -11,7 +11,7 @@ import {
     saveAuthSession,
 } from "./storage";
 import type { User } from "@/types";
-import { useCurrentUserContext } from "./current-user-context";
+import { currentUserQueryKey, useCurrentUserContext } from "./current-user-context";
 
 export type CurrentUser = User;
 
@@ -78,7 +78,7 @@ export const useUpdateProfile = () => {
         mutationFn: UpdateProfileService,
         onSuccess: async () => {
             await Promise.all([
-                await queryClient.invalidateQueries({ queryKey: ["auth", "current-user"] }),
+                await queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
             ]);
         },
     });

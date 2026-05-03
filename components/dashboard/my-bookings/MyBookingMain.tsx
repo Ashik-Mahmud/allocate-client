@@ -9,6 +9,7 @@ import { BookingStatus, Booking } from '@/types/booking'
 import { useDebounce } from '@/hooks'
 import { Button } from '@/components/ui/button'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
+import { toast } from 'sonner'
 
 const MyBookingMain = () => {
     const [statusFilter, setStatusFilter] = React.useState<string>("");
@@ -40,6 +41,9 @@ const MyBookingMain = () => {
                 bookingId: id,
                 payload: { status: BookingStatus.CANCELLED }
             });
+            setIsOpenCancelDialog(false);
+            setSelectedBookingId(null);
+            toast.success("Booking cancelled successfully");
         } catch (error) {
             console.error("Failed to cancel booking:", error);
         }

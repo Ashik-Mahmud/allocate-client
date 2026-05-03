@@ -32,6 +32,8 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
 
   [NotificationType.SYSTEM_ALERT]: { icon: ShieldAlert, color: 'text-red-500', bgColor: 'bg-red-50' },
   [NotificationType.MAINTENANCE_NOTICE]: { icon: AlertCircle, color: 'text-slate-600', bgColor: 'bg-slate-100' },
+  [NotificationType.RESOURCE_MAINTENANCE]: { icon: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-100' },
+  [NotificationType.RESOURCE_AVAILABLE]: { icon: CheckCircle2, color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
 };
 
 
