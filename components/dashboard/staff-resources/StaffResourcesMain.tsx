@@ -12,10 +12,11 @@ import DialogPopup from '@/components/shared/dialog-popup';
 import { Button } from '@/components/ui/button';
 import { useDebounce } from '@/hooks';
 import ShowAvailableSlots from './showAvailableSlots';
-import { format, toDate } from "date-fns"
 import CreateBooking from './CreateBooking';
 import { Booking, CreateBookingPayload } from '@/types/booking';
 import { toast } from 'sonner';
+import { useCurrentUser } from '@/features/auth';
+import { getCalendarDateKey, getCalendarNow, getTodayCalendarKey, parseDateTimeLocalInTimeZone } from '@/lib/utils/timezone-date';
 
 const quickCategories: { label: string; value: "" | ResourceType }[] = [
   { label: 'All', value: '' },
@@ -34,21 +35,20 @@ const quickCategories: { label: string; value: "" | ResourceType }[] = [
 ];
 
 
-// use date-fns to get today's date in yyyy-mm-dd format
-const getTodayDate = () => {
-  return format(new Date(), 'yyyy-MM-dd');;
-};
+const padTime = (value: number) => String(value).padStart(2, '0');
 
 
 const StaffResourcesMain = () => {
   const router = useRouter();
+  const { user } = useCurrentUser();
+  const timeZone = user?.organization?.timezone || 'UTC';
   const [view, setView] = React.useState<'grid' | 'list'>('grid');
   const [search, setSearch] = useState("");
   const [type, setType] = useState<"" | ResourceType>("");
   const [slotsDialogOpen, setSlotsDialogOpen] = useState(false);
   const [dialogResource, setDialogResource] = useState<Resource | null>(null);
   const [dialogDate, setDialogDate] = useState(
-    getTodayDate()
+    getTodayCalendarKey(timeZone)
   );
   const [selectedSlot, setSelectedSlot] = useState<{ start: string; end: string } | null>(null);
   const [isOpenBookingDialog, setIsOpenBookingDialog] = useState(false);
@@ -76,52 +76,35 @@ const StaffResourcesMain = () => {
   const onShowSlots = (resourceId: string) => {
     const selected = resourcesQuery.data?.data?.find((item: Resource) => item.id === resourceId) ?? null;
     setDialogResource(selected);
-    setDialogDate(getTodayDate());
+    setDialogDate(getTodayCalendarKey(timeZone));
     setSlotsDialogOpen(true);
   };
 
   const onReserveResource = (resource: Resource) => {
     const rules = resource?.resourcesRules?.[0];
-    const now = new Date();
-
-
-    const localYear = now.getFullYear();
-    const localMonth = now.getMonth();
-    const localDay = now.getDate();
-
-
-    // Date.UTC creates a timestamp based on these values as if they were UTC
-    const openingUTC = new Date(Date.UTC(
-      localYear,
-      localMonth,
-      localDay,
-      rules?.opening_hours ?? 9, 0, 0
-    ));
-
-    const closingUTC = new Date(Date.UTC(
-      localYear,
-      localMonth,
-      localDay,
-      rules?.closing_hours ?? 18, 0, 0
-    ));
-
-
+    const current = getCalendarNow(timeZone);
+    const todayKey = getCalendarDateKey(current.year, current.month, current.day);
+    const openingHour = rules?.opening_hours ?? 9;
+    const closingHour = rules?.closing_hours ?? 18;
+    const openingLocal = `${todayKey}T${padTime(openingHour)}:00`;
+    const closingLocal = `${todayKey}T${padTime(closingHour)}:00`;
+    const openingUTC = parseDateTimeLocalInTimeZone(openingLocal, timeZone);
+    const closingUTC = parseDateTimeLocalInTimeZone(closingLocal, timeZone);
     const currentUTC = new Date();
 
     let finalStart: Date;
 
-    // Logic: If current UTC time is within today's UTC opening/closing window
+    // Logic: If current time is within today's timezone-aware opening/closing window
     if (currentUTC >= openingUTC && currentUTC < closingUTC) {
       finalStart = currentUTC;
     } else {
-      // Otherwise, default to the local "Today's" opening hour in UTC
+      // Otherwise, default to today's opening hour in the organization timezone
       finalStart = openingUTC;
     }
 
     const finalEnd = new Date(finalStart.getTime() + 30 * 60 * 1000);
 
     setSelectedSlot({
-      // Using .toISOString() is safer than manual formatting for UTC
       start: finalStart.toISOString(),
       end: finalEnd.toISOString(),
     });

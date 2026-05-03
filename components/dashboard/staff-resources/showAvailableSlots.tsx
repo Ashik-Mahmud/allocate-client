@@ -2,21 +2,11 @@
 import React, { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { useFetchResourceAvailableSlots } from '@/features/bookings';
+import { useCurrentUser } from '@/features/auth';
 import { Resource } from '@/types/resources';
 import { Clock, CalendarDays, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils'; // Assuming you have shadcn's utility
-import { format, parseISO } from 'date-fns';
-
-const formatISOToTime = (isoString: string) => {
-    if (!isoString) return '';
-    const date = parseISO(isoString); 
-    return date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-        // timeZone: 'UTC' 
-    });
-};
+import { formatCalendarDayMonth, formatTimeInTimeZone, getTodayCalendarKey } from '@/lib/utils/timezone-date';
 
 type Slot = { start: string; end: string };
 
@@ -45,6 +35,8 @@ const ShowAvailableSlots = ({
     setSlotsDialogOpen,
     onSlotConfirm
 }: Props) => {
+    const { user } = useCurrentUser();
+    const timeZone = user?.organization?.timezone || 'UTC';
     const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
 
     const dialogSlotsQuery = useFetchResourceAvailableSlots({
@@ -60,10 +52,12 @@ const ShowAvailableSlots = ({
         const slots = apiData?.availableSlots;
         if (!Array.isArray(slots)) return [];
         return slots.map(slot => ({
-            display: `${formatISOToTime(slot.start)} — ${formatISOToTime(slot.end)}`,
+            display: `${formatTimeInTimeZone(slot.start, timeZone)} — ${formatTimeInTimeZone(slot.end, timeZone)}`,
             raw: slot
         }));
-    }, [apiData]);
+    }, [apiData, timeZone]);
+
+    const todayKey = getTodayCalendarKey(timeZone);
 
     const handleConfirm = () => {
         if (selectedSlot) {
@@ -88,7 +82,7 @@ const ShowAvailableSlots = ({
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-500 mb-4">
                     <CalendarDays className="w-4 h-4" />
-                    <span>{new Date(dialogDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>
+                    <span>{formatCalendarDayMonth(dialogDate, timeZone)}</span>
                 </div>
 
                 <input
@@ -98,7 +92,7 @@ const ShowAvailableSlots = ({
                         setDialogDate(e.target.value);
                         setSelectedSlot(null); // Reset selection on date change
                     }}
-                    min={format(new Date(), 'yyyy-MM-dd')}
+                    min={todayKey}
 
                     className="w-full bg-slate-50 dark:bg-slate-900 dark:text-white px-3 py-2 rounded-lg text-xs font-medium outline-none border border-transparent focus:border-slate-200 transition-all"
                 />
@@ -167,7 +161,7 @@ const ShowAvailableSlots = ({
                     )}
                 >
                     {selectedSlot
-                        ? `Book ${formatISOToTime(selectedSlot.start)}`
+                        ? `Book ${formatTimeInTimeZone(selectedSlot.start, timeZone)}`
                         : 'Select a time slot'}
                 </Button>
                 <Button

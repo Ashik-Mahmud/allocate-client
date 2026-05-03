@@ -1,21 +1,32 @@
 "use client"
 import { useFetchResourceBookingCalendar } from '@/features/bookings'
-import { useGetBrowseResourcesListQuery, useResourcesListQuery } from '@/features/resources'
+import { useGetBrowseResourcesListQuery } from '@/features/resources'
+import { useCurrentUser } from '@/features/auth'
 import { BookingCalendarEntry } from '@/types/booking'
 import React from 'react'
 import ResourceSelector from './ResourceSelector'
 import MonthYearNavigation from './MonthYearNavigation'
 import CalendarGrid from './CalendarGrid'
 import { CalendarDays, Info } from 'lucide-react'
+import { formatCalendarDate, getCalendarMonthStart } from '@/lib/utils/timezone-date'
 
 const BookingsCalendarMain = () => {
-    const [month, setMonth] = React.useState(new Date().getMonth() + 1)
-    const [year, setYear] = React.useState(new Date().getFullYear())
+    const { user } = useCurrentUser()
+    const timeZone = user?.organization?.timezone || 'UTC'
+    const initialCalendarMonth = React.useMemo(() => getCalendarMonthStart(timeZone), [timeZone])
+    const [month, setMonth] = React.useState(initialCalendarMonth.month)
+    const [year, setYear] = React.useState(initialCalendarMonth.year)
     const [resourceId, setResourceId] = React.useState<string | undefined>()
     const [selectedDateDetails, setSelectedDateDetails] = React.useState<{
         date: string
         entry: BookingCalendarEntry
     } | null>(null)
+
+    React.useEffect(() => {
+        const current = getCalendarMonthStart(timeZone)
+        setMonth(current.month)
+        setYear(current.year)
+    }, [timeZone])
 
     // Fetch resources
     const { data: resourcesData, isLoading: resourcesLoading } = useGetBrowseResourcesListQuery({
@@ -110,12 +121,7 @@ const BookingsCalendarMain = () => {
                                     <div>
                                         <p className="text-xs text-slate-600 dark:text-slate-400">Date</p>
                                         <p className="text-sm font-bold text-slate-900 dark:text-white">
-                                            {new Date(selectedDateDetails.date + 'T00:00:00').toLocaleDateString('en-US', {
-                                                weekday: 'long',
-                                                month: 'long',
-                                                day: 'numeric',
-                                                year: 'numeric'
-                                            })}
+                                            {formatCalendarDate(selectedDateDetails.date, timeZone)}
                                         </p>
                                     </div>
                                     <div>
@@ -154,7 +160,7 @@ const BookingsCalendarMain = () => {
                                     Partial Days
                                 </p>
                                 <p className="text-2xl font-black text-amber-700 dark:text-amber-400 mt-1">
-                                    {calendarEntries.filter(e => e.status === 'PARTIALLY_BOOKED').length}
+                                    {calendarEntries.filter(e => e.status === 'PARTIALLY_BOOKED' || String(e.status) === 'PARTIALLY_AVAILABLE').length}
                                 </p>
                             </div>
                             <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20">
@@ -179,6 +185,7 @@ const BookingsCalendarMain = () => {
                     <MonthYearNavigation
                         month={month}
                         year={year}
+                        timeZone={timeZone}
                         onMonthChange={handleMonthChange}
                     />
 
@@ -186,6 +193,7 @@ const BookingsCalendarMain = () => {
                     <CalendarGrid
                         month={month}
                         year={year}
+                        timeZone={timeZone}
                         entries={calendarEntries}
                         onDateClick={handleDateClick}
                         isLoading={calendarLoading}

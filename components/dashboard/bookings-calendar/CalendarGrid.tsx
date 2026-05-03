@@ -1,12 +1,14 @@
 "use client"
 import React from 'react'
-import { BookingCalendarEntry } from '@/types/booking'
+import { BookingCalendarAvailableStatus, BookingCalendarEntry } from '@/types/booking'
 import { cn } from '@/lib/utils'
 import CalendarStatusBadge from './CalendarStatusBadge'
+import { getCalendarDateKey, getMonthGridStartDay, getTodayCalendarKey } from '@/lib/utils/timezone-date'
 
 interface CalendarGridProps {
     month: number
     year: number
+    timeZone?: string
     entries: BookingCalendarEntry[]
     onDateClick?: (date: string, entry: BookingCalendarEntry) => void
     isLoading?: boolean
@@ -17,6 +19,7 @@ const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const CalendarGrid = ({
     month,
     year,
+    timeZone,
     entries,
     onDateClick,
     isLoading = false
@@ -24,7 +27,7 @@ const CalendarGrid = ({
     const [hoveredDate, setHoveredDate] = React.useState<string | null>(null)
 
     // Get first day of month and number of days
-    const firstDay = new Date(year, month - 1, 1).getDay()
+    const firstDay = getMonthGridStartDay(year, month, timeZone)
     const daysInMonth = new Date(year, month, 0).getDate()
 
     // Create array of calendar days
@@ -37,15 +40,14 @@ const CalendarGrid = ({
     }
 
     const getEntryForDate = (day: number): BookingCalendarEntry | undefined => {
-        const dateStr = new Date(year, month - 1, day).toISOString().split('T')[0]
+        const dateStr = getCalendarDateKey(year, month, day)
         return entries.find(e => e.date === dateStr)
     }
 
     const isToday = (day: number) => {
-        const today = new Date()
-        return day === today.getDate() &&
-            month === today.getMonth() + 1 &&
-            year === today.getFullYear()
+        const todayKey = getTodayCalendarKey(timeZone)
+        const dayKey = getCalendarDateKey(year, month, day)
+        return dayKey === todayKey
     }
 
     return (
@@ -77,7 +79,10 @@ const CalendarGrid = ({
                     {calendarDays.map((day, idx) => {
                         const entry = day ? getEntryForDate(day) : undefined
                         const today = day ? isToday(day) : false
-                        const dateStr = day ? new Date(year, month - 1, day).toISOString().split('T')[0] : ''
+                        const dateStr = day ? getCalendarDateKey(year, month, day) : ''
+                        const normalizedStatus: BookingCalendarAvailableStatus | undefined = String(entry?.status ?? '') === 'PARTIALLY_AVAILABLE'
+                            ? 'PARTIALLY_BOOKED'
+                            : entry?.status
 
                         return (
                             <div
@@ -89,10 +94,10 @@ const CalendarGrid = ({
                                         'cursor-pointer group relative',
                                         today && 'ring-2 ring-indigo-500 dark:ring-indigo-400',
                                         entry && 'hover:shadow-lg hover:-translate-y-1 hover:scale-105',
-                                        entry?.status === 'FULLY_BOOKED' && 'bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-200 dark:border-rose-500/20',
-                                        entry?.status === 'PARTIALLY_BOOKED' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
-                                        entry?.status === 'AVAILABLE' && 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/20',
-                                        entry?.status === 'OFF_DAY' && 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700',
+                                        normalizedStatus === 'FULLY_BOOKED' && 'bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-200 dark:border-rose-500/20',
+                                        normalizedStatus === 'PARTIALLY_BOOKED' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
+                                        normalizedStatus === 'AVAILABLE' && 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/20',
+                                        normalizedStatus === 'OFF_DAY' && 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700',
                                         !entry && 'bg-slate-50 dark:bg-slate-900/30 border-2 border-slate-100 dark:border-slate-800'
                                     ]
                                 )}
@@ -114,10 +119,10 @@ const CalendarGrid = ({
                                         {entry && (
                                             <div className={cn(
                                                 'w-1.5 h-1.5 rounded-full mt-1',
-                                                entry.status === 'FULLY_BOOKED' && 'bg-rose-500',
-                                                entry.status === 'PARTIALLY_BOOKED' && 'bg-amber-500',
-                                                entry.status === 'AVAILABLE' && 'bg-emerald-500',
-                                                entry.status === 'OFF_DAY' && 'bg-slate-400'
+                                                normalizedStatus === 'FULLY_BOOKED' && 'bg-rose-500',
+                                                normalizedStatus === 'PARTIALLY_BOOKED' && 'bg-amber-500',
+                                                normalizedStatus === 'AVAILABLE' && 'bg-emerald-500',
+                                                normalizedStatus === 'OFF_DAY' && 'bg-slate-400'
                                             )} />
                                         )}
 
@@ -125,15 +130,15 @@ const CalendarGrid = ({
                                         {entry && hoveredDate === dateStr && (
                                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 whitespace-nowrap">
                                                 <CalendarStatusBadge
-                                                    status={entry.status}
+                                                    status={normalizedStatus || 'OFF_DAY'}
                                                     availableSlotsCount={entry.availableSlotsCount}
                                                     isHovering={true}
                                                 />
                                                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent"
                                                     style={{
-                                                        borderTopColor: entry.status === 'FULLY_BOOKED' ? '#fca5a5' :
-                                                            entry.status === 'PARTIALLY_BOOKED' ? '#fcd34d' :
-                                                                entry.status === 'AVAILABLE' ? '#86efac' :
+                                                        borderTopColor: normalizedStatus === 'FULLY_BOOKED' ? '#fca5a5' :
+                                                            normalizedStatus === 'PARTIALLY_BOOKED' ? '#fcd34d' :
+                                                                normalizedStatus === 'AVAILABLE' ? '#86efac' :
                                                                     '#d1d5db'
                                                     }}
                                                 />

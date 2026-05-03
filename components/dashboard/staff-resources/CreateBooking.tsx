@@ -5,9 +5,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info } from 'lucide-react'
 import { Resource } from '@/types/resources'
-import { cn, formatTime } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { useCurrentUser } from '@/features/auth'
+import { formatCalendarDate, formatDateTimeLocalInTimeZone, formatTimeInTimeZone, parseDateTimeLocalInTimeZone } from '@/lib/utils/timezone-date'
 
 type CreateBookingPayload = {
     resource_id: string;
@@ -29,6 +30,7 @@ type Props = {
 const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting, error }: Props) => {
 
     const { user } = useCurrentUser();
+    const timeZone = user?.organization?.timezone || 'UTC';
     const [startTime, setStartTime] = useState(selectedSlot.start);
     const [endTime, setEndTime] = useState(selectedSlot.end);
     const [isEditing, setIsEditing] = useState(false);
@@ -81,7 +83,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         </h1>
                         <p className="text-sm text-slate-400 flex items-center gap-1.5 mt-1">
                             <Calendar className="w-3.5 h-3.5" />
-                            {new Date(startTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            {formatCalendarDate(startTime.slice(0, 10), timeZone)}
                         </p>
                     </div>
                     <div className="text-right">
@@ -100,12 +102,12 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                     <div className="flex items-center gap-6">
                         <div className="space-y-0.5">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">From</p>
-                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{formatTime(startTime)}</p>
+                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{formatTimeInTimeZone(startTime, timeZone)}</p>
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-300" />
                         <div className="space-y-0.5">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">To</p>
-                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{formatTime(endTime)}</p>
+                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{formatTimeInTimeZone(endTime, timeZone)}</p>
                         </div>
                     </div>
                     <button
@@ -120,17 +122,16 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                     <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800 grid grid-cols-2 gap-8 animate-in slide-in-from-top-2">
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-center">
-                                <span className="text-[9px] uppercase font-bold text-slate-400">Start (24h UTC)</span>
+                                <span className="text-[9px] uppercase font-bold text-slate-400">Start ({timeZone})</span>
                             </div>
                             <input
                                 type="datetime-local"
-                                // Using UTC ISO string for min prevents timezone "yesterday" bugs
-                                min={format(new Date(), 'yyyy-MM-dd\'T\'HH:mm')}
+                                min={formatDateTimeLocalInTimeZone(new Date(), timeZone)}
                                 className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
-                                value={new Date(startTime).toISOString().slice(0, 16)}
+                                value={formatDateTimeLocalInTimeZone(startTime, timeZone)}
                                 onChange={(e) => {
                                     if (!e.target.value) return;
-                                    const date = new Date(e.target.value + ":00Z"); // Force treat as UTC
+                                    const date = parseDateTimeLocalInTimeZone(e.target.value, timeZone);
                                     setStartTime(date.toISOString());
                                     if (date.getTime() >= new Date(endTime).getTime()) {
                                         setEndTime(new Date(date.getTime() + 30 * 60000).toISOString());
@@ -138,26 +139,26 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                                 }}
                             />
                             <span className="text-[10px] text-emerald-500 font-mono italic">
-                                {new Date(startTime).toISOString().slice(11, 16)} UTC
+                                {formatTimeInTimeZone(startTime, timeZone)} {timeZone}
                             </span>
                         </div>
 
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-center">
-                                <span className="text-[9px] uppercase font-bold text-slate-400">End (24h UTC)</span>
+                                <span className="text-[9px] uppercase font-bold text-slate-400">End ({timeZone})</span>
                             </div>
                             <input
                                 type="datetime-local"
-                                min={new Date(startTime).toISOString().slice(0, 16)}
+                                min={formatDateTimeLocalInTimeZone(startTime, timeZone)}
                                 className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
-                                value={new Date(endTime).toISOString().slice(0, 16)}
+                                value={formatDateTimeLocalInTimeZone(endTime, timeZone)}
                                 onChange={(e) => {
                                     if (!e.target.value) return;
-                                    setEndTime(new Date(e.target.value + ":00Z").toISOString());
+                                    setEndTime(parseDateTimeLocalInTimeZone(e.target.value, timeZone).toISOString());
                                 }}
                             />
                             <span className="text-[10px] text-emerald-500 font-mono italic text-right">
-                                {new Date(endTime).toISOString().slice(11, 16)} UTC
+                                {formatTimeInTimeZone(endTime, timeZone)} {timeZone}
                             </span>
                         </div>
                     </div>

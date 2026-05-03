@@ -2,22 +2,19 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react'
-import { format } from 'date-fns'
+import { getCalendarMonthLabel, getCalendarNow } from '@/lib/utils/timezone-date'
 
 interface MonthYearNavigationProps {
     month: number
     year: number
+    timeZone?: string
     onMonthChange: (month: number, year: number) => void
 }
-
-const MONTHS = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-]
 
 const MonthYearNavigation = ({
     month,
     year,
+    timeZone,
     onMonthChange
 }: MonthYearNavigationProps) => {
     const handlePreviousMonth = () => {
@@ -37,8 +34,8 @@ const MonthYearNavigation = ({
     }
 
     const handleToday = () => {
-        const today = new Date()
-        onMonthChange(today.getMonth() + 1, today.getFullYear())
+        const today = getCalendarNow(timeZone)
+        onMonthChange(today.month, today.year)
     }
 
     return (
@@ -56,10 +53,10 @@ const MonthYearNavigation = ({
                 <Calendar className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                 <div className="text-center">
                     <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                        {MONTHS[month - 1]} {year}
+                        {getCalendarMonthLabel(year, month, timeZone)}
                     </h2>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                        {format(new Date(year, month - 1, 1), 'EEEE, MMMM yyyy')}
+                        {timeZone || 'UTC'}
                     </p>
                 </div>
             </div>
