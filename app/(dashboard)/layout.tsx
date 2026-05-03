@@ -10,6 +10,7 @@ import AllocateDrawer from "@/components/shared/allocate-drawer";
 import UpdateProfile from "@/components/dashboard/profile/update-profile";
 import UpdateOrganizationDrawer from "@/components/dashboard/update-org-drawer";
 import { useCurrentUser } from "@/features/auth";
+import NextBookingCountDown from "@/components/dashboard/booking-availability/NextBookingCountDown";
 
 export default async function DashboardLayout({
   children,
@@ -21,16 +22,16 @@ export default async function DashboardLayout({
   if (!session?.user?.email) {
     redirect(ROUTES.signIn);
   }
-  
+
 
 
 
   return (
     <div className="h-dvh  bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      
-   
-          <UpdateOrganizationDrawer />
-       
+
+      <NextBookingCountDown />
+      <UpdateOrganizationDrawer />
+
 
 
       <div className="grid h-full md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
