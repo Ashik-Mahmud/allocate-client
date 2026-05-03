@@ -71,6 +71,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
         });
     };
 
+
     return (
         <div className="flex flex-col h-full px-2  mx-auto bg-white dark:bg-slate-950 antialiased animate-in fade-in duration-500">
 
@@ -83,7 +84,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         </h1>
                         <p className="text-sm text-slate-400 flex items-center gap-1.5 mt-1">
                             <Calendar className="w-3.5 h-3.5" />
-                            {formatCalendarDate(startTime.slice(0, 10), timeZone)}
+                            {formatCalendarDate(formatDateTimeLocalInTimeZone(startTime, timeZone), timeZone)}
                         </p>
                     </div>
                     <div className="text-right">

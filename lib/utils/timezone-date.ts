@@ -69,9 +69,15 @@ export function getCalendarMonthStart(timeZone?: string | null) {
   };
 }
 
-export function formatCalendarDate(dateKey: string, timeZone?: string | null, locale = "en-US") {
+export function formatCalendarDate(dateValue: string | Date, timeZone?: string | null, locale = "en-US") {
   const resolvedTimeZone = resolveTimeZone(timeZone);
-  const date = new Date(`${dateKey}T12:00:00Z`);
+  const date = typeof dateValue === "string"
+    ? new Date(dateValue.includes("T") ? dateValue : `${dateValue}T12:00:00Z`)
+    : dateValue;
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
 
   return new Intl.DateTimeFormat(locale, {
     timeZone: resolvedTimeZone,
@@ -79,18 +85,24 @@ export function formatCalendarDate(dateKey: string, timeZone?: string | null, lo
     month: "long",
     day: "numeric",
     year: "numeric",
-  })?.format(date);
+  }).format(date);
 }
 
-export function formatCalendarDayMonth(dateKey: string, timeZone?: string | null, locale = "en-US") {
+export function formatCalendarDayMonth(dateValue: string | Date, timeZone?: string | null, locale = "en-US") {
   const resolvedTimeZone = resolveTimeZone(timeZone);
-  const date = new Date(`${dateKey}T12:00:00Z`);
+  const date = typeof dateValue === "string"
+    ? new Date(dateValue.includes("T") ? dateValue : `${dateValue}T12:00:00Z`)
+    : dateValue;
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
 
   return new Intl.DateTimeFormat(locale, {
     timeZone: resolvedTimeZone,
     month: "long",
     day: "numeric",
-  }).format(date);
+  }).format(date); // return format like "September 5"
 }
 
 export function formatTimeInTimeZone(dateValue: string | Date, timeZone?: string | null, locale = "en-US") {
@@ -102,7 +114,7 @@ export function formatTimeInTimeZone(dateValue: string | Date, timeZone?: string
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
-  }).format(date);
+  }).format(date); // return time format like "3:45 PM"
 }
 
 function getTimeZoneParts(date: Date, timeZone: string) {
@@ -127,13 +139,13 @@ function getTimeZoneParts(date: Date, timeZone: string) {
     hour: get("hour"),
     minute: get("minute"),
     second: get("second"),
-  };
+  }; // returns components of the date in the specified time zone
 }
 
 function getTimeZoneOffsetMinutes(date: Date, timeZone: string) {
   const parts = getTimeZoneParts(date, timeZone);
   const utcEquivalent = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
-  return (utcEquivalent - date.getTime()) / 60000;
+  return (utcEquivalent - date.getTime()) / 60000;  // returns the offset in minutes between the date's time zone and UTC
 }
 
 export function formatDateTimeLocalInTimeZone(dateValue: string | Date, timeZone?: string | null) {
@@ -142,7 +154,7 @@ export function formatDateTimeLocalInTimeZone(dateValue: string | Date, timeZone
   const parts = getTimeZoneParts(date, resolvedTimeZone);
   const pad = (value: number) => String(value).padStart(2, "0");
 
-  return `${parts.year}-${pad(parts.month)}-${pad(parts.day)}T${pad(parts.hour)}:${pad(parts.minute)}`;
+  return `${parts.year}-${pad(parts.month)}-${pad(parts.day)}T${pad(parts.hour)}:${pad(parts.minute)}`; // returns a string in the format "YYYY-MM-DDTHH:mm" adjusted to the specified time zone, suitable for use in <input type="datetime-local">
 }
 
 export function parseDateTimeLocalInTimeZone(dateTimeLocal: string, timeZone?: string | null) {

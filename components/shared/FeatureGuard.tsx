@@ -112,7 +112,7 @@ export default function FeatureGuard({
                 <div className={
                     cn(
                         "",
-                        view === 'table' ? "relative flex flex-row w-full items-center justify-start  px-3" : "flex flex-col items-center text-center max-w-60  gap-3",
+                        view === 'table' ? "relative flex flex-row w-full items-center justify-start  px-3" : "flex flex-col items-center text-center max-w-80  gap-3",
                     )
                 }>
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
