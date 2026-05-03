@@ -76,6 +76,16 @@ const NextBookingFloatingWidget = () => {
                     body: `Your booking in ${nextBooking.resource.name} starts in 5 minutes.`,
                     icon: "/file.svg"
                 });
+                setIsExpanded(true); // Optionally expand the widget when the notification is shown
+            }
+        }
+        else if (timeLeft?.mins === 0 && timeLeft?.secs === 0) {
+            if (Notification.permission === "granted") {
+                new Notification("Booking Started!", {
+                    body: `Your booking in ${nextBooking.resource.name} has started.`,
+                    icon: "/file.svg"
+                });
+                setIsExpanded(true); // Optionally expand the widget when the notification is shown
             }
         }
     }, [timeLeft, nextBooking?.resource?.name]);

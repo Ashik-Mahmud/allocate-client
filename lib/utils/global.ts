@@ -19,6 +19,7 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
   [NotificationType.BOOKING_REJECTED]: { icon: XCircle, color: 'text-rose-500', bgColor: 'bg-rose-50' },
   [NotificationType.BOOKING_REMINDER]: { icon: BellRing, color: 'text-amber-500', bgColor: 'bg-amber-50' },
   [NotificationType.BOOKING_CANCELLED]: { icon: XCircle, color: 'text-slate-500', bgColor: 'bg-slate-50' },
+  [NotificationType.BOOKING_COMPLETED]: { icon: CheckCircle2, color: 'text-green-500', bgColor: 'bg-green-50' },
 
   [NotificationType.CREDIT_RECEIVED]: { icon: Coins, color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
   [NotificationType.CREDIT_REVOKED]: { icon: AlertCircle, color: 'text-rose-600', bgColor: 'bg-rose-100' },
@@ -34,6 +35,7 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
   [NotificationType.MAINTENANCE_NOTICE]: { icon: AlertCircle, color: 'text-slate-600', bgColor: 'bg-slate-100' },
   [NotificationType.RESOURCE_MAINTENANCE]: { icon: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-100' },
   [NotificationType.RESOURCE_AVAILABLE]: { icon: CheckCircle2, color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
+
 };
 
 
