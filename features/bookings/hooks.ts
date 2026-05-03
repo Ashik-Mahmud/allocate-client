@@ -97,10 +97,11 @@ export const useFetchAllBookings = (filters?: FetchMyBookingsFilters) => {
 
 
 // Hook to fetch resource based booking calendar 
-export const useFetchResourceBookingCalendar = ({ resourceId, month, year }: { resourceId: string; month: string; year: string }) => {
+export const useFetchResourceBookingCalendar = ({ resourceId, month, year, enabled }: { resourceId: string; month: string; year: string; enabled?: boolean }) => {
     return useQuery({
         queryKey: BookingKeys.availability(resourceId, `${month}-${year}`),
         queryFn: () => fetchBookingResourceCalendar(resourceId, month, year),
+        enabled: enabled,
     });
 }
 

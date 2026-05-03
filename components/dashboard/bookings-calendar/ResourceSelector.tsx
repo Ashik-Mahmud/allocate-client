@@ -67,7 +67,7 @@ const ResourceSelector = ({
                             >
                                 <div className="flex gap-3 items-start">
                                     {/* Photo */}
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                                    <div className="shrink-0 w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 overflow-hidden">
                                         {resource.photo ? (
                                             <img
                                                 src={resource.photo}
@@ -75,7 +75,7 @@ const ResourceSelector = ({
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (
-                                            <div className="w-full h-full bg-gradient-to-br from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center text-slate-500">
+                                            <div className="w-full h-full bg-linear-to-br from-slate-300 to-slate-400 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center text-slate-500">
                                                 <span className="text-xs font-bold">IMG</span>
                                             </div>
                                         )}
@@ -91,18 +91,17 @@ const ResourceSelector = ({
                                         </p>
                                         <div className="flex items-baseline gap-1 mt-1">
                                             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                                                ${typeof resource.hourly_rate === 'string'
+                                               {typeof resource.hourly_rate === 'string'
                                                     ? resource.hourly_rate
                                                     : resource.hourly_rate?.toFixed(2)
-                                                }
-                                            </span>
+                                                }cr</span>
                                             <span className="text-[10px] text-slate-400">/hour</span>
                                         </div>
                                     </div>
 
                                     {/* Status Indicator */}
                                     {selectedResourceId === resource.id && (
-                                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                                        <div className="shrink-0 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
                                             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                             </svg>

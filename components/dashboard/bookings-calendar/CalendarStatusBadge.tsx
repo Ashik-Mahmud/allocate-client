@@ -24,7 +24,7 @@ const STATUS_CONFIG: Record<BookingCalendarAvailableStatus, {
         icon: <Ban className="w-4 h-4" />,
         description: 'No availability'
     },
-    PARTIALLY_AVAILABLE: {
+    PARTIALLY_BOOKED: {
         label: 'Partial Availability',
         color: 'text-amber-600 dark:text-amber-400',
         bgColor: 'bg-amber-100 dark:bg-amber-500/10',
@@ -57,14 +57,14 @@ const CalendarStatusBadge = ({
     return (
         <div className={cn(
             'flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all duration-200',
-            config.bgColor,
-            config.color,
+            config?.bgColor,
+            config?.color,
             isHovering && 'ring-2 ring-offset-1 dark:ring-offset-0'
         )}>
-            <span className="text-sm">{config.icon}</span>
+            <span className="text-sm">{config?.icon}</span>
             <div>
                 <p className="text-[10px] font-bold uppercase tracking-tighter leading-none">
-                    {config.label}
+                    {config?.label}
                 </p>
                 {status !== 'OFF_DAY' && (
                     <p className="text-[9px] opacity-75">

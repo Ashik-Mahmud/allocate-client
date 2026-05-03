@@ -90,7 +90,7 @@ const CalendarGrid = ({
                                         today && 'ring-2 ring-indigo-500 dark:ring-indigo-400',
                                         entry && 'hover:shadow-lg hover:-translate-y-1 hover:scale-105',
                                         entry?.status === 'FULLY_BOOKED' && 'bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-200 dark:border-rose-500/20',
-                                        entry?.status === 'PARTIALLY_AVAILABLE' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
+                                        entry?.status === 'PARTIALLY_BOOKED' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
                                         entry?.status === 'AVAILABLE' && 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/20',
                                         entry?.status === 'OFF_DAY' && 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700',
                                         !entry && 'bg-slate-50 dark:bg-slate-900/30 border-2 border-slate-100 dark:border-slate-800'
@@ -115,7 +115,7 @@ const CalendarGrid = ({
                                             <div className={cn(
                                                 'w-1.5 h-1.5 rounded-full mt-1',
                                                 entry.status === 'FULLY_BOOKED' && 'bg-rose-500',
-                                                entry.status === 'PARTIALLY_AVAILABLE' && 'bg-amber-500',
+                                                entry.status === 'PARTIALLY_BOOKED' && 'bg-amber-500',
                                                 entry.status === 'AVAILABLE' && 'bg-emerald-500',
                                                 entry.status === 'OFF_DAY' && 'bg-slate-400'
                                             )} />
@@ -132,7 +132,7 @@ const CalendarGrid = ({
                                                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent"
                                                     style={{
                                                         borderTopColor: entry.status === 'FULLY_BOOKED' ? '#fca5a5' :
-                                                            entry.status === 'PARTIALLY_AVAILABLE' ? '#fcd34d' :
+                                                            entry.status === 'PARTIALLY_BOOKED' ? '#fcd34d' :
                                                                 entry.status === 'AVAILABLE' ? '#86efac' :
                                                                     '#d1d5db'
                                                     }}
@@ -159,7 +159,7 @@ const CalendarGrid = ({
                     </div>
                     <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-50 dark:bg-amber-500/10">
                         <div className="w-2 h-2 rounded-full bg-amber-500" />
-                        <span className="text-xs text-amber-700 dark:text-amber-400 font-medium">Partial</span>
+                        <span className="text-xs text-amber-700 dark:text-amber-400 font-medium">Partial Availability</span>
                     </div>
                     <div className="flex items-center gap-2 p-2 rounded-lg bg-rose-50 dark:bg-rose-500/10">
                         <div className="w-2 h-2 rounded-full bg-rose-500" />

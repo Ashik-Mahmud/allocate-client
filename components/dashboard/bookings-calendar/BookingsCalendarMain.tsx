@@ -36,14 +36,15 @@ const BookingsCalendarMain = () => {
         resourceId: resourceId as string,
         month: month.toString(),
         year: year.toString(),
+        enabled: Boolean(resourceId) // Only fetch when resourceId is set
     })
 
     const calendarEntries = React.useMemo(() => {
-        if (calendarData?.data) {
-            return Array.isArray(calendarData.data) ? calendarData.data : [calendarData.data]
+        if (calendarData?.data?.calendar) {
+            return Array.isArray(calendarData?.data?.calendar) ? calendarData?.data?.calendar : [calendarData?.data?.calendar]
         }
         return []
-    }, [calendarData])
+    }, [calendarData?.data?.calendar])
 
     const handleMonthChange = (newMonth: number, newYear: number) => {
         setMonth(newMonth)
@@ -84,7 +85,7 @@ const BookingsCalendarMain = () => {
                         {/* Info Box */}
                         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 space-y-2">
                             <div className="flex items-start gap-2">
-                                <Info className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
+                                <Info className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         About Calendar
@@ -137,22 +138,6 @@ const BookingsCalendarMain = () => {
 
                 {/* Main Content: Calendar */}
                 <div className="lg:col-span-3 space-y-6">
-                    {/* Month/Year Navigation */}
-                    <MonthYearNavigation
-                        month={month}
-                        year={year}
-                        onMonthChange={handleMonthChange}
-                    />
-
-                    {/* Calendar Grid */}
-                    <CalendarGrid
-                        month={month}
-                        year={year}
-                        entries={calendarEntries}
-                        onDateClick={handleDateClick}
-                        isLoading={calendarLoading}
-                    />
-
                     {/* Additional Stats (Optional) */}
                     {calendarEntries.length > 0 && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -169,7 +154,7 @@ const BookingsCalendarMain = () => {
                                     Partial Days
                                 </p>
                                 <p className="text-2xl font-black text-amber-700 dark:text-amber-400 mt-1">
-                                    {calendarEntries.filter(e => e.status === 'PARTIALLY_AVAILABLE').length}
+                                    {calendarEntries.filter(e => e.status === 'PARTIALLY_BOOKED').length}
                                 </p>
                             </div>
                             <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20">
@@ -190,6 +175,23 @@ const BookingsCalendarMain = () => {
                             </div>
                         </div>
                     )}
+                    {/* Month/Year Navigation */}
+                    <MonthYearNavigation
+                        month={month}
+                        year={year}
+                        onMonthChange={handleMonthChange}
+                    />
+
+                    {/* Calendar Grid */}
+                    <CalendarGrid
+                        month={month}
+                        year={year}
+                        entries={calendarEntries}
+                        onDateClick={handleDateClick}
+                        isLoading={calendarLoading}
+                    />
+
+
                 </div>
             </div>
         </div>

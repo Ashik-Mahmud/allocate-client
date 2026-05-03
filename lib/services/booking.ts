@@ -1,4 +1,4 @@
-import { Booking, CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking"
+import { Booking, BookingCalendarEntry, BookingResourceCalendarResponse, CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking"
 import { apiRequest } from "./http";
 import { ApiResponse, PaginatedResponse } from "@/types";
 
@@ -72,7 +72,7 @@ export const fetchAllBookings = async (filters?: FetchAllBookingsFilters) => {
 // service to fetch booking resource calendar availablity for month
 export const fetchBookingResourceCalendar = async (resourceId: string, month: string, year: string) => {
     const query = new URLSearchParams({ month, year }).toString();
-    return apiRequest<ApiResponse<Record<string, any>>>(`/bookings/resource/${resourceId}/calendar?${query}`, {
+    return apiRequest<ApiResponse<BookingResourceCalendarResponse>>(`/bookings/resource/${resourceId}/calendar?${query}`, {
         method: "GET",
     });
 }

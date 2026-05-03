@@ -5,14 +5,16 @@ import { useFetchResourceAvailableSlots } from '@/features/bookings';
 import { Resource } from '@/types/resources';
 import { Clock, CalendarDays, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils'; // Assuming you have shadcn's utility
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const formatISOToTime = (isoString: string) => {
-    return new Date(isoString).toLocaleTimeString('en-US', {
+    if (!isoString) return '';
+    const date = parseISO(isoString); 
+    return date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
         hour12: true,
-        timeZone: 'UTC'
+        // timeZone: 'UTC' 
     });
 };
 
