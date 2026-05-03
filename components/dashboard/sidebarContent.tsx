@@ -165,7 +165,7 @@ const commonNavigation: NavItem[] = [
         icon: CalendarCheck,
     },
     {
-        label: "My bookings",
+        label: "My Bookings",
         description: "See your personal bookings",
         href: ROUTES.dashboardCommon.myBookings,
         icon: CalendarCheck,
