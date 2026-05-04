@@ -1,5 +1,5 @@
 "use client"
-import { useCurrentUser } from '@/features/auth';
+import { currentUserQueryKey, useCurrentUser } from '@/features/auth';
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, X, Calendar, ArrowRight, BellRing, ChevronDown, Radio } from 'lucide-react';
@@ -7,8 +7,10 @@ import { cn } from '@/lib/utils';
 import { formatTimeInTimeZone } from '@/lib/utils/timezone-date';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/constants/routes';
+import { useQueryClient } from '@tanstack/react-query';
 
 const NextBookingFloatingWidget = () => {
+    const queryClient = useQueryClient();
     const router = useRouter();
     const { user } = useCurrentUser();
     const [isExpanded, setIsExpanded] = useState(false);
@@ -24,7 +26,7 @@ const NextBookingFloatingWidget = () => {
     const activeBooking = (user as any)?.activeBooking;
     const nextBooking = (user as any)?.nextBooking;
     const currentBooking = activeBooking || nextBooking;
-    const isLive = !!activeBooking; 
+    const isLive = !!activeBooking;
 
     /**
      * EFFECT: Notification Permission Logic
@@ -56,10 +58,10 @@ const NextBookingFloatingWidget = () => {
         if (!currentBooking) return;
 
         const timer = setInterval(() => {
-            const target = isLive 
-                ? new Date(currentBooking.end_time).getTime() 
+            const target = isLive
+                ? new Date(currentBooking.end_time).getTime()
                 : new Date(currentBooking.start_time).getTime();
-            
+
             const now = new Date().getTime();
             const diff = target - now;
 
@@ -90,11 +92,20 @@ const NextBookingFloatingWidget = () => {
                 setIsExpanded(true);
             }
         }
+        if (timeLeft?.mins === 0 && timeLeft?.secs === 0 ) {
+            refetchUserData(); // To update the active booking status immediately when the booking starts
+
+        }
     }, [timeLeft, currentBooking?.resource?.name, isLive]);
+
+    const refetchUserData = async () => {
+        await queryClient.refetchQueries({ queryKey: currentUserQueryKey });
+    }
 
     if (!currentBooking || !timeLeft) return null;
 
     const isUrgent = !isLive && timeLeft.mins < 15;
+
 
     return (
         <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-9999">
@@ -147,9 +158,9 @@ const NextBookingFloatingWidget = () => {
                     style={{ position: 'fixed', bottom: 32, right: side === 'left' ? 'unset' : 32, left: side === 'left' ? 32 : 'unset', touchAction: 'none' }}
                     className={cn(
                         "z-9999 pointer-events-auto cursor-grab active:cursor-grabbing flex items-center gap-3 p-2 pr-4 rounded-full border shadow-lg backdrop-blur-xl opacity-80 hover:opacity-100",
-                        isLive ? "bg-emerald-500 border-emerald-400 text-white" : 
-                        isUrgent ? "bg-red-500 border-red-400 text-white" : 
-                        "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white"
+                        isLive ? "bg-emerald-500 border-emerald-400 text-white" :
+                            isUrgent ? "bg-red-500 border-red-400 text-white" :
+                                "bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white"
                     )}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -212,7 +223,7 @@ const NextBookingFloatingWidget = () => {
                                     <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
                                         <Calendar size={18} className="text-slate-300" />
                                         <span className="text-sm font-semibold">
-                                          Starts at    {formatTimeInTimeZone(currentBooking.start_time, user?.organization?.timezone)}
+                                            {isLive ? "Ends at" : "Starts at"}    {formatTimeInTimeZone(isLive ? currentBooking?.end_time : currentBooking?.start_time, user?.organization?.timezone)}
                                         </span>
                                     </div>
                                     <div className="relative group">

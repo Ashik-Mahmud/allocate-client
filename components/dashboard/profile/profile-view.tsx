@@ -352,7 +352,7 @@ export default function ProfileView({ user }: Props) {
                                         <LabelValue label="Timezone" value={organization.timezone || "N/A"} />
                                         <LabelValue label="Address" value={formatAddress(organization.address)} />
                                         <LabelValue label="Notifications" value={formatNotificationPreferences(organization.settings)} />
-                                        {organization?.frozen_credits && <LabelValue label="Frozen Credits" value={organization?.frozen_credits + ' CR' || "N/A"} />}
+                                        {Number(organization?.frozen_credits || 0) > 0 && <LabelValue label="Frozen Credits" value={organization?.frozen_credits + ' CR' || "N/A"} />}
                                     </div>
                                 </div>
                             ) : (

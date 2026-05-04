@@ -9,6 +9,7 @@ import type { CreateResourcePayload, Resource, ResourceType } from "@/types/reso
 import { ResourceMetadataFields } from "@/components/dashboard/resources/resource-metadata-fields";
 import { set } from "date-fns";
 import { is } from "zod/v4/locales";
+import { BiError } from "react-icons/bi";
 
 const resourceTypes: ResourceType[] = [
   "MEETING_ROOM",
@@ -317,7 +318,7 @@ export function ResourceCreateForm({
             className="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none focus:border-slate-500 dark:border-slate-700 dark:bg-slate-950"
           />
           <small className="text-[10px] text-slate-500 dark:text-slate-400">
-             *Set only float values that are multiples of 5, e.g. 0, 5, 10, 15, etc. This will determine the credit cost for booking this resource per hour.
+            *Set only float values that are multiples of 5, e.g. 0, 5, 10, 15, etc. This will determine the credit cost for booking this resource per hour.
           </small>
         </label>
 
@@ -372,10 +373,13 @@ export function ResourceCreateForm({
         </label> */}
       </div>
 
-      {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
-      {success ? <p className="text-sm text-emerald-600 dark:text-emerald-400">{success}</p> : null}
+
 
       <div className="text-right sticky -bottom-6 p-3 bg-white dark:bg-slate-950 ">
+        {error ? <div className="rounded-md bg-red-50 p-3 text-left mb-3 flex items-center gap-2">
+          <BiError className="size-5 text-red-500" aria-hidden="true" />
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        </div> : null}
         <Button type="submit" size={"lg"} disabled={isSubmitting} className="px-5 cursor-pointer">
           {isSubmitting ? "Saving..." : submitLabel ?? (mode === "edit" ? "Save changes" : "Create resource")}
         </Button>

@@ -29,6 +29,8 @@ export default async function DashboardLayout({
   return (
     <div className="h-dvh  bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 
+
+
       <NextBookingCountDown />
       <UpdateOrganizationDrawer />
 
@@ -43,10 +45,16 @@ export default async function DashboardLayout({
             <div className="border-b border-slate-200 bg-white px-3 py-1 dark:border-slate-800 dark:bg-slate-950 md:px-5 md:py-1">
               <DashboardTopbar />
             </div>
+            <div className="px-4 md:px-6 pt-4">
+              <div className="p-4 text-sm text-red-600 dark:text-red-400 bg-red-50 border border-red-200 rounded ">
+                Plan Limit Exceeded: You are currently using 5/2 resources. Booking is temporarily disabled for your organization. [Upgrade to Pro Plan]
+              </div>
+            </div>
+            <div className="h-full flex-1  p-4">
 
-            <div className="h-full flex-1   p-4">
               <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
                 <div className="min-h-full w-full h-full md:absolute inset-0 p-4 md:p-6">
+
                   {children}
                 </div>
               </div>

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Organizations } from '@/types/organization'
+import AllocateTooltip from '@/components/shared/tooltip'
 
 const ORG_TYPES = [
     { value: 'Tech', label: 'Tech' },
@@ -405,7 +406,7 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
 
                                 <div className="space-y-1.5">
                                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                        <Globe className="size-3.5 text-slate-400" /> Timezone
+                                        <Globe className="size-3.5 text-slate-400" /> Timezone  <AllocateTooltip content="Set the organization's operating timezone. This will be the default timezone for all users and bookings under this organization. Default is UTC, the date and time will be displayed in the correct format based on your timezone. (IMPORTANT)" position="top" />
                                     </label>
                                     <select
                                         {...register('timezone')}
