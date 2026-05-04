@@ -7,6 +7,8 @@ import { format } from 'date-fns'
 
 import { Booking, BookingStatus } from '@/types/booking'
 import BookingDetailsDialog from './BookingDetailsDialog'
+import StatusBadge from './BookingStatus'
+import BookingStatusBadge from './BookingStatus'
 
 interface BookingCardProps {
     booking: Booking | any;
@@ -19,22 +21,13 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
     const startTime = new Date(booking.start_time);
     const endTime = new Date(booking.end_time);
 
-    const statusStyles: Record<string, string> = {
-        CONFIRMED: "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-100",
-        PENDING: "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border-amber-100",
-        CANCELLED: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-500 border-slate-200",
-        REJECTED: "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 border-rose-100",
-        COMPLETED: "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-100",
-    };
 
     return (
         <>
             <div className="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-5 transition-all hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-none hover:-translate-y-1">
                 {/* Status Badge */}
                 <div className="flex justify-between items-start mb-4">
-                    <span className={cn("px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter border", statusStyles[booking?.status!] || statusStyles.PENDING)}>
-                        {booking.status}
-                    </span>
+                    <BookingStatusBadge status={booking.status} />
                 </div>
 
                 {/* Resource Info */}

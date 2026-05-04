@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import BookingStatusBadge from '../my-bookings/BookingStatus'
+import { BookingStatus } from '@/types/booking'
 
 interface ResourceSelectorProps {
     resources: Resource[]
@@ -59,7 +61,7 @@ const ResourceSelector = ({
                                 key={resource.id}
                                 onClick={() => onResourceSelect(resource.id)}
                                 className={cn(
-                                    "group relative p-3 rounded-2xl border-2 transition-all duration-200 text-left",
+                                    "group relative cursor-pointer p-3 rounded-2xl border-2 transition-all duration-200 text-left",
                                     selectedResourceId === resource.id
                                         ? "border-emerald-500 bg-emerald-50/30 dark:bg-emerald-500/10"
                                         : "border-slate-100 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-950"
@@ -86,12 +88,15 @@ const ResourceSelector = ({
                                         <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                                             {resource.name}
                                         </h4>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">
+
+                                        {resource?.is_occupied ? <div className='w-max'>
+                                            <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
+                                        </div> : <p className="text-xs text-slate-500 dark:text-slate-400">
                                             {resource.type || 'Resource'}
-                                        </p>
+                                        </p>}
                                         <div className="flex items-baseline gap-1 mt-1">
                                             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                                               {typeof resource.hourly_rate === 'string'
+                                                {typeof resource.hourly_rate === 'string'
                                                     ? resource.hourly_rate
                                                     : resource.hourly_rate?.toFixed(2)
                                                 }cr</span>

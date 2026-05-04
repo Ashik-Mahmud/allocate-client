@@ -1,6 +1,9 @@
 import { Calendar, Clock, Info, ShieldAlert, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Resource } from "@/types/resources";
+import StatusBadge from "../my-bookings/BookingStatus";
+import BookingStatusBadge from "../my-bookings/BookingStatus";
+import { BookingStatus } from "@/types/booking";
 
 type ResourceCardProps = {
     resource: Resource;
@@ -63,12 +66,13 @@ const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps
                             </h3>
                             <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
                                 {
-                                    resource?.is_available ? (
+                                    !resource?.is_occupied ? (
                                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">Slot Available</span>
                                     ) : (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">Slot Unavailable</span>
+                                        <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
                                     )
                                 }
+
                             </p>
                         </div>
                         <div className="text-right">

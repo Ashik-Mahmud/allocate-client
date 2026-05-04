@@ -44,6 +44,8 @@ export interface Resource {
 	deletedAt?: string | null;
 	createdAt: string;
 	updatedAt: string;
+	is_occupied?: boolean; // Computed property for frontend convenience
+	currentBooking?: Partial<Booking>; // Optional current booking info if occupied
 	resourcesRules?: ResourceRule[];
 	bookings?: Partial<Booking>[];
 	organization?: Partial<Organizations>
