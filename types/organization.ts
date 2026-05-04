@@ -37,6 +37,7 @@ export interface Organizations {
   photo: string | null;
   plan_type: PlanType | null;
   credit_pool: number | null;
+  frozen_credits: number | null;
   is_active: boolean | null;
   timezone: string;
   address: OrgAddress | string | null;

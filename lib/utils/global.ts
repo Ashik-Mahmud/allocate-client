@@ -30,6 +30,10 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
 
   [NotificationType.SUBSCRIPTION_EXPIRING]: { icon: CreditCard, color: 'text-orange-500', bgColor: 'bg-orange-50' },
   [NotificationType.SUBSCRIPTION_EXPIRED]: { icon: CreditCard, color: 'text-red-600', bgColor: 'bg-red-50' },
+  [NotificationType.SUBSCRIPTION_RENEWED]: { icon: CreditCard, color: 'text-green-600', bgColor: 'bg-green-50' },
+  [NotificationType.UPGRADE_PLAN_REMINDER]: { icon: CreditCard, color: 'text-slate-600', bgColor: 'bg-slate-100' },
+  [NotificationType.SUBSCRIPTION_CANCELLED]: { icon: CreditCard, color: 'text-rose-600', bgColor: 'bg-rose-100' },
+  [NotificationType.CREDIT_RESET]: { icon: CreditCard, color: 'text-blue-600', bgColor: 'bg-blue-100' },
 
   [NotificationType.SYSTEM_ALERT]: { icon: ShieldAlert, color: 'text-red-500', bgColor: 'bg-red-50' },
   [NotificationType.MAINTENANCE_NOTICE]: { icon: AlertCircle, color: 'text-slate-600', bgColor: 'bg-slate-100' },

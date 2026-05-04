@@ -80,7 +80,7 @@ const adminNavigation: NavItem[] = [
 ];
 
 const orgAdminNavigation: NavItem[] = [
-     {
+    {
         label: "Dashboard",
         description: "View your daily work queue and tasks",
         href: ROUTES.dashboardCommon.overview,
@@ -146,20 +146,21 @@ const staffNavigation: NavItem[] = [
 ];
 
 const commonNavigation: NavItem[] = [
+    
     {
         label: "Resources",
         description: "Browse shared resources",
         href: ROUTES.dashboardCommon.resources,
         icon: BriefcaseBusiness,
     },
+    // {
+    //     label: "Availability",
+    //     description: "Check available booking slots",
+    //     href: ROUTES.dashboardCommon.bookingAvailability,
+    //     icon: CalendarCheck,
+    // },
     {
-        label: "Availability",
-        description: "Check available booking slots",
-        href: ROUTES.dashboardCommon.bookingAvailability,
-        icon: CalendarCheck,
-    },
-    {
-        label: "Bookings Calendar",
+        label: "Availability Calendar",
         description: "View and manage your bookings availability",
         href: ROUTES.dashboardCommon.bookings,
         icon: CalendarCheck,
@@ -178,6 +179,15 @@ const commonNavigation: NavItem[] = [
     //     icon: UserCog,
     // },
 ];
+
+const OrgConditionalNavigation: NavItem[] = [
+    {
+        label: "Staff Dashboard",
+        description: "View your dashboard overview",
+        href: ROUTES.dashboardCommon.staffOverview,
+        icon: LayoutDashboard,
+    },
+]
 
 const SidebarContent = ({
     user,
@@ -292,7 +302,7 @@ const SidebarContent = ({
                             <p className="px-2 pt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
                                 Common
                             </p>
-                            {commonNavigation.map((item) => {
+                            {[...(role === APP_ROLES.ORG_ADMIN ? OrgConditionalNavigation : []), ...commonNavigation].map((item) => {
                                 const Icon = item.icon;
                                 const active = isActiveRoute(pathname, item.href);
 

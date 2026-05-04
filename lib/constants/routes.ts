@@ -17,7 +17,6 @@ export const ROUTES = {
     resourcesManagement: "/dashboard/resources-management",
     staffManagement: "/dashboard/staff-management",
     creditManagement: "/dashboard/credit-management",
-    creditHistory: "/dashboard/credit-history",
     billing: "/dashboard/billing",
   },
   dashboardStaff: {
@@ -25,6 +24,7 @@ export const ROUTES = {
     dailyPlan: "/dashboard/daily-plan",
   },
   dashboardCommon: {
+     staffOverview: "/dashboard/staff-overview",
      overview: "/dashboard/overview",
     bookingAvailability: "/dashboard/booking-availability",
     bookings: "/dashboard/bookings-calendar",

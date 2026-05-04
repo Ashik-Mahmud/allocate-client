@@ -242,7 +242,7 @@ export default function ProfileView({ user }: Props) {
                                         {
                                             label: "View credit history",
                                             onClick: () => {
-                                                router.push(ROUTES.dashboardOrgAdmin.creditHistory)
+                                                router.push(ROUTES.dashboardOrgAdmin.creditManagement)
                                             }
                                         },
                                         {
@@ -352,6 +352,7 @@ export default function ProfileView({ user }: Props) {
                                         <LabelValue label="Timezone" value={organization.timezone || "N/A"} />
                                         <LabelValue label="Address" value={formatAddress(organization.address)} />
                                         <LabelValue label="Notifications" value={formatNotificationPreferences(organization.settings)} />
+                                        {organization?.frozen_credits && <LabelValue label="Frozen Credits" value={organization?.frozen_credits + ' CR' || "N/A"} />}
                                     </div>
                                 </div>
                             ) : (
