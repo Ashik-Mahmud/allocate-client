@@ -10,6 +10,7 @@ export enum BookingStatus {
     REJECTED = "REJECTED",
     CANCELLED = "CANCELLED",
     COMPLETED = "COMPLETED",
+    CHECKED_IN = "CHECKED_IN",
 }
 
 export interface Booking {
@@ -113,4 +114,10 @@ export const BOOKING_STATUS_CONFIG = {
         color: "text-blue-600 bg-blue-50 border-blue-100 dark:bg-blue-500/10 dark:text-blue-400",
         icon: Clock,
     },
+    [BookingStatus.CHECKED_IN]: {
+        label: "Checked In",
+        color: "text-green-600 bg-green-50 border-green-100 dark:bg-green-500/10 dark:text-green-400",
+        icon: CheckCircle2,
+    },
+
 }

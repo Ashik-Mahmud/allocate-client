@@ -1,8 +1,12 @@
+"use client"
+import { useDashboardOverview } from '@/features/dashboard/hooks'
 import React from 'react'
 
 type Props = {}
 
 const StaffDashboardOverview = (props: Props) => {
+    const { data } = useDashboardOverview()
+    console.log(data?.data)
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Staff Overview</h1>
