@@ -34,10 +34,11 @@ export function useResourcesListQuery(filters?: ResourceListFilters) {
 	});
 }
 
-export function useGetBrowseResourcesListQuery(filters?: ResourceListFilters) {
+export function useGetBrowseResourcesListQuery(filters?: ResourceListFilters, enabled: boolean = true) {
 	return useQuery({
 		queryKey: resourceKeys.all(filters),
 		queryFn: () => getBrowseResourcesList(filters),
+		enabled: enabled,
 	});
 }
 

@@ -1,17 +1,25 @@
 "use client"
-import { useFetchResourceBookingCalendar } from '@/features/bookings'
+import { useCreateBooking, useFetchResourceBookingCalendar } from '@/features/bookings'
 import { useGetBrowseResourcesListQuery } from '@/features/resources'
 import { useCurrentUser } from '@/features/auth'
-import { BookingCalendarEntry } from '@/types/booking'
-import React from 'react'
+import { BookingCalendarEntry, CreateBookingPayload } from '@/types/booking'
+import React, { useState } from 'react'
 import ResourceSelector from './ResourceSelector'
 import MonthYearNavigation from './MonthYearNavigation'
 import CalendarGrid from './CalendarGrid'
 import { CalendarDays, Info } from 'lucide-react'
-import { formatCalendarDate, getCalendarMonthStart } from '@/lib/utils/timezone-date'
+import { formatCalendarDate, formatCalendarDateKey, formatDateTimeLocalInTimeZone, getCalendarDateKey, getCalendarMonthStart, getTodayCalendarKey } from '@/lib/utils/timezone-date'
 import FeatureGuard from '@/components/shared/FeatureGuard'
+import DialogPopup from '@/components/shared/dialog-popup'
+import ShowAvailableSlots from '../staff-resources/showAvailableSlots'
+import CreateBooking from '../staff-resources/CreateBooking'
+import { Resource } from '@/types/resources'
+import { toast } from 'sonner'
+import { ROUTES } from '@/lib/constants/routes'
+import { useRouter } from 'next/navigation'
 
 const BookingsCalendarMain = () => {
+    const router = useRouter()
     const { user } = useCurrentUser()
     const timeZone = user?.organization?.timezone || 'UTC'
     const initialCalendarMonth = React.useMemo(() => getCalendarMonthStart(timeZone), [timeZone])
@@ -23,16 +31,27 @@ const BookingsCalendarMain = () => {
         entry: BookingCalendarEntry
     } | null>(null)
 
+    const [slotsDialogOpen, setSlotsDialogOpen] = useState(false);
+    const [dialogResource, setDialogResource] = useState<Resource | null>(null);
+    const [dialogDate, setDialogDate] = useState(
+        getTodayCalendarKey(timeZone)
+    );
+    const [selectedSlot, setSelectedSlot] = useState<{ start: string; end: string } | null>(null);
+    const [isOpenBookingDialog, setIsOpenBookingDialog] = useState(false);
+
+
+
     React.useEffect(() => {
         const current = getCalendarMonthStart(timeZone)
         setMonth(current.month)
         setYear(current.year)
     }, [timeZone])
 
-    // Fetch resources
+    // Fetch & Mutation 
+    const bookingMutation = useCreateBooking();
     const { data: resourcesData, isLoading: resourcesLoading } = useGetBrowseResourcesListQuery({
         limit: 9999, // Fetch all resources for selection
-    })
+    }, user?.id ? true : false) // Only enable query if user ID is available
 
     const resources = resourcesData?.data || []
 
@@ -64,7 +83,26 @@ const BookingsCalendarMain = () => {
     }
 
     const handleDateClick = (date: string, entry: BookingCalendarEntry) => {
-        setSelectedDateDetails({ date, entry })
+        // setSelectedDateDetails({ date, entry })
+        const selected = resources?.find((item: Resource) => item.id === resourceId) ?? null;
+        setDialogResource(selected);
+        setDialogDate(
+            date ??
+            getTodayCalendarKey(timeZone));
+        setSlotsDialogOpen(true);
+    }
+
+
+    // handle booking submission from the CreateBooking component
+    const handleBooking = async (data: CreateBookingPayload) => {
+        const result = await bookingMutation.mutateAsync(data);
+        if (result?.success) {
+            setIsOpenBookingDialog(false);
+            toast.success("Booking created successfully! Redirecting to My Bookings...");
+            setTimeout(() => {
+                router.push(ROUTES.dashboardCommon.myBookings);
+            }, 2000);
+        }
     }
 
     return (
@@ -82,10 +120,10 @@ const BookingsCalendarMain = () => {
                     View real-time booking availability for your resources. Select a resource to see detailed booking calendar.
                 </p>
             </div>
-            <FeatureGuard 
-            // showChildrenInBlur
-             description="Booking Calendar is a powerful tool that allows you to view real-time availability of your resources. By selecting a resource, you can see a detailed calendar that highlights available, partially booked, fully booked, and off days. This feature helps you manage your bookings more efficiently and make informed decisions about resource allocation."
-             >
+            <FeatureGuard
+                // showChildrenInBlur
+                description="Booking Calendar is a powerful tool that allows you to view real-time availability of your resources. By selecting a resource, you can see a detailed calendar that highlights available, partially booked, fully booked, and off days. This feature helps you manage your bookings more efficiently and make informed decisions about resource allocation."
+            >
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Sidebar: Resource Selector */}
                     <div className="lg:col-span-1">
@@ -207,6 +245,57 @@ const BookingsCalendarMain = () => {
                     </div>
                 </div>
             </FeatureGuard>
+            {/* Slots Dialog */}
+            <DialogPopup
+                open={slotsDialogOpen}
+                onOpenChange={(open) => {
+                    setSlotsDialogOpen(open);
+                    if (!open) {
+                        setDialogResource(null);
+                    }
+                }}
+                title={dialogResource ? `Available slots — ${dialogResource.name}` : "Available slots"}
+                description={dialogResource ? `Pick a date to view available slots for ${dialogResource.name}.` : "Pick a resource and date to view slots."}
+                size="md"
+                className='p-0'
+            >
+                <ShowAvailableSlots
+                    onSlotConfirm={
+                        (date) => {
+                            setSlotsDialogOpen(false);
+                            setSelectedSlot(date);
+                            setIsOpenBookingDialog(true);
+                        }
+                    }
+                    dialogResource={dialogResource}
+                    dialogDate={dialogDate}
+                    setDialogDate={setDialogDate}
+                    setSlotsDialogOpen={setSlotsDialogOpen}
+                    slotsDialogOpen={slotsDialogOpen}
+                />
+            </DialogPopup>
+
+            {/* Create booking dialog */}
+            <DialogPopup
+                open={isOpenBookingDialog}
+                onOpenChange={setIsOpenBookingDialog}
+                title="Confirm Booking"
+                description="Review the details and confirm your booking."
+                size="md"
+                className='p-0'
+            >
+                {dialogResource && <CreateBooking
+                    onSubmit={handleBooking}
+                    resource={dialogResource}
+                    selectedSlot={selectedSlot!}
+                    onBack={() => {
+                        setIsOpenBookingDialog(false);
+                        setSlotsDialogOpen(true)
+                    }}
+                    isSubmitting={bookingMutation.isPending}
+                    error={bookingMutation?.isError ? bookingMutation?.error?.message ?? "" : undefined}
+                />}
+            </DialogPopup>
         </div>
     )
 }

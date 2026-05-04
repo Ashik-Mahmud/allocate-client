@@ -215,7 +215,7 @@ const NextBookingFloatingWidget = () => {
                                 <h1 className="text-8xl font-black tracking-tighter text-slate-900 dark:text-white font-mono">
                                     {String(timeLeft.mins).padStart(2, '0')}<span className="text-slate-200 dark:text-slate-800">:</span>{String(timeLeft.secs).padStart(2, '0')}
                                 </h1>
-                                <p className="text-slate-400 font-medium ml-1">Remaining to start</p>
+                                <p className="text-slate-400 font-medium ml-1">Remaining minutes to start</p>
                             </div>
 
                             <div className="space-y-4">
