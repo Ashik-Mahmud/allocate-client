@@ -11,14 +11,14 @@ export const fetchStaffInsights = (payload: TdashboardFilter) => {
 
 // Service to fetch organization insights for the dashboard;
 export const fetchOrganizationInsights = (payload: TdashboardFilter) => {
-    return apiRequest<ApiResponse<{}>>(`/dashboard/organization-insights`, {
+    return apiRequest<TdashboardOverviewResponse<{}>>(`/dashboard/organization-insights`, {
         method: "GET",
     });
 }
 
 // Service to fetch System insights for the dashboard;
 export const fetchSystemInsights = (payload: TdashboardFilter) => {
-    return apiRequest<ApiResponse<{}>>(`/dashboard/system-insights`, {
+    return apiRequest<TdashboardOverviewResponse<{}>>(`/dashboard/system-insights`, {
         method: "GET",
     });
 }
