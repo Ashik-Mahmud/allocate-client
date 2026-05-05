@@ -1,10 +1,10 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http"
-import { TdashboardFilter } from "@/types/dashboard";
+import { StaffDashboardData, TdashboardFilter,  TdashboardOverviewResponse } from "@/types/dashboard";
 
 // Service to fetch staff insights for the dashboard;
 export const fetchStaffInsights = (payload: TdashboardFilter) => {
-    return apiRequest<ApiResponse<{}>>(`/dashboard/staff-insights`, {
+    return apiRequest<TdashboardOverviewResponse<StaffDashboardData>>(`/dashboard/staff-insights`, {
         method: "GET",
     });
 }

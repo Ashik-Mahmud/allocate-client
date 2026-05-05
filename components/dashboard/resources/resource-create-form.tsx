@@ -152,6 +152,7 @@ export function ResourceCreateForm({
   // const [isAvailable, setIsAvailable] = useState(true);
   const [isActive, setIsActive] = useState(true);
   const [isMaintenance, setIsMaintenance] = useState(false);
+  const [isAutoConfirm, setIsAutoConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -177,6 +178,7 @@ export function ResourceCreateForm({
     setMetadataFields(metadataFromResource.length > 0 ? metadataFromResource : buildDefaultMetadataFields(nextType));
     setIsActive(Boolean(initialValues.is_active));
     setIsMaintenance(Boolean(initialValues.is_maintenance));
+    setIsAutoConfirm(Boolean(initialValues.isAutoConfirm));
     setError(null);
     setSuccess(null);
   }, [initialValues]);
@@ -256,6 +258,7 @@ export function ResourceCreateForm({
         metadata: payloadMetadata,
         is_active: isActive,
         is_maintenance: isMaintenance,
+        isAutoConfirm: isAutoConfirm,
       });
 
       setSuccess(mode === "edit" ? "Resource updated." : "Resource created.");
@@ -343,7 +346,7 @@ export function ResourceCreateForm({
       />
 
       <div className="flex flex-wrap items-stretch gap-4 text-sm text-slate-700 dark:text-slate-300">
-        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 ">
+        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 md:w-[48%]">
           <input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} />
           <div className="flex flex-col ">
             <span>
@@ -355,6 +358,17 @@ export function ResourceCreateForm({
           </div>
         </label>
 
+        <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 md:w-[48%]">
+          <input type="checkbox" checked={isAutoConfirm} onChange={(event) => setIsAutoConfirm(event.target.checked)} />
+          <div className="flex flex-col ">
+            <span>
+              {isAutoConfirm ? "Auto-confirm bookings" : "Manual approval required"}
+            </span>
+            <small>
+              Bookings for this resource will {isAutoConfirm ? "be automatically confirmed" : "require manual approval"}.
+            </small>
+          </div>
+        </label>
         {/* Turn off under maintenance */}
         {/* <label className="flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-md px-3 py-1 w-[48%]">
           <input

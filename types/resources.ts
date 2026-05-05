@@ -45,6 +45,7 @@ export interface Resource {
 	createdAt: string;
 	updatedAt: string;
 	is_occupied?: boolean; // Computed property for frontend convenience
+	isAutoConfirm?: boolean
 	currentBooking?: Partial<Booking>; // Optional current booking info if occupied
 	resourcesRules?: ResourceRule[];
 	bookings?: Partial<Booking>[];
@@ -75,6 +76,7 @@ export interface CreateResourcePayload {
 	is_available?: boolean;
 	is_active?: boolean;
 	is_maintenance?: boolean;
+	isAutoConfirm?: boolean;
 }
 
 export type UpdateResourcePayload = Partial<CreateResourcePayload>;
@@ -114,6 +116,7 @@ export interface Resources {
     is_available: boolean;
     is_active: boolean;
     is_maintenance: boolean;
+	isAutoConfirm: boolean;
     deletedAt: Date | string | null;
     createdAt: Date | string;
     updatedAt: Date | string;

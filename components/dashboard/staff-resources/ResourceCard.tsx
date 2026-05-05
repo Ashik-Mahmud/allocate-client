@@ -4,6 +4,7 @@ import { Resource } from "@/types/resources";
 import StatusBadge from "../my-bookings/BookingStatus";
 import BookingStatusBadge from "../my-bookings/BookingStatus";
 import { BookingStatus } from "@/types/booking";
+import { BiTask } from "react-icons/bi";
 
 type ResourceCardProps = {
     resource: Resource;
@@ -86,6 +87,10 @@ const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps
 
                     {/* Rule Highlights (The "Important Data") */}
                     <div className=" flex flex-wrap gap-2">
+                          <RuleBadge
+                            icon={<BiTask className="size-3" />}
+                            label={`${resource?.isAutoConfirm ? "Auto-Confirm" : "Manual Approval"} Booking`}
+                        />
                         <RuleBadge
                             icon={<Clock className="size-3" />}
                             label={`${rules?.opening_hours}:00 - ${rules?.closing_hours}:00`}

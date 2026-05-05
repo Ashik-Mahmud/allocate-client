@@ -98,7 +98,7 @@ export function ResourceListTable({
               <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Check-in</TableHead>
               <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Type</TableHead>
               <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Rate</TableHead>
-              <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Availability</TableHead>
+              <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Auto/Manual Confirm</TableHead>
               <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Under Maintenance</TableHead>
               <TableHead className="sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Status</TableHead>
               <TableHead className="text-right sticky top-0 z-20 bg-slate-100 dark:bg-slate-900 dark:text-white">Actions</TableHead>
@@ -188,7 +188,7 @@ export function ResourceListTable({
                 <TableCell className="px-2 py-2 text-slate-700 dark:text-slate-300">{resource.type}</TableCell>
                 <TableCell className="px-2 py-2 text-slate-700 dark:text-slate-300">{String(resource.hourly_rate)} Credit</TableCell>
                 <TableCell className="px-2 py-2 text-slate-700 dark:text-slate-300">
-                  {resource.is_available ? <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">Available</span> : <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">Unavailable</span>}
+                  {resource.isAutoConfirm ? <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">Auto-Confirm</span> : <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">Manual Approval</span>}
                 </TableCell>
                 <TableCell className="px-2 py-2 text-slate-700 dark:text-slate-300">
                   {resource.is_maintenance ? <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">Yes</span> : <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">No</span>}
