@@ -68,7 +68,7 @@ const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps
                             <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
                                 {
                                     !resource?.is_occupied ? (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">Slot Available</span>
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500">Slot Available</span>
                                     ) : (
                                         <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
                                     )

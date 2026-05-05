@@ -224,10 +224,11 @@ export function ResourceCreateForm({
     }
 
     const numericRate = Number(hourlyRate);
-    if (Number.isNaN(numericRate) || numericRate < 0) {
+    if (Number.isNaN(numericRate) || numericRate <= 0) {
       setError("Hourly rate must be a valid positive number.");
       return;
     }
+
 
     const metadataEntries = metadataFields.map((field) => ({
       key: field.key.trim(),
@@ -271,6 +272,7 @@ export function ResourceCreateForm({
       setPhoto('');
       onSuccess?.();
     } catch (submitError) {
+      console.log(getApiErrorMessage(submitError, "Failed to create resource."))
       setError(getApiErrorMessage(submitError, "Failed to create resource."));
     }
   }

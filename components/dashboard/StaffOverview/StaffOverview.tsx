@@ -169,7 +169,7 @@ const StaffDashboardOverview = () => {
                                     <p className="truncate font-medium text-slate-950 dark:text-slate-50">{resource.name}</p>
 
                                     {
-                                        !resource?.isOccupied ? <div className='w-max my-1'>
+                                        resource?.isOccupied ? <div className='w-max my-1'>
                                             <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
                                         </div> : <p className="text-sm text-slate-600 dark:text-slate-400">{resource.type.replaceAll('_', ' ').toLowerCase()}</p>
 

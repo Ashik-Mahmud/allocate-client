@@ -92,9 +92,9 @@ const NextBookingFloatingWidget = () => {
                 setIsExpanded(true);
             }
         }
-        if (timeLeft?.mins === 0 && timeLeft?.secs === 0 ) {
+        if (timeLeft?.mins === 0 && timeLeft?.secs === 0) {
             refetchUserData(); // To update the active booking status immediately when the booking starts
-
+            setIsExpanded(true);
         }
     }, [timeLeft, currentBooking?.resource?.name, isLive]);
 
