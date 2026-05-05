@@ -3,7 +3,7 @@
 import React, { useMemo } from "react"
 import { Lock, Crown, ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils/cn'
 import { Button } from "@/components/ui/button"
 import { ROUTES } from "@/lib/constants/routes"
 import { useCurrentUser } from "@/features/auth"

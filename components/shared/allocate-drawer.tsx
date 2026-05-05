@@ -11,7 +11,7 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils/cn'
 import { X } from "lucide-react"
 
 type Props = {

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { BookingCalendarAvailableStatus, BookingCalendarEntry } from '@/types/booking'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import CalendarStatusBadge from './CalendarStatusBadge'
 import { getCalendarDateKey, getMonthGridStartDay, getTodayCalendarKey } from '@/lib/utils/timezone-date'
 

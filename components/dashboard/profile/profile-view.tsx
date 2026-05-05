@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 
 import { APP_ROLES } from "@/lib/constants/roles";
-import { cn } from "@/lib/utils";
 import type { User } from "@/types";
 import { ROUTES } from "@/lib/constants/routes";
 import AllocateDropdown from "@/components/shared/dropdown";
@@ -34,6 +33,7 @@ import WeeklyReportToggle from "../OrgOverview/WeeklyReportEnabled";
 import { PlanType } from "@/types/organization";
 import { useUpdateOrganization } from "@/features/organization";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils/cn";
 
 type Props = {
     user: User;

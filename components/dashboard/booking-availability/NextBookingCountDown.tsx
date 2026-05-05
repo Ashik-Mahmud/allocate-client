@@ -3,11 +3,11 @@ import { currentUserQueryKey, useCurrentUser } from '@/features/auth';
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, X, Calendar, ArrowRight, BellRing, ChevronDown, Radio } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { formatTimeInTimeZone } from '@/lib/utils/timezone-date';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/constants/routes';
 import { useQueryClient } from '@tanstack/react-query';
+import { cn } from '@/lib/utils/cn';
 
 const NextBookingFloatingWidget = () => {
     const queryClient = useQueryClient();

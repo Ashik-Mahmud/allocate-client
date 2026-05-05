@@ -1,6 +1,6 @@
 import React from 'react'
-import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils/cn';
 
 type Props = {
     type: "page" | "component";
@@ -15,7 +15,7 @@ const Loader = ({ type, pageName, className }: Props) => {
     return (
         <div className={cn(
             "flex flex-col items-center justify-center gap-4 transition-all duration-500",
-            isPage ? "fixed inset-0 z-50 bg-white/80 backdrop-blur-md dark:bg-zinc-950/80" : "w-full h-full min-h-[200px]",
+            isPage ? "fixed inset-0 z-50 bg-white/80 backdrop-blur-md dark:bg-zinc-950/80" : "w-full h-full min-h-50",
             className
         )}>
             <div className="relative flex items-center justify-center">
@@ -23,7 +23,7 @@ const Loader = ({ type, pageName, className }: Props) => {
                 <div className="absolute h-16 w-16 animate-pulse rounded-full border-2 border-primary/20" />
                 
                 {/* Inner Spinning Ring - Faster */}
-                <div className="absolute h-12 w-12 animate-[spin_0.8s_linear_infinite] rounded-full border-t-2 border-primary border-r-2 border-transparent" />
+                <div className="absolute h-12 w-12 animate-[spin_0.8s_linear_infinite] rounded-full border-t-2 border-primary border-r-2" />
                 
                 {/* Core Icon - Counter-rotating */}
                 <Loader2 className="h-6 w-6 animate-[spin_2s_linear_infinite_reverse] text-primary dark:text-primary/80" />

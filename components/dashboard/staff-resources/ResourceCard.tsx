@@ -1,5 +1,5 @@
 import { Calendar, Clock, Info, ShieldAlert, Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import { Resource } from "@/types/resources";
 import StatusBadge from "../my-bookings/BookingStatus";
 import BookingStatusBadge from "../my-bookings/BookingStatus";

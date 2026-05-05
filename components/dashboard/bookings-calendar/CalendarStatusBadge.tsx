@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { BookingCalendarAvailableStatus } from '@/types/booking'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { CheckCircle2, AlertCircle, Clock, Ban } from 'lucide-react'
 
 interface CalendarStatusBadgeProps {

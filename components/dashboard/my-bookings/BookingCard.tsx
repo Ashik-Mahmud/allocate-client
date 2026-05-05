@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Clock, Calendar, XCircle, Coins, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { format } from 'date-fns'
 
 import { Booking, BookingStatus } from '@/types/booking'

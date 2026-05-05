@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import { BOOKING_STATUS_CONFIG, BookingStatus } from "@/types/booking";
 
 const BookingStatusBadge = ({ status }: { status: BookingStatus }) => {

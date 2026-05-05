@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 import { Booking, BookingStatus } from '@/types/booking'
 import { useUpdateBooking } from '@/features/bookings'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 
 interface Props {
     isOpen: boolean;

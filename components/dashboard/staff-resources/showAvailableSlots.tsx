@@ -5,7 +5,7 @@ import { useFetchResourceAvailableSlots } from '@/features/bookings';
 import { useCurrentUser } from '@/features/auth';
 import { Resource } from '@/types/resources';
 import { Clock, CalendarDays, CheckCircle2 } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Assuming you have shadcn's utility
+import { cn } from '@/lib/utils/cn'; // Assuming you have shadcn's utility
 import { formatCalendarDayMonth, formatTimeInTimeZone, getTodayCalendarKey } from '@/lib/utils/timezone-date';
 
 type Slot = { start: string; end: string };

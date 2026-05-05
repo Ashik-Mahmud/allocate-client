@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import type { Resource } from "@/types/resources";
 import { MoreHorizontalIcon } from "lucide-react";
 import ConfirmationAlert from "@/components/shared/confirmationAlert";

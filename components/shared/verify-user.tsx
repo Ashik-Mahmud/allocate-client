@@ -4,7 +4,7 @@ import { CheckCircle2, Loader2, MailCheck, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 
 import { useCurrentUser, useSendVerificationEmailMutation } from "@/features/auth/hooks";
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import { Button } from "../ui/button";
 
 type Props = {

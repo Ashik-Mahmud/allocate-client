@@ -1,5 +1,5 @@
 "use client"
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 import React, { forwardRef, InputHTMLAttributes } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 

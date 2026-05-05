@@ -2,13 +2,13 @@
 import { Building2, CircleDollarSign, LayoutDashboard, User } from "lucide-react";
 
 import { APP_ROLES, type AppRole } from "@/lib/constants/roles";
-import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import NotificationPopover from "./notifcationPopover";
 import { useCurrentUser } from "@/features/auth";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { PlanType } from "@/types/organization";
+import { cn } from "@/lib/utils/cn";
 const planStyles = {
     [PlanType.FREE]: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-zinc-900 dark:text-zinc-400",
     [PlanType.PRO]: "border-indigo-200 bg-indigo-50/50 text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/5 dark:text-indigo-300 shadow-sm shadow-indigo-500/5",

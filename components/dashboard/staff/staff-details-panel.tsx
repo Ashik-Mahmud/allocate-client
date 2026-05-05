@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import { ROUTES } from "@/lib/constants/routes";
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import type { StaffDetails, StaffManagementFormValues } from "@/types/staff";
 
 import StaffCreditTransactionsTable from "./staff-credit-transactions-table";

@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from 'react'
 import { CheckCheck, Trash2, BellOff, Search, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import {
     useClearAllNotifications,
     useDeleteNotification,
@@ -13,6 +12,7 @@ import {
 import NotificationItem from './NotificationItem'
 import ConfirmationAlert from '@/components/shared/confirmationAlert'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
+import { cn } from '@/lib/utils/cn'
 
 // Define the filter type
 export type NotificationFilters = {

@@ -12,7 +12,7 @@ import { PlanType } from '@/types/organization'
 import { useAssignCreditsToMultipleStaffMutation, useGetStaffCreditLogQuery } from '@/features/staff'
 import { CreditTransaction, TransactionType } from '@/types/credits'
 import { CreditHistoryTable } from './CreditHistoryTable'
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils/cn'
 import { useDebounce } from '@/hooks'
 import { toast } from 'sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'

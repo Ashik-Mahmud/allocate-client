@@ -16,9 +16,9 @@ import {
     ShieldCheck,
     ToggleLeft,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import type { Organizations } from '@/types/organization'
 import AllocateTooltip from '@/components/shared/tooltip'
+import { cn } from '@/lib/utils/cn'
 
 const ORG_TYPES = [
     { value: 'Tech', label: 'Tech' },

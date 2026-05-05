@@ -8,7 +8,7 @@ import {
     UserCheck,
     UserMinus
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { format, formatDistanceToNow } from 'date-fns' // Assuming you use date-fns for formatting
 import AllocateDropdown from '@/components/shared/dropdown'
 import { StaffDetails } from '@/types/staff'

@@ -3,10 +3,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
-import { cn } from "@/lib/utils";
 import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
+import { cn } from '@/lib/utils/cn';
 
 type Props = {
     user: User | null;

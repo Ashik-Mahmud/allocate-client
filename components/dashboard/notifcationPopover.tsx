@@ -6,7 +6,6 @@ import { Bell, Check, MoreHorizontal } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 import { ROUTES } from "@/lib/constants/routes";
-import { cn } from "@/lib/utils";
 import { getNotificationRedirectRoute } from "@/lib/utils/notification-routing";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useGetNotification, useGetUnreadNotificationsCount, useMarkAllNotificationsAsRead, useMarkNotificationAsRead } from "@/features/notifications";
@@ -14,6 +13,7 @@ import { NotificationConfig } from "@/lib/utils/global";
 import { NotificationType } from "@/types/notification";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/features/auth";
+import { cn } from "@/lib/utils/cn";
 
 const NotificationPopover = () => {
     const router = useRouter();

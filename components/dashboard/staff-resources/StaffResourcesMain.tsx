@@ -1,5 +1,5 @@
 "use client";
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 import { Clock, DatabaseSearch, LayoutGrid, List, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react'
 import ResourceCard from './ResourceCard';

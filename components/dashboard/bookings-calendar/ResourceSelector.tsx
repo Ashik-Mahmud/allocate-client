@@ -4,7 +4,7 @@ import { Resource } from '@/types/resources'
 import { Button } from '@/components/ui/button'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import BookingStatusBadge from '../my-bookings/BookingStatus'
 import { BookingStatus } from '@/types/booking'
 

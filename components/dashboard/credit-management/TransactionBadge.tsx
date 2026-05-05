@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils/cn';
 import { TRANSACTION_CONFIG } from "@/lib/utils/global";
 import { TransactionType } from "@/types/credits";
 

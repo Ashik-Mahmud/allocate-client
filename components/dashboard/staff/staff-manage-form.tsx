@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Loader2, UserPlus, Save, Mail, User, Lock, ImageIcon } from "lucide-react"
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { User as UserType } from '@/types'
 
 // 1. Validation Schema

@@ -3,9 +3,9 @@
 import React from 'react'
 import { Check, Trash2, Clock } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
-import { cn } from '@/lib/utils'
 import { NotificationConfig } from '@/lib/utils/global'
 import { Notification, NotificationType } from '@/types/notification'
+import { cn } from '@/lib/utils/cn'
 // The mapping we built
 
 type ItemProps = {

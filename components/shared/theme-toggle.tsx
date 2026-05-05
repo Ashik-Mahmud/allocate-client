@@ -1,9 +1,9 @@
 "use client";
 
+import { cn } from "@/lib/utils/cn";
 import { MoonStar, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { cn } from "@/lib/utils";
 
 type ThemeToggleProps = {
   floating?: boolean;
