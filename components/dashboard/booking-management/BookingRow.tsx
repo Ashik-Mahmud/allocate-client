@@ -27,7 +27,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
 
             <div className="flex items-center gap-4">
                 {/* Resource Photo */}
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden grid place-items-center rounded-2xl border border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
                     {booking?.resource?.photo ? (
                         <img
                             src={booking.resource.photo}
@@ -83,7 +83,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                             disabled={!canConfirm}
                             title={canConfirm ? "Confirm Booking" : "Already Processed"}
                             onClick={() => onConfirm(booking)}
-                            className={`flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 
+                            className={`cursor-pointer flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 
                                 ${canConfirm
                                     ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white dark:bg-emerald-950/30 dark:text-emerald-500"
                                     : "cursor-not-allowed opacity-30 bg-slate-100 text-slate-400 dark:bg-slate-800"

@@ -1,5 +1,5 @@
 import { changeBookingStatusService, createBookingService, fetchAllBookings, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
-import { CreateBookingPayload, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
+import { CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { currentUserQueryKey } from "../auth";
 
@@ -35,7 +35,7 @@ export const useChangeBookingStatus = () => {
     return useMutation({
         mutationFn: async ({ bookingId, payload }: { bookingId: string; payload: UpdateBookingStatusPayload }) =>
             changeBookingStatusService(bookingId, payload),
-        onSuccess: async () => {
+        onSuccess: async  (_response, variables) => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
@@ -92,7 +92,7 @@ export const useFetchMyBookings = (filters?: FetchMyBookingsFilters) => {
 
 
 // Hook to fetch all bookings (for admin) - can be implemented similarly to useFetchMyBookings with appropriate service and query key
-export const useFetchAllBookings = (filters?: FetchMyBookingsFilters) => {
+export const useFetchAllBookings = (filters?: FetchAllBookingsFilters) => {
     return useQuery({
         queryKey: BookingKeys.lists(filters),
         queryFn: () => fetchAllBookings(filters), // Replace with appropriate service for fetching all bookings
