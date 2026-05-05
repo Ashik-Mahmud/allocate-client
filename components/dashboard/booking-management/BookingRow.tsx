@@ -118,14 +118,16 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                             onClick: () => { 
                                 onMarkCompleted && onMarkCompleted(booking)
                             },
-                            icon: CheckCircle
+                            icon: CheckCircle,
+                            disabled: status !== BookingStatus.CONFIRMED
                         },
                         {
                             label: "Reschedule",
                             onClick: () => { 
                                 onReschedule && onReschedule(booking)
                             },
-                            icon: Calendar
+                            icon: Calendar,
+                            disabled: status === BookingStatus.CANCELLED || status === BookingStatus.COMPLETED
                         },
                         {
                             label: "View User Profile",
@@ -139,7 +141,8 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                             onClick: () => { 
                                 onSendReminder && onSendReminder(booking)
                             },
-                            icon: Clock
+                            icon: Clock,
+                            disabled: status !== BookingStatus.PENDING
                         },
                         {
                             label: "Cancel",
@@ -147,7 +150,8 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                                 onCancel && onCancel(booking)
                             },
                             icon: Ban,
-                            destructive: true
+                            destructive: true,
+                            disabled: !canCancel
                         },
 
                     ]}>

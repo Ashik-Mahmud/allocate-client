@@ -105,7 +105,7 @@ const ViewBookingDetails = ({ booking }: Props) => {
                 {/* 4. Entity Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                     {booking?.user && (
-                        <div className="space-y-4 rounded-2xl">
+                        <div className="space-y-4 rounded">
                             <SectionTitle icon={<User className="size-4" />} title="Customer" />
                             <EntityCard
                                 name={booking?.user?.name || "Anonymous User"}

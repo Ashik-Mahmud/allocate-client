@@ -39,6 +39,8 @@ export const useChangeBookingStatus = () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: currentUserQueryKey }), // Invalidate all availability queries
             ]);
         }
     });
@@ -54,6 +56,8 @@ export const useUpdateBooking = () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
             ]);
         }
     });

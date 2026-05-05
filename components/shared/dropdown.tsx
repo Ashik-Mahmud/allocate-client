@@ -9,6 +9,7 @@ type Props = {
         onClick: () => void;
         destructive?: boolean;
         icon?: React.ComponentType<{ className?: string }>;
+        disabled?: boolean;
     }[];
     children: React.ReactNode;
 
@@ -38,6 +39,7 @@ const AllocateDropdown = ({ children, dropdownOptions }: Props) => {
                                 onClick={option.onClick}
                                 // Apply destructive styles if the option is marked as destructive
                                 variant={option?.destructive ? 'destructive' : 'default'}
+                                disabled={option.disabled}
                             >
                                 {option.icon && <option.icon className="size-4 mr-2" />}
                                 {option.label}
