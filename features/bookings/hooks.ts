@@ -1,4 +1,4 @@
-import { changeBookingStatusService, createBookingService, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
+import { changeBookingStatusService, createBookingService, fetchAllBookings, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
 import { CreateBookingPayload, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { currentUserQueryKey } from "../auth";
@@ -91,7 +91,7 @@ export const useFetchMyBookings = (filters?: FetchMyBookingsFilters) => {
 export const useFetchAllBookings = (filters?: FetchMyBookingsFilters) => {
     return useQuery({
         queryKey: BookingKeys.lists(filters),
-        queryFn: () => fetchMyBookings(filters), // Replace with appropriate service for fetching all bookings
+        queryFn: () => fetchAllBookings(filters), // Replace with appropriate service for fetching all bookings
     });
 }
 

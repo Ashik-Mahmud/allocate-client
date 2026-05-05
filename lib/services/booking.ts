@@ -47,23 +47,28 @@ export const fetchMyBookings = async (filters?: FetchMyBookingsFilters) => {
 
     const sendingQuery = query.toString();
 
-    return apiRequest<PaginatedResponse<Booking[]>>(`/bookings/my-bookings${sendingQuery ? `?${sendingQuery}` : ''}`, {
+    return apiRequest<PaginatedResponse<Booking>>(`/bookings/my-bookings${sendingQuery ? `?${sendingQuery}` : ''}`, {
         method: "GET",
     });
 }
 
 // service to fetch all bookings (for admin)
 export const fetchAllBookings = async (filters?: FetchAllBookingsFilters) => {
-    const query = new URLSearchParams({
-        page: String(filters?.page ?? 1),
-        limit: String(filters?.limit ?? 10),
-        status: filters?.status ?? "",
-        search: filters?.search ?? "",
-        userId: filters?.userId ?? "",
-        resourceId: filters?.resourceId ?? "",
-        dateRange: filters?.dateRange ?? "",
-    }).toString();
-    return apiRequest<PaginatedResponse<Booking>>(`/bookings/all?${query}`, {
+
+
+    const query = new URLSearchParams();
+
+    if (filters?.limit) query.append("limit", String(filters.limit));
+    if (filters?.page) query.append("page", String(filters.page));
+    if (filters?.status) query.append("status", filters.status);
+    if (filters?.search) query.append("search", filters.search);
+    if (filters?.userId) query.append("userId", filters.userId);
+    if (filters?.resourceId) query.append("resourceId", filters.resourceId);
+    if (filters?.dateRange) query.append("dateRange", filters.dateRange);
+
+    const sendingQuery = query.toString();
+
+    return apiRequest<PaginatedResponse<Booking>>(`/bookings/all?${sendingQuery}`, {
         method: "GET",
     });
 }

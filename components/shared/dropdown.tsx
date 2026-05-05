@@ -8,6 +8,7 @@ type Props = {
         label: string;
         onClick: () => void;
         destructive?: boolean;
+        icon?: React.ComponentType<{ className?: string }>;
     }[];
     children: React.ReactNode;
 
@@ -24,7 +25,7 @@ const AllocateDropdown = ({ children, dropdownOptions }: Props) => {
                         </Button>
                     )}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="dark:bg-slate-800">
+                <DropdownMenuContent align="end" className="dark:bg-slate-800 w-max" >
                     {dropdownOptions.map((option, index) => (
 
                         <div key={index}>
@@ -38,6 +39,7 @@ const AllocateDropdown = ({ children, dropdownOptions }: Props) => {
                                 // Apply destructive styles if the option is marked as destructive
                                 variant={option?.destructive ? 'destructive' : 'default'}
                             >
+                                {option.icon && <option.icon className="size-4 mr-2" />}
                                 {option.label}
                             </DropdownMenuItem>
                             </div>
