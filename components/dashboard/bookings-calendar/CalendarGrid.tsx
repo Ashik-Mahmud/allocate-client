@@ -90,16 +90,14 @@ const CalendarGrid = ({
                                 className={cn(
                                     'aspect-square rounded-2xl transition-all duration-200 flex flex-col items-center justify-center p-2',
                                     day === null && 'bg-transparent cursor-default',
-                                    day !== null && [
-                                        'cursor-pointer group relative',
-                                        today && 'ring-2 ring-indigo-500 dark:ring-indigo-400',
-                                        entry && 'hover:shadow-lg hover:-translate-y-1 hover:scale-105',
-                                        normalizedStatus === 'FULLY_BOOKED' && 'bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-200 dark:border-rose-500/20',
-                                        normalizedStatus === 'PARTIALLY_BOOKED' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
-                                        normalizedStatus === 'AVAILABLE' && 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/20',
-                                        normalizedStatus === 'OFF_DAY' && 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700',
-                                        !entry && 'bg-slate-50 dark:bg-slate-900/30 border-2 border-slate-100 dark:border-slate-800'
-                                    ]
+                                    day !== null && 'cursor-pointer group relative',
+                                    day !== null && today && 'ring-2 ring-indigo-500 dark:ring-indigo-400',
+                                    day !== null && entry && 'hover:shadow-lg hover:-translate-y-1 hover:scale-105',
+                                    day !== null && normalizedStatus === 'FULLY_BOOKED' && 'bg-rose-50 dark:bg-rose-500/10 border-2 border-rose-200 dark:border-rose-500/20',
+                                    day !== null && normalizedStatus === 'PARTIALLY_BOOKED' && 'bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-200 dark:border-amber-500/20',
+                                    day !== null && normalizedStatus === 'AVAILABLE' && 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-200 dark:border-emerald-500/20',
+                                    day !== null && normalizedStatus === 'OFF_DAY' && 'bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700',
+                                    day !== null && !entry && 'bg-slate-50 dark:bg-slate-900/30 border-2 border-slate-100 dark:border-slate-800'
                                 )}
                                 onMouseEnter={() => day && setHoveredDate(dateStr)}
                                 onMouseLeave={() => setHoveredDate(null)}

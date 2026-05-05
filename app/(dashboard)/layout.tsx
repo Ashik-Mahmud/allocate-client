@@ -11,6 +11,7 @@ import UpdateProfile from "@/components/dashboard/profile/update-profile";
 import UpdateOrganizationDrawer from "@/components/dashboard/update-org-drawer";
 import { useCurrentUser } from "@/features/auth";
 import NextBookingCountDown from "@/components/dashboard/booking-availability/NextBookingCountDown";
+import PlanLimitExceed from "@/components/shared/PlanLimitExceed";
 
 export default async function DashboardLayout({
   children,
@@ -45,11 +46,8 @@ export default async function DashboardLayout({
             <div className="border-b border-slate-200 bg-white px-3 py-1 dark:border-slate-800 dark:bg-slate-950 md:px-5 md:py-1">
               <DashboardTopbar />
             </div>
-            <div className="px-4 md:px-6 pt-4">
-              <div className="p-4 text-sm text-red-600 dark:text-red-400 bg-red-50 border border-red-200 rounded ">
-                Plan Limit Exceeded: You are currently using 5/2 resources. Booking is temporarily disabled for your organization. [Upgrade to Pro Plan]
-              </div>
-            </div>
+          
+            <PlanLimitExceed />
             <div className="h-full flex-1  p-4">
 
               <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white  dark:border-slate-800 dark:bg-slate-950">

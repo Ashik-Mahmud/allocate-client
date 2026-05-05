@@ -60,4 +60,9 @@ export interface Organizations {
   // invitations?: Invitation[];
   // bookings?: Bookings[];
   // creditTransactions?: CreditTransaction[];
+  _count?: {
+    users: number;
+    resources: number;
+    // Add counts for other relations as needed
+  };
 }

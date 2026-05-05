@@ -185,7 +185,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         <Textarea
                             name="notes"
                             placeholder="Any specific requirements?"
-                            className="border-none bg-slate-50 dark:bg-slate-900 rounded-xl min-h-25 focus-visible:ring-1 focus-visible:ring-slate-200 resize-none"
+                            className="border bg-slate-50 dark:bg-slate-900 rounded-xl min-h-25 focus-visible:ring-1 focus-visible:ring-slate-200 resize-none"
                         />
                     </div>
                 </div>
@@ -206,7 +206,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                     }
                     {
                         error && (
-                            <div className='flex items-center bg-rose-50 border border-rose-200 text-rose-600 rounded-lg p-3 mb-6'>
+                            <div className='flex items-center bg-rose-50 dark:bg-rose-500/5 border border-rose-200 dark:border-rose-600/5 text-rose-600 rounded-lg p-3 mb-6'>
                                 <p className="text-sm text-rose-600  flex items-center gap-1 justify-center">
                                     <Info className="w-4 h-4 text-rose-400 fill-rose-400" />
                                     {error}
