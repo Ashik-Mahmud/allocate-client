@@ -45,7 +45,7 @@ const NotificationItem = ({ notification, onMarkRead, onDelete }: ItemProps) => 
                         {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                     </span>
                 </div>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-line">
                     {notification.message}
                 </p>
 

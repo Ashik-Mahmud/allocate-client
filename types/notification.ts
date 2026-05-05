@@ -38,6 +38,8 @@ export enum NotificationType {
 
   RESOURCE_MAINTENANCE = 'RESOURCE_MAINTENANCE',
   RESOURCE_AVAILABLE = 'RESOURCE_AVAILABLE',
+
+  WEEKLY_REPORT = 'WEEKLY_REPORT',
 }
 
 export interface Notification {

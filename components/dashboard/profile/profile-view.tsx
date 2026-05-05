@@ -30,6 +30,10 @@ import UpdateOrganizationDrawer from "../update-org-drawer";
 import { useState } from "react";
 import AllocateDrawer from "@/components/shared/allocate-drawer";
 import UpdateProfile from "./update-profile";
+import WeeklyReportToggle from "../OrgOverview/WeeklyReportEnabled";
+import { PlanType } from "@/types/organization";
+import { useUpdateOrganization } from "@/features/organization";
+import { toast } from "sonner";
 
 type Props = {
     user: User;
@@ -166,10 +170,27 @@ export default function ProfileView({ user }: Props) {
     const orgName = organization?.name ?? "No organization linked";
     const orgStatus = organization?.is_active ? "Active" : organization ? "Inactive" : "Not linked";
     const currentCredits = typeof user.personal_credits === "number" ? user.personal_credits : 0;
+    const isPro = organization?.plan_type !== PlanType.FREE;
     const router = useRouter();
+    const organizationFn = useUpdateOrganization();
 
     const [isOpenOrgEdit, setIsOpenOrgEdit] = useState(false);
     const [isUpdateProfileOpen, setIsUpdateProfileOpen] = useState(false);
+
+
+    const handleToggleWeeklyReport = async (newStatus: boolean) => {
+        const result = await organizationFn.mutateAsync({
+            payload: {
+                weeklyReportEnabled: newStatus,
+            },
+        })
+        if (result.success) {
+            toast.success(`${newStatus ? "Great!" : "Oops!"} Weekly report ${newStatus ? "enabled" : "disabled"} successfully. You will ${newStatus ? "start" : "stop"} receiving weekly summary emails every Sunday.`);
+        }
+
+    }
+
+
     return (
         <div className="space-y-6">
             <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/50">
@@ -420,7 +441,17 @@ export default function ProfileView({ user }: Props) {
                             <DetailRow label="Updated" value={formatDate(user.updatedAt)} />
                             <DetailRow label="Last activity" value={user.last_login ? formatDate(user.last_login) : "Never"} />
                             <DetailRow label="Account state" value={user.deletedAt ? "Deleted" : "Active"} />
+
                         </div>
+                        {
+                            isOrgAdmin && (<div className="mt-5">
+                                <WeeklyReportToggle
+                                    isEnabled={organization?.weeklyReportEnabled ?? false}
+                                    isPro={isPro}
+                                    onToggle={handleToggleWeeklyReport}
+                                />
+                            </div>)
+                        }
                     </SectionCard>
                 </div>
             </section>

@@ -63,7 +63,7 @@ const NotificationMain = () => {
     }, [notifications]);
 
     return (
-        <div className="mx-auto  space-y-6 p-6">
+        <div className="mx-auto  space-y-6 md:p-6">
 
             {/* Header Section */}
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

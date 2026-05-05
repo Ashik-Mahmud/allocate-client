@@ -74,7 +74,7 @@ export function ResourceFilterForm({
 
 
 
-      <div className="mt-4 flex flex-wrap gap-4">
+      <div className="mt-4 flex relative flex-col sm:flex-row sm:flex-wrap gap-4">
         <label className="space-y-1 text-sm text-slate-700 dark:text-slate-300 flex-1">
           <span>Search</span>
           <input

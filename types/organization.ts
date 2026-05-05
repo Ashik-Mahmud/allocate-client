@@ -43,6 +43,7 @@ export interface Organizations {
   address: OrgAddress | string | null;
   business_email: string | null;
   needUpdateOrg: boolean | null;
+  weeklyReportEnabled?: boolean | null;
   settings: OrgSettings | null;
   isVerified: boolean | null;
   deletedAt: Date | string | null;

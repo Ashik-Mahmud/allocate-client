@@ -194,7 +194,7 @@ const NextBookingFloatingWidget = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className={cn(
-                                "fixed bottom-8 w-95 bg-white dark:bg-slate-950 rounded-[40px] shadow-2xl z-10001 border p-8 pointer-events-auto",
+                                "fixed bottom-8 w-80 sm:w-95 bg-white dark:bg-slate-950 rounded-[40px] shadow-2xl z-10001 border p-8 pointer-events-auto",
                                 side === 'left' ? 'left-8' : 'right-8',
                                 isLive ? "border-emerald-500/30" : "border-slate-100 dark:border-slate-800"
                             )}
@@ -212,7 +212,7 @@ const NextBookingFloatingWidget = () => {
                             </div>
 
                             <div className="mb-10 text-center py-4  bg-slate-50 dark:bg-slate-900/50 rounded-3xl">
-                                <h1 className={cn("text-8xl font-black tracking-tighter font-mono", isLive ? "text-emerald-500" : "text-slate-900 dark:text-white")}>
+                                <h1 className={cn("text-7xl sm:text-8xl font-black tracking-tighter font-mono", isLive ? "text-emerald-500" : "text-slate-900 dark:text-white")}>
                                     {String(timeLeft.mins).padStart(2, '0')}<span className="opacity-20">:</span>{String(timeLeft.secs).padStart(2, '0')}
                                 </h1>
                                 <p className="text-slate-400 font-medium text-xs">{isLive ? "Remaining session time" : "Remaining minutes to start"}</p>

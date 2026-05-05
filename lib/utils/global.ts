@@ -1,7 +1,8 @@
 import { NotificationType } from '@/types/notification';
 import {
   CalendarClock, CheckCircle2, XCircle, BellRing,
-  Coins, AlertCircle, UserPlus, CreditCard, ShieldAlert
+  Coins, AlertCircle, UserPlus, CreditCard, ShieldAlert,
+  ChartNoAxesCombined
 } from 'lucide-react';
 import {
   ArrowUpCircle,
@@ -39,6 +40,8 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
   [NotificationType.MAINTENANCE_NOTICE]: { icon: AlertCircle, color: 'text-slate-600', bgColor: 'bg-slate-100' },
   [NotificationType.RESOURCE_MAINTENANCE]: { icon: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-100' },
   [NotificationType.RESOURCE_AVAILABLE]: { icon: CheckCircle2, color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
+  // icon will be graph or stats
+  [NotificationType.WEEKLY_REPORT]: { icon: ChartNoAxesCombined, color: 'text-blue-600', bgColor: 'bg-blue-100' },
 
 };
 
