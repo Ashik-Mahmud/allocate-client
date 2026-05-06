@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { toast } from 'sonner'
 import { useCurrentUser } from '@/features/auth';
+import CancelBookingAlert from '../booking-management/CancelBookingAlert';
 
 const MyBookingMain = () => {
     const [statusFilter, setStatusFilter] = React.useState<string>("");
@@ -18,11 +19,8 @@ const MyBookingMain = () => {
     const [limit, setLimit] = React.useState<number>(10);
     const [page, setPage] = React.useState<number>(1);
     const [isOpenCancelDialog, setIsOpenCancelDialog] = React.useState(false);
-    const [selectedBookingId, setSelectedBookingId] = React.useState<string | null>(null);
-
+    const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
     const debouncedSearch = useDebounce(searchTerm, 500);
-    const changeBookingStatus = useChangeBookingStatus();
-
     const { data: apiData, isLoading, isFetching } = useFetchMyBookings({
         page,
         limit,
@@ -36,19 +34,6 @@ const MyBookingMain = () => {
     const currentPage = pagination?.page ?? page;
     const total = pagination?.total ?? 0;
 
-    const handleCancel = async (id: string) => {
-        try {
-            await changeBookingStatus.mutateAsync({
-                bookingId: id,
-                payload: { status: BookingStatus.CANCELLED }
-            });
-            setIsOpenCancelDialog(false);
-            setSelectedBookingId(null);
-            toast.success("Booking cancelled successfully");
-        } catch (error) {
-            console.error("Failed to cancel booking:", error);
-        }
-    };
 
     return (
         <div className="mx-auto px-4  antialiased space-y-6">
@@ -152,7 +137,7 @@ const MyBookingMain = () => {
                                     key={booking?.id}
                                     booking={booking!}
                                     onCancel={(id) => {
-                                        setSelectedBookingId(id);
+                                        setSelectedBooking(booking);
                                         setIsOpenCancelDialog(true);
                                     }}
                                     onUpdateNotes={() => { }}
@@ -202,26 +187,14 @@ const MyBookingMain = () => {
             )}
 
             {/* Cancel Confirmation Dialog */}
-            <AllocateConfirmationAlert
-                open={isOpenCancelDialog}
-                onOpenChange={setIsOpenCancelDialog}
-                title="Cancel Booking"
-                description="Are you sure you want to cancel this booking?"
-                confirmText="Yes, cancel it"
-                icon={<FileWarning className="w-4 h-4" />}
-                variant='warning'
-                errorMessage={
-                    changeBookingStatus?.isError ? changeBookingStatus?.error instanceof Error
-                        ? changeBookingStatus.error.message
-                        : "An error occurred while cancelling the booking."
-                        : undefined
-                }
-                onConfirm={() => {
-                    if (selectedBookingId) {
-                        handleCancel(selectedBookingId);
-                    }
-                }}
+            <CancelBookingAlert
+                bookingToCancel={selectedBooking as Booking | null}
+                isOpenCancelDialog={isOpenCancelDialog}
+                setIsOpenCancelDialog={setIsOpenCancelDialog}
+                setBookingToCancel={setSelectedBooking}
+
             />
+
 
         </div>
     )

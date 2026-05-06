@@ -33,7 +33,7 @@ const ViewBookingDetails = ({ booking }: Props) => {
                 </div>
             </header>
 
-            <div className="grid gap-8 lg:grid-cols-1 p-6 pt-0">
+            <div className="grid gap-8 lg:grid-cols-1 p-6 pt-2">
 
                 {/* 2. Reservation Details */}
                 <div className="space-y-6">
@@ -71,6 +71,7 @@ const ViewBookingDetails = ({ booking }: Props) => {
                         <DetailItem label="Total Duration" value={`${totalDuration} minutes`} />
                         <div className="md:col-span-2 h-px bg-slate-100 dark:bg-slate-800 my-2" />
                         <DetailItem label="Purpose/Note" value={booking?.notes || "No special instructions."} isLongText />
+                        <div className="md:col-span-2 h-px bg-slate-100 dark:bg-slate-800 my-2" />
                         {booking.status === BookingStatus?.CANCELLED && (
                             <DetailItem label="Cancellation Note" value={booking?.cancellation_reason || "N/A"} isLongText />
                         )}

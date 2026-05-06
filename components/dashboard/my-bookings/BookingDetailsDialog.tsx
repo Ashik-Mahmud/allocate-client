@@ -36,7 +36,7 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-md rounded-2xl border-none p-0 overflow-hidden bg-white dark:bg-slate-950">
+            <DialogContent className="max-w-xl! rounded-2xl border-none p-0 overflow-hidden bg-white dark:bg-slate-950">
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4">
                     <div>
                         <p className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-60 mb-1">Booking Reference</p>
@@ -64,13 +64,13 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
 
                 <div className="p-6 space-y-6">
                     {/* Metadata Section */}
-                    {booking.cancellation_reason && <div className="relative">
+                    {booking?.cancellation_reason && <div className="relative">
                         <div className="space-y-1">
                             <label className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1.5">
                                 <FileWarning className="w-3 h-3" /> Cancellation Reason
                             </label>
                             <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                                {booking.cancellation_reason || "N/A"}
+                                {booking?.cancellation_reason || "N/A"}
                             </p>
                         </div>
 
@@ -93,8 +93,8 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
                                 placeholder="Add notes about this session..."
                                 className={
                                     cn(
-                                        "min-h-30 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl focus-visible:ring-1 focus-visible:ring-slate-200 resize-none p-4 pb-12",
-
+                                        "min-h-30 bg-slate-50 dark:bg-slate-900  rounded-2xl focus-visible:ring-1 focus-visible:ring-slate-200 resize-none p-4 pb-12",
+                                        booking?.status === BookingStatus.PENDING || booking?.status === BookingStatus.CONFIRMED ? "border" : 'border-none'
                                     )
                                 }
                             />

@@ -69,7 +69,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                     {/* View Details - Always Visible */}
                     <button
                         title="View Full Details"
-                        className="flex h-10 items-center gap-2 rounded-xl px-3 text-xs font-bold text-slate-600 transition-all hover:bg-slate-100 active:scale-95 dark:text-slate-400 dark:hover:bg-slate-900"
+                        className="flex cursor-pointer h-10 items-center gap-2 rounded-xl px-3 text-xs font-bold text-slate-600 transition-all hover:bg-slate-100 active:scale-95 dark:text-slate-400 dark:hover:bg-slate-900"
                         onClick={() => onViewDetails(booking)}
                     >
                         <Eye className="size-4" />
@@ -100,7 +100,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                             disabled={!canCancel}
                             onClick={() => onCancel(booking)}
                             title={canCancel ? "Cancel/Reject Booking" : "Cannot Cancel"}
-                            className={`flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 
+                            className={`flex cursor-pointer h-10 items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 
                                 ${canCancel
                                     ? "bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-950/30 dark:text-rose-500"
                                     : "cursor-not-allowed opacity-30 bg-slate-100 text-slate-400 dark:bg-slate-800"

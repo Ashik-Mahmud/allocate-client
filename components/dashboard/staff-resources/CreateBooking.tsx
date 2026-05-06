@@ -184,17 +184,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
             {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col flex-1">
                 <div className="space-y-6">
-                    {/*         <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Purpose</label>
-                            <Input name="purpose" placeholder="Meeting" className="border-none bg-slate-50 dark:bg-slate-900 rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-slate-200" required />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Dept.</label>
-                            <Input name="dept" placeholder="Design" className="border-none bg-slate-50 dark:bg-slate-900 rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-slate-200" required />
-                        </div>
-                    </div> */}
-
+   
                     <div className="space-y-2 relative">
                         <div className="flex items-center justify-between w-full ">
                             <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Notes</label>

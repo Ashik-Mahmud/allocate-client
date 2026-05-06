@@ -1,6 +1,6 @@
 "use client";
 import { cn } from '@/lib/utils/cn';
-import { Clock, DatabaseSearch, LayoutGrid, List, Search } from 'lucide-react';
+import { Clock, Database, DatabaseSearch, LayoutGrid, List, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react'
 import ResourceCard from './ResourceCard';
 import { useGetBrowseResourcesListQuery } from '@/features/resources';
@@ -136,6 +136,19 @@ const StaffResourcesMain = () => {
 
   return (
     <div className="mx-auto  space-y-8">
+      <div>
+        <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm uppercase tracking-widest">
+          <Database className="w-4 h-4" />
+           Browse Resources
+        </div>
+        <div className="flex items-center gap-3">
+          <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+            Available Resources 
+          </h1>
+
+        </div>
+        <p className="text-slate-500 text-sm">Find and reserve the resources you need for your work.</p>
+      </div>
       {/* Header with Search & Filters */}
       <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
         <div className="flex-1 space-y-4 w-full">
