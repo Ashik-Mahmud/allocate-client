@@ -10,11 +10,15 @@ import { Popover } from '@/components/ui/popover'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import AllocatePopover from '@/components/shared/allocate-popover'
 import { toast } from 'sonner'
-import { formatCalendarDateKey } from '@/lib/utils/timezone-date'
+import { formatCalendarDateKey, getCalendarDateKey, getTodayCalendarKey } from '@/lib/utils/timezone-date'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { useRefineNote } from '@/hooks/use-refine-note';
 import CancelBookingAlert from './CancelBookingAlert';
 import { Button } from '@/components/ui/button';
+import RescheduleBooking from './RescheduleBooking';
+import { set } from 'date-fns';
+import { Resource } from '@/types/resources';
+import useTimezone from '@/hooks/use-timezone';
 
 
 type Props = {}
@@ -36,7 +40,8 @@ const BookingManagementMain = (props: Props) => {
     const [bookingToCancel, setBookingToCancel] = React.useState<Booking | null>(null);
     const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = React.useState(false);
     const [isOpenMarkCompletedDialog, setIsOpenMarkCompletedDialog] = React.useState(false);
-
+    const [isOpenRescheduleDialog, setIsOpenRescheduleDialog] = React.useState(false);
+    const [dialogResource, setDialogResource] = React.useState<Partial<Resource> | null>(null);
 
     const { data, isLoading, isError } = useFetchAllBookings({
         limit,
@@ -283,6 +288,9 @@ const BookingManagementMain = (props: Props) => {
                                 onReschedule={() => {
                                     console.log(`Rescheduling booking ${booking.id}`);
                                     // TODO: Open reschedule dialog
+                                    setIsOpenRescheduleDialog(true);
+                                    setSelectedBooking(booking);
+                                    setDialogResource(booking?.resource ?? null)
                                 }}
                                 onViewUserProfile={() => {
                                     setSelectedBooking(booking);
@@ -434,7 +442,6 @@ const BookingManagementMain = (props: Props) => {
             </AllocateDrawer>
 
 
-
             <AllocateConfirmationAlert
                 open={isOpenMarkCompletedDialog}
                 onOpenChange={setIsOpenMarkCompletedDialog}
@@ -448,6 +455,14 @@ const BookingManagementMain = (props: Props) => {
                     }
                     setIsOpenMarkCompletedDialog(false);
                 }}
+            />
+
+            <RescheduleBooking
+                booking={selectedBooking as Booking}
+                dialogResource={dialogResource as Resource}
+                isOpenBookingDialog={isOpenRescheduleDialog}
+                setDialogResource={setDialogResource}
+                setIsOpenBookingDialog={setIsOpenRescheduleDialog}
             />
         </div>
     )

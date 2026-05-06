@@ -63,12 +63,16 @@ export interface getBookingStatsFilters {
     groupBy: "day" | "week" | "month";
 }
 
-export interface CreateBookingPayload {
-    resource_id: string;
+export interface RescheduleBookingPayload {
     start_time: string; // ISO string
     end_time: string;   // ISO string
+}
+export interface CreateBookingPayload extends RescheduleBookingPayload {
+    resource_id: string;
     notes?: string;
 }
+
+
 
 export type BookingCalendarAvailableStatus = "AVAILABLE" | "PARTIALLY_BOOKED" | "FULLY_BOOKED" | "OFF_DAY";
 export interface BookingCalendarEntry {

@@ -27,9 +27,10 @@ type Props = {
     onSubmit: (data: CreateBookingPayload) => void;
     isSubmitting?: boolean;
     error?: string | null;
+    type?: 'reschedule' | 'rebook';
 }
 
-const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting, error }: Props) => {
+const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting, error, type }: Props) => {
 
     const { user } = useCurrentUser();
     const timeZone = user?.organization?.timezone || 'UTC';
@@ -45,7 +46,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
         const hrs = Math.max(0, diff / (1000 * 60 * 60));
         return {
             durationHrs: hrs.toFixed(1),
-            totalCredits: Math.ceil(hrs * creditRate)
+            totalCredits: Math.floor(hrs * creditRate)
         };
     }, [startTime, endTime, creditRate]);
 
@@ -84,6 +85,8 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
             setNotes(refinedText);
         }
     };
+
+    const isReschedule = type === 'reschedule';
 
     return (
         <div className="flex flex-col h-full px-2  mx-auto bg-white dark:bg-slate-950 antialiased animate-in fade-in duration-500">
@@ -183,8 +186,8 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col flex-1">
-                <div className="space-y-6">
-   
+                {!isReschedule ? <div className="space-y-6">
+
                     <div className="space-y-2 relative">
                         <div className="flex items-center justify-between w-full ">
                             <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Notes</label>
@@ -231,13 +234,13 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                             </p>
                         )}
                     </div>
-                </div>
+                </div> : ''}
 
                 {/* Footer Action */}
                 <div className="mt-auto pt-8">
 
                     {
-                        !hasEnoughCredits && (
+                        !hasEnoughCredits && !isReschedule && (
                             <div className='flex items-center bg-rose-50 border border-rose-200 text-rose-600 rounded-lg p-3 mb-6'>
                                 <p className="text-sm text-rose-600  flex items-center gap-1 justify-center">
                                     <Zap className="w-4 h-4 text-rose-400 fill-rose-400" />
@@ -268,7 +271,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
 
                     <Button
                         type="submit"
-                        disabled={isSubmitting || parseFloat(durationHrs) <= 0 || !hasEnoughCredits}
+                        disabled={isSubmitting || parseFloat(durationHrs) <= 0 || (!hasEnoughCredits && !isReschedule)}
                         className="cursor-pointer w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 rounded-2xl font-bold transition-all shadow-lg active:scale-[0.99]"
                     >
                         {isSubmitting ? "Processing..." : `Confirm Booking`}

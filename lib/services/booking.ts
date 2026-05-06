@@ -1,4 +1,4 @@
-import { Booking, BookingCalendarEntry, BookingResourceCalendarResponse, CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking"
+import { Booking, BookingCalendarEntry, BookingResourceCalendarResponse, CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, RescheduleBookingPayload, UpdateBookingStatusPayload } from "@/types/booking"
 import { apiRequest } from "./http";
 import { ApiResponse, PaginatedResponse } from "@/types";
 
@@ -6,6 +6,22 @@ export const createBookingService = async (booking: CreateBookingPayload) => {
     return apiRequest<ApiResponse<Booking>>(`/bookings/create`, {
         method: "POST",
         body: JSON.stringify(booking),
+    });
+}
+
+// service to reschedule a booking
+export const rescheduleBookingService = async (bookingId: string, payload: RescheduleBookingPayload) => {
+    const query = new URLSearchParams({ bookingId }).toString();
+    return apiRequest<ApiResponse<Booking>>(`/bookings/reschedule?${query}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+    });
+}
+
+// service to send reminder 
+export const sendBookingReminderService = async (bookingId: string) => {
+    return apiRequest<ApiResponse<{ success: boolean }>>(`/inbox/${bookingId}/send-reminder`, {
+        method: "POST",
     });
 }
 

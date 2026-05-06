@@ -1,5 +1,5 @@
-import { changeBookingStatusService, createBookingService, fetchAllBookings, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, updateBookingService } from "@/lib/services/booking";
-import { CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, UpdateBookingStatusPayload } from "@/types/booking";
+import { changeBookingStatusService, createBookingService, fetchAllBookings, fetchBookingResourceCalendar, fetchBookingStats, fetchMyBookings, fetchResourceAvailableSlots, rescheduleBookingService, sendBookingReminderService, updateBookingService } from "@/lib/services/booking";
+import { CreateBookingPayload, FetchAllBookingsFilters, FetchMyBookingsFilters, getBookingStatsFilters, RescheduleBookingPayload, UpdateBookingStatusPayload } from "@/types/booking";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { currentUserQueryKey } from "../auth";
 
@@ -28,6 +28,29 @@ export const useCreateBooking = () => {
         }
     });
 };
+
+// Hook to reschedule a booking
+export const useRescheduleBooking = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: { bookingId: string, payload: RescheduleBookingPayload }) => rescheduleBookingService(payload.bookingId, payload.payload),
+        onSuccess: async () => {
+            return await Promise.all([
+                queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: currentUserQueryKey }), // Invalidate all availability queries
+            ]);
+        }
+    });
+};
+
+// Hook to send booking reminder
+export const useSendBookingReminder = () => {
+    return useMutation({
+        mutationFn: (bookingId: string) => sendBookingReminderService(bookingId),
+    });
+}
 
 // Hook to change booking status (e.g., cancel a booking)
 export const useChangeBookingStatus = () => {

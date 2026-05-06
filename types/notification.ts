@@ -40,6 +40,7 @@ export enum NotificationType {
   RESOURCE_AVAILABLE = 'RESOURCE_AVAILABLE',
 
   WEEKLY_REPORT = 'WEEKLY_REPORT',
+  BOOKING_RESCHEDULED = 'BOOKING_RESCHEDULED',
 }
 
 export interface Notification {

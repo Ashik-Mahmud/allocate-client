@@ -1,4 +1,4 @@
-import { Calendar, Check, Eye, X, Clock, MoreHorizontal, Ban, CheckCircle } from "lucide-react"
+import { Calendar, Check, Eye, X, Clock, MoreHorizontal, Ban, CheckCircle, Coins } from "lucide-react"
 import BookingStatusBadge from "../my-bookings/BookingStatus"
 import { Booking, BookingStatus } from "@/types/booking"
 import AllocateDropdown from "@/components/shared/dropdown"
@@ -54,6 +54,13 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                         <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
                             {booking?.user?.name || "Anonymous User"}
                         </p>
+                        <span className="hidden mx-2 text-slate-300 dark:text-slate-700 sm:inline">•</span>
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                            <Coins className="size-3" />
+                            <span>
+                                {booking?.total_cost ? `${booking.total_cost.toFixed(2)} CR` : "N/A"}
+                            </span>
+                        </div>
                         <span className="hidden mx-2 text-slate-300 dark:text-slate-700 sm:inline">•</span>
                         <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                             <Clock className="size-3" />
