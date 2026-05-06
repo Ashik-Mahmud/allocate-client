@@ -5,6 +5,7 @@ import { useOrganizationInsights } from '@/features/dashboard/hooks';
 import useSubscription from '@/hooks/use-subscription';
 import { OrgOverviewPro } from '../OrgOverviewPro';
 import { OrgInsights } from '../OrgOverviewPro/OrgOverviewPro';
+import NextDayRoadmap from '@/components/shared/NextDayTask';
 
 type Props = {}
 
@@ -13,6 +14,7 @@ const OrgDashboardMain = (props: Props) => {
     const orgInsights = useOrganizationInsights()
     return (
         <div>
+            <NextDayRoadmap />
             {
                 isPaid ? <OrgOverviewPro
                     insights={orgInsights?.data?.insights as OrgInsights}
