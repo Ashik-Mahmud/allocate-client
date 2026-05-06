@@ -77,7 +77,7 @@ export const useFetchResourceAvailableSlots = ({
         queryKey: BookingKeys.availability(resourceId ?? "", date),
         queryFn: () => fetchResourceAvailableSlots(resourceId as string, date),
         enabled: enabled && Boolean(resourceId && date),
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: enabled && Boolean(resourceId && date),
     });
 };
 
@@ -87,6 +87,7 @@ export const useFetchMyBookings = (filters?: FetchMyBookingsFilters) => {
     return useQuery({
         queryKey: [...BookingKeys.myBooking(), filters],
         queryFn: () => fetchMyBookings(filters),
+        refetchOnWindowFocus: true,
     });
 };
 
@@ -96,6 +97,7 @@ export const useFetchAllBookings = (filters?: FetchAllBookingsFilters) => {
     return useQuery({
         queryKey: BookingKeys.lists(filters),
         queryFn: () => fetchAllBookings(filters), // Replace with appropriate service for fetching all bookings
+        refetchOnWindowFocus: true,
     });
 }
 
@@ -114,6 +116,7 @@ export const useFetchBookingStats = (filters?: getBookingStatsFilters) => {
     return useQuery({
         queryKey: BookingKeys.stats(filters),
         queryFn: () => fetchBookingStats(filters), // Replace with appropriate service for fetching all bookings
+        refetchOnWindowFocus: true,
     });
 }
 

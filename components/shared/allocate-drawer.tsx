@@ -24,7 +24,7 @@ type Props = {
     footer?: React.ReactNode;
     className?: string;
     position?: "left" | "right" | "top" | "bottom";
-    showHandler?: boolean
+    showHandler?: boolean;
 }
 
 const AllocateDrawer = ({

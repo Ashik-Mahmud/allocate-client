@@ -14,6 +14,7 @@ import { formatCalendarDateKey } from '@/lib/utils/timezone-date'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { useRefineNote } from '@/hooks/use-refine-note';
 import CancelBookingAlert from './CancelBookingAlert';
+import { Button } from '@/components/ui/button';
 
 
 type Props = {}
@@ -35,7 +36,6 @@ const BookingManagementMain = (props: Props) => {
     const [bookingToCancel, setBookingToCancel] = React.useState<Booking | null>(null);
 
     const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = React.useState(false);
-    const [bookingToConfirm, setBookingToConfirm] = React.useState<Booking | null>(null);
 
 
     const { data, isLoading, isError } = useFetchAllBookings({
@@ -66,7 +66,7 @@ const BookingManagementMain = (props: Props) => {
 
 
     const handleConfirmBooking = async (booking?: Booking) => {
-        const selectedBooking = booking || bookingToConfirm;
+        const selectedBooking = booking;
         if (selectedBooking) {
             console.log(`Confirming booking ${selectedBooking.id}`);
             // TODO: Call API to confirm booking
@@ -80,7 +80,8 @@ const BookingManagementMain = (props: Props) => {
             if (result?.success) {
                 toast.success(`${selectedBooking.resource?.name} has been confirmed successfully`);
                 setIsOpenConfirmationDialog(false);
-                setBookingToConfirm(null);
+                setSelectedBooking(null);
+                setIsOpenViewDetails(false);
             }
         }
     };
@@ -265,7 +266,8 @@ const BookingManagementMain = (props: Props) => {
                                     console.log(`Confirming booking ${booking.id}`);
                                     // TODO: Call API to confirm booking
                                     setIsOpenConfirmationDialog(true);
-                                    setBookingToConfirm(booking);
+                                    setSelectedBooking(booking);
+                                    setIsOpenViewDetails(true);
                                 }}
                                 onCancel={() => {
                                     setBookingToCancel(booking);
@@ -381,28 +383,56 @@ const BookingManagementMain = (props: Props) => {
             {/* View Details Drawer */}
             <AllocateDrawer
                 open={isOpenViewDetails}
-                onOpenChange={() => setIsOpenViewDetails(false)}
+                onOpenChange={() => {
+                    setIsOpenViewDetails(false);
+                    setSelectedBooking(null);
+                    setIsOpenConfirmationDialog(false);
+                }}
                 title='Booking details'
                 description='Here is the booking details'
                 position='bottom'
                 showHandler={false}
                 showHeader={false}
                 footer={<div className="flex justify-center gap-2">
-                    <button
-                        onClick={() => setIsOpenViewDetails(false)}
-                        className="rounded-xl border w-full cursor-pointer border-slate-200 bg-slate-100 px-4 py-2 text-sm font-medium dark:border-slate-800 dark:bg-slate-950"
-                    >
-                        Close
-                    </button>
+                    {
+                        isOpenConfirmationDialog ? (
+                            <button
+                                onClick={() => {
+                                    if (selectedBooking) {
+                                        handleConfirmBooking(selectedBooking);
+                                    }
+                                }}
+                                disabled={statusMutation.isPending}
+                                className="rounded-xl border w-full cursor-pointer border-slate-200 bg-green-100 px-4 py-2 text-base font-medium text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400 disabled:cursor-not-allowed disabled:opacity-50 grid place-items-center"
+
+                            >
+                                {
+                                    statusMutation.isPending ? (
+                                        <Loader2 className="animate-spin" />
+                                    ) : (
+                                        "View & Confirm Booking"
+                                    )
+                                }
+
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => setIsOpenViewDetails(false)}
+                                className="rounded-xl border w-full cursor-pointer border-slate-200 bg-slate-100 px-4 py-2 text-sm font-medium dark:border-slate-800 dark:bg-slate-950"
+                            >
+                                Close
+                            </button>
+                        )
+                    }
                 </div>}
             >
                 {/* The content of the drawer will be handled by the AllocateDrawer component */}
                 {selectedBooking && <ViewBookingDetails booking={selectedBooking} />}
             </AllocateDrawer>
 
-    
 
-            <AllocateConfirmationAlert
+
+            {/* <AllocateConfirmationAlert
                 open={isOpenConfirmationDialog}
                 onOpenChange={setIsOpenConfirmationDialog}
                 title="Confirm Action"
@@ -415,7 +445,7 @@ const BookingManagementMain = (props: Props) => {
                     }
                     setIsOpenConfirmationDialog(false);
                 }}
-            />
+            /> */}
         </div>
     )
 }

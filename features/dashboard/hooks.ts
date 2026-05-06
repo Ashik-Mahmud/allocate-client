@@ -11,6 +11,8 @@ export const useDashboardOverview = (filters?: TdashboardFilter) => {
     return useQuery({
         queryKey: DashboardKeys.overview(),
         queryFn: () => fetchStaffInsights({}), // Replace with appropriate service for fetching dashboard overview
+        staleTime: 10 * 60 * 1000, // Cache for 10 minutes
+        refetchOnWindowFocus: false, // Don't refetch on window focus to reduce unnecessary calls
     });
 }
 
@@ -18,7 +20,9 @@ export const useDashboardOverview = (filters?: TdashboardFilter) => {
 export const useOrganizationInsights = (filters?: TdashboardFilter) => {
     return useQuery({
         queryKey: DashboardKeys.overview(),
-        queryFn: () => fetchOrganizationInsights({}), // Replace with appropriate service for fetching organization insights
+        queryFn: () => fetchOrganizationInsights({}),
+        staleTime: 10 * 60 * 1000, // Cache for 10 minutes
+        refetchOnWindowFocus: false, // Don't refetch on window focus to reduce unnecessary calls
     });
 }
 
@@ -26,5 +30,7 @@ export const useSystemInsights = (filters?: TdashboardFilter) => {
     return useQuery({
         queryKey: DashboardKeys.overview(),
         queryFn: () => fetchSystemInsights({}), // Replace with appropriate service for fetching system insights
+        staleTime: 10 * 60 * 1000, // Cache for 10 minutes
+        refetchOnWindowFocus: false, // Don't refetch on window focus to reduce unnecessary calls
     });
 }
