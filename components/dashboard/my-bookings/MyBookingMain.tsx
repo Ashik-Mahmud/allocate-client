@@ -19,6 +19,7 @@ const MyBookingMain = () => {
     const [limit, setLimit] = React.useState<number>(10);
     const [page, setPage] = React.useState<number>(1);
     const [isOpenCancelDialog, setIsOpenCancelDialog] = React.useState(false);
+    const [isOpenMarkCompletedDialog, setIsOpenMarkCompletedDialog] = React.useState(false);
     const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
     const debouncedSearch = useDebounce(searchTerm, 500);
     const { data: apiData, isLoading, isFetching } = useFetchMyBookings({
@@ -33,6 +34,25 @@ const MyBookingMain = () => {
     const totalPages = pagination?.totalPages ?? 1;
     const currentPage = pagination?.page ?? page;
     const total = pagination?.total ?? 0;
+
+
+    //handle mark as completed
+    const statusMutation = useChangeBookingStatus();
+    const handleMarkAsCompleted = async (booking: Booking, status: BookingStatus) => {
+        if (booking?.status === BookingStatus.CHECKED_IN) {
+            const result = await statusMutation.mutateAsync({
+                bookingId: booking.id,
+                payload: {
+                    status: status
+                }
+            });
+            if (result?.success) {
+                toast.success(`${booking.resource?.name} has been ${status.toLowerCase()} successfully`);
+                setIsOpenMarkCompletedDialog(false);
+                setSelectedBooking(null);
+            }
+        }
+    }
 
 
     return (
@@ -132,7 +152,7 @@ const MyBookingMain = () => {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {
-                            bookings.map((booking: Booking) => (
+                            bookings?.map((booking: Booking) => (
                                 <BookingCard
                                     key={booking?.id}
                                     booking={booking!}
@@ -141,6 +161,10 @@ const MyBookingMain = () => {
                                         setIsOpenCancelDialog(true);
                                     }}
                                     onUpdateNotes={() => { }}
+                                    onMarkCompleted={(id) => {
+                                        setSelectedBooking(booking);
+                                        setIsOpenMarkCompletedDialog(true);
+                                    }}
 
                                 />
                             ))
@@ -195,6 +219,22 @@ const MyBookingMain = () => {
 
             />
 
+            {/* Mark as Completed Dialog */}
+            <AllocateConfirmationAlert
+                open={isOpenMarkCompletedDialog}
+                onOpenChange={setIsOpenMarkCompletedDialog}
+                title="Mark booking as completed"
+                description="Are you sure you want to perform this action?"
+                confirmText="Yes, Confirm"
+                variant='default'
+                onConfirm={() => {
+                    if (selectedBooking) {
+                        handleMarkAsCompleted(selectedBooking, BookingStatus.COMPLETED);
+                    }
+
+
+                }}
+            />
 
         </div>
     )

@@ -35,8 +35,9 @@ export const useChangeBookingStatus = () => {
     return useMutation({
         mutationFn: async ({ bookingId, payload }: { bookingId: string; payload: UpdateBookingStatusPayload }) =>
             changeBookingStatusService(bookingId, payload),
-        onSuccess: async  (_response, variables) => {
+        onSuccess: async (_response, variables) => {
             return await Promise.all([
+                queryClient.invalidateQueries({ queryKey: BookingKeys.all }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),

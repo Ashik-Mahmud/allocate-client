@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { Clock, Calendar, XCircle, Coins, Eye } from 'lucide-react'
+import { Clock, Calendar, XCircle, Coins, Eye, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils/cn'
 import { format } from 'date-fns'
@@ -15,9 +15,10 @@ interface BookingCardProps {
     booking: Booking | any;
     onCancel: (id: string) => void;
     onUpdateNotes: (id: string, notes: string) => void;
+    onMarkCompleted?: (id: string) => void;
 }
 
-const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => {
+const BookingCard = ({ booking, onCancel, onUpdateNotes, onMarkCompleted }: BookingCardProps) => {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const startTime = new Date(booking.start_time);
     const endTime = new Date(booking.end_time);
@@ -70,7 +71,7 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
                         View & Edit details
                     </Button>
 
-                    {booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED' && (
+                    {booking.status !== BookingStatus.CANCELLED && booking.status !== BookingStatus.COMPLETED && booking.status !== BookingStatus.CHECKED_IN && (
                         <Button
                             variant="ghost"
                             onClick={() => onCancel(booking.id)}
@@ -80,6 +81,22 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
                             Cancel Booking
                         </Button>
                     )}
+                    {
+                        booking.status === BookingStatus.CHECKED_IN && (
+                            <Button
+                                variant="ghost"
+                                onClick={() => {
+                                    if (onMarkCompleted) {
+                                        onMarkCompleted(booking.id);
+                                    }
+                                }}
+                                className="px-3 cursor-pointer rounded-xl h-10 bg-emerald-100/50 text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10"
+                            >
+                                <CheckCircle className="w-4 h-4" />
+                                Mark as Completed
+                            </Button>
+                        )
+                    }
                 </div>
             </div>
 

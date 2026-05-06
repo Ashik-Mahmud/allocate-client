@@ -34,8 +34,8 @@ const BookingManagementMain = (props: Props) => {
     const [isOpenCancelDialog, setIsOpenCancelDialog] = React.useState(false);
 
     const [bookingToCancel, setBookingToCancel] = React.useState<Booking | null>(null);
-
     const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = React.useState(false);
+    const [isOpenMarkCompletedDialog, setIsOpenMarkCompletedDialog] = React.useState(false);
 
 
     const { data, isLoading, isError } = useFetchAllBookings({
@@ -65,7 +65,7 @@ const BookingManagementMain = (props: Props) => {
     };
 
 
-    const handleConfirmBooking = async (booking?: Booking) => {
+    const handleConfirmBooking = async (booking?: Booking, status: BookingStatus = BookingStatus.CONFIRMED) => {
         const selectedBooking = booking;
         if (selectedBooking) {
             console.log(`Confirming booking ${selectedBooking.id}`);
@@ -73,15 +73,16 @@ const BookingManagementMain = (props: Props) => {
             const result = await statusMutation.mutateAsync({
                 bookingId: selectedBooking.id,
                 payload: {
-                    status: BookingStatus.CONFIRMED
+                    status: status
                 }
             });
 
             if (result?.success) {
-                toast.success(`${selectedBooking.resource?.name} has been confirmed successfully`);
+                toast.success(`${selectedBooking.resource?.name} has been ${status.toLowerCase()} successfully`);
                 setIsOpenConfirmationDialog(false);
                 setSelectedBooking(null);
                 setIsOpenViewDetails(false);
+                setIsOpenMarkCompletedDialog(false);
             }
         }
     };
@@ -276,6 +277,8 @@ const BookingManagementMain = (props: Props) => {
                                 onMarkCompleted={() => {
                                     console.log(`Marking booking ${booking.id} as completed`);
                                     // TODO: Call API to mark as completed
+                                    setIsOpenMarkCompletedDialog(true);
+                                    setSelectedBooking(booking);
                                 }}
                                 onReschedule={() => {
                                     console.log(`Rescheduling booking ${booking.id}`);
@@ -399,7 +402,7 @@ const BookingManagementMain = (props: Props) => {
                             <button
                                 onClick={() => {
                                     if (selectedBooking) {
-                                        handleConfirmBooking(selectedBooking);
+                                        handleConfirmBooking(selectedBooking, BookingStatus.CONFIRMED);
                                     }
                                 }}
                                 disabled={statusMutation.isPending}
@@ -432,20 +435,20 @@ const BookingManagementMain = (props: Props) => {
 
 
 
-            {/* <AllocateConfirmationAlert
-                open={isOpenConfirmationDialog}
-                onOpenChange={setIsOpenConfirmationDialog}
-                title="Confirm Action"
+            <AllocateConfirmationAlert
+                open={isOpenMarkCompletedDialog}
+                onOpenChange={setIsOpenMarkCompletedDialog}
+                title="Mark booking as completed"
                 description="Are you sure you want to perform this action?"
                 confirmText="Yes, Confirm"
                 variant='default'
                 onConfirm={() => {
-                    if (bookingToConfirm) {
-                        handleConfirmBooking(bookingToConfirm);
+                    if (selectedBooking) {
+                        handleConfirmBooking(selectedBooking, BookingStatus.COMPLETED);
                     }
-                    setIsOpenConfirmationDialog(false);
+                    setIsOpenMarkCompletedDialog(false);
                 }}
-            /> */}
+            />
         </div>
     )
 }
