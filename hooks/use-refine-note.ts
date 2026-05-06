@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useRefineNote = () => {
+export const useRefineNote = (isPaid?: boolean) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -14,7 +14,7 @@ export const useRefineNote = () => {
             const response = await fetch("/api/refine-note", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: text }),
+                body: JSON.stringify({ prompt: text, isPaid: isPaid ?? false }),
             });
 
             const data = await response.json();

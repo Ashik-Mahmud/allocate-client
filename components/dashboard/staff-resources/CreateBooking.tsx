@@ -3,13 +3,14 @@ import React, { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info, Sparkle, Loader2, AlertCircle } from 'lucide-react'
+import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info, Sparkle, Loader2, AlertCircle, Lock } from 'lucide-react'
 import { Resource } from '@/types/resources'
 import { cn } from '@/lib/utils/cn'
 import { format } from 'date-fns'
 import { useCurrentUser } from '@/features/auth'
 import { formatCalendarDate, formatDateTimeLocalInTimeZone, formatTimeInTimeZone, parseDateTimeLocalInTimeZone } from '@/lib/utils/timezone-date'
 import { useRefineNote } from '@/hooks/use-refine-note';
+import { PlanType } from '@/types/organization';
 
 type CreateBookingPayload = {
     resource_id: string;
@@ -73,11 +74,13 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
         });
     };
 
+    const isPaidUser = user?.organization?.plan_type !== PlanType.FREE;
     const [notes, setNotes] = useState("");
-    const { refineNote, isLoading, error: refineError } = useRefineNote();
+    const { refineNote, isLoading, error: refineError } = useRefineNote(isPaidUser);
 
     const handleRefineClick = async () => {
-        const refinedText = await refineNote(notes);;
+        if (!isPaidUser) return;
+        const refinedText = await refineNote(notes);
         console.log(refinedText, 'refinedText')
         if (refinedText) {
             setNotes(refinedText);
@@ -193,25 +196,30 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         </div>
                     </div> */}
 
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between w-full">
+                    <div className="space-y-2 relative">
+                        <div className="flex items-center justify-between w-full ">
                             <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Notes</label>
 
                             <button
                                 type="button"
                                 onClick={handleRefineClick}
-                                disabled={isLoading || notes.length < 5}
-                                className={`text-xs transition-colors flex items-center gap-1 ${isLoading || notes.length < 5
-                                    ? "text-slate-300 cursor-not-allowed"
-                                    : "text-orange-400 hover:text-orange-600 cursor-pointer"
+                                disabled={!isPaidUser || isLoading || notes.length < 5}
+                                className={`text-xs transition-all flex items-center gap-1 px-2 py-1 rounded-lg ${!isPaidUser
+                                    ? "text-slate-400 bg-slate-100 dark:bg-slate-800 cursor-not-allowed opacity-70"
+                                    : isLoading || notes.length < 5
+                                        ? "text-slate-300 cursor-not-allowed"
+                                        : "text-orange-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/30 cursor-pointer"
                                     }`}
                             >
-                                {isLoading ? (
+                                {!isPaidUser ? (
+                                    <Lock className="w-3 h-3" />
+                                ) : isLoading ? (
                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
                                 ) : (
                                     <Sparkle className="w-3.5 h-3.5" />
                                 )}
-                                {isLoading ? "Refining..." : "Refine with AI"}
+
+                                {!isPaidUser ? "Upgrade to use AI" : isLoading ? "Refining..." : "Refine with AI"}
                             </button>
                         </div>
                         <Textarea
@@ -221,6 +229,12 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                         />
+                        {!isPaidUser && (
+                            <div className="absolute bottom-2 right-3">
+                                <span className="text-[9px] text-slate-400 italic">AI Refinement is a Pro feature</span>
+                            </div>
+                        )}
+
                         {refineError && (
                             <p className="text-[10px] text-red-500 flex items-center gap-1 mt-1 ml-1">
                                 <AlertCircle className="w-3 h-3" />
@@ -279,8 +293,8 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         View Other Slots
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     )
 }
 

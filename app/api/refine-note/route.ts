@@ -13,12 +13,23 @@ const ratelimit = new Ratelimit({
     limiter: Ratelimit.slidingWindow(5, "10 m"),
 });
 export async function POST(req: Request) {
-    const { prompt } = await req.json();
+    const { prompt, isPaid } = await req.json();
 
+    // If the user is not a paid user, we can apply a stricter rate limit or return an error
+    if (!isPaid) {
+        return NextResponse.json(
+            { error: "Refinement is only available for paid users." },
+            { status: 403 }
+        );
+    }
+
+    // Basic validation
     if (!prompt) return NextResponse.json({ error: "No prompt provided" }, { status: 400 });
+
+
+    // Rate limiting based on IP address
     const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
     const { success } = await ratelimit.limit(ip);
-
     if (!success) {
         return NextResponse.json(
             { error: "Too many requests. Please try again later." },
