@@ -1,117 +1,129 @@
 "use client"
 import { useOrganizationInsights } from '@/features/dashboard/hooks'
-import { BOOKING_STATUS_CONFIG } from '@/types/booking'
-import { AlertCircle, ArrowUpRight, BookOpen, CreditCard, Users } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
+import { OrgHeader } from './OrgHeader'
+import { MetricsSummary } from './MetricsSummary'
+import { RecentActivity } from './RecentActivity'
+import { LowCreditAlerts } from './LowCreditAlerts'
+import { ActivityDrawer } from './ActivityDrawer'
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/constants/routes';
+import AssignCredits from '../credit-management/assignCredits';
+import { useAssignCreditsToMultipleStaffMutation } from '@/features/staff';
+import { toast } from 'sonner';
+import { useCurrentUser } from '@/features/auth';
 
 type Props = {}
 
 const OrgDashboardOverview = (props: Props) => {
+    const { user } = useCurrentUser()
+    const router = useRouter()
+    const [showActivityDrawer, setShowActivityDrawer] = useState(false)
+    const [assignOpen, setAssignOpen] = useState(false)
+    const [selectedStaffIds, setSelectedStaffIds] = useState<string[]>([])
 
-    const orgInsights = useOrganizationInsights();
-    const data: any = orgInsights?.data?.insights;
-    const metrics = data?.metrics;
-    const recentStaffActivity = data?.recentStaffActivity || [];
-    const lowCreditAlerts = data?.lowCreditAlerts || [];
+    const orgInsights = useOrganizationInsights()
+    const assignCreditsMutation = useAssignCreditsToMultipleStaffMutation();
 
-    return (<div className="p-6 bg-slate-50 dark:bg-slate-950 min-h-screen font-sans">
-        {/* Header Section */}
-        <div className="mb-8 flex justify-between items-end">
-            <div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                    {data?.organization?.name} Dashboard
-                </h1>
-                <p className="text-slate-500 text-sm">Overview of your workforce and resources</p>
+    const data: any = orgInsights?.data?.insights
+    const metrics = data?.metrics
+    const recentStaffActivity = data?.recentStaffActivity || []
+    const lowCreditAlerts = data?.lowCreditAlerts || []
+
+
+    const handleManageCredits = () => {
+        // TODO: Navigate to credit management
+        console.log('Navigate to credit management')
+        router.push(ROUTES.dashboardOrgAdmin.creditManagement)
+    }
+
+    const handleTopUp = (userId: string) => {
+        // TODO: Open top-up modal
+        // console.log('Top up for user:', userId)
+        setSelectedStaffIds([userId])
+        setAssignOpen(true)
+    }
+
+    const handleViewAllActivity = () => {
+        setShowActivityDrawer(true)
+    }
+
+
+
+    const handleAssignSubmit = async (data: { staffCredits: { staff_id: string; credits: number }[] }) => {
+        try {
+            const payload = {
+                staffCredits: data.staffCredits.map((item) => ({
+                    staff_id: item.staff_id,
+                    credits: item.credits,
+                })),
+            };
+
+            const response = await assignCreditsMutation.mutateAsync(payload);
+
+            if (response?.success) {
+                toast.success(`Successfully assigned credits to ${payload.staffCredits.length} staff member(s).`);
+                setAssignOpen(false);
+                setSelectedStaffIds([]);
+            }
+        } catch (error: any) {
+            toast.error(error?.message || 'Failed to assign credits.');
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-50 to-blue-50/30 dark:from-slate-950 dark:via-slate-950 dark:to-blue-950/20 font-sans">
+            <div className="p-4 md:p-6 lg:p-8 mx-auto">
+                {/* Header */}
+                <OrgHeader organizationName={data?.organization?.name} onManageCredits={handleManageCredits} />
+
+                {/* Metrics Summary Grid */}
+                <MetricsSummary
+                    totalStaff={metrics?.totalStaff || 0}
+                    organizationCreditPool={metrics?.organizationCreditPool || 0}
+                    totalCreditsAssigned={metrics?.totalCreditsAssigned || 0}
+                    lowCreditAlertsCount={metrics?.lowCreditAlertsCount || 0}
+                    totalBookings={metrics?.totalBookings || 0}
+                    upcomingBookings={metrics?.upcomingBookings || 0}
+                />
+
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    {/* Recent Activity - Spans 2 cols on desktop */}
+                    <div className="lg:col-span-2">
+                        <RecentActivity activities={recentStaffActivity} onViewAll={handleViewAllActivity} />
+                    </div>
+
+                    {/* Low Credit Alerts - Right Column */}
+                    <div>
+                        <LowCreditAlerts
+                            alerts={lowCreditAlerts}
+                            count={metrics?.lowCreditAlertsCount || 0}
+                            onTopUp={handleTopUp}
+                        />
+                    </div>
+                </div>
             </div>
-            <button className="bg-slate-900 dark:bg-white dark:text-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:opacity-90 transition-all">
-                Manage Credits <ArrowUpRight size={16} />
-            </button>
-        </div>
 
-        {/* 1. Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <MetricCard title="Total Staff" value={metrics?.totalStaff} icon={<Users size={20} />} />
-            <MetricCard
-                title="Organization Pool"
-                value={`${metrics?.organizationCreditPool} Cr`}
-                icon={<CreditCard size={20} />}
-                isCritical={metrics?.organizationCreditPool < 50}
+            {/* Activity Drawer */}
+            <ActivityDrawer
+                isOpen={showActivityDrawer}
+                activities={recentStaffActivity}
+                onClose={() => setShowActivityDrawer(false)}
             />
-            <MetricCard title="Total Bookings" value={metrics?.totalBookings} icon={<BookOpen size={20} />} />
-            <MetricCard title="Low Credit Alerts" value={metrics?.lowCreditAlertsCount} icon={<AlertCircle size={20} />} />
+            <AssignCredits
+                open={assignOpen}
+                onOpenChange={setAssignOpen}
+                selectedStaffIds={selectedStaffIds}
+                onSubmit={handleAssignSubmit}
+                isLoading={assignCreditsMutation.isPending}
+                orgCreditPool={user?.organization?.credit_pool || 0}
+                position='bottom'
+                error={assignCreditsMutation.error?.message}
+            />
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* 2. Recent Activity - Left Column (Main) */}
-            <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm">
-                <h2 className="text-lg font-semibold mb-4">Recent Staff Activity</h2>
-                <div className="space-y-6">
-                    {recentStaffActivity.map((activity: any, idx: number) => (
-                        <div key={idx} className="flex gap-4 items-start">
-                            <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${BOOKING_STATUS_CONFIG?.[activity.status as keyof typeof BOOKING_STATUS_CONFIG].color}`} />
-                            <div className="flex-1">
-                                <p className="text-sm text-slate-700 dark:text-slate-300">
-                                    <span className="font-bold">{activity.staffName}</span> {activity.status.toLowerCase()}
-                                    <span className="font-medium text-slate-900 dark:text-white"> {activity.resourceName}</span>
-                                </p>
-                                <p className="text-xs text-slate-400 mt-1">{activity.message}</p>
-                            </div>
-                            <span className="text-xs text-slate-400 font-medium">
-                                {new Date(activity.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* 3. Action Center - Right Column */}
-            <div className="space-y-6">
-                {/* Low Credit Alerts */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="font-semibold flex items-center gap-2 text-rose-600">
-                            <AlertCircle size={18} /> Credit Alerts
-                        </h2>
-                    </div>
-                    <div className="space-y-3">
-                        {lowCreditAlerts.map((user: any) => (
-                            <div key={user.id} className="flex items-center justify-between p-2 rounded-lg bg-rose-50/50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30">
-                                <div>
-                                    <p className="text-xs font-bold text-slate-900 dark:text-slate-200">{user.name}</p>
-                                    <p className="text-[10px] text-slate-500">{user.email}</p>
-                                </div>
-                                <button className="text-[10px] bg-white dark:bg-slate-800 border border-rose-200 text-rose-600 px-2 py-1 rounded font-bold hover:bg-rose-600 hover:text-white transition-colors">
-                                    Top Up
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    );
+    )
 }
 
 export default OrgDashboardOverview
-
-// Sub-components
-type MetricCardProps = {
-    title: string;
-    value: string | number;
-    icon: React.ReactNode;
-    isCritical?: boolean;
-}
-const MetricCard = ({ title, value, icon, isCritical }: MetricCardProps) => (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-xl shadow-sm">
-        <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
-                {icon}
-            </div>
-            {isCritical && <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-pulse"></span>}
-        </div>
-        <p className="text-sm font-medium text-slate-500">{title}</p>
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{value}</h3>
-    </div>
-);
 
