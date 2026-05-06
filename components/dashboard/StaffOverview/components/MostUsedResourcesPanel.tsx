@@ -1,14 +1,35 @@
-import { Landmark } from 'lucide-react'
+"use client"
+import { Landmark, Plus, Zap } from 'lucide-react'
 import { Panel, EmptyInline } from './SharedComponents'
 import { StaffDashboardData } from '@/types/dashboard'
 import BookingStatusBadge from '../../my-bookings/BookingStatus';
 import { BookingStatus } from '@/types/booking';
+import { useEffect, useState } from 'react';
+import RescheduleBooking from '../../booking-management/RescheduleBooking';
+import { Resource } from '@/types/resources';
+import { useResourceByIdQuery } from '@/features/resources';
 
 type MostUsedResourcesPanelProps = {
     resources: StaffDashboardData['mostUsedResources']
 }
 
 export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProps) {
+
+    const [openQuickBookModal, setIsOpenQuickBookModal] = useState(false);
+    const [selectedResourceId, setSelectedResourceId] = useState<string | null>(null);
+
+    // handle quick book
+    const handleQuickBook = (resource: StaffDashboardData['mostUsedResources'][number]) => {
+        // Open the quick book modal and pass the selected resource
+        setIsOpenQuickBookModal(true);
+        setSelectedResourceId(resource.id);
+        // You can also set the selected resource in state if needed for the modal
+    }
+
+    const resource = useResourceByIdQuery(selectedResourceId!);
+
+
+
     return (
         <Panel title="Most used resources" description="Your top 5 most repeated resources.">
             <div className="space-y-3">
@@ -16,50 +37,46 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
                     resources?.map((resource) => (
                         <div
                             key={resource.id}
-                            className="flex items-center flex-wrap gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-2.5 transition-colors hover:bg-slate-100/50 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:bg-slate-800/50 sm:p-3"
+                            className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-2.5 transition-all hover:bg-slate-100/50 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:bg-slate-800/50"
                         >
-                            {/* Image Container: Shrinks slightly on mobile to save space */}
-                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 sm:h-14 sm:w-14 sm:rounded-2xl">
+                            {/* 1. Image */}
+                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
                                 {resource?.image ? (
-                                    <img
-                                        src={resource?.image}
-                                        alt={resource?.name}
-                                        className="h-full w-full object-cover"
-                                        loading="lazy"
-                                    />
+                                    <img src={resource?.image} alt={resource?.name} className="h-full w-full object-cover" />
                                 ) : (
                                     <div className="flex h-full w-full items-center justify-center text-slate-400">
-                                        <Landmark className="size-5" aria-hidden="true" />
+                                        <Landmark className="size-5" />
                                     </div>
                                 )}
                             </div>
 
-                            {/* Content: Takes up remaining space */}
+                            {/* 2. Content */}
                             <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50 sm:text-base">
+                                <p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
                                     {resource?.name}
                                 </p>
-                                {
-                                    resource?.isOccupied ? (
-                                    <div className="w-max">
-                                        <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
-                                    </div>
-                                ) : (<p className="truncate text-xs capitalize text-slate-500 dark:text-slate-400 sm:text-sm">
-                                        {resource?.type?.replaceAll('_', ' ')?.toLowerCase()}
-                                    </p>)
-                                }
-
+                                <div className="flex items-center gap-2">
+                                    <p className="truncate text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                        {resource?.usageCount} uses
+                                    </p>
+                                    {resource?.isOccupied && <span className="h-1 w-1 rounded-full bg-orange-500" />}
+                                </div>
                             </div>
 
-                            {/* Stats Badge: Minimalist on mobile, full detail on desktop */}
-                            <div className="shrink-0 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-center dark:border-slate-800 dark:bg-slate-950 sm:rounded-2xl sm:px-3 sm:py-2 sm:text-right">
-                                <p className="hidden text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 sm:block">
-                                    uses
-                                </p>
-                                <p className="text-sm font-bold text-slate-950 dark:text-slate-50">
-                                    {resource?.usageCount}
-                                    <span className="ml-1 text-[10px] font-medium text-slate-400 sm:hidden">pts</span>
-                                </p>
+                            {/* 3. Minimal Action Section */}
+                            <div className="flex items-center gap-2">
+                                {resource?.isOccupied ? <BookingStatusBadge status={BookingStatus.CHECKED_IN} /> : <button
+                                    onClick={() => handleQuickBook(resource)}
+                                    disabled={resource?.isOccupied}
+                                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all
+                ${resource?.isOccupied
+                                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed dark:bg-slate-800 dark:text-slate-600'
+                                            : 'bg-primary text-white hover:bg-primary active:scale-95 dark:bg-primary cursor-pointer'
+                                        }`}
+                                >
+                                    <Plus className="size-3.5" />
+                                    <span>Book</span>
+                                </button>}
                             </div>
                         </div>
                     ))
@@ -67,6 +84,15 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
                     <EmptyInline text="No frequently used resources yet." />
                 )}
             </div>
+            {(
+                <RescheduleBooking
+                    isOpenBookingDialog={openQuickBookModal}
+                    setIsOpenBookingDialog={setIsOpenQuickBookModal}
+                    setDialogResource={() => { }}
+                    dialogResource={resource?.data?.data as Resource}
+                    type="rebook"
+                />
+            )}
         </Panel>
     )
 }

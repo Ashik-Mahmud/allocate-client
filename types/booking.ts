@@ -96,37 +96,37 @@ export interface BookingResourceCalendarResponse {
 export const BOOKING_STATUS_CONFIG = {
     [BookingStatus.PENDING]: {
         label: "Pending",
-        color: "text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:text-amber-400",
+        color: "text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:border-amber-400 dark:text-amber-400",
         icon: Hourglass,
     },
     [BookingStatus.CONFIRMED]: {
         label: "Confirmed",
-        color: "text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400",
+        color: "text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-400 dark:text-emerald-400",
         icon: CheckCircle2,
     },
     [BookingStatus.REJECTED]: {
         label: "Rejected",
-        color: "text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400",
+        color: "text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-400 dark:text-rose-400",
         icon: Ban,
     },
     [BookingStatus.CANCELLED]: {
         label: "Cancelled",
-        color: "text-slate-500 bg-slate-50 border-slate-100 dark:bg-slate-800 dark:text-slate-400",
+        color: "text-slate-500 bg-slate-50 border-slate-100 dark:bg-slate-800 dark:border-slate-400 dark:text-slate-400",
         icon: XCircle,
     },
     [BookingStatus.COMPLETED]: {
         label: "Completed",
-        color: "text-blue-600 bg-blue-50 border-blue-100 dark:bg-blue-500/10 dark:text-blue-400",
+        color: "text-blue-600 bg-blue-50 border-blue-100 dark:bg-blue-500/10 dark:border-blue-400 dark:text-blue-400",
         icon: Clock,
     },
     [BookingStatus.CHECKED_IN]: {
         label: "Checked In",
-        color: "text-green-600 bg-green-50 border-green-100 dark:bg-green-500/10 dark:text-green-400",
+        color: "text-green-600 bg-green-50 border-green-100 dark:bg-green-500/10 dark:border-green-400 dark:text-green-400",
         icon: CheckCircle2,
     },
     [BookingStatus.BOOKING_REMINDER]: {
         label: "Booking Reminder",
-        color: "text-purple-600 bg-purple-50 border-purple-100 dark:bg-purple-500/10 dark:text-purple-400",
+        color: "text-purple-600 bg-purple-50 border-purple-100 dark:bg-purple-500/10 dark:border-purple-400 dark:text-purple-400",
         icon: Clock,
     },
 

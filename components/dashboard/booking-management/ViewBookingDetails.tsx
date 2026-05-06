@@ -1,6 +1,6 @@
 "use client"
 import { Booking, BookingStatus } from '@/types/booking'
-import { Calendar, Clock, User, ShieldCheck, CreditCard, Activity, Globe } from 'lucide-react'
+import { Calendar, Clock, User, ShieldCheck, CreditCard, Activity, Globe, Calendar1, CalendarCheck } from 'lucide-react'
 import BookingStatusBadge from '../my-bookings/BookingStatus'
 import { format } from 'date-fns'
 import { ConstantData } from '@/lib/constants/constant'
@@ -39,14 +39,20 @@ const ViewBookingDetails = ({ booking }: Props) => {
                 <div className="space-y-6">
                     <SectionTitle icon={<Calendar className="size-4" />} title="Reservation Details" />
 
-                    <div className="rounded-3xl border border-slate-100 bg-slate-50/50 p-5 dark:border-slate-800 dark:bg-slate-900/30">
+                    <div className="rounded-3xl border border-slate-100 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-900/30">
                         <div className="flex gap-4">
-                            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white shadow-sm dark:border-slate-700">
-                                <img
-                                    src={booking?.resource?.photo || '/placeholder.png'}
-                                    className="h-full w-full object-cover"
-                                    alt=""
-                                />
+                            <div className="h-20 w-20 grid place-items-center bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden rounded-2xl border border-white shadow-sm dark:border-slate-700">
+                               {
+                                booking?.resource?.photo ? (
+                                    <img
+                                        src={booking?.resource?.photo}
+                                        className="h-full w-full object-cover"
+                                        alt={booking?.resource?.name}
+                                    />
+                                ) : (
+                                     <Calendar className="m-auto size-6 text-slate-400" />
+                                )
+                               } 
                             </div>
                             <div className="space-y-1 flex-1 flex justify-between">
                                 <div className="flex flex-col gap-1 items-start">

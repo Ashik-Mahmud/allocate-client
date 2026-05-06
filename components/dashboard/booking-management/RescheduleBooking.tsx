@@ -69,6 +69,8 @@ const RescheduleBooking = ({
                 start: booking?.start_time ? new Date(booking.start_time).toISOString() : "",
                 end: booking?.end_time ? new Date(booking.end_time).toISOString() : ""
             });
+        }else{
+            setSelectedSlot(null);
         }
     }, [booking]);
 

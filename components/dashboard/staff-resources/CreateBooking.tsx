@@ -34,8 +34,8 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
 
     const { user } = useCurrentUser();
     const timeZone = user?.organization?.timezone || 'UTC';
-    const [startTime, setStartTime] = useState(selectedSlot.start);
-    const [endTime, setEndTime] = useState(selectedSlot.end);
+    const [startTime, setStartTime] = useState(selectedSlot?.start);
+    const [endTime, setEndTime] = useState(selectedSlot?.end);
     const [isEditing, setIsEditing] = useState(false);
 
     // Hourly rate in Credits
@@ -43,9 +43,9 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
 
     const { totalCredits, durationHrs } = useMemo(() => {
         const diff = new Date(endTime).getTime() - new Date(startTime).getTime();
-        const hrs = Math.max(0, diff / (1000 * 60 * 60));
+        const hrs = Math.max(0, diff / (1000 * 60 * 60)) || 0;
         return {
-            durationHrs: hrs.toFixed(1),
+            durationHrs: hrs.toFixed(1) || "0",
             totalCredits: Math.floor(hrs * creditRate)
         };
     }, [startTime, endTime, creditRate]);
