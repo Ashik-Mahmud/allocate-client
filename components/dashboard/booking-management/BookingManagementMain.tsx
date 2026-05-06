@@ -1,5 +1,5 @@
 "use client"
-import { useChangeBookingStatus, useFetchAllBookings } from '@/features/bookings'
+import { useChangeBookingStatus, useFetchAllBookings, useSendBookingReminder } from '@/features/bookings'
 import { Calendar, Filter, Search, X, ChevronLeft, ChevronRight, AlertCircle, Loader2, Lock, Sparkles } from 'lucide-react'
 import React from 'react'
 import BookingRow from './BookingRow'
@@ -36,6 +36,7 @@ const BookingManagementMain = (props: Props) => {
     const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null);
     const [isOpenFilters, setIsOpenFilters] = React.useState(false);
     const [isOpenCancelDialog, setIsOpenCancelDialog] = React.useState(false);
+    const [isOpenSendReminderDialog, setIsOpenSendReminderDialog] = React.useState(false);
 
     const [bookingToCancel, setBookingToCancel] = React.useState<Booking | null>(null);
     const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = React.useState(false);
@@ -54,6 +55,7 @@ const BookingManagementMain = (props: Props) => {
 
     })
     const statusMutation = useChangeBookingStatus()
+    const sendReminderMutation = useSendBookingReminder()
 
     const pagination = data?.pagination;
     const bookings = data?.data ?? [];
@@ -93,15 +95,19 @@ const BookingManagementMain = (props: Props) => {
     };
 
 
-    // handle rescheduling booking - open reschedule drawer with selected booking details
-
-
-
     // handle sending reminder - call API to send reminder for the booking and show toast on success
-
-
-
-
+    const handleSendReminder = async (booking?: Booking) => {
+        const selectedBooking = booking;
+        if (selectedBooking) {
+            console.log(`Sending reminder for booking ${selectedBooking.id}`);
+            const result = await sendReminderMutation.mutateAsync(selectedBooking.id);
+            if (result?.success) {
+                toast.success(`Reminder sent to ${selectedBooking?.user?.name} for ${selectedBooking.resource?.name} successfully`);
+                setIsOpenSendReminderDialog(false);
+                setSelectedBooking(null);
+            }
+        }
+    };
 
 
 
@@ -301,6 +307,8 @@ const BookingManagementMain = (props: Props) => {
                                 onSendReminder={() => {
                                     console.log(`Sending reminder for booking ${booking.id}`);
                                     // TODO: Call API to send reminder
+                                    setIsOpenSendReminderDialog(true);
+                                    setSelectedBooking(booking);
                                 }}
                             />
                         ))
@@ -454,6 +462,20 @@ const BookingManagementMain = (props: Props) => {
                         handleConfirmBooking(selectedBooking, BookingStatus.COMPLETED);
                     }
                     setIsOpenMarkCompletedDialog(false);
+                }}
+            />
+            <AllocateConfirmationAlert
+                open={isOpenSendReminderDialog}
+                onOpenChange={setIsOpenSendReminderDialog}
+                title="Send booking reminder"
+                description="Are you sure you want to send a reminder for this booking?"
+                confirmText="Yes, Send Reminder"
+                variant='default'
+                onConfirm={() => {
+                    if (selectedBooking) {
+                        handleSendReminder(selectedBooking);
+                    }
+
                 }}
             />
 
