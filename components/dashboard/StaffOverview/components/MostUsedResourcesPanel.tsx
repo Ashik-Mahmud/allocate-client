@@ -1,6 +1,8 @@
 import { Landmark } from 'lucide-react'
 import { Panel, EmptyInline } from './SharedComponents'
 import { StaffDashboardData } from '@/types/dashboard'
+import BookingStatusBadge from '../../my-bookings/BookingStatus';
+import { BookingStatus } from '@/types/booking';
 
 type MostUsedResourcesPanelProps = {
     resources: StaffDashboardData['mostUsedResources']
@@ -37,9 +39,16 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
                                 <p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50 sm:text-base">
                                     {resource?.name}
                                 </p>
-                                <p className="truncate text-xs capitalize text-slate-500 dark:text-slate-400 sm:text-sm">
-                                    {resource?.type?.replaceAll('_', ' ')?.toLowerCase()}
-                                </p>
+                                {
+                                    resource?.isOccupied ? (
+                                    <div className="w-max">
+                                        <BookingStatusBadge status={BookingStatus.CHECKED_IN} />
+                                    </div>
+                                ) : (<p className="truncate text-xs capitalize text-slate-500 dark:text-slate-400 sm:text-sm">
+                                        {resource?.type?.replaceAll('_', ' ')?.toLowerCase()}
+                                    </p>)
+                                }
+
                             </div>
 
                             {/* Stats Badge: Minimalist on mobile, full detail on desktop */}

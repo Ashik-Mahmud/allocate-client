@@ -2,6 +2,8 @@ import { Calendar, Check, Eye, X, Clock, MoreHorizontal, Ban, CheckCircle } from
 import BookingStatusBadge from "../my-bookings/BookingStatus"
 import { Booking, BookingStatus } from "@/types/booking"
 import AllocateDropdown from "@/components/shared/dropdown"
+import { useEffect, useState } from "react";
+import { useCurrentUser } from "@/features/auth";
 
 type Props = {
     booking: Booking;
@@ -115,7 +117,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                     <AllocateDropdown dropdownOptions={[
                         {
                             label: "Mark as Completed",
-                            onClick: () => { 
+                            onClick: () => {
                                 onMarkCompleted && onMarkCompleted(booking)
                             },
                             icon: CheckCircle,
@@ -123,7 +125,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                         },
                         {
                             label: "Reschedule",
-                            onClick: () => { 
+                            onClick: () => {
                                 onReschedule && onReschedule(booking)
                             },
                             icon: Calendar,
@@ -131,14 +133,14 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                         },
                         {
                             label: "View User Profile",
-                            onClick: () => { 
+                            onClick: () => {
                                 onViewUserProfile && onViewUserProfile(booking)
                             },
                             icon: Eye
                         },
                         {
                             label: "Send Reminder",
-                            onClick: () => { 
+                            onClick: () => {
                                 onSendReminder && onSendReminder(booking)
                             },
                             icon: Clock,
@@ -146,7 +148,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
                         },
                         {
                             label: "Cancel",
-                            onClick: () => { 
+                            onClick: () => {
                                 onCancel && onCancel(booking)
                             },
                             icon: Ban,
@@ -169,25 +171,41 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
 }
 
 function TimeInfo({ booking }: { booking: Booking }) {
-    const start = new Date(booking.start_time)
-    const end = new Date(booking.end_time)
+    // 1. Default to null or a placeholder to prevent hydration mismatch
+    const [formattedTime, setFormattedTime] = useState<string | null>(null)
+    const userData = useCurrentUser();
 
-    const timeOptions: Intl.DateTimeFormatOptions = {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-        timeZone: booking?.organization?.timezone || 'UTC',
-    }
+    useEffect(() => {
+        const start = new Date(booking.start_time)
+        const end = new Date(booking.end_time)
+        const tz = userData?.user?.organization?.timezone || 'UTC'
 
-    const dateOptions: Intl.DateTimeFormatOptions = {
-        month: 'short',
-        day: 'numeric',
-        timeZone: booking?.organization?.timezone || 'UTC',
-    }
+
+        const timeOptions: Intl.DateTimeFormatOptions = {
+            hour: 'numeric', // 'numeric' often looks better than '2-digit' for hours (e.g., "5" vs "05")
+            minute: '2-digit',
+            hour12: true,
+            timeZone: tz,
+        }
+
+        const dateOptions: Intl.DateTimeFormatOptions = {
+            month: 'short',
+            day: 'numeric',
+            timeZone: tz,
+        }
+
+        const dateStr = start.toLocaleDateString('en-US', dateOptions)
+        const startStr = start.toLocaleTimeString('en-US', timeOptions)
+        const endStr = end.toLocaleTimeString('en-US', timeOptions)
+
+        setFormattedTime(`${dateStr} • ${startStr} - ${endStr}`)
+    }, [booking])
+
+    if (!formattedTime) return <span className="tabular-nums">Loading...</span>
 
     return (
         <span className="tabular-nums">
-            {start.toLocaleDateString('en-US', dateOptions)} • {start.toLocaleTimeString('en-US', timeOptions)} - {end.toLocaleTimeString('en-US', timeOptions)}
+            {formattedTime}
         </span>
     )
 }

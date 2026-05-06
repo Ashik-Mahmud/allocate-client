@@ -61,7 +61,6 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-
         onSubmit({
             resource_id: resource.id,
             start_time: startTime,
@@ -81,12 +80,10 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
     const handleRefineClick = async () => {
         if (!isPaidUser) return;
         const refinedText = await refineNote(notes);
-        console.log(refinedText, 'refinedText')
         if (refinedText) {
             setNotes(refinedText);
         }
     };
-
 
     return (
         <div className="flex flex-col h-full px-2  mx-auto bg-white dark:bg-slate-950 antialiased animate-in fade-in duration-500">
@@ -150,8 +147,10 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                                     if (!e.target.value) return;
                                     const date = parseDateTimeLocalInTimeZone(e.target.value, timeZone);
                                     setStartTime(date.toISOString());
-                                    if (date.getTime() >= new Date(endTime).getTime()) {
-                                        setEndTime(new Date(date.getTime() + 30 * 60000).toISOString());
+                                    const currentEndDate = new Date(endTime);
+                                    if (date.getTime() >= currentEndDate.getTime()) {
+                                        const newEnd = new Date(date.getTime() + 30 * 60000);
+                                        setEndTime(newEnd.toISOString());
                                     }
                                 }}
                             />

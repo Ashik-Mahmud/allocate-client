@@ -1,6 +1,6 @@
 "use client"
 import { useChangeBookingStatus, useFetchAllBookings } from '@/features/bookings'
-import { Calendar, Filter, Search, X, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react'
+import { Calendar, Filter, Search, X, ChevronLeft, ChevronRight, AlertCircle, Loader2, Lock, Sparkles } from 'lucide-react'
 import React from 'react'
 import BookingRow from './BookingRow'
 import { Booking, BookingStatus } from '@/types/booking'
@@ -12,6 +12,7 @@ import AllocatePopover from '@/components/shared/allocate-popover'
 import { toast } from 'sonner'
 import { formatCalendarDateKey } from '@/lib/utils/timezone-date'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
+import { useRefineNote } from '@/hooks/use-refine-note';
 
 type Props = {}
 
@@ -49,6 +50,12 @@ const BookingManagementMain = (props: Props) => {
 
     const pagination = data?.pagination;
     const bookings = data?.data ?? [];
+
+
+    const isPaidUser = true; // TODO: Replace with actual check for paid user
+    const { refineNote, isLoading: isGeneratingReason } = useRefineNote(isPaidUser);
+
+
 
     const handleResetFilters = () => {
         setSearchTerm("");
@@ -101,6 +108,19 @@ const BookingManagementMain = (props: Props) => {
         }
     };
 
+
+    // handle rescheduling booking - open reschedule drawer with selected booking details
+
+
+
+    // handle sending reminder - call API to send reminder for the booking and show toast on success
+
+
+    // handle generate cancellation reason with AI - call refineNote with booking details and set the generated reason to cancelReason state
+    const handleGenerateCancelReason = async (booking: Booking) => {
+        const aiReason = await refineNote(`Generate a professional reason for cancelling this booking for the resource ${booking.resource?.name} scheduled on ${booking.start_time}. Keep it concise and relevant to the booking context.`);
+        if (aiReason) setCancelReason(aiReason);
+    };
 
 
 
@@ -402,33 +422,68 @@ const BookingManagementMain = (props: Props) => {
             </AllocateDrawer>
 
             {/* Cancel Confirmation Dialog */}
+            {/* Cancel Confirmation Dialog */}
             <AlertDialog open={isOpenCancelDialog} onOpenChange={setIsOpenCancelDialog}>
-                <AlertDialogContent>
-                    <AlertDialogTitle>Cancel Booking</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Are you sure you want to cancel this booking? This action cannot be undone.
-                    </AlertDialogDescription>
-                    <div className="mt-4">
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                            Cancellation Reason (Required)
-                        </label>
-                        <textarea
-                            value={cancelReason}
-                            onChange={(e) => setCancelReason(e.target.value)}
-                            placeholder="Please provide a reason for cancellation..."
-                            className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-800 dark:bg-slate-900"
-                            rows={3}
-                        />
-                    </div>
-                    <div className="mt-6 flex gap-2">
-                        <AlertDialogCancel className="flex-1">Keep Booking</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleCancelBooking}
-                            disabled={!cancelReason.trim() || statusMutation.isPending}
-                            className="flex-1 bg-red-600 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                            {statusMutation.isPending ? "Cancelling..." : "Cancel Booking"}
-                        </AlertDialogAction>
+                <AlertDialogContent className="max-w-100 rounded-2xl border-none p-6 shadow-xl">
+                    <div className="space-y-4">
+                        {/* Header */}
+                        <div className="space-y-1">
+                            <AlertDialogTitle className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                                Cancel Booking
+                            </AlertDialogTitle>
+                            <AlertDialogDescription className="text-sm text-slate-500">
+                                This will release your slot and notify the admin.
+                            </AlertDialogDescription>
+                        </div>
+
+                        {/* Input Section */}
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between px-1">
+                                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                                    Cancellation Reason
+                                </label>
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        handleGenerateCancelReason(bookingToCancel as Booking);
+                                    }}
+                                    disabled={!isPaidUser || isGeneratingReason}
+                                    className={`flex items-center gap-1 text-[11px] font-medium transition-all ${!isPaidUser
+                                        ? "text-slate-300 cursor-not-allowed"
+                                        : "text-orange-400 hover:text-orange-600"
+                                        }`}
+                                >
+                                    {!isPaidUser ? <Lock className="w-2.5 h-2.5" /> : <Sparkles className="w-3 h-3" />}
+                                    {isGeneratingReason ? "Generating..." : "Generate with AI"}
+                                </button>
+                            </div>
+
+                            <textarea
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                                placeholder="Why are you cancelling?"
+                                className="w-full resize-none rounded-xl border-none bg-slate-50 p-3 text-sm transition-all focus:ring-1 focus:ring-slate-200 dark:bg-slate-900 dark:focus:ring-slate-800"
+                                rows={3}
+                            />
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-3 pt-2">
+                            <AlertDialogCancel className="flex-1 rounded-xl border-none bg-slate-100 py-6 text-sm font-medium text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400">
+                                Keep Booking
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={handleCancelBooking}
+                                disabled={!cancelReason.trim() || statusMutation.isPending}
+                                className="flex-1 rounded-xl bg-red-500 py-6 text-sm font-medium text-white shadow-lg shadow-red-500/20 hover:bg-red-600 disabled:opacity-50"
+                            >
+                                {statusMutation.isPending ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    "Cancel Now"
+                                )}
+                            </AlertDialogAction>
+                        </div>
                     </div>
                 </AlertDialogContent>
             </AlertDialog>

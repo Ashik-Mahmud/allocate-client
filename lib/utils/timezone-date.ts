@@ -159,7 +159,9 @@ export function formatDateTimeLocalInTimeZone(dateValue: string | Date, timeZone
 
 export function parseDateTimeLocalInTimeZone(dateTimeLocal: string, timeZone?: string | null) {
   const resolvedTimeZone = resolveTimeZone(timeZone);
-  const [datePart, timePart] = dateTimeLocal.split("T");
+
+  const cleanInput = dateTimeLocal.replace(/(Z|[+-]\d{2}:?\d{2})$/i, "");
+  const [datePart, timePart] = cleanInput.split("T");
 
   if (!datePart || !timePart) {
     return new Date(dateTimeLocal);

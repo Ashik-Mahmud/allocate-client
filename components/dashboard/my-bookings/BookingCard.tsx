@@ -9,6 +9,7 @@ import { Booking, BookingStatus } from '@/types/booking'
 import BookingDetailsDialog from './BookingDetailsDialog'
 import StatusBadge from './BookingStatus'
 import BookingStatusBadge from './BookingStatus'
+import useTimezone from '@/hooks/use-timezone';
 
 interface BookingCardProps {
     booking: Booking | any;
@@ -20,7 +21,6 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const startTime = new Date(booking.start_time);
     const endTime = new Date(booking.end_time);
-
 
     return (
         <>
@@ -48,7 +48,7 @@ const BookingCard = ({ booking, onCancel, onUpdateNotes }: BookingCardProps) => 
                     <div className="space-y-0.5">
                         <p className="text-[9px] uppercase font-bold text-slate-400">Duration</p>
                         <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-                            {format(startTime, 'HH:mm')} - {format(endTime, 'HH:mm')}
+                            {format(startTime, 'hh:mm a')} - {format(endTime, 'hh:mm a')}
                         </p>
                     </div>
                     <div className="space-y-0.5 text-right">

@@ -10,6 +10,7 @@ import { useDebounce } from '@/hooks'
 import { Button } from '@/components/ui/button'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { toast } from 'sonner'
+import { useCurrentUser } from '@/features/auth';
 
 const MyBookingMain = () => {
     const [statusFilter, setStatusFilter] = React.useState<string>("");
