@@ -3,12 +3,13 @@ import React, { useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info } from 'lucide-react'
+import { Clock, Calendar, Coins, Zap, Edit2, ChevronRight, Info, Sparkle, Loader2, AlertCircle } from 'lucide-react'
 import { Resource } from '@/types/resources'
 import { cn } from '@/lib/utils/cn'
 import { format } from 'date-fns'
 import { useCurrentUser } from '@/features/auth'
 import { formatCalendarDate, formatDateTimeLocalInTimeZone, formatTimeInTimeZone, parseDateTimeLocalInTimeZone } from '@/lib/utils/timezone-date'
+import { useRefineNote } from '@/hooks/use-refine-note';
 
 type CreateBookingPayload = {
     resource_id: string;
@@ -59,6 +60,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+
         onSubmit({
             resource_id: resource.id,
             start_time: startTime,
@@ -69,6 +71,17 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
             //     dept: formData.get('dept') as string,
             // }
         });
+    };
+
+    const [notes, setNotes] = useState("");
+    const { refineNote, isLoading, error: refineError } = useRefineNote();
+
+    const handleRefineClick = async () => {
+        const refinedText = await refineNote(notes);;
+        console.log(refinedText, 'refinedText')
+        if (refinedText) {
+            setNotes(refinedText);
+        }
     };
 
 
@@ -181,12 +194,39 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                     </div> */}
 
                     <div className="space-y-2">
-                        <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Notes</label>
+                        <div className="flex items-center justify-between w-full">
+                            <label className="text-[11px] font-semibold text-slate-400 uppercase ml-1">Notes</label>
+
+                            <button
+                                type="button"
+                                onClick={handleRefineClick}
+                                disabled={isLoading || notes.length < 5}
+                                className={`text-xs transition-colors flex items-center gap-1 ${isLoading || notes.length < 5
+                                    ? "text-slate-300 cursor-not-allowed"
+                                    : "text-orange-400 hover:text-orange-600 cursor-pointer"
+                                    }`}
+                            >
+                                {isLoading ? (
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                    <Sparkle className="w-3.5 h-3.5" />
+                                )}
+                                {isLoading ? "Refining..." : "Refine with AI"}
+                            </button>
+                        </div>
                         <Textarea
                             name="notes"
                             placeholder="Any specific requirements?"
                             className="border bg-slate-50 dark:bg-slate-900 rounded-xl min-h-25 focus-visible:ring-1 focus-visible:ring-slate-200 resize-none"
+                            value={notes}
+                            onChange={(e) => setNotes(e.target.value)}
                         />
+                        {refineError && (
+                            <p className="text-[10px] text-red-500 flex items-center gap-1 mt-1 ml-1">
+                                <AlertCircle className="w-3 h-3" />
+                                {refineError}
+                            </p>
+                        )}
                     </div>
                 </div>
 
