@@ -29,8 +29,8 @@ export function OverviewHeader({ user }: OverviewHeaderProps) {
 
                 <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-slate-500 dark:text-slate-400">
                     <Chip label="personal scope" />
-                    <Chip label={user.email} />
-                    <Chip label={`User ${user.id.slice(0, 8)}`} />
+                    <Chip label={user?.email} />
+                    <Chip label={`User ${user?.id?.slice(0, 8)}`} />
                 </div>
             </div>
         </section>

@@ -22,10 +22,10 @@ export function LastTransactionSection({ metrics }: LastTransactionSectionProps)
         <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
                 <p className="truncate text-base font-medium text-slate-950 dark:text-slate-50">
-                    {metrics.lastTransaction.description}
+                    {metrics?.lastTransaction?.description}
                 </p>
                 <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                    {formatTransactionType(metrics.lastTransaction.type)} • {formatDateTime(metrics.lastTransaction.date)}
+                    {formatTransactionType(metrics?.lastTransaction?.type)} • {formatDateTime(metrics?.lastTransaction?.date)}
                 </p>
             </div>
 
@@ -33,7 +33,7 @@ export function LastTransactionSection({ metrics }: LastTransactionSectionProps)
             <div className="shrink-0 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-left sm:text-right dark:border-slate-800 dark:bg-slate-900">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Amount</p>
                 <p className="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
-                    {formatCredits(metrics.lastTransaction.amount)}
+                    {formatCredits(metrics?.lastTransaction?.amount)}
                 </p>
             </div>
         </div>

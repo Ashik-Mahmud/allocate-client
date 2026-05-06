@@ -19,7 +19,7 @@ const OrgDashboardOverview = (props: Props) => {
         <div className="mb-8 flex justify-between items-end">
             <div>
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                    {data.organization.name} Dashboard
+                    {data?.organization?.name} Dashboard
                 </h1>
                 <p className="text-slate-500 text-sm">Overview of your workforce and resources</p>
             </div>
@@ -30,15 +30,15 @@ const OrgDashboardOverview = (props: Props) => {
 
         {/* 1. Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <MetricCard title="Total Staff" value={metrics.totalStaff} icon={<Users size={20} />} />
+            <MetricCard title="Total Staff" value={metrics?.totalStaff} icon={<Users size={20} />} />
             <MetricCard
                 title="Organization Pool"
-                value={`${metrics.organizationCreditPool} Cr`}
+                value={`${metrics?.organizationCreditPool} Cr`}
                 icon={<CreditCard size={20} />}
-                isCritical={metrics.organizationCreditPool < 50}
+                isCritical={metrics?.organizationCreditPool < 50}
             />
-            <MetricCard title="Total Bookings" value={metrics.totalBookings} icon={<BookOpen size={20} />} />
-            <MetricCard title="Low Credit Alerts" value={metrics.lowCreditAlertsCount} icon={<AlertCircle size={20} />} />
+            <MetricCard title="Total Bookings" value={metrics?.totalBookings} icon={<BookOpen size={20} />} />
+            <MetricCard title="Low Credit Alerts" value={metrics?.lowCreditAlertsCount} icon={<AlertCircle size={20} />} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

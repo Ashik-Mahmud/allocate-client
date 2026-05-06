@@ -10,18 +10,18 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
     return (
         <Panel title="Most used resources" description="Your top 5 most repeated resources.">
             <div className="space-y-3">
-                {resources.length > 0 ? (
-                    resources.map((resource) => (
+                {resources?.length > 0 ? (
+                    resources?.map((resource) => (
                         <div
                             key={resource.id}
                             className="flex items-center flex-wrap gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/80 p-2.5 transition-colors hover:bg-slate-100/50 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:bg-slate-800/50 sm:p-3"
                         >
                             {/* Image Container: Shrinks slightly on mobile to save space */}
                             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 sm:h-14 sm:w-14 sm:rounded-2xl">
-                                {resource.image ? (
+                                {resource?.image ? (
                                     <img
-                                        src={resource.image}
-                                        alt={resource.name}
+                                        src={resource?.image}
+                                        alt={resource?.name}
                                         className="h-full w-full object-cover"
                                         loading="lazy"
                                     />
@@ -35,10 +35,10 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
                             {/* Content: Takes up remaining space */}
                             <div className="min-w-0 flex-1">
                                 <p className="truncate text-sm font-semibold text-slate-950 dark:text-slate-50 sm:text-base">
-                                    {resource.name}
+                                    {resource?.name}
                                 </p>
                                 <p className="truncate text-xs capitalize text-slate-500 dark:text-slate-400 sm:text-sm">
-                                    {resource.type.replaceAll('_', ' ').toLowerCase()}
+                                    {resource?.type?.replaceAll('_', ' ')?.toLowerCase()}
                                 </p>
                             </div>
 
@@ -48,7 +48,7 @@ export function MostUsedResourcesPanel({ resources }: MostUsedResourcesPanelProp
                                     uses
                                 </p>
                                 <p className="text-sm font-bold text-slate-950 dark:text-slate-50">
-                                    {resource.usageCount}
+                                    {resource?.usageCount}
                                     <span className="ml-1 text-[10px] font-medium text-slate-400 sm:hidden">pts</span>
                                 </p>
                             </div>
