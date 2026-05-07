@@ -52,7 +52,7 @@ export default async function DashboardLayout({
 
               <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white  dark:border-slate-800 dark:bg-slate-950">
                 <div className="min-h-full w-full h-full md:absolute inset-0 p-4 md:p-6">
-
+                    
                   {children}
                 </div>
               </div>

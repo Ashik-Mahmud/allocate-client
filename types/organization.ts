@@ -24,6 +24,30 @@ export enum PlanType {
   // Match these to your actual Prisma enum values
 }
 
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  REFUNDED = 'REFUNDED',
+}
+
+export interface Subscription {
+  id: string;
+  org_id: string;
+  // Relation field (Optional if you are not fetching it with 'include')
+  organization?: any; 
+  plan_name: PlanType;
+  start_date: Date | string;
+  end_date?: Date | string | null;
+  payment_status?: PaymentStatus | null;
+  is_active?: boolean | null;
+  last_reminder_sent?: Date | string | null;
+  
+  // Metadata / Timestamps
+  deletedAt?: Date | string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string | null;
+}
 export interface OrgSettings {
   notificationPreference: OrgNotificationPreference;
 }
@@ -54,6 +78,7 @@ export interface Organizations {
   users?: User[];
   resources?: Resources[];
   resourcesRules?: ResourcesRule[];
+  subscription?: Subscription | null;
   // Add other relation types as you define them:
   // subscriptions?: Subscription[];
   // notifications?: Notification[];

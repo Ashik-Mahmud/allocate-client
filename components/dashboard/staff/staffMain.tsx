@@ -19,6 +19,8 @@ import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/lib/constants/routes'
 import AssignCredits from '../credit-management/assignCredits'
 import { useCurrentUser } from '@/features/auth'
+import Loader from '@/components/shared/loader';
+import VerifyLoggedInUser from '@/components/shared/verify-user';
 
 export interface StaffListFilters {
     page?: number;
@@ -128,6 +130,20 @@ const StaffMain = () => {
     }
 
     const allowcateRevokeError = assignCredits?.error?.message || revokeCredits?.error?.message || '';
+
+
+
+    if (isLoading || isFetching) {
+        return (
+            <Loader type="component" />
+        );
+    }
+
+    if (!user?.is_verified) {
+        return (
+            <VerifyLoggedInUser className="mx-auto w-full" pageName="Staff Management" type="page" />
+        );
+    }
 
     return (
         <div className="space-y-6">

@@ -1,7 +1,7 @@
 "use client"
 
 import VerifyLoggedInUser from '@/components/shared/verify-user';
-import { useCurrentUserContext } from '@/features/auth';
+import { useCurrentUser, useCurrentUserContext } from '@/features/auth';
 import React from 'react'
 import { ResourcesPanel } from './resources-panel';
 import Loader from '@/components/shared/loader';
@@ -11,7 +11,7 @@ import AllocateDrawer from '@/components/shared/allocate-drawer';
 type Props = {}
 
 const ResourcesMain = (props: Props) => {
-    const { user, isFetching, isLoading } = useCurrentUserContext();
+    const { user, isFetching, isLoading } = useCurrentUser();
 
     if (isLoading || isFetching) {
         return (

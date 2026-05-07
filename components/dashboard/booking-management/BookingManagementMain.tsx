@@ -19,12 +19,16 @@ import RescheduleBooking from './RescheduleBooking';
 import { set } from 'date-fns';
 import { Resource } from '@/types/resources';
 import useTimezone from '@/hooks/use-timezone';
+import Loader from '@/components/shared/loader';
+import VerifyLoggedInUser from '@/components/shared/verify-user';
+import { useCurrentUser } from '@/features/auth';
 
 
 type Props = {}
 
 const BookingManagementMain = (props: Props) => {
 
+    const {user, isFetching, isLoading: userLoading  } = useCurrentUser();
     const [searchTerm, setSearchTerm] = React.useState("");
     const [statusFilter, setStatusFilter] = React.useState<string | undefined>(undefined);
     const [page, setPage] = React.useState(1);
@@ -109,6 +113,18 @@ const BookingManagementMain = (props: Props) => {
         }
     };
 
+
+    if (userLoading || isFetching) {
+        return (
+            <Loader type="component" />
+        );
+    }
+
+    if (!user?.is_verified) {
+        return (
+            <VerifyLoggedInUser className="mx-auto w-full" pageName="Booking Management" type="page" />
+        );
+    }
 
 
     return (

@@ -9,10 +9,11 @@ export function formatTransactionType(type: 'SPEND' | 'DEPOSIT') {
 }
 
 export function formatDateTime(value: string) {
+    
     return new Intl.DateTimeFormat('en-US', {
         dateStyle: 'medium',
         timeStyle: 'short',
-    }).format(new Date(value))
+    })?.format(new Date(value))
 }
 
 export function formatLastTransaction(date: string) {

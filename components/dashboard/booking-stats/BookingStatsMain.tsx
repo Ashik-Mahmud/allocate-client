@@ -9,6 +9,7 @@ import useTimezone from '@/hooks/use-timezone';
 import { parseDateTimeLocalInTimeZone } from '@/lib/utils/timezone-date';
 import CreditForecast from './CreditForecasting';
 import useSubscription from '@/hooks/use-subscription';
+import Loader from '@/components/shared/loader';
 
 type Props = {
 
@@ -87,7 +88,14 @@ const BookingStatsMain = (props: Props) => {
     }
 
     const data = stats?.data as BookingStatsResponse
-    console.log(stats)
+  
+    if(isLoading) {
+        return (
+            <div className="space-y-4">
+                <Loader type="component" />
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -115,10 +123,10 @@ const BookingStatsMain = (props: Props) => {
                         <select value={groupBy} onChange={(e) => setGroupBy(e.target.value as any)} className="h-9 rounded-xl border border-slate-200 bg-white dark:text-slate-400 dark:bg-indigo-900/10 dark:border-indigo-800/10 px-3 text-sm font-medium">
                             <option value="day">Day</option>
                             <option value="week" disabled={!isPaid}>Week 
-                                {!isPaid && <span className="text-xs text-amber-500 font-bold ml-1"> (Pro)</span>}
+                                {!isPaid && <> (Pro)</>}
                                 </option>
                             <option value="month" disabled={!isPaid}>Month 
-                                {!isPaid && <span className="text-xs text-amber-500 font-bold ml-1"> (Pro)</span>}
+                                {!isPaid && <> (Pro)</>}
 
                             </option>
                         </select>

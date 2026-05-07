@@ -88,7 +88,7 @@ const PremiumInsights = ({ premiumInsight }: Props) => {
                                     <span className="text-zinc-400">Utilization Intensity</span>
                                     <span className={Number(forecasting?.avgDailyBurn) > efficiency ? 'text-orange-500 animate-pulse' : 'text-indigo-500'}>
                                         {Number(forecasting?.avgDailyBurn) > efficiency ? 'Above Target' : 'Optimal'}
-                                        <span className="ml-1 opacity-70">({Number(forecasting?.avgDailyBurn).toFixed(1)} CR/Day)</span>
+                                        <span className="ml-1 opacity-70">({Number(forecasting?.avgDailyBurn || 0).toFixed(1)} CR/Day)</span>
                                     </span>
                                 </div>
 
@@ -99,14 +99,14 @@ const PremiumInsights = ({ premiumInsight }: Props) => {
                                             : 'bg-indigo-600 dark:bg-indigo-500'
                                             }`}
                                         style={{
-                                            width: `${Math.min((Number(forecasting?.avgDailyBurn) / efficiency) * 100, 100)}%`
+                                            width: `${Math.min((Number(forecasting?.avgDailyBurn || 0) / efficiency) * 100, 100)}%`
                                         }}
                                     />
                                 </div>
 
                                 {/* Subtle label for the percentage */}
                                 <p className="text-[9px] text-zinc-400 font-medium text-right uppercase">
-                                    {Math.round((Number(forecasting?.avgDailyBurn) / efficiency) * 100)}% Capacity Used
+                                    {Math.round((Number(forecasting?.avgDailyBurn || 0) / efficiency) * 100)}% Capacity Used
                                 </p>
                             </div>
                         </div>

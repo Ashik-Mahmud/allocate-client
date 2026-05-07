@@ -1,11 +1,13 @@
 import type { AppRole } from "@/lib/constants/roles";
-import type { Organizations } from "./organization";
+import type { Organizations, PlanType } from "./organization";
 
 export interface ApiErrorBody {
 	message?: string;
 	error?: string;
 	details?: unknown;
 }
+
+
 
 export interface User {
 	id?: string;
