@@ -118,7 +118,7 @@ const orgAdminNavigation: NavItem[] = [
     // },
     {
         label: "Booking stats",
-        description: "Track organization booking metrics",
+        description: "Track organization financial metrics",
         href: ROUTES.dashboardOrgAdmin.bookingStats,
         icon: CalendarCheck,
     },

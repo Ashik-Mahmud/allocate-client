@@ -100,12 +100,14 @@ export const fetchBookingResourceCalendar = async (resourceId: string, month: st
 
 // service to get booking stats
 export const fetchBookingStats = async (filters?: getBookingStatsFilters) => {
-    const query = new URLSearchParams({
-        startDate: filters?.startDate ?? "",
-        endDate: filters?.endDate ?? "",
-        groupBy: filters?.groupBy ?? "day",
-    }).toString();
-    return apiRequest<ApiResponse<Record<string, any>>>(`/bookings/stats?${query}`, {
+    const query = new URLSearchParams();
+
+    if (filters?.startDate) query.append("startDate", filters.startDate);
+    if (filters?.endDate) query.append("endDate", filters.endDate);
+    if (filters?.groupBy) query.append("groupBy", filters.groupBy);
+
+
+    return apiRequest<ApiResponse<Record<string, any>>>(`/bookings/stats?${query?.toString()}`, {
         method: "GET",
     });
 }

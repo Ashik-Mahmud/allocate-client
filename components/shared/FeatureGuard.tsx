@@ -112,25 +112,33 @@ export default function FeatureGuard({
                 <div className={
                     cn(
                         "",
-                        view === 'table' ? "relative flex flex-row w-full items-center justify-start  px-3" : "flex flex-col items-center text-center max-w-80  gap-3",
+                        view === 'table' ? "relative flex flex-row w-full items-center justify-between  px-3 " : "flex flex-col items-center text-center max-w-80  gap-3",
                     )
                 }>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                        <Lock className="size-4 text-slate-600 dark:text-slate-400" />
-                    </div>
-
-                    <div className={
+                    <div
+                     className={
                         cn(
-                            "space-y-1 px-4",
-                            view === 'table' ? "text-left" : "text-center"
+                            view === 'table' ? 'flex items-center gap-1' : 'items-center flex-col justify-center flex gap-3'
                         )
-                    }>
-                        <h4 className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-white uppercase">
-                            {title || "Premium Insights"}
-                        </h4>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400  leading-tight">
-                            {description || "Upgrade to a Pro plan to unlock premium insights."}
-                        </p>
+                     }
+                    >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <Lock className="size-4 text-slate-600 dark:text-slate-400" />
+                        </div>
+
+                        <div className={
+                            cn(
+                                "space-y-1 px-4",
+                                view === 'table' ? "text-left" : "text-center"
+                            )
+                        }>
+                            <h4 className="text-[13px] font-bold tracking-tight text-slate-900 dark:text-white uppercase">
+                                {title || "Premium Insights"}
+                            </h4>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400  leading-tight">
+                                {description || "Upgrade to a Pro plan to unlock premium insights."}
+                            </p>
+                        </div>
                     </div>
 
                     <Link

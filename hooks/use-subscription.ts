@@ -5,11 +5,12 @@ import React from 'react'
 type Props = {}
 
 const useSubscription = () => {
-    const { user, isLoading } = useCurrentUser()
+    const { user, isLoading, } = useCurrentUser()
     return {
         planType: user?.organization?.plan_type,
         isPaid: user?.organization?.plan_type !== PlanType.FREE,
-        isLoading
+        isLoading,
+        credit_pool: user?.organization?.credit_pool || 0,
     }
 }
 
