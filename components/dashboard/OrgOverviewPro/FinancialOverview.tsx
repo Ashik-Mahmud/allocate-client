@@ -78,7 +78,7 @@ export const FinancialOverview = ({
             <div className="mb-6">
                 <p className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide mb-3">Top Spenders</p>
                 <div className="space-y-2.5">
-                    {topSpenders.map((spender, idx) => {
+                    {topSpenders?.map((spender, idx) => {
                         const percentage = (spender.creditsSpent / totalCreditsSpentThisMonth) * 100
                         return (
                             <div key={idx} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">

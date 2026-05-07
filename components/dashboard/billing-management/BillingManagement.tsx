@@ -17,6 +17,7 @@ const BillingManagement = () => {
   const currentPlan = subscription?.plan_name ?? organization?.plan_type ?? PlanType.FREE
   const billingStatus = subscription?.payment_status ?? (currentPlan === PlanType.FREE ? PaymentStatus.PENDING : PaymentStatus.COMPLETED)
 
+  console.log(subscription)
   if (isLoading) {
     return (
       <div className="space-y-5">

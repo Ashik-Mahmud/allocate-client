@@ -224,7 +224,7 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
                         lowCreditAlertsCount={financialOverview?.lowCreditAlertsCount}
                         lowCreditSeverity={financialOverview?.lowCreditSeverity}
                         totalCreditsSpentThisMonth={financialOverview?.totalCreditsSpentThisMonth}
-                        topSpenders={financialOverview?.topSpenders}
+                        topSpenders={financialOverview?.topSpenders ?? []}
                     />
 
                     {/* 3. Staff Engagement */}

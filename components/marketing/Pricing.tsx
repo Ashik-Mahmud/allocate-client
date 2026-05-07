@@ -73,7 +73,7 @@ export const PricingSection = () => {
               <div className="space-y-2">
                 <p className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Limits</p>
                 <ul className="space-y-2 text-sm text-foreground">
-                  <FeatureItem label={`Up to ${plan.limits.MAX_USERS} Users`} />
+                  <FeatureItem label={`Up to ${plan.limits.MAX_USERS} Staffs`} />
                   <FeatureItem label={`${plan.limits.MAX_RESOURCES} Resources`} />
                   <FeatureItem label={`${plan.limits.INITIAL_CREDITS} Monthly Credits`} />
                   <FeatureItem label={`${plan.limits.BOOKING_WINDOW_DAYS} Days Booking Window`} />
