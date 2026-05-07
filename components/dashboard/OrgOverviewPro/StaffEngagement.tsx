@@ -24,7 +24,7 @@ export const StaffEngagement = ({
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-200 to-purple-100 dark:from-purple-800/50 dark:to-purple-900/30">
+                <div className="p-3 rounded-xl bg-linear-to-br from-purple-200 to-purple-100 dark:from-purple-800/50 dark:to-purple-900/30">
                     <Users size={24} className="text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
@@ -37,11 +37,11 @@ export const StaffEngagement = ({
 
             {/* Engagement Stats */}
             <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-900/10 border border-purple-200 dark:border-purple-900/30">
+                <div className="p-3 rounded-lg bg-linear-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-900/10 border border-purple-200 dark:border-purple-900/30">
                     <p className="text-xs font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wide">Total Staff</p>
                     <p className="text-2xl font-bold text-purple-900 dark:text-purple-300 mt-1">{totalStaff}</p>
                 </div>
-                <div className="p-3 rounded-lg bg-gradient-to-br from-pink-50 to-pink-100/50 dark:from-pink-900/20 dark:to-pink-900/10 border border-pink-200 dark:border-pink-900/30">
+                <div className="p-3 rounded-lg bg-linear-to-br from-pink-50 to-pink-100/50 dark:from-pink-900/20 dark:to-pink-900/10 border border-pink-200 dark:border-pink-900/30">
                     <p className="text-xs font-semibold text-pink-700 dark:text-pink-400 uppercase tracking-wide">Active</p>
                     <p className="text-2xl font-bold text-pink-900 dark:text-pink-300 mt-1">
                         {activeStaffThisMonth} ({utilizationRate}%)
@@ -63,7 +63,7 @@ export const StaffEngagement = ({
                             <div key={staff.staffId} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-purple-200 dark:hover:border-purple-900/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group">
                                 <div className="flex items-start justify-between mb-2">
                                     <div className="flex items-center gap-2 flex-1">
-                                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white">
+                                        <div className="w-6 h-6 rounded-full bg-linear-to-br from-purple-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white">
                                             {idx + 1}
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -72,14 +72,14 @@ export const StaffEngagement = ({
                                             </p>
                                         </div>
                                     </div>
-                                    <p className="text-lg font-bold text-purple-600 dark:text-purple-400 flex-shrink-0">
+                                    <p className="text-lg font-bold text-purple-600 dark:text-purple-400 shrink-0">
                                         {staff.recentBookings}
                                     </p>
                                 </div>
 
                                 <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-purple-400 to-purple-600 transition-all duration-500"
+                                        className="h-full bg-linear-to-r from-purple-400 to-purple-600 transition-all duration-500"
                                         style={{ width: `${percentage}%` }}
                                     />
                                 </div>
@@ -91,7 +91,7 @@ export const StaffEngagement = ({
             </div>
 
             {/* Engagement Rate */}
-            <div className="p-3 rounded-lg bg-gradient-to-r from-purple-50 to-purple-50/50 dark:from-purple-900/20 dark:to-purple-900/10 border border-purple-100 dark:border-purple-900/20">
+            <div className="p-3 rounded-lg bg-linear-to-r from-purple-50 to-purple-50/50 dark:from-purple-900/20 dark:to-purple-900/10 border border-purple-100 dark:border-purple-900/20">
                 <div className="flex items-start justify-between">
                     <div>
                         <p className="text-xs font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wide">Engagement Rate</p>

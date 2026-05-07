@@ -25,7 +25,7 @@ export const BookingStatusBreakdown = ({
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-200 to-cyan-100 dark:from-cyan-800/50 dark:to-cyan-900/30">
+                <div className="p-3 rounded-xl bg-linear-to-br from-cyan-200 to-cyan-100 dark:from-cyan-800/50 dark:to-cyan-900/30">
                     <BarChart3 size={24} className="text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
@@ -43,7 +43,7 @@ export const BookingStatusBreakdown = ({
                     return (
                         <div
                             key={idx}
-                            className={`p-4 rounded-lg border bg-gradient-to-r ${status.bgColor} ${status.borderColor} hover:shadow-md transition-all`}
+                            className={`p-4 rounded-lg border bg-linear-to-r ${status.bgColor} ${status.borderColor} hover:shadow-md transition-all`}
                         >
                             <div className="flex items-start justify-between mb-3">
                                 <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export const BookingStatusBreakdown = ({
                             {/* Progress Bar */}
                             <div className="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                                 <div
-                                    className={`h-full bg-gradient-to-r ${status.color} transition-all duration-500`}
+                                    className={`h-full bg-linear-to-r ${status.color} transition-all duration-500`}
                                     style={{ width: `${percentage}%` }}
                                 />
                             </div>

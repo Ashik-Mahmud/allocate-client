@@ -126,7 +126,7 @@ export const StaffEngagementSkeleton = () => {
 
             {/* Top Performers */}
             <div className="space-y-2.5">
-                {[...Array(2)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                     <div key={i} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800">
                         <Skeleton className="h-4 w-40 mb-2" />
                         <Skeleton className="h-1.5 w-full" />
@@ -197,7 +197,7 @@ export const AdminRecommendationsSkeleton = () => {
                 {[...Array(3)].map((_, i) => (
                     <div key={i} className="p-4 rounded-lg border border-slate-100 dark:border-slate-800">
                         <div className="flex gap-3">
-                            <Skeleton variant="circle" className="w-5 h-5 flex-shrink-0 mt-1" />
+                            <Skeleton variant="circle" className="w-5 h-5 shrink-0 mt-1" />
                             <div className="flex-1">
                                 <Skeleton className="h-4 w-24 mb-2" />
                                 <Skeleton className="h-3 w-full" />

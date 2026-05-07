@@ -148,14 +148,10 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
 
                     {/* Main Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
-                        <div className="space-y-6 md:space-y-8">
-                            <ResourceAnalyticsSkeleton />
-                            <StaffEngagementSkeleton />
-                        </div>
-                        <div className="space-y-6 md:space-y-8">
-                            <FinancialOverviewSkeleton />
-                            <BookingStatusBreakdownSkeleton />
-                        </div>
+                        <ResourceAnalyticsSkeleton />
+                        <StaffEngagementSkeleton />
+                        <FinancialOverviewSkeleton />
+                        <BookingStatusBreakdownSkeleton />
                     </div>
 
                     {/* Recommendations */}

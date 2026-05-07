@@ -58,7 +58,7 @@ type SessionToken = SessionTokenUser & {
 };
 
 
-function buildSessionUser(user: User): SessionTokenUser | null {
+function buildSessionUser(user: User ): SessionTokenUser | null {
   if (!user) {
     return null;
   }
@@ -196,7 +196,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const profileResponse = await getProfileWithToken(accessToken);
         const profileUser = profileResponse.data;
-        const sessionUser = buildSessionUser(profileUser);
+        const sessionUser = buildSessionUser(profileUser as User);
 
         if (!sessionUser) {
           return null;

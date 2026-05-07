@@ -30,7 +30,7 @@ export const AdminRecommendations = ({ recommendations }: AdminRecommendationsPr
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-orange-200 to-orange-100 dark:from-orange-800/50 dark:to-orange-900/30">
+                <div className="p-3 rounded-xl bg-linear-to-br from-orange-200 to-orange-100 dark:from-orange-800/50 dark:to-orange-900/30">
                     <Lightbulb size={24} className="text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
@@ -45,11 +45,11 @@ export const AdminRecommendations = ({ recommendations }: AdminRecommendationsPr
                 {recommendations.map((rec, idx) => (
                     <div
                         key={idx}
-                        className={`p-4 rounded-lg border bg-gradient-to-r ${getRecommendationColor(idx)} hover:shadow-md transition-all animate-in fade-in slide-in-from-left-2`}
+                        className={`p-4 rounded-lg border bg-linear-to-r ${getRecommendationColor(idx)} hover:shadow-md transition-all animate-in fade-in slide-in-from-left-2`}
                         style={{ animationDelay: `${idx * 50}ms` }}
                     >
                         <div className="flex items-start gap-3">
-                            <div className="flex-shrink-0 mt-0.5">
+                            <div className="shrink-0 mt-0.5">
                                 {getRecommendationIcon(idx)}
                             </div>
                             <div className="flex-1">
@@ -68,22 +68,22 @@ export const AdminRecommendations = ({ recommendations }: AdminRecommendationsPr
             </div>
 
             {/* Quick Actions */}
-            <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-slate-50 to-slate-50/50 dark:from-slate-800/50 dark:to-slate-800/30 border border-slate-200 dark:border-slate-700/50">
+            <div className="mt-6 p-4 rounded-lg bg-linear-to-r from-slate-50 to-slate-50/50 dark:from-slate-800/50 dark:to-slate-800/30 border border-slate-200 dark:border-slate-700/50">
                 <p className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide mb-3">Quick Actions</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     <button 
                     onClick={() => router.push(ROUTES.dashboardOrgAdmin.creditManagement)}
-                    className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-rose-600 to-rose-500 text-white hover:from-rose-700 hover:to-rose-600 transition-all active:scale-95">
+                    className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-linear-to-r from-rose-600 to-rose-500 text-white hover:from-rose-700 hover:to-rose-600 transition-all active:scale-95">
                         Allocate Credits
                     </button>
                     <button
                         onClick={() => router.push(ROUTES.dashboardOrgAdmin.bookingManagement)}  
-                     className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all active:scale-95">
+                     className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-linear-to-r from-blue-600 to-blue-500 text-white hover:from-blue-700 hover:to-blue-600 transition-all active:scale-95">
                         Review Bookings
                     </button>
                     <button
                         onClick={() => router.push(ROUTES.dashboardOrgAdmin.billing)}
-                     className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-green-600 to-green-500 text-white hover:from-green-700 hover:to-green-600 transition-all active:scale-95">
+                     className="cursor-pointer px-3 py-2 rounded-lg text-xs font-semibold bg-linear-to-r from-green-600 to-green-500 text-white hover:from-green-700 hover:to-green-600 transition-all active:scale-95">
                         Expand Pool
                     </button>
                 </div>
