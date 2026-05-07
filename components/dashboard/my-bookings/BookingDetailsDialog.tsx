@@ -37,7 +37,7 @@ const BookingDetailsDialog = ({ isOpen, onClose, booking, onUpdateNotes }: Props
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-xl! rounded-2xl border-none p-0 overflow-hidden bg-white dark:bg-slate-950">
-                <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4">
+                <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between gap-4 dark:text-white">
                     <div>
                         <p className="text-[10px] uppercase font-bold tracking-[0.2em] opacity-60 mb-1">Booking Reference</p>
                         <DialogTitle className="text-xl font-black">{booking.resource?.name || 'Booking'} • #{booking.id.slice(-8).toUpperCase()}</DialogTitle>

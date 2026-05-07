@@ -56,12 +56,10 @@ const MyBookingMain = () => {
 
 
     return (
-        <div className="mx-auto px-4  antialiased space-y-6">
+        <div className="mx-auto sm:p-4  antialiased space-y-6">
             {/* Header (title moved into combined header with filters) */}
             {/* Title + Filters Popover */}
-            <div className="flex items-center gap-4">
-                <div className="flex-1" />
-            </div>
+         
             <div className="relative">
                 <div className="flex items-center justify-between">
                     <div>

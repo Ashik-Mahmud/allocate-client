@@ -46,7 +46,7 @@ const DialogPopup = ({
                 className
             )}>
                 {/* Header Section */}
-                <DialogHeader className="p-4 pb-3 border-b bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-zinc-800">
+                <DialogHeader className="p-4 pb-3 border-b bg-slate-50 dark:bg-slate-950 border-slate-100 dark:border-zinc-800">
                     <DialogTitle className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                         {title}
                     </DialogTitle>
@@ -58,7 +58,7 @@ const DialogPopup = ({
                 </DialogHeader>
 
                 {/* Content Section - Scrollable */}
-                <div className="flex-1 overflow-y-auto p-4 max-h-[80vh]">
+                <div className="flex-1 overflow-y-auto py-4 sm:p-4 max-h-[80vh]">
                     {children}
                 </div>
 

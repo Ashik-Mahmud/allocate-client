@@ -129,7 +129,7 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
     if (isLoading || !insights) {
         return (
             <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-50 to-blue-50/30 dark:from-slate-950 dark:via-slate-950 dark:to-blue-950/20 font-sans">
-                <div className="p-4 md:p-6 lg:p-8  mx-auto">
+                <div className="p-0 md:p-6 lg:p-8  mx-auto">
                     {/* Header Skeleton */}
                     <div className="mb-8">
                         <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded w-1/3 mb-2 animate-pulse" />
@@ -179,7 +179,7 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
 
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-50 to-blue-50/30 dark:from-slate-950 dark:via-slate-950 dark:to-blue-950/20 font-sans">
-            <div className="p-4 md:p-6 lg:p-8  mx-auto">
+            <div className="p-0 md:p-6 lg:p-8  mx-auto">
                 {/* Page Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent mb-2">
@@ -251,7 +251,7 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
                     <AdminRecommendations recommendations={adminRecommendations} />
                 </div>
             </div>
-            <AssignCredits
+            {assignOpen ? <AssignCredits
                 open={assignOpen}
                 onOpenChange={setAssignOpen}
                 selectedStaffIds={selectedStaffIds}
@@ -260,7 +260,7 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
                 orgCreditPool={user?.organization?.credit_pool || 0}
                 position='bottom'
                 error={assignCreditsMutation.error?.message}
-            />
+            /> : null}
         </div>
     )
 }

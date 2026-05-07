@@ -136,7 +136,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                 </div>
 
                 {isEditing && (
-                    <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800 grid grid-cols-2 gap-8 animate-in slide-in-from-top-2">
+                    <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-8 animate-in slide-in-from-top-2">
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-center">
                                 <span className="text-[9px] uppercase font-bold text-slate-400">Start ({timeZone})</span>
@@ -144,7 +144,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                             <input
                                 type="datetime-local"
                                 min={formatDateTimeLocalInTimeZone(new Date(), timeZone)}
-                                className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
+                                className="bg-slate-50 dark:bg-slate-900 p-2 dark:text-white rounded-lg text-xs font-mono focus:outline-none appearance-none w-full"
                                 value={formatDateTimeLocalInTimeZone(startTime, timeZone)}
                                 onChange={(e) => {
                                     if (!e.target.value) return;
@@ -169,7 +169,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                             <input
                                 type="datetime-local"
                                 min={formatDateTimeLocalInTimeZone(startTime, timeZone)}
-                                className="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg text-xs font-mono focus:outline-none appearance-none"
+                                className="bg-slate-50 dark:bg-slate-900 p-2 dark:text-white rounded-lg text-xs font-mono focus:outline-none appearance-none w-full"
                                 value={formatDateTimeLocalInTimeZone(endTime, timeZone)}
                                 onChange={(e) => {
                                     if (!e.target.value) return;
@@ -217,7 +217,7 @@ const CreateBooking = ({ selectedSlot, resource, onBack, onSubmit, isSubmitting,
                         <Textarea
                             name="notes"
                             placeholder="Any specific requirements?"
-                            className="border bg-slate-50 dark:bg-slate-900 rounded-xl min-h-25 focus-visible:ring-1 focus-visible:ring-slate-200 resize-none"
+                            className="border bg-slate-50 dark:bg-slate-900 rounded-xl min-h-25 focus-visible:ring-1 focus-visible:ring-slate-200 resize-none dark:border-slate-600 dark:text-white"
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                         />

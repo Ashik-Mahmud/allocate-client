@@ -1,7 +1,7 @@
 import { BookingStatus, BOOKING_STATUS_CONFIG } from '@/types/booking'
 
 export function formatCredits(value: number) {
-    return `${value.toLocaleString()} CR`
+    return `${value?.toLocaleString()} CR`
 }
 
 export function formatTransactionType(type: 'SPEND' | 'DEPOSIT') {
@@ -40,7 +40,7 @@ export function formatRelativeTime(value: string) {
 export function normalizeDescription(description: string, resourceName: string) {
     const sanitized = description.replace(/\bundefined\b\s*/gi, '').trim()
 
-    if (sanitized.length > 0) {
+    if (sanitized?.length > 0) {
         return sanitized
     }
 

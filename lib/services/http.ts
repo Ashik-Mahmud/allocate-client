@@ -271,6 +271,8 @@ export async function apiRequest<TResponse>(
   if (token && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${token}`);
   }
+  //  for ngrok users, to skip the annoying warning page. This header is ignored by our backend and is only used by ngrok to identify browser requests.
+  headers.set("ngrok-skip-browser-warning", "true");
 
   const response = await fetch(`${getBaseUrl()}${path}`, {
     ...init,

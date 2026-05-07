@@ -21,6 +21,8 @@ import { useCurrentUser } from '@/features/auth';
 import { OrgOverviewPro } from '../OrgOverviewPro';
 import { FileText, Map, Sparkles, TrendingUp, Users } from 'lucide-react';
 import UpgradeProOverview from './UpgradeProOverview';
+import { MostUsedResourcesPanel } from '../StaffOverview/components/MostUsedResourcesPanel';
+import MostUsedResource from './MostUsedResource';
 
 type Props = {
     orgInsights: any;
@@ -85,16 +87,16 @@ const OrgDashboardOverview = ({ orgInsights }: Props) => {
     if (orgInsights?.isLoading) {
         return (
             <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-50 to-blue-50/30 dark:from-slate-950 dark:via-slate-950 dark:to-blue-950/20 font-sans">
-                <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+                <div className="p-4 md:p-6 lg:p-8  mx-auto">
                     <OrgHeaderSkeleton />
                     <MetricsSummarySkeleton />
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 items-stretch">
                         <div className="lg:col-span-2">
                             <RecentActivitySkeleton />
                         </div>
-                        <div>
-                            <LowCreditAlertsSkeleton />
-                        </div>
+
+                        <LowCreditAlertsSkeleton />
+
                     </div>
                 </div>
             </div>
@@ -119,21 +121,22 @@ const OrgDashboardOverview = ({ orgInsights }: Props) => {
                     />
 
                     {/* Main Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
                         {/* Recent Activity - Spans 2 cols on desktop */}
                         <div className="lg:col-span-2">
                             <RecentActivity activities={recentStaffActivity} onViewAll={handleViewAllActivity} />
                         </div>
 
                         {/* Low Credit Alerts - Right Column */}
-                        <div>
-                            <LowCreditAlerts
-                                alerts={lowCreditAlerts}
-                                count={metrics?.lowCreditAlertsCount || 0}
-                                onTopUp={handleTopUp}
-                            />
-                        </div>
+                        {/* <div> */}
+                        <LowCreditAlerts
+                            alerts={lowCreditAlerts}
+                            count={metrics?.lowCreditAlertsCount || 0}
+                            onTopUp={handleTopUp}
+                        />
+                        {/* </div> */}
                     </div>
+                    <MostUsedResource data={data?.resourceAnalytics} />
                 </div>
 
                 {/* Activity Drawer */}
@@ -142,7 +145,8 @@ const OrgDashboardOverview = ({ orgInsights }: Props) => {
                     activities={recentStaffActivity}
                     onClose={() => setShowActivityDrawer(false)}
                 />
-                <AssignCredits
+
+                {assignOpen ? <AssignCredits
                     open={assignOpen}
                     onOpenChange={setAssignOpen}
                     selectedStaffIds={selectedStaffIds}
@@ -151,7 +155,9 @@ const OrgDashboardOverview = ({ orgInsights }: Props) => {
                     orgCreditPool={user?.organization?.credit_pool || 0}
                     position='bottom'
                     error={assignCreditsMutation.error?.message}
-                />
+                /> : null}
+
+
                 <div className="px-5 pb-8">
                     <UpgradeProOverview orgName={data?.organization?.name} />
                 </div>

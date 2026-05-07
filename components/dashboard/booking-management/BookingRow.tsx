@@ -71,7 +71,7 @@ const BookingRow = ({ booking, onViewDetails, onConfirm, onCancel, onMarkComplet
             </div>
 
             {/* Quick Actions Group */}
-            <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-4 md:border-none md:pt-0">
+            <div className="flex items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-700 pt-4 md:border-none md:pt-0">
                 <div className="flex items-center gap-1.5">
                     {/* View Details - Always Visible */}
                     <button

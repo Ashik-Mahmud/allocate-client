@@ -18,7 +18,7 @@ const OrgDashboardMain = (props: Props) => {
             {
                 isPaid ? <OrgOverviewPro
                     insights={orgInsights?.data?.insights as OrgInsights}
-                    isLoading={orgInsights?.isLoading}
+                    isLoading={orgInsights?.isLoading || orgInsights?.isFetching}
                 /> : <OrgDashboardOverview orgInsights={orgInsights} />
             }
         </div>

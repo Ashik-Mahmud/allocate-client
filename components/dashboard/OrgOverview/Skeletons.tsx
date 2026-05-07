@@ -6,7 +6,7 @@ export const OrgHeaderSkeleton = () => {
         <div className="mb-6 md:mb-8 relative overflow-hidden">
             <div className="relative p-4 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div className="flex items-start gap-3 md:gap-4 flex-1">
-                    <Skeleton variant="circle" className="w-12 h-12 flex-shrink-0" />
+                    <Skeleton variant="circle" className="w-12 h-12 shrink-0" />
                     <div className="flex-1">
                         <Skeleton className="h-8 w-40 mb-2" />
                         <Skeleton className="h-4 w-64" />
@@ -52,7 +52,7 @@ export const RecentActivitySkeleton = () => {
                 {[...Array(4)].map((_, i) => (
                     <div key={i} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800">
                         <div className="flex gap-3">
-                            <Skeleton variant="circle" className="w-2 h-2 mt-1.5 flex-shrink-0" />
+                            <Skeleton variant="circle" className="w-2 h-2 mt-1.5 shrink-0" />
                             <div className="flex-1">
                                 <Skeleton className="h-3 w-40 mb-2" />
                                 <Skeleton className="h-2.5 w-32" />
