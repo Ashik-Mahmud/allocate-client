@@ -11,6 +11,7 @@ const useSubscription = () => {
         isPaid: user?.organization?.plan_type !== PlanType.FREE,
         isLoading,
         credit_pool: user?.organization?.credit_pool || 0,
+        
     }
 }
 

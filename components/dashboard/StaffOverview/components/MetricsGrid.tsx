@@ -12,28 +12,28 @@ export function MetricsGrid({ metrics }: MetricsGridProps) {
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <StatCard
                 label="Current balance"
-                value={formatCredits(metrics?.myCurrentBalance)}
+                value={formatCredits(metrics?.myCurrentBalance || 0)}
                 helper="Available credits"
                 icon={Wallet}
                 accent="emerald"
             />
             <StatCard
                 label="Total spent"
-                value={formatCredits(metrics?.totalSpent)}
+                value={formatCredits(metrics?.totalSpent || 0)}
                 helper={formatLastTransaction(metrics?.lastTransaction?.date)}
                 icon={ArrowDownRight}
                 accent="rose"
             />
             <StatCard
                 label="Usage count"
-                value={metrics?.usageCount?.toLocaleString()}
+                value={metrics?.usageCount?.toLocaleString() || '0'}
                 helper="Bookings logged"
                 icon={Activity}
                 accent="cyan"
             />
             <StatCard
                 label="This month"
-                value={formatCredits(metrics?.currentMonthSpent)}
+                value={formatCredits(metrics?.currentMonthSpent || 0)}
                 helper="Current month spent"
                 icon={CalendarClock}
                 accent="amber"

@@ -9,6 +9,9 @@ export function formatTransactionType(type: 'SPEND' | 'DEPOSIT') {
 }
 
 export function formatDateTime(value: string) {
+    if (!value) {
+        return 'Not available'
+    }
     
     return new Intl.DateTimeFormat('en-US', {
         dateStyle: 'medium',

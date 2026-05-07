@@ -8,12 +8,13 @@ interface Resource {
 }
 
 interface ResourceAnalyticsProps {
-    resources: Resource[]
-    mostUsedResource: string
+    resources?: Resource[]
+    mostUsedResource?: string
 }
 
-export const ResourceAnalytics = ({ resources, mostUsedResource }: ResourceAnalyticsProps) => {
-    const maxBookings = Math.max(...resources.map(r => r.bookings), 1)
+export const ResourceAnalytics = ({ resources = [], mostUsedResource = '' }: ResourceAnalyticsProps) => {
+    const safeResources = Array.isArray(resources) ? resources : []
+    const maxBookings = Math.max(...safeResources.map(r => r?.bookings ?? 0), 1)
 
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -37,9 +38,9 @@ export const ResourceAnalytics = ({ resources, mostUsedResource }: ResourceAnaly
 
             {/* Resources List */}
             <div className="space-y-3">
-                {resources.map((resource, idx) => {
-                    const percentage = (resource.bookings / maxBookings) * 100
-                    const isMostUsed = resource.name === mostUsedResource
+                {safeResources?.map((resource, idx) => {
+                    const percentage = (resource?.bookings / maxBookings) * 100
+                    const isMostUsed = resource?.name === mostUsedResource
 
                     return (
                         <div
@@ -52,19 +53,19 @@ export const ResourceAnalytics = ({ resources, mostUsedResource }: ResourceAnaly
                         >
                             <div className="flex items-start justify-between mb-2">
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-1">{resource.name}</p>
+                                    <p className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-1">{resource?.name}</p>
                                     <div className="flex items-center gap-4 mt-1">
                                         <div className="flex items-center gap-1">
                                             <TrendingUp size={14} className="text-slate-500 dark:text-slate-400" />
-                                            <span className="text-xs text-slate-600 dark:text-slate-400">{resource.bookings} bookings</span>
+                                            <span className="text-xs text-slate-600 dark:text-slate-400">{resource?.bookings} bookings</span>
                                         </div>
                                         <div className="text-xs text-slate-600 dark:text-slate-400">
-                                            {resource.totalHours} hrs
+                                            {resource?.totalHours} hrs
                                         </div>
                                     </div>
                                 </div>
                                 <div className="shrink-0 text-right">
-                                    <p className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{resource.bookings}</p>
+                                    <p className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{resource?.bookings}</p>
                                 </div>
                             </div>
 

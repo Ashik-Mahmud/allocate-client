@@ -123,13 +123,10 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
     };
 
 
-
-
-
-    if (isLoading || !insights || !user ) {
+    if (isLoading || !insights  ) {
         return (
             <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-50 to-blue-50/30 dark:from-slate-950 dark:via-slate-950 dark:to-blue-950/20 font-sans">
-                <div className="p-0 md:p-6 lg:p-8  mx-auto">
+                <div className="p-0 md:p-3  mx-auto">
                     {/* Header Skeleton */}
                     <div className="mb-8">
                         <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded w-1/3 mb-2 animate-pulse" />
@@ -215,8 +212,8 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
 
                     {/* 1. Resource Analytics */}
                     <ResourceAnalytics
-                        resources={bookingAndResourcePatterns?.resourceAnalytics}
-                        mostUsedResource={bookingAndResourcePatterns?.mostUsedResource}
+                        resources={bookingAndResourcePatterns?.resourceAnalytics ?? []}
+                        mostUsedResource={bookingAndResourcePatterns?.mostUsedResource ?? ''}
                     />
 
                     {/* 2. Financial Overview */}
@@ -239,10 +236,10 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
 
                     {/* 4. Booking Status Breakdown */}
                     <BookingStatusBreakdown
-                        confirmed={bookingAndResourcePatterns?.bookingStatusDistribution.confirmed}
-                        completed={bookingAndResourcePatterns?.bookingStatusDistribution.completed}
-                        pending={bookingAndResourcePatterns?.bookingStatusDistribution.pending}
-                        cancelled={bookingAndResourcePatterns?.bookingStatusDistribution.cancelled}
+                        confirmed={bookingAndResourcePatterns?.bookingStatusDistribution?.confirmed}
+                        completed={bookingAndResourcePatterns?.bookingStatusDistribution?.completed}
+                        pending={bookingAndResourcePatterns?.bookingStatusDistribution?.pending}
+                        cancelled={bookingAndResourcePatterns?.bookingStatusDistribution?.cancelled}
                     />
 
                 </div>

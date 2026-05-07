@@ -19,7 +19,7 @@ export const StaffEngagement = ({
     mostActiveStaff,
 }: StaffEngagementProps) => {
     const utilizationRate = Math.round((activeStaffThisMonth / totalStaff) * 100)
-    const maxBookings = Math.max(...mostActiveStaff.map(s => s.recentBookings), 1)
+    const maxBookings = Math.max(...mostActiveStaff?.map(s => s.recentBookings), 1)
 
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -57,10 +57,10 @@ export const StaffEngagement = ({
                 </div>
 
                 <div className="space-y-2.5">
-                    {mostActiveStaff.map((staff, idx) => {
-                        const percentage = (staff.recentBookings / maxBookings) * 100
+                    {mostActiveStaff?.map((staff, idx) => {
+                        const percentage = (staff?.recentBookings / maxBookings) * 100
                         return (
-                            <div key={staff.staffId} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-purple-200 dark:hover:border-purple-900/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group">
+                            <div key={staff?.staffId} className="p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:border-purple-200 dark:hover:border-purple-900/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group">
                                 <div className="flex items-start justify-between mb-2">
                                     <div className="flex items-center gap-2 flex-1">
                                         <div className="w-6 h-6 rounded-full bg-linear-to-br from-purple-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white">
@@ -68,12 +68,12 @@ export const StaffEngagement = ({
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                                                {staff.staffName}
+                                                {staff?.staffName}
                                             </p>
                                         </div>
                                     </div>
                                     <p className="text-lg font-bold text-purple-600 dark:text-purple-400 shrink-0">
-                                        {staff.recentBookings}
+                                        {staff?.recentBookings}
                                     </p>
                                 </div>
 
