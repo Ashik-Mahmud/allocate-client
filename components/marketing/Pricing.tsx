@@ -1,9 +1,11 @@
+"use client"
 import React from 'react';
 import { Check, X, Zap, Building2, Crown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { SUBSCRIPTION_LIMITS, SUBSCRIPTION_PRICING } from '@/lib/constants/subscription';
 import { PlanType } from '@/types/organization';
+import { useDetectCountry } from '@/hooks/use-detect-country';
 
 type Plan = {
   type: PlanType;
@@ -15,7 +17,7 @@ type Plan = {
   popular?: boolean;
 };
 
-const pricingPlans:Plan[] = [
+const pricingPlans: Plan[] = [
   {
     type: PlanType.FREE,
     name: "Starter",
@@ -44,6 +46,8 @@ const pricingPlans:Plan[] = [
 ];
 
 export const PricingSection = () => {
+  const { currency, currencySymbol } = useDetectCountry();
+
   return (
     <section className="py-20 px-4">
       <div className="max-w-7xl mx-auto text-center mb-16">
@@ -54,12 +58,14 @@ export const PricingSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {pricingPlans.map((plan: Plan) => (
-          <Card 
-            key={plan.type} 
-            className={`relative flex flex-col border-2 transition-all duration-300 hover:shadow-lg ${
-              plan.popular ? 'border-primary shadow-md scale-105' : 'border-border'
-            }`}
+        {pricingPlans.map((plan: Plan) => {
+          const pricing: any = currency && typeof plan?.price === "object" ? plan?.price?.[currency as "USD" | "BDT"] : plan?.price;
+
+
+          return (<Card
+            key={plan.type}
+            className={`relative flex flex-col border-2 transition-all duration-300 hover:shadow-lg ${plan.popular ? 'border-primary shadow-md scale-105' : 'border-border'
+              }`}
           >
             {plan.popular && (
               <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
@@ -73,10 +79,10 @@ export const PricingSection = () => {
                 <CardTitle className="text-xl">{plan.name}</CardTitle>
               </div>
               <div className="flex items-baseline gap-1 mt-2">
-                <span className="text-4xl font-bold tracking-tight">{
-                   typeof plan.price === "string" ? plan.price : `$${plan.price.dollar.monthly}`                
-                }</span>
-                {plan.price !== "Custom" && <span className="text-muted-foreground">/month</span>}
+                <span className="text-4xl font-bold tracking-tight">
+                 {typeof pricing === "object" ? `${currencySymbol}${pricing?.monthly ?? 0}` : pricing}
+                </span>
+                {typeof pricing === "string" ? null : <span className="text-muted-foreground">/month</span>}
               </div>
               <CardDescription className="mt-2">{plan.description}</CardDescription>
             </CardHeader>
@@ -96,10 +102,10 @@ export const PricingSection = () => {
                 <p className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Features</p>
                 <ul className="space-y-2 text-sm">
                   {Object.entries(plan.limits.FEATURES).map(([key, value]) => (
-                    <FeatureItem 
-                      key={key} 
-                      label={key.replace(/_/g, ' ')} 
-                      included={value} 
+                    <FeatureItem
+                      key={key}
+                      label={key.replace(/_/g, ' ')}
+                      included={value}
                     />
                   ))}
                 </ul>
@@ -107,15 +113,15 @@ export const PricingSection = () => {
             </CardContent>
 
             <CardFooter>
-              <Button 
-                variant={plan.popular ? "default" : "outline"} 
+              <Button
+                variant={plan.popular ? "default" : "outline"}
                 className="w-full text-md font-semibold h-11"
               >
                 {plan.type === "FREE" ? "Get Started" : plan.type === "PRO" ? "Upgrade to Pro" : "Contact Sales"}
               </Button>
             </CardFooter>
-          </Card>
-        ))}
+          </Card>)
+        })}
       </div>
     </section>
   );

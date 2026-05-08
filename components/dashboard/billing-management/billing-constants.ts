@@ -14,15 +14,15 @@ export type FeatureMeta = {
 export type PlanMeta = {
   plan: PlanType
   price:{
-    taka:{
+    BDT:{
         monthly: number,
         annually: number,
     },
-    dollar:{
+    USD:{
         monthly: number,
         annually: number,
     }
-  },
+  } | string,
   name: string
   subtitle: string
   accent: string
@@ -72,6 +72,7 @@ export const PLAN_CARDS: PlanMeta[] = [
     border: 'border-slate-200 dark:border-slate-800',
     ctaLabel: 'Talk to sales',
     ctaHref: ROUTES.pricing,
-    price: SUBSCRIPTION_PRICING[PlanType.ENTERPRISE],
+    // price: SUBSCRIPTION_PRICING[PlanType.ENTERPRISE],
+    price: "Custom",
     },
 ]

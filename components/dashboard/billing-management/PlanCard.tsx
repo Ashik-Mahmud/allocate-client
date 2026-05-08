@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 
@@ -9,11 +9,14 @@ import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription'
 import { cn } from '@/lib/utils/cn'
 import { PlanType } from '@/types/organization'
 import { FEATURE_CATALOG, type PlanMeta } from './billing-constants'
+import { useCurrentUser } from '@/features/auth';
+import { useDetectCountry } from '@/hooks/use-detect-country';
 
 interface PlanCardProps {
     plan: PlanMeta
     isCurrent: boolean
     onClick?: (type: PlanType) => void
+    country?: string
 }
 
 function FeatureChip({ label, supported }: { label: string; supported: boolean }) {
@@ -33,8 +36,12 @@ function FeatureChip({ label, supported }: { label: string; supported: boolean }
 }
 
 export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick }) => {
+    const { currency, currencySymbol } = useDetectCountry();
     const limits = SUBSCRIPTION_LIMITS[plan.plan]
     const featureCount = FEATURE_CATALOG.filter(({ key }) => Boolean(limits?.FEATURES?.[key])).length ?? 0
+
+    const pricing: any = currency && typeof plan?.price === "object" ? plan?.price?.[currency as "USD" | "BDT"] : plan?.price;
+
 
     return (
         <article
@@ -64,6 +71,12 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick }) 
                     </div>
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{plan.subtitle}</p>
                 </div>
+            </div>
+
+            {/* pricing */}
+            <div className="mt-4 flex items-baseline gap-1">
+                <span className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{typeof pricing === "object" ? `${currencySymbol}${pricing?.monthly ?? 0}` : pricing}</span>
+                {typeof pricing === "string" ? null : <span className="text-muted-foreground">/month</span>}
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-2">

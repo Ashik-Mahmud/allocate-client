@@ -116,32 +116,32 @@ export const SUBSCRIPTION_LIMITS = {
 };
 export const SUBSCRIPTION_PRICING = {
     [PlanType.FREE]: {
-        taka: {
+        BDT: {
             monthly: 0,
             annually: 0,
         },
-        dollar: {
+        USD: {
             monthly: 0,
             annually: 0,
         }
     },
     [PlanType.PRO]: {
-    
-        taka: {
+
+        BDT: {
             monthly: 999,
             annually: 9990, // 2 months free (10 months at the price of 12 months)
         },
-        dollar: {
+        USD: {
             monthly: 9.99,
             annually: 99.90, // 2 months free (10 months at the price of 12 months)
         }
     },
     [PlanType.ENTERPRISE]: {
-        taka: {
+        BDT: {
             monthly: 2499,
             annually: 24990,
         },
-        dollar: {
+        USD: {
             monthly: 24.99,
             annually: 249.90,
         }

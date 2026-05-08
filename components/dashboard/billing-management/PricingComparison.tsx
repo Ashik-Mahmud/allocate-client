@@ -7,6 +7,10 @@ import { PLAN_CARDS } from './billing-constants'
 import { PlanCard } from './PlanCard'
 import DialogPopup from '@/components/shared/dialog-popup';
 import ContactSalesForm from './ContactSalesPopup';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/constants/routes';
+import { useDetectCountry } from '@/hooks/use-detect-country';
+import { useCurrentUser } from '@/features/auth';
 
 interface PricingComparisonProps {
     currentPlan: PlanType
@@ -25,18 +29,25 @@ function SectionShell({ title, subtitle, children }: { title: string; subtitle: 
 }
 
 export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPlan }) => {
+    const router = useRouter();
     const [isOpenContactSales, setIsOpenContactSales] = React.useState(false)
-    return (
+    const [isOpenPaymentMethod, setIsOpenPaymentMethod] = React.useState(false)
+      return (
         <SectionShell title="Plan comparison" subtitle="The essentials only, so the cards stay short and easy to compare.">
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {PLAN_CARDS.map((plan) => (
                     <PlanCard
                         key={plan.plan} plan={plan}
                         isCurrent={plan.plan === currentPlan}
+
                         onClick={(type) => {
                             console.log(type)
                             if (type === PlanType.ENTERPRISE) {
                                 setIsOpenContactSales(true)
+                            } else if (type === PlanType.FREE) {
+                                router.push(ROUTES.pricing)
+                            } else if (type === PlanType.PRO) {
+                                setIsOpenPaymentMethod(true)
                             }
                         }} // Replace with actual click handler if needed
                     />
