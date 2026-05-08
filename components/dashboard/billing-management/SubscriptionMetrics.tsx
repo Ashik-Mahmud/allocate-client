@@ -15,6 +15,7 @@ interface SubscriptionMetricsProps {
     billingStatus: PaymentStatus
     subscription: Subscription | null
     creditPool: number
+    onExtend?: () => void
 }
 
 function formatDate(value?: string | Date | null) {
@@ -75,7 +76,7 @@ function SectionShell({ title, subtitle, children }: { title: string; subtitle: 
     )
 }
 
-export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ currentPlan, billingStatus, subscription, creditPool }) => {
+export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ currentPlan, billingStatus, subscription, creditPool, onExtend }) => {
 
     const currentLimits = SUBSCRIPTION_LIMITS[currentPlan]
     const isPaidPlan = currentPlan !== PlanType.FREE && currentPlan !== null && subscription?.is_active
@@ -126,7 +127,7 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                         {subscription?.is_active ? 'Active cycle' : 'No active cycle'}
                     </span>
                     {isPaidPlan && (
-                        <button className="group relative flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/50 px-4 py-1.5 text-xs font-medium text-amber-700 transition-all hover:bg-amber-100 hover:shadow-sm dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-400 dark:hover:bg-amber-900/20 cursor-pointer">
+                        <button className="group relative flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/50 px-4 py-1.5 text-xs font-medium text-amber-700 transition-all hover:bg-amber-100 hover:shadow-sm dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-400 dark:hover:bg-amber-900/20 cursor-pointer" onClick={onExtend}>
                             <CalendarPlus className="h-3.5 w-3.5 animate-pulse" />
                             <span>Extend Current Plan</span>
                             <ChevronRight className="h-3 w-3 opacity-50 transition-transform group-hover:translate-x-0.5" />

@@ -11,6 +11,9 @@ import { SubscriptionMetrics } from './SubscriptionMetrics'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { ROUTES } from '@/lib/constants/routes';
+import AllocateDrawer from '@/components/shared/allocate-drawer';
+import PaymentForm from './PaymentForm';
+import { Check } from 'lucide-react';
 
 const BillingManagement = () => {
     const { user, isLoading } = useCurrentUser()
@@ -22,6 +25,8 @@ const BillingManagement = () => {
 
     const searchParams = useSearchParams();
     const router = useRouter();
+    const [isOpenPaymentMethod, setIsOpenPaymentMethod] = React.useState(false)
+
 
     // Check for payment success in URL parameters and show toast notification
     useEffect(() => {
@@ -58,12 +63,41 @@ const BillingManagement = () => {
                     billingStatus={billingStatus}
                     subscription={subscription}
                     creditPool={organization?.credit_pool ?? 0}
+                    onExtend={() => {
+                        setIsOpenPaymentMethod(true)
+                    }}
                 />
 
-                <PricingComparison currentPlan={currentPlan} />
+                <PricingComparison currentPlan={currentPlan} onUpgrade={(type) => {
+                    setIsOpenPaymentMethod(true)
+                }} />
             </div>
 
             <BillingFooter />
+
+            <AllocateDrawer
+                open={isOpenPaymentMethod}
+                onOpenChange={() => setIsOpenPaymentMethod(false)}
+                title="Payment Method"
+                description="Add your payment method to upgrade your subscription and enjoy uninterrupted access to Allocate's features."
+                position="bottom"
+                showHandler={false}
+
+                footer={
+                    <div className="flex items-center text-center justify-center gap-4 opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+                        <p className="text-[10px] font-medium uppercase tracking-widest flex items-center gap-1.5">
+                            <Check className="h-3 w-3" /> Secure Payment Gateway
+                        </p>
+                    </div>
+                }
+            >
+
+                <PaymentForm currentPlan={currentPlan as PlanType} onSuccess={() => {
+                    setIsOpenPaymentMethod(false)
+                }} />
+            </AllocateDrawer>
+
+
         </div>
     )
 }

@@ -11,12 +11,15 @@ import { PlanType } from '@/types/organization'
 import { FEATURE_CATALOG, type PlanMeta } from './billing-constants'
 import { useCurrentUser } from '@/features/auth';
 import { useDetectCountry } from '@/hooks/use-detect-country';
+import { ROUTES } from '@/lib/constants/routes';
+import { is } from 'zod/v4/locales/index.js';
 
 interface PlanCardProps {
     plan: PlanMeta
     isCurrent: boolean
     onClick?: (type: PlanType) => void
     country?: string
+    currentPlan?: PlanType
 }
 
 function FeatureChip({ label, supported }: { label: string; supported: boolean }) {
@@ -35,7 +38,7 @@ function FeatureChip({ label, supported }: { label: string; supported: boolean }
     )
 }
 
-export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick }) => {
+export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick, currentPlan }) => {
     const { currency, currencySymbol } = useDetectCountry();
     const limits = SUBSCRIPTION_LIMITS[plan.plan]
     const featureCount = FEATURE_CATALOG.filter(({ key }) => Boolean(limits?.FEATURES?.[key])).length ?? 0
@@ -104,7 +107,8 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick }) 
             </div>
 
 
-            <button className="mt-4 w-full rounded-xl disabled:opacity-40! disabled:pointer-events-none! cursor-pointer" disabled={isCurrent} onClick={() => onClick?.(plan.plan)}>
+
+            <button className="mt-4 mb-2 w-full rounded-xl disabled:opacity-40! disabled:pointer-events-none! cursor-pointer" disabled={isCurrent} onClick={() => onClick?.(plan.plan)}>
                 <span className={cn(
                     'flex items-center justify-center gap-1 rounded-2xl px-4 py-1 text-xs font-semibold',
                     isCurrent ? 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300' : 'bg-primary text-white hover:bg-primary'
@@ -113,6 +117,18 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, isCurrent, onClick }) 
                     <ArrowRight className="size-4" />
                 </span>
             </button>
+            {
+                (currentPlan === PlanType.FREE || plan?.plan !== PlanType.FREE) && (
+                    <Link href={ROUTES.pricing} className="mt-4 w-full rounded-xl" target="_blank">
+                        <span className='flex items-center justify-center gap-1 rounded-2xl py-1  text-xs font-medium bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-300'>
+                            View pricing
+                            <ArrowRight className="size-3.5" />
+                        </span>
+                    </Link>
+
+                )
+            }
+
         </article>
     )
 }

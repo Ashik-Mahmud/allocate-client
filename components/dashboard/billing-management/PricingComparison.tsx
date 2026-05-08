@@ -14,6 +14,7 @@ import { useCurrentUser } from '@/features/auth';
 
 interface PricingComparisonProps {
     currentPlan: PlanType
+    onUpgrade?: (type: PlanType) => void
 }
 
 function SectionShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
@@ -28,25 +29,26 @@ function SectionShell({ title, subtitle, children }: { title: string; subtitle: 
     )
 }
 
-export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPlan }) => {
+export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPlan, onUpgrade }) => {
     const router = useRouter();
     const [isOpenContactSales, setIsOpenContactSales] = React.useState(false)
-    const [isOpenPaymentMethod, setIsOpenPaymentMethod] = React.useState(false)
-      return (
+    return (
         <SectionShell title="Plan comparison" subtitle="The essentials only, so the cards stay short and easy to compare.">
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {PLAN_CARDS.map((plan) => (
                     <PlanCard
-                        key={plan.plan} plan={plan}
+                        key={plan.plan}
+                        plan={plan}
                         isCurrent={plan.plan === currentPlan}
-
+                        currentPlan={currentPlan}
                         onClick={(type) => {
                             if (type === PlanType.ENTERPRISE) {
                                 setIsOpenContactSales(true)
                             } else if (type === PlanType.FREE) {
                                 router.push(ROUTES.pricing)
                             } else if (type === PlanType.PRO) {
-                                setIsOpenPaymentMethod(true)
+                                // setIsOpenPaymentMethod(true)
+                                onUpgrade && onUpgrade?.(type)
                             }
                         }} // Replace with actual click handler if needed
                     />
