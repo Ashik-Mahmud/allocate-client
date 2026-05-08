@@ -208,7 +208,66 @@ async function parseResponseBody(response: Response): Promise<unknown> {
   }
 }
 
+function collectErrorMessages(value: unknown): string[] {
+  if (!value) {
+    return [];
+  }
+
+  if (typeof value === "string") {
+    return value.trim().length > 0 ? [value.trim()] : [];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => collectErrorMessages(item));
+  }
+
+  if (typeof value !== "object") {
+    return [];
+  }
+
+  const typed = value as {
+    message?: unknown;
+    error?: unknown;
+    data?: unknown;
+    details?: unknown;
+    errors?: unknown;
+    issue?: unknown;
+  };
+
+  const envelopeMessages = [typed.message, typed.error, typed.data, typed.details, typed.errors].flatMap((item) =>
+    collectErrorMessages(item)
+  );
+
+  if (envelopeMessages.length > 0) {
+    return envelopeMessages;
+  }
+
+  if (typeof typed.issue === "string" && typed.issue.trim().length > 0) {
+    return [typed.issue.trim()];
+  }
+
+  if (typeof typed.message === "string" && typed.message.trim().length > 0) {
+    return [typed.message.trim()];
+  }
+
+  if (typeof typed.error === "string" && typed.error.trim().length > 0) {
+    return [typed.error.trim()];
+  }
+
+  return [];
+}
+
 function getErrorMessage(status: number, body: unknown) {
+  const messages = Array.from(new Set(collectErrorMessages(body).filter((message) => message.trim().length > 0)));
+
+  if (messages.length > 0) {
+    if (messages.length === 1) {
+      return messages[0];
+    }
+
+    return messages.map((message, index) => `${index + 1}. ${message}`).join("\n");
+  }
+
   if (body && typeof body === "object") {
     const typed = body as ApiErrorBody;
     const withUnknownFields = body as { error?: unknown; details?: unknown };
@@ -279,11 +338,7 @@ export async function apiRequest<TResponse>(
     headers,
   });
 
-  if (
-    response.status === 401 &&
-    allowRetry &&
-    path !== REFRESH_TOKEN_PATH
-  ) {
+  if (response.status === 401 && allowRetry && path !== REFRESH_TOKEN_PATH) {
     const nextAccessToken = await refreshAccessTokenIfNeeded();
 
     if (nextAccessToken) {
@@ -303,8 +358,6 @@ export async function apiRequest<TResponse>(
   }
 
   const body = await parseResponseBody(response);
-
-
 
   if (!response.ok) {
     throw new ApiError(

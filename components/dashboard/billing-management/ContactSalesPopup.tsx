@@ -21,6 +21,7 @@ import {
 import { useCurrentUser } from '@/features/auth';
 import useCountries from '@/hooks/use-countries';
 import { useCreateSalesInquiry } from '@/features/sales/hooks';
+import { getApiErrorMessage } from '@/lib/services/http';
 import { CreateSalesInquiryDto } from '@/types/sales';
 
 // Comprehensive country list (Shortened for brevity, but you can expand this array)
@@ -44,6 +45,7 @@ const ContactSalesForm = () => {
     const { user } = useCurrentUser();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const { countries, countryStatus, isLoading } = useCountries();
 
     // Default values (Pre-filled for user convenience)
@@ -67,6 +69,7 @@ const ContactSalesForm = () => {
 
     const onSubmit = async (data: FormValues) => {
         setIsSubmitting(true);
+        setSubmitError(null);
         try {
             const sendingData = {
                 name: data.name,
@@ -91,12 +94,16 @@ const ContactSalesForm = () => {
             }
 
         } catch (error) {
-            toast.error("Failed to send. Please try again.");
+            // console.log(error);
+            const message = getApiErrorMessage(error, "Failed to send. Please try again.");
+            setSubmitError(message);
+            toast.error("Failed to send.", {
+                description: message,
+            });
         } finally {
             setIsSubmitting(false);
         }
     };
-
 
 
     if (isSuccess) {
@@ -192,8 +199,8 @@ const ContactSalesForm = () => {
                     <SelectContent >
                         <SelectItem value="1-10">1-10 employees</SelectItem>
                         <SelectItem value="11-50">11-50 employees</SelectItem>
-                        <SelectItem value="51-500">51-500 employees</SelectItem>
-                        <SelectItem value="500">500+ employees</SelectItem>
+                        <SelectItem value="51-100">51-100 employees</SelectItem>
+                        <SelectItem value="100+">100+ employees</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -225,6 +232,12 @@ const ContactSalesForm = () => {
                     </span>
                 )}
             </Button>
+
+            {submitError ? (
+                <p className="text-center text-sm text-destructive whitespace-pre-line">
+                    {submitError}
+                </p>
+            ) : null}
 
             <p className="text-center text-[11px] text-muted-foreground">
                 Secure 256-bit SSL encrypted connection.

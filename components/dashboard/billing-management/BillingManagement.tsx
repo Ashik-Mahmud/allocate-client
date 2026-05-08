@@ -36,7 +36,6 @@ const BillingManagement = () => {
         }
     }, [searchParams, router]);
 
-    console.log(subscription)
     if (isLoading) {
         return (
             <div className="space-y-5">

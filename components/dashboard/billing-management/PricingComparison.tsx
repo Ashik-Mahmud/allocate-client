@@ -41,7 +41,6 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPla
                         isCurrent={plan.plan === currentPlan}
 
                         onClick={(type) => {
-                            console.log(type)
                             if (type === PlanType.ENTERPRISE) {
                                 setIsOpenContactSales(true)
                             } else if (type === PlanType.FREE) {
