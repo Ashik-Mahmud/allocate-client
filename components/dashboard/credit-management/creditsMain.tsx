@@ -268,7 +268,7 @@ const CreditManagementMain = () => {
                 </div>
             </div>
 
-            <AssignCredits
+           {assignOpen ? <AssignCredits
                 open={assignOpen}
                 onOpenChange={setAssignOpen}
                 selectedStaffIds={selectedStaffIds}
@@ -277,7 +277,7 @@ const CreditManagementMain = () => {
                 orgCreditPool={user?.organization?.credit_pool || 0}
                 position='bottom'
                 error={assignCreditsMutation.error?.message}
-            />
+            /> : null}
         </div>
     )
 }

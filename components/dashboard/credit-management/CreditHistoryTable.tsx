@@ -4,6 +4,10 @@ import { CreditTransaction, TransactionType } from "@/types/credits";
 import { format } from "date-fns";
 import { Info, Coins } from "lucide-react";
 import { TransactionBadge } from "./TransactionBadge";
+import AllocateTooltip from "@/components/shared/tooltip";
+import { PaymentProvider } from "@/types/billings";
+import { BsStripe } from "react-icons/bs";
+import PaymentProviderBadge from "@/components/shared/payment-method";
 
 type CreditHistoryTableProps = {
     items: CreditTransaction[] | undefined;
@@ -81,9 +85,12 @@ export const CreditHistoryTable = ({ items, isLoading }: CreditHistoryTableProps
                         <tr>
                             <th className="px-4 py-3">Staff Member</th>
                             <th className="px-4 py-3">Type</th>
-                            <th className="px-4 py-3">Amount</th>
+                            <th className="px-4 py-3">Credits Amount</th>
                             <th className="px-4 py-3">Date</th>
-                            <th className="px-4 py-3 text-right">Balance</th>
+                            <th className="px-4 py-3">Price Amout</th>
+                            <th className="px-4 py-3">Method</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3 text-right">Credits Balance</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -123,8 +130,45 @@ export const CreditHistoryTable = ({ items, isLoading }: CreditHistoryTableProps
                                     <td className="px-4 py-3 text-xs text-slate-500">
                                         {format(new Date(item.createdAt), 'MMM dd, HH:mm')}
                                     </td>
+                                    <td className="px-4 py-4 text-sm align-middle">
+                                        <div className="font-medium text-slate-900">
+                                            {item?.price_paid
+                                                ? `${item?.currency ?? '$'}${item.price_paid.toFixed(2)}`
+                                                : <span className="text-slate-400">—</span>
+                                            }
+                                        </div>
+                                    </td>
+
+                                    <td className="px-4 py-4 text-sm align-middle">
+                                         <PaymentProviderBadge provider={item?.payment_gateway || 'unknown'} showIcon={true}  transactionId={item?.transaction_id || ''} />
+                                    </td>
+
+                                    <td className="px-4 py-4 text-sm align-middle">
+                                        {
+
+                                            item?.status ? <div className="flex items-center gap-2">
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item?.status === 'COMPLETED'
+                                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                                    : 'bg-amber-50 text-amber-700 border-amber-200'
+                                                    }`}>
+                                                    <span className={`mr-1.5 h-1.5 w-1.5 rounded-full ${item?.status === 'COMPLETED' ? 'bg-emerald-500' : 'bg-amber-500'
+                                                        }`}></span>
+                                                    {item?.status}
+                                                </span>
+
+                                                {item?.description && (
+                                                    <AllocateTooltip content={<p className="max-w-xs">{item.description}</p>}>
+                                                        <button className="text-slate-400 hover:text-slate-600 transition-colors focus:outline-none">
+                                                            <Info className="size-3.5" />
+                                                        </button>
+                                                    </AllocateTooltip>
+                                                )}
+                                            </div> : <span className="text-slate-400">—</span>
+                                        }
+
+                                    </td>
                                     <td className="px-4 py-3 text-right font-semibold text-sm">
-                                        {item.currentBalance}
+                                        {item?.currentBalance}
                                     </td>
                                 </tr>
                             );

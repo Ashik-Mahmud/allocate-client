@@ -9,6 +9,7 @@ import { PaymentStatus, PlanType, type Subscription } from '@/types/organization
 import { FEATURE_CATALOG } from './billing-constants'
 import { RenewalCountdown } from './RenewalCountdown'
 import { formatDistanceStrict } from 'date-fns';
+import PaymentProviderBadge from '@/components/shared/payment-method';
 
 interface SubscriptionMetricsProps {
     currentPlan: PlanType
@@ -149,11 +150,18 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                     </div>
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Billing status</p>
-                        <p className="mt-2 text-sm font-medium text-slate-900 dark:text-slate-100">{billingStatus.toLowerCase().replace('_', ' ')}</p>
+                        <p className="mt-2 text-sm font-medium text-slate-900 dark:text-slate-100 capitalize">{subscription?.payment_status ?? '-'}</p>
                     </div>
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Reminder</p>
-                        <p className="mt-2 text-sm font-medium text-slate-900 dark:text-slate-100">{subscription?.last_reminder_sent ? formatDate(subscription.last_reminder_sent) : 'None sent'}</p>
+                        <p className="text-[11px] mb-1 font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Provider </p>
+
+                        {
+                            <PaymentProviderBadge
+                                provider={subscription?.provider || 'unknown'}
+                                showIcon={true}
+                                transactionId={subscription?.last_transaction_id! || ''}
+                            />
+                        }
                     </div>
                 </div>
 

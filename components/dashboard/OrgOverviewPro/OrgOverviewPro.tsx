@@ -229,9 +229,9 @@ export const OrgOverviewPro = ({ insights, onTopUpCredits, isLoading = false }: 
 
                     {/* 3. Staff Engagement */}
                     <StaffEngagement
-                        totalStaff={staffEngagement?.totalStaff}
-                        activeStaffThisMonth={staffEngagement?.activeStaffThisMonth}
-                        mostActiveStaff={staffEngagement?.mostActiveStaff}
+                        totalStaff={staffEngagement?.totalStaff ?? 0}
+                        activeStaffThisMonth={staffEngagement?.activeStaffThisMonth ?? 0}
+                        mostActiveStaff={staffEngagement?.mostActiveStaff ?? []}
                     />
 
                     {/* 4. Booking Status Breakdown */}

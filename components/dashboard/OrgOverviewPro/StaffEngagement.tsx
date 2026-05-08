@@ -18,7 +18,7 @@ export const StaffEngagement = ({
     activeStaffThisMonth,
     mostActiveStaff,
 }: StaffEngagementProps) => {
-    const utilizationRate = Math.round((activeStaffThisMonth / totalStaff) * 100)
+    const utilizationRate = Math.round(((activeStaffThisMonth / totalStaff) || 0) * 100)
     const maxBookings = Math.max(...mostActiveStaff?.map(s => s.recentBookings), 1)
 
     return (

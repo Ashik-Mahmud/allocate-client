@@ -1,4 +1,5 @@
 import { User } from ".";
+import { PaymentProvider } from "./billings";
 import { Resources, ResourcesRule } from "./resources";
 
 export interface OrgAddress {
@@ -31,6 +32,8 @@ export enum PaymentStatus {
   REFUNDED = 'REFUNDED',
 }
 
+
+
 export interface Subscription {
   id: string;
   org_id: string;
@@ -42,7 +45,9 @@ export interface Subscription {
   payment_status?: PaymentStatus | null;
   is_active?: boolean | null;
   last_reminder_sent?: Date | string | null;
-  
+  provider?:PaymentProvider | null;
+  last_transaction_id?: string | null;
+  external_id?: string | null; // For storing Stripe subscription ID or similar
   // Metadata / Timestamps
   deletedAt?: Date | string | null;
   createdAt?: Date | string;

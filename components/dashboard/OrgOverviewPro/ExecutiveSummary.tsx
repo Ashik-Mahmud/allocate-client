@@ -20,7 +20,7 @@ export const ExecutiveSummary = ({
     upcomingBookings,
     creditCoverageRatio,
 }: ExecutiveSummaryProps) => {
-    const utilizationRate = Math.round((activeStaffCount / staffCount) * 100)
+    const utilizationRate = Math.round(((activeStaffCount / staffCount) || 0) * 100)
     const healthStatus = criticalAlertCount > 2 ? 'critical' : criticalAlertCount > 0 ? 'warning' : 'healthy'
     const healthColors = {
         critical: 'from-rose-600 to-rose-700 text-white',
