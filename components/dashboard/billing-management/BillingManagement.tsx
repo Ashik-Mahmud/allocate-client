@@ -26,15 +26,30 @@ const BillingManagement = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [isOpenPaymentMethod, setIsOpenPaymentMethod] = React.useState(false)
+    const [selectedPlan, setSelectedPlan] = React.useState<PlanType>(PlanType.PRO)
 
 
     // Check for payment success in URL parameters and show toast notification
     useEffect(() => {
-        if (searchParams.get('payment') === 'success') {
-            toast.success('Subscription Activated!', {
-                description: 'Your credits have been added to the pool.',
-                position: 'top-center',
-            });
+        if (searchParams.get('payment')) {
+            if (searchParams.get('payment') === 'success') {
+                toast.success('Subscription Activated!', {
+                    description: 'Your credits have been added to the pool.',
+                    position: 'top-center',
+                });
+            }
+            if (searchParams.get('payment') === 'failed') {
+                toast.error('Payment Failed', {
+                    description: 'There was an issue processing your payment. Please try again.',
+                    position: 'top-center',
+                });
+            }
+            if (searchParams.get('payment') === 'cancelled') {
+                toast.error('Payment Cancelled', {
+                    description: 'Your payment was cancelled. No changes have been made to your subscription.',
+                    position: 'top-center',
+                });
+            }
 
             // Redirect to dashboard
             router.replace(ROUTES.dashboardOrgAdmin.billing);
@@ -69,6 +84,7 @@ const BillingManagement = () => {
                 />
 
                 <PricingComparison currentPlan={currentPlan} onUpgrade={(type) => {
+                        setSelectedPlan(type)
                     setIsOpenPaymentMethod(true)
                 }} />
             </div>
@@ -92,7 +108,7 @@ const BillingManagement = () => {
                 }
             >
 
-                <PaymentForm currentPlan={currentPlan as PlanType} onSuccess={() => {
+                <PaymentForm selectedPlan={selectedPlan as PlanType.PRO | PlanType.ENTERPRISE} onSuccess={() => {
                     setIsOpenPaymentMethod(false)
                 }} />
             </AllocateDrawer>

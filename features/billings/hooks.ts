@@ -15,7 +15,7 @@ export const useCreatePaymentCheckout = () => {
         mutationFn: (payment: CreatePaymentCheckoutPayload) => createPaymentCheckoutService(payment),
         onSuccess: async () => {
             return await Promise.all([
-                queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
+                // queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
             ]);
         }
     });

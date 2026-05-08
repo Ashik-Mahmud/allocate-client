@@ -13,12 +13,16 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { PlanType } from '@/types/organization';
 import { cn } from '@/lib/utils/cn';
 import { useDetectCountry } from '@/hooks/use-detect-country';
+import { useCreatePaymentCheckout } from '@/features/billings/hooks';
+import { PaymentProvider } from '@/types/billings';
+import { Warning } from 'next/dist/next-devtools/dev-overlay/icons/warning';
+import { ImWarning } from 'react-icons/im';
 
 export const CreateCheckoutSchema = z.object({
     months: z.coerce.number().int().positive("Please enter a valid month"),
     planType: z.enum([PlanType.PRO, PlanType.ENTERPRISE]),
     currency: z.enum(['BDT', 'USD']),
-    paymentGateway: z.enum(['stripe', 'sslcommerz']),
+    payment_gateway: z.enum([PaymentProvider.STRIPE, PaymentProvider.SSLCOMMERZ]),
 });
 
 type PaymentFormValues = z.infer<typeof CreateCheckoutSchema>;
@@ -31,33 +35,44 @@ const MONTH_OPTIONS = [
     { label: "Other", value: "custom" },
 ];
 
-const PaymentForm = ({ currentPlan, onSuccess }: { currentPlan: PlanType; onSuccess: () => void }) => {
+const PaymentForm = ({ selectedPlan, onSuccess }: { selectedPlan: PlanType.PRO | PlanType.ENTERPRISE; onSuccess: () => void }) => {
 
     const { currency } = useDetectCountry();
     const [loading, setLoading] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState<number | "custom">(1);
+    const paymentMutation = useCreatePaymentCheckout();
 
     const form = useForm<PaymentFormValues>({
         resolver: zodResolver(CreateCheckoutSchema as any),
         defaultValues: {
             months: 1,
-            planType: currentPlan === PlanType.PRO ? PlanType.PRO : PlanType.ENTERPRISE,
+            planType: selectedPlan ?? PlanType.PRO,
             currency: 'USD',
-            paymentGateway: 'stripe',
+            payment_gateway: PaymentProvider.STRIPE,
         },
     });
 
     async function onSubmit(values: PaymentFormValues) {
         setLoading(true);
-        console.log(values);
         // Integrate your payment trigger here
-        setTimeout(() => {
-            setLoading(false);
+        const payload = {
+            planType: values.planType as PlanType,
+            months: +values.months,
+            currency: values.currency,
+            payment_gateway: values.payment_gateway as PaymentProvider,
+        }
+        const result = await paymentMutation.mutateAsync(payload);
+        if (result?.data?.url) {
+            window.open(result.data.url, "_blank");
             onSuccess();
-        }, 2000);
+        } else {
+            // Handle error case
+            alert("Failed to initiate payment. Please try again.");
+            setLoading(false);
+        }
     }
 
-    const gateway = form.watch("paymentGateway");
+    const gateway = form.watch("payment_gateway");
 
     return (
         <div className="w-full  mx-auto py-6 px-4  h-full">
@@ -113,15 +128,15 @@ const PaymentForm = ({ currentPlan, onSuccess }: { currentPlan: PlanType; onSucc
                             <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment Method</label>
                             <RadioGroup
                                 onValueChange={(val) => {
-                                    form.setValue("paymentGateway", val as any);
-                                    form.setValue("currency", val === "stripe" ? "USD" : "BDT");
+                                    form.setValue("payment_gateway", val as any);
+                                    form.setValue("currency", val === PaymentProvider.STRIPE ? "USD" : "BDT");
                                 }}
-                                defaultValue={form.getValues("paymentGateway")}
+                                defaultValue={form.getValues("payment_gateway")}
                                 className="grid grid-cols-2 gap-3"
                             >
                                 {[
-                                    { id: "stripe", label: "Stripe", icon: CreditCard, sub: "Cards, Apple Pay" },
-                                    { id: "sslcommerz", label: "Local", icon: Landmark, sub: "Bkash, Nagad, Bank" }
+                                    { id: PaymentProvider.STRIPE, label: "Stripe", icon: CreditCard, sub: "Cards, Apple Pay" },
+                                    { id: PaymentProvider.SSLCOMMERZ, label: "Local", icon: Landmark, sub: "Bkash, Nagad, Bank" }
                                 ].map((method) => (
                                     <label
                                         key={method.id}
@@ -130,7 +145,7 @@ const PaymentForm = ({ currentPlan, onSuccess }: { currentPlan: PlanType; onSucc
                                             gateway === method.id
                                                 ? "border-primary bg-primary/10 dark:bg-indigo-900/30 dark:border-indigo-900"
                                                 : "border-muted bg-transparent hover:bg-accent dark:bg-slate-800 dark:border-slate-700",
-                                            currency === "USD" && method.id === "sslcommerz" ? "cursor-not-allowed opacity-50" : ""
+                                            currency === "USD" && method.id === PaymentProvider.SSLCOMMERZ ? "cursor-not-allowed opacity-50" : ""
                                         )}
                                     >
                                         <RadioGroupItem value={method.id} className="sr-only" />
@@ -149,11 +164,26 @@ const PaymentForm = ({ currentPlan, onSuccess }: { currentPlan: PlanType; onSucc
                             </RadioGroup>
                         </div>
                     </div>
+                    <div className="mt-auto">
+                        {
+                            paymentMutation?.isError && (
+                                /* for error */
+                                <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 animate-in fade-in flex items-center ">
+                                    {/* lucid */}
+                                    <ImWarning className="h-4 w-4 inline-block mr-2" />
+                                    <p>
+                                        {paymentMutation.error instanceof Error ? paymentMutation.error.message : "Failed to initiate payment. Please try again."}
+                                    </p>
+                                </div>
+                            )
+                        }
 
-                    <Button type="submit" className="cursor-pointer w-full mt-auto rounded-xl py-6 text-base font-bold shadow-lg shadow-primary/20 transition-all active:scale-[0.98] dark:bg-indigo-900" disabled={loading}>
-                        {loading ? "Initializing..." : `Pay in ${form.watch("currency")}`}
-                        {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
-                    </Button>
+                        <Button type="submit" className="cursor-pointer w-full  rounded-xl py-6 text-base font-bold shadow-lg shadow-primary/20 transition-all active:scale-[0.98] dark:bg-indigo-900" disabled={paymentMutation?.isPending}>
+                            {paymentMutation?.isPending ? "Initializing..." : `Pay in ${form.watch("currency")}`}
+                            {!paymentMutation?.isPending && <ArrowRight className="ml-2 h-4 w-4" />}
+                        </Button>
+                    </div>
+
                 </form>
             </CardContent>
 

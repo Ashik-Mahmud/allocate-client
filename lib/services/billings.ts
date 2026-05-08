@@ -5,7 +5,7 @@ import { CreatePaymentCheckoutPayload, PaymentCheckoutResponse } from "@/types/b
 
 // service to create payment checkout session and get the checkout URL
 export const createPaymentCheckoutService = async (payment: CreatePaymentCheckoutPayload) => {
-    return apiRequest<ApiResponse<PaymentCheckoutResponse | any>>(`/bookings/create`, {
+    return apiRequest<ApiResponse<PaymentCheckoutResponse>>(`/payments/create-checkout`, {
         method: "POST",
         body: JSON.stringify(payment),
     });
