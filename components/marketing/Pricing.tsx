@@ -2,29 +2,39 @@ import React from 'react';
 import { Check, X, Zap, Building2, Crown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription';
+import { SUBSCRIPTION_LIMITS, SUBSCRIPTION_PRICING } from '@/lib/constants/subscription';
+import { PlanType } from '@/types/organization';
 
+type Plan = {
+  type: PlanType;
+  name: string;
+  price: typeof SUBSCRIPTION_PRICING[PlanType] | string;
+  description: string;
+  icon: React.ReactNode;
+  limits: typeof SUBSCRIPTION_LIMITS[PlanType];
+  popular?: boolean;
+};
 
-const pricingPlans = [
+const pricingPlans:Plan[] = [
   {
-    type: "FREE",
+    type: PlanType.FREE,
     name: "Starter",
-    price: "$0",
+    price: SUBSCRIPTION_PRICING[PlanType.FREE],
     description: "Perfect for small teams or individuals.",
     icon: <Zap className="w-5 h-5 text-blue-500" />,
     limits: SUBSCRIPTION_LIMITS.FREE,
   },
   {
-    type: "PRO",
+    type: PlanType.PRO,
     name: "Professional",
-    price: "$29",
+    price: SUBSCRIPTION_PRICING[PlanType.PRO],
     description: "Advanced tools for growing organizations.",
     icon: <Crown className="w-5 h-5 text-amber-500" />,
     limits: SUBSCRIPTION_LIMITS.PRO,
     popular: true,
   },
   {
-    type: "ENTERPRISE",
+    type: PlanType.ENTERPRISE,
     name: "Enterprise",
     price: "Custom",
     description: "Full control for large scale operations.",
@@ -44,7 +54,7 @@ export const PricingSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {pricingPlans.map((plan) => (
+        {pricingPlans.map((plan: Plan) => (
           <Card 
             key={plan.type} 
             className={`relative flex flex-col border-2 transition-all duration-300 hover:shadow-lg ${
@@ -63,7 +73,9 @@ export const PricingSection = () => {
                 <CardTitle className="text-xl">{plan.name}</CardTitle>
               </div>
               <div className="flex items-baseline gap-1 mt-2">
-                <span className="text-4xl font-bold tracking-tight">{plan.price}</span>
+                <span className="text-4xl font-bold tracking-tight">{
+                   typeof plan.price === "string" ? plan.price : `$${plan.price.dollar.monthly}`                
+                }</span>
                 {plan.price !== "Custom" && <span className="text-muted-foreground">/month</span>}
               </div>
               <CardDescription className="mt-2">{plan.description}</CardDescription>

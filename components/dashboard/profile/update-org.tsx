@@ -11,6 +11,7 @@ import {
     Hash,
     Image as ImageIcon,
     Info,
+    Loader2,
     Mail,
     MapPin,
     ShieldCheck,
@@ -19,6 +20,8 @@ import {
 import type { Organizations } from '@/types/organization'
 import AllocateTooltip from '@/components/shared/tooltip'
 import { cn } from '@/lib/utils/cn'
+import useCountries from '@/hooks/use-countries';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const ORG_TYPES = [
     { value: 'Tech', label: 'Tech' },
@@ -93,10 +96,7 @@ export const TIMEZONE_GROUPS = getTimezoneOptions().reduce<Record<string, string
     return groups
 }, {})
 
-type CountryOption = {
-    name: string;
-    code: string;
-}
+
 
 type NotificationPreferences = typeof DEFAULT_NOTIFICATION_PREFERENCES
 
@@ -202,14 +202,14 @@ function mapToOrganizationPayload(values: OrgFormValues): Partial<Organizations>
 }
 
 const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
-    const [countries, setCountries] = useState<CountryOption[]>([])
-    const [countryStatus, setCountryStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+    const { countries, countryStatus, isLoading } = useCountries();
 
     const {
         register,
         handleSubmit,
         reset,
         control,
+        setValue,
         formState: { errors },
     } = useForm<OrgFormValues>({
         resolver: zodResolver(orgSchema as any),
@@ -221,43 +221,6 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
             reset(getDefaultFormValues(data))
         }
     }, [data, reset])
-
-    useEffect(() => {
-        const controller = new AbortController()
-        const loadCountries = async () => {
-            try {
-                setCountryStatus('loading')
-                const response = await fetch('https://restcountries.com/v3.1/all?fields=name,cca2', {
-                    signal: controller.signal,
-                })
-
-                if (!response.ok) {
-                    throw new Error('Failed to load countries')
-                }
-
-                const payload = await response.json() as Array<{ name?: { common?: string }; cca2?: string }>
-                const nextCountries = payload
-                    .map((country) => ({
-                        name: country.name?.common ?? country.cca2 ?? '',
-                        code: country.cca2 ?? country.name?.common ?? '',
-                    }))
-                    .filter((country) => country.name.length > 0 && country.code.length > 0)
-                    .sort((first, second) => first.name.localeCompare(second.name))
-
-                setCountries(nextCountries)
-                setCountryStatus('ready')
-            } catch {
-                if (!controller.signal.aborted) {
-                    setCountries([])
-                    setCountryStatus('error')
-                }
-            }
-        }
-
-        loadCountries()
-
-        return () => controller.abort()
-    }, [])
 
     const watchedName = useWatch({ control, name: 'name' })
     const watchedSlug = useWatch({ control, name: 'slug' })
@@ -481,7 +444,7 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
 
                                     <div className="space-y-1.5">
                                         <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Country</label>
-                                        <input
+                                        {/* <input
                                             {...register('address.country')}
                                             list="organization-country-list"
                                             placeholder={countryStatus === 'loading' ? 'Loading countries...' : 'Bangladesh'}
@@ -491,7 +454,20 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
                                             {countries.map((country) => (
                                                 <option key={country.code} value={country.name} />
                                             ))}
-                                        </datalist>
+                                        </datalist> */}
+                                        <Select onValueChange={(value) => setValue('address.country', value)} defaultValue={watchedCountry}>
+                                            <SelectTrigger className="w-full p-5! bg-white border-input focus:ring-primary dark:bg-slate-800 dark:border-slate-600 dark:text-white">
+                                                <SelectValue placeholder="Select Country" />
+                                            </SelectTrigger>
+                                            <SelectContent className="max-h-75" >
+                                                {
+                                                    isLoading ? <Loader2 className="animate-spin" /> : (countries).map(c => (
+                                                        <SelectItem key={c.code} value={c.name}>{c.name}</SelectItem>
+                                                    ))
+                                                }
+
+                                            </SelectContent>
+                                        </Select>
                                         {countryStatus === 'error' ? (
                                             <p className="text-[11px] text-amber-600 dark:text-amber-400">Country suggestions could not be loaded. You can still type the value manually.</p>
                                         ) : (
@@ -540,7 +516,7 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
                                                 key === 'sms' || key === 'push' ? 'opacity-50 cursor-not-allowed' : ''
                                             )
                                         }
-                                        title={key === 'sms' || key === 'push' ? 'SMS and Push notifications are not available in this version.' : undefined}
+                                            title={key === 'sms' || key === 'push' ? 'SMS and Push notifications are not available in this version.' : undefined}
                                         >
                                             <span className="font-medium text-slate-700 dark:text-slate-200">{label}</span>
                                             <input
@@ -572,7 +548,7 @@ const UpdateOrganization = ({ data, onSubmit, formId }: Props) => {
 
                 </div>
             </section>
-            
+
         </form>
     )
 }

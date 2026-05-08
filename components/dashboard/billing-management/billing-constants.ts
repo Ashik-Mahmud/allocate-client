@@ -1,6 +1,7 @@
 import { Layers3, ShieldCheck, Sparkles } from 'lucide-react'
 import { ROUTES } from '@/lib/constants/routes'
 import { PlanType } from '@/types/organization'
+import { SUBSCRIPTION_PRICING } from '@/lib/constants/subscription';
 
 export type FeatureKey = 'AI_INSIGHTS' | 'ADVANCED_RULES' | 'PRIORITY_SUPPORT'
 
@@ -12,6 +13,16 @@ export type FeatureMeta = {
 
 export type PlanMeta = {
   plan: PlanType
+  price:{
+    taka:{
+        monthly: number,
+        annually: number,
+    },
+    dollar:{
+        monthly: number,
+        annually: number,
+    }
+  },
   name: string
   subtitle: string
   accent: string
@@ -38,6 +49,7 @@ export const PLAN_CARDS: PlanMeta[] = [
     border: 'border-slate-200 dark:border-slate-800',
     ctaLabel: 'View pricing',
     ctaHref: ROUTES.pricing,
+    price: SUBSCRIPTION_PRICING[PlanType.FREE],
   },
   {
     plan: PlanType.PRO,
@@ -49,6 +61,7 @@ export const PLAN_CARDS: PlanMeta[] = [
     ctaLabel: 'Upgrade to Pro',
     ctaHref: ROUTES.pricing,
     featured: true,
+    price: SUBSCRIPTION_PRICING[PlanType.PRO],
   },
   {
     plan: PlanType.ENTERPRISE,
@@ -59,5 +72,6 @@ export const PLAN_CARDS: PlanMeta[] = [
     border: 'border-slate-200 dark:border-slate-800',
     ctaLabel: 'Talk to sales',
     ctaHref: ROUTES.pricing,
-  },
+    price: SUBSCRIPTION_PRICING[PlanType.ENTERPRISE],
+    },
 ]

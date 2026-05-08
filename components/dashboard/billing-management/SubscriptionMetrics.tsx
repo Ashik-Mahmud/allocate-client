@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { Banknote, CheckCircle2, Clock3, Layers3, Users } from 'lucide-react'
+import { Banknote, CalendarPlus, CheckCircle2, ChevronRight, Clock3, Layers3, Pencil, Users } from 'lucide-react'
 
 import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription'
 import { cn } from '@/lib/utils/cn'
@@ -76,7 +76,9 @@ function SectionShell({ title, subtitle, children }: { title: string; subtitle: 
 }
 
 export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ currentPlan, billingStatus, subscription, creditPool }) => {
+
     const currentLimits = SUBSCRIPTION_LIMITS[currentPlan]
+    const isPaidPlan = currentPlan !== PlanType.FREE && currentPlan !== null && subscription?.is_active
 
     const statusClassName =
         billingStatus === PaymentStatus.COMPLETED
@@ -123,6 +125,13 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                     <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
                         {subscription?.is_active ? 'Active cycle' : 'No active cycle'}
                     </span>
+                    {isPaidPlan && (
+                        <button className="group relative flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50/50 px-4 py-1.5 text-xs font-medium text-amber-700 transition-all hover:bg-amber-100 hover:shadow-sm dark:border-amber-900/30 dark:bg-amber-900/10 dark:text-amber-400 dark:hover:bg-amber-900/20 cursor-pointer">
+                            <CalendarPlus className="h-3.5 w-3.5 animate-pulse" />
+                            <span>Extend Current Plan</span>
+                            <ChevronRight className="h-3 w-3 opacity-50 transition-transform group-hover:translate-x-0.5" />
+                        </button>
+                    )}
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
