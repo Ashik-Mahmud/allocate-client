@@ -1,21 +1,24 @@
 "use client"
 
 import React from 'react'
-import { Banknote, CalendarPlus, CheckCircle2, ChevronRight, Clock3, Layers3, Pencil, Users } from 'lucide-react'
+import { Banknote, CalendarPlus, CheckCircle2, ChevronRight, Clock3, Layers3, Users } from 'lucide-react'
 
 import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription'
 import { cn } from '@/lib/utils/cn'
 import { PaymentStatus, PlanType, type Subscription } from '@/types/organization'
+import type { CreditTransaction } from '@/types/credits'
 import { FEATURE_CATALOG } from './billing-constants'
 import { RenewalCountdown } from './RenewalCountdown'
-import { formatDistanceStrict } from 'date-fns';
 import PaymentProviderBadge from '@/components/shared/payment-method';
+import { InvoiceDownloadCard } from './InvoiceDownloadCard'
 
 interface SubscriptionMetricsProps {
     currentPlan: PlanType
     billingStatus: PaymentStatus
     subscription: Subscription | null
     creditPool: number
+    organizationName?: string | null
+    creditTransactions?: CreditTransaction[]
     onExtend?: () => void
 }
 
@@ -77,7 +80,7 @@ function SectionShell({ title, subtitle, children }: { title: string; subtitle: 
     )
 }
 
-export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ currentPlan, billingStatus, subscription, creditPool, onExtend }) => {
+export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ currentPlan, billingStatus, subscription, creditPool, organizationName, creditTransactions, onExtend }) => {
 
     const currentLimits = SUBSCRIPTION_LIMITS[currentPlan]
     const isPaidPlan = currentPlan !== PlanType.FREE && currentPlan !== null && subscription?.is_active
@@ -159,7 +162,7 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                             <PaymentProviderBadge
                                 provider={subscription?.provider || 'unknown'}
                                 showIcon={true}
-                                transactionId={subscription?.last_transaction_id! || ''}
+                                transactionId={subscription?.last_transaction_id ?? ''}
                             />
                         }
                     </div>
@@ -170,6 +173,12 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                         <FeatureChip key={key} label={label} supported={Boolean(currentLimits?.FEATURES?.[key])} />
                     ))}
                 </div>
+
+                <InvoiceDownloadCard
+                    organizationName={organizationName}
+                    subscription={subscription}
+                    creditTransactions={creditTransactions}
+                />
             </div>
         </SectionShell>
     )

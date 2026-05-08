@@ -1,5 +1,6 @@
 import { User } from ".";
 import { PaymentProvider } from "./billings";
+import { CreditTransaction } from "./credits";
 import { Resources, ResourcesRule } from "./resources";
 
 export interface OrgAddress {
@@ -84,6 +85,7 @@ export interface Organizations {
   resources?: Resources[];
   resourcesRules?: ResourcesRule[];
   subscription?: Subscription | null;
+  creditTransactions?: CreditTransaction[];
   // Add other relation types as you define them:
   // subscriptions?: Subscription[];
   // notifications?: Notification[];

@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react'
 import { useCurrentUser } from '@/features/auth'
-import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription'
 import { PaymentStatus, PlanType } from '@/types/organization'
+import type { CreditTransaction } from '@/types/credits'
 import { BillingFooter } from './BillingFooter'
 import { BillingHeader } from './BillingHeader'
 import { PricingComparison } from './PricingComparison'
@@ -19,6 +19,7 @@ const BillingManagement = () => {
     const { user, isLoading } = useCurrentUser()
     const organization = user?.organization ?? null
     const subscription = organization?.subscription ?? null
+    const creditTransactions = (user?.organization?.creditTransactions) || []
 
     const currentPlan = subscription?.plan_name ?? organization?.plan_type ?? PlanType.FREE
     const billingStatus = subscription?.payment_status ?? (currentPlan === PlanType.FREE ? PaymentStatus.PENDING : PaymentStatus.COMPLETED)
@@ -78,13 +79,15 @@ const BillingManagement = () => {
                     billingStatus={billingStatus}
                     subscription={subscription}
                     creditPool={organization?.credit_pool ?? 0}
+                    organizationName={organization?.name ?? null}
+                    creditTransactions={creditTransactions}
                     onExtend={() => {
                         setIsOpenPaymentMethod(true)
                     }}
                 />
 
                 <PricingComparison currentPlan={currentPlan} onUpgrade={(type) => {
-                        setSelectedPlan(type)
+                    setSelectedPlan(type)
                     setIsOpenPaymentMethod(true)
                 }} />
             </div>
