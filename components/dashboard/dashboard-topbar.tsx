@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { PlanType } from "@/types/organization";
 import { cn } from "@/lib/utils/cn";
+import { Role } from "@/types";
 const planStyles = {
     [PlanType.FREE]: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-zinc-900 dark:text-zinc-400",
     [PlanType.PRO]: "border-indigo-200 bg-indigo-50/50 text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/5 dark:text-indigo-300 shadow-sm shadow-indigo-500/5",
@@ -88,25 +89,29 @@ const planStyles = {
                         )}
 
                         {/* Personal Credits Chip */}
-                        <div className="group relative flex items-center gap-2 rounded-2xl border border-slate-200 bg-white pl-2 pr-4 py-0.5 transition-all hover:border-slate-300 dark:border-slate-800 dark:bg-zinc-950 dark:hover:border-slate-700">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 dark:bg-zinc-800">
-                                <User className="size-4 text-slate-600 dark:text-slate-400" />
-                            </div>
-                            <div className="flex flex-col items-start">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
-                                    Personal
-                                </span>
-                                <span className="flex items-center gap-1.5 font-mono text-sm font-bold text-slate-900 dark:text-slate-100">
-                                    {typeof user?.personal_credits === "number"
-                                        ? user?.personal_credits.toLocaleString()
-                                        : "0"}
-                                    <span className="text-[10px] font-medium opacity-60">CR</span>
-                                </span>
-                            </div>
-                        </div>
+                        {
+                            user?.role !== Role.ADMIN && (<div className="group relative flex items-center gap-2 rounded-2xl border border-slate-200 bg-white pl-2 pr-4 py-0.5 transition-all hover:border-slate-300 dark:border-slate-800 dark:bg-zinc-950 dark:hover:border-slate-700">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 dark:bg-zinc-800">
+                                    <User className="size-4 text-slate-600 dark:text-slate-400" />
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-500">
+                                        Personal
+                                    </span>
+                                    <span className="flex items-center gap-1.5 font-mono text-sm font-bold text-slate-900 dark:text-slate-100">
+                                        {typeof user?.personal_credits === "number"
+                                            ? user?.personal_credits.toLocaleString()
+                                            : "0"}
+                                        <span className="text-[10px] font-medium opacity-60">CR</span>
+                                    </span>
+                                </div>
+                            </div>)
+                        }
                     </div>
 
-                    <NotificationPopover  />
+                    {
+                        user?.role !== Role.ADMIN && <NotificationPopover />
+                    }
 
                     <ThemeToggle
                         floating={false}

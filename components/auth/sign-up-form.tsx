@@ -121,9 +121,9 @@ export function SignUpForm() {
         />
         <label htmlFor="terms" className="text-sm text-slate-600">
           I agree to the{" "}
-          <a href="#" className="text-slate-900 dark:text-slate-400 underline">
+          <Link href={ROUTES.termsAndConditions} className="text-slate-900 dark:text-slate-400 underline">
             terms and conditions
-          </a>
+          </Link>
           .
         </label>
       </div>

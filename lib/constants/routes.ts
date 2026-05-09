@@ -3,6 +3,7 @@ export const ROUTES = {
   pricing: "/pricing",
   signIn: "/sign-in",
   signUp: "/sign-up",
+  termsAndConditions: "/terms-conditions",
   dashboard: "/dashboard",
   dashboardAdmin: {
    
@@ -20,8 +21,7 @@ export const ROUTES = {
     billing: "/dashboard/billing",
   },
   dashboardStaff: {
-    workQueue: "/dashboard/work-queue",
-    dailyPlan: "/dashboard/daily-plan",
+    requestSupport: "/dashboard/request-support",
   },
   dashboardCommon: {
      staffOverview: "/dashboard/staff-overview",

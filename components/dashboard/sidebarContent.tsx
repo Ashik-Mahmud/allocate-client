@@ -140,7 +140,7 @@ const staffNavigation: NavItem[] = [
     {
         label: "Request Support",
         description: "Submit support requests and track their status",
-        href: ROUTES.dashboardStaff.dailyPlan,
+        href: ROUTES.dashboardStaff.requestSupport,
         icon: CalendarCheck,
     },
 ];
