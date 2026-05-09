@@ -4,15 +4,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { notificationsKeys } from "./hooks";
-import { useNamespaceSocket, useRealtimeEvent, useRealtimeSocket } from "@/features/realtime";
+import { useNamespaceSocket, useRealtimeEvent, useRealtimeManager, useRealtimeSocket } from "@/features/realtime";
 
 export function NotificationRealtimeSync() {
     const queryClient = useQueryClient();
 
-
-    // console.log(connected, socket)
-
-    const { subscribeNamespace, getNamespaceState, subscribe, getNamespaceSocket, emit, connected } = useRealtimeSocket()
+    const {  getNamespaceSocket,  connected } = useRealtimeManager()
     const { socket } = useNamespaceSocket('notifications')
 
     useEffect(() => {
