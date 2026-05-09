@@ -6,6 +6,8 @@ import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import type { Session } from "next-auth";
 import { CurrentUserProvider } from "@/features/auth/current-user-context";
+import { NotificationRealtimeSync } from "@/features/notifications/notification-realtime-sync";
+import { RealtimeSocketProvider } from "@/features/realtime";
 import { TooltipProvider } from "../ui/tooltip";
 
 
@@ -43,7 +45,12 @@ export function Providers({ children, session }: ProvidersProps) {
       <SessionProvider session={session} refetchOnWindowFocus={false}>
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
-            <CurrentUserProvider>{children}</CurrentUserProvider>
+            <CurrentUserProvider>
+              <RealtimeSocketProvider>
+                <NotificationRealtimeSync />
+                {children}
+              </RealtimeSocketProvider>
+            </CurrentUserProvider>
           </QueryClientProvider>
         </TooltipProvider>
       </SessionProvider>

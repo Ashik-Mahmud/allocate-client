@@ -214,6 +214,7 @@ const NotificationMain = () => {
                 onConfirm={() => {
                     if (deleteTargetId) {
                         clearNotification.mutate({ notificationId: deleteTargetId });
+                        setDeleteTargetId(null);
                     }
                 }}
                 open={!!deleteTargetId}

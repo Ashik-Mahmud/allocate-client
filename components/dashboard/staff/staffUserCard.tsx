@@ -15,6 +15,7 @@ import { StaffDetails } from '@/types/staff'
 import { useDeleteStaffMutation } from '@/features/staff'
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation'
 import { on } from 'events'
+import { Role } from '@/types';
 // This would typically come from your Prisma types
 interface UserProps {
     user: StaffDetails
@@ -109,12 +110,13 @@ const StaffUserCard = ({ user, onEdit, onDelete, onViewDetails, onAssignCredits,
                         }
                     },
                     {
-                        label: 'Delete User',
+                        label: `Delete ${user?.name}`,
                         onClick: () => {
                             // Handle delete user logic here
                             onDelete && onDelete(user.id);
                         },
-                        destructive: true
+                        destructive: true,
+                        disabled: user?.role === Role.ORG_ADMIN
                     }
 
                 ]} >
