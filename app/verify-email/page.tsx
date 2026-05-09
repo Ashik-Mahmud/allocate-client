@@ -2,7 +2,7 @@
 import { verifyEmail } from '@/lib/services'
 import { cn } from '@/lib/utils/cn'
 import { AlertCircle, CheckCircle2, Loader2, X } from 'lucide-react'
-import { useParams, useSearchParams } from 'next/navigation'
+import { redirect, useParams, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -12,6 +12,9 @@ const VerifyEmail = () => {
     const token = searchParams.get('token')
 
 
+    if (!token) {
+        redirect('/')
+    }
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
 
     useEffect(() => {
