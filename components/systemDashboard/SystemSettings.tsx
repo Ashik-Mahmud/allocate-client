@@ -241,7 +241,7 @@ const SystemSettings = () => {
               <div className="space-y-4">
                 {[
                   { id: 'can_export_logs', label: 'Export System Logs', icon: <FileJson size={16}/> },
-                  { id: 'ui_dark_mode', label: 'Force App-wide Dark Mode', icon: <Moon size={16}/> }
+                  { id: 'ui_dark_mode', label: 'Enable App-wide Dark Mode', icon: <Moon size={16}/> }
                 ].map((flag) => (
                   <div 
                     key={flag.id}
