@@ -29,6 +29,7 @@ export interface CreditTransaction {
     status: string | null;
     createdAt: Date;
     user?: Partial<User>;
+    metadata?: Record<string, any> | null;
 }
 
 /**

@@ -163,6 +163,7 @@ export const SubscriptionMetrics: React.FC<SubscriptionMetricsProps> = ({ curren
                                 provider={subscription?.provider || 'unknown'}
                                 showIcon={true}
                                 transactionId={subscription?.last_transaction_id ?? ''}
+                                showMetadata
                             />
                         }
                     </div>

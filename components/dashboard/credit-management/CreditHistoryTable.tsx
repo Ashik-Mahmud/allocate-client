@@ -131,16 +131,22 @@ export const CreditHistoryTable = ({ items, isLoading }: CreditHistoryTableProps
                                         {format(new Date(item.createdAt), 'MMM dd, HH:mm')}
                                     </td>
                                     <td className="px-4 py-4 text-sm align-middle">
-                                        <div className="font-medium text-slate-900">
+                                        <div className="font-medium text-slate-900 dark:text-slate-100">
                                             {item?.price_paid
-                                                ? `${item?.currency ?? '$'}${item.price_paid.toFixed(2)}`
+                                                ? `${item?.currency ?? '$'}${' '+ item.price_paid.toFixed(2)}`
                                                 : <span className="text-slate-400">—</span>
                                             }
                                         </div>
                                     </td>
 
                                     <td className="px-4 py-4 text-sm align-middle">
-                                         <PaymentProviderBadge provider={item?.payment_gateway || 'unknown'} showIcon={true}  transactionId={item?.transaction_id || ''} />
+                                        <PaymentProviderBadge
+                                            provider={item?.payment_gateway || 'unknown'}
+                                            showIcon={true}
+                                            transactionId={item?.transaction_id || ''}
+                                            showMetadata={true}
+                                            metadata={item?.metadata as Record<string, any> | undefined}
+                                        />
                                     </td>
 
                                     <td className="px-4 py-4 text-sm align-middle">
