@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession } from "next-auth/react";
 
-import { login, register, sendVerificationEmail, UpdateProfileService } from "@/lib/services/auth";
+import { changePasswordService, login, register, sendVerificationEmail, UpdateProfileService } from "@/lib/services/auth";
 
 import {
     buildAuthSession,
@@ -83,3 +83,13 @@ export const useUpdateProfile = () => {
         },
     });
 }
+
+export const useChangePassword = () => {
+    return useMutation({
+        mutationFn: changePasswordService,
+        onSuccess: async () => {
+            // Optionally, you can invalidate user-related queries here if needed
+        },
+    });
+}
+// Implement the API call to change the password

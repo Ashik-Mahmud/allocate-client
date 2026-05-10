@@ -55,3 +55,11 @@ export const UpdateProfileService = async (payload: Partial<User>) => {
 
   });
 }
+
+
+export const changePasswordService = async (payload:{currentPassword: string, newPassword: string}) => {
+  return apiRequest<ApiResponse<{ success: boolean; message?: string }>>("/auth/change-password", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+};

@@ -1,3 +1,4 @@
+import { TransactionType } from "./credits";
 export type AlertType = 'info' | 'warning' | 'error' | 'success';
 
 export interface GlobalAlert {
@@ -22,4 +23,57 @@ export interface SystemSettingsData {
   maintenance_mode: boolean;
   global_alert_message: GlobalAlert;
   features_flags: FeatureFlags;
+}
+
+export interface OrganizationListFilters {
+  organizationId?: string;
+  name: string;
+  verified: boolean;
+  page: number;
+  limit: number;
+  search: string;
+}
+
+export interface BroadcastAnnouncementPayload {
+  title: string,
+  message: string,
+  userIds: string[],
+  type: 'SYSTEM_ALERT' | 'MAINTENANCE_NOTICE'
+  metadata: Record<string, any>,
+  receiverType: 'ALL' | 'ORG' | 'STAFF' | 'INDIVIDUAL',
+}
+
+export interface AdminUserFilters {
+  organizationId?: string;
+  name: string;
+  email: string;
+  role: "ORG_ADMIN" | "STAFF";
+  page: number;
+  limit: number;
+  search?: string;
+}
+
+export interface TransactionListFilters {
+  organizationId?: string;
+  type?: TransactionType;
+  startDate?: string;
+  endDate?: string;
+  page: number;
+  limit: number;
+}
+
+export interface RevenueAnalyticsFilters {
+  startDate: string;
+  endDate: string;
+  organizationId?: string;
+  groupBy: "day" | "week" | "month";
+}
+
+export interface ActivityLogFilters {
+  organizationId?: string;
+  userId?: string;
+  startDate?: string;
+  endDate?: string;
+  page: number;
+  limit: number;
 }
