@@ -12,6 +12,9 @@ import UpdateOrganizationDrawer from "@/components/dashboard/update-org-drawer";
 import { useCurrentUser } from "@/features/auth";
 import NextBookingCountDown from "@/components/dashboard/booking-availability/NextBookingCountDown";
 import PlanLimitExceed from "@/components/shared/PlanLimitExceed";
+import GlobalAlertMessage from "@/components/shared/GlobalAlertMessage";
+import { Role } from "@/types";
+import MaintenanceAlert from "@/components/shared/MaintenanceAlert";
 
 export default async function DashboardLayout({
   children,
@@ -42,17 +45,19 @@ export default async function DashboardLayout({
 
 
         <main className="min-w-0  border-l border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex h-full min-h-0 flex-col pt-20 md:pt-0">
+          <div className="flex h-full min-h-0 flex-col pt-20 md:pt-0 relative">
             <div className="border-b border-slate-200 bg-white px-3 py-1 dark:border-slate-800 dark:bg-slate-950 md:px-5 md:py-1">
               <DashboardTopbar />
             </div>
-          
+
             <PlanLimitExceed />
+            {session?.user?.role !== Role.ADMIN && <GlobalAlertMessage />}
+            {session?.user?.role !== Role.ADMIN && <MaintenanceAlert type="maintenance" view="detailed"  />}
             <div className="h-full flex-1  p-4">
 
               <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white  dark:border-slate-800 dark:bg-slate-950">
                 <div className="min-h-full w-full h-full md:absolute inset-0 p-4 md:p-6">
-                    
+
                   {children}
                 </div>
               </div>

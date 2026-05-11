@@ -10,6 +10,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { PlanType } from "@/types/organization";
 import { cn } from "@/lib/utils/cn";
 import { Role } from "@/types";
+import useGlobalSettings from "@/hooks/use-global-settings";
 const planStyles = {
     [PlanType.FREE]: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-zinc-900 dark:text-zinc-400",
     [PlanType.PRO]: "border-indigo-200 bg-indigo-50/50 text-indigo-700 dark:border-indigo-500/20 dark:bg-indigo-500/5 dark:text-indigo-300 shadow-sm shadow-indigo-500/5",
@@ -17,6 +18,7 @@ const planStyles = {
 }; export function DashboardTopbar() {
     const { user } = useCurrentUser();
     const role = user?.role ?? null;
+    const { isThemeMode } = useGlobalSettings();
 
     return (
         <div className="rounded-xl border-0 border-slate-200 z-50  py-3 dark:border-slate-800 dark:bg-slate-950  md:py-2">
@@ -113,10 +115,11 @@ const planStyles = {
                         user?.role !== Role.ADMIN && <NotificationPopover />
                     }
 
-                    <ThemeToggle
+
+                    {isThemeMode ? <ThemeToggle
                         floating={false}
                         className="hidden sm:grid h-10 w-10 rounded-xl border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                    />
+                    /> : null}
 
 
                 </div>
