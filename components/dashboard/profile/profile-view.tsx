@@ -304,8 +304,8 @@ export default function ProfileView({ user }: Props) {
 
                 <div className={
                     cn(
-                        "grid gap-4 px-6 py-6 lg:grid-cols-2",
-                        isAdmin ? " lg:grid-cols-1" : ''
+                        "grid gap-4 px-6 py-6 ",
+                        isAdmin ? " lg:grid-cols-1" : 'grid-cols-1 lg:grid-cols-2'
                     )
                 }>
                     {isOrgAdmin ? (

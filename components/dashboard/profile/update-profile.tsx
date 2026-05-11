@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils/cn'
 import { TIMEZONE_GROUPS } from './update-org'
 import { useUpdateProfile } from '@/features/auth'
 import { toast } from 'sonner'
+import DialogPopup from '@/components/shared/dialog-popup';
+import ChangePasswordForm from './changedPassword';
 
 // 1. Validation Schema
 export const UpdateProfileSchema = z.object({
@@ -29,6 +31,8 @@ type Props = {
 }
 
 const UpdateProfile = ({ isOpen, setIsOpen, user, onSubmit, isLoading }: Props) => {
+
+    const [isOpenChangedPassword, setIsOpenChangedPassword] = React.useState(false);
 
     const {
         register,
@@ -149,7 +153,16 @@ const UpdateProfile = ({ isOpen, setIsOpen, user, onSubmit, isLoading }: Props) 
                 }
 
                 {/* Save Button */}
-                <div className="pt-6">
+                <div className="pt-6 flex flex-col gap-3">
+                    {/* button for change password */}
+
+                    <button
+                        type="button"
+                        onClick={() => setIsOpenChangedPassword(true)}
+                        className="w-full h-12 cursor-pointer bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                    >
+                        Change Password
+                    </button>
                     <button
                         type="submit"
                         disabled={isLoading || updateProfile.isPending}
@@ -160,6 +173,18 @@ const UpdateProfile = ({ isOpen, setIsOpen, user, onSubmit, isLoading }: Props) 
                     </button>
                 </div>
             </form>
+            <DialogPopup
+                open={isOpenChangedPassword}
+                onOpenChange={setIsOpenChangedPassword}
+                title="Change Password"
+                description="Update your account password to keep your account secure"
+            >
+                <ChangePasswordForm
+                    onCancel={() => setIsOpenChangedPassword(false)}
+                    onSubmit={() => setIsOpenChangedPassword(false)}
+
+                />
+            </DialogPopup>
         </AllocateDrawer>
     )
 }
