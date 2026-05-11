@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { Building2, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useFetchOrganizations, useUpdateOrganizationMutation } from "@/features/system/hooks";
+import { useFetchOrganizations, useRestoreOrganizationMutation, useUpdateOrganizationMutation } from "@/features/system/hooks";
 import { Organizations } from "@/types/organization";
 import { OrganizationListFilters } from "@/types/systemGlobal";
 import OrganizationsFilters from "./OrganizationsFilters";
@@ -29,7 +29,7 @@ const defaultFilters: OrganizationListFilters = {
 
 };
 
-export type OrgTableActionTypes = "toggle-verify" | "toggle-active" | 'copy-id' | "view" | 'delete' | 'trial' | 'edit' | 'top-up-credits' | 'need-update' | 'extend-trial' | 'view-subscription' | null;
+export type OrgTableActionTypes = "toggle-verify" | "toggle-active" | 'copy-id' | "view" | 'delete' | 'restore' | 'trial' | 'edit' | 'top-up-credits' | 'need-update' | 'extend-trial' | 'view-subscription' | null;
 
 const OrganizationMain = () => {
     const [appliedFilters, setAppliedFilters] = useState<OrganizationListFilters>(defaultFilters);
@@ -46,6 +46,7 @@ const OrganizationMain = () => {
 
     const { data, isLoading, isFetching, refetch } = useFetchOrganizations(appliedFilters);
     const updateOrgMutation = useUpdateOrganizationMutation();
+    const restoreMutation = useRestoreOrganizationMutation();
 
     const organizations = useMemo(() => data?.data ?? [], [data?.data]);
     const pagination = data?.pagination;
@@ -134,6 +135,11 @@ const OrganizationMain = () => {
         }
         if (action === 'delete') {
             setIsOpenDeleteOrg(true);
+            setSelectedOrg(org);
+            return;
+        }
+        if (action === 'restore') {
+            setIsConfirmingAction(true);
             setSelectedOrg(org);
             return;
         }
@@ -277,6 +283,26 @@ const OrganizationMain = () => {
         }
     };
 
+    // Handle restore organization
+    const handleRestoreOrganization = async () => {
+        try {
+            const result = await restoreMutation.mutateAsync(selectedOrg?.id ?? "");
+            if (result.success) {
+                toast.success("Organization restored", {
+                    description: "The organization has been successfully restored and is now active.",
+                });
+                setIsConfirmingAction(false);
+                setSelectedOrg(null)
+                setActionType(null);
+                refetch();
+            }
+
+        } catch (error) {
+            toast.error("Failed to restore organization");
+        }
+    }
+
+
     const total = pagination?.total ?? organizations.length;
     const totalPages = pagination?.totalPages ?? 1;
     const currentPage = pagination?.page ?? appliedFilters.page ?? 1;
@@ -408,6 +434,8 @@ const OrganizationMain = () => {
                         handleAllowTrial();
                     } else if (actionType === 'need-update') {
                         handleNeedUpdateOrg();
+                    } else if (actionType === 'restore') {
+                        handleRestoreOrganization();
                     }
                 }}
             />

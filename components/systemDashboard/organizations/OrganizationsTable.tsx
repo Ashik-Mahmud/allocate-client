@@ -202,7 +202,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                             },
                                             {
                                                 label: org?.deletedAt ? "Restore organization" : "Delete organization",
-                                                onClick: () => onAction("delete", org),
+                                                onClick: () => onAction(org?.deletedAt? 'restore' : 'delete', org),
                                                 destructive: true,
                                                 icon: org?.deletedAt ? BiReset : Trash2,
                                             },

@@ -1,6 +1,6 @@
 import { BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization } from "@/lib/services/system";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
 import { organizationKeys } from "../organization";
@@ -70,6 +70,19 @@ export const useDeleteOrganizationMutation = () => {
         },
     });
 };
+
+// Hook to restore an organization (if soft-deleted)
+export const useRestoreOrganizationMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: string) => restoreOrganization(id),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: SystemKeys.organizations() }),
+            ]);
+        }
+        });
+    };
 
 // Hook to send broadcast announcement
 export const useBroadcastAnnouncement = () => {
