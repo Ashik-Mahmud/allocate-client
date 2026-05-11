@@ -14,6 +14,7 @@ import OrganizationDetail from "./OrganizationDetail";
 import AllocateConfirmationAlert from "@/components/shared/TriggerConfirmation";
 import { set } from "date-fns";
 import ExtendTrialForm from "./ExtendTrialForm";
+import ViewSubscription from "./ViewSubscription";
 
 const defaultFilters: OrganizationListFilters = {
     organizationId: "",
@@ -27,7 +28,7 @@ const defaultFilters: OrganizationListFilters = {
 
 };
 
-export type OrgTableActionTypes = "toggle-verify" | "toggle-active" | 'copy-id' | "view" | 'delete' | 'trial' | 'edit' | 'top-up-credits' | 'need-update' | 'extend-trial' | null;
+export type OrgTableActionTypes = "toggle-verify" | "toggle-active" | 'copy-id' | "view" | 'delete' | 'trial' | 'edit' | 'top-up-credits' | 'need-update' | 'extend-trial' | 'view-subscription' | null;
 
 const OrganizationMain = () => {
     const [appliedFilters, setAppliedFilters] = useState<OrganizationListFilters>(defaultFilters);
@@ -38,6 +39,7 @@ const OrganizationMain = () => {
     const [isConfirmingAction, setIsConfirmingAction] = useState(false);
     const [actionType, setActionType] = useState<OrgTableActionTypes>(null);
     const [isOpenExtendTrial, setIsOpenExtendTrial] = useState(false);
+    const [isOpenSubscription, setIsOpenSubscription] = useState(false);
 
     const { data, isLoading, isFetching, refetch } = useFetchOrganizations(appliedFilters);
     const updateOrgMutation = useUpdateOrganizationMutation();
@@ -50,7 +52,7 @@ const OrganizationMain = () => {
     };
 
     const handleApplyFilters = () => {
-       
+
         setAppliedFilters(draftFilters);
     };
 
@@ -130,6 +132,11 @@ const OrganizationMain = () => {
         if (action === 'delete') {
             setIsConfirmingAction(true);
             setSelectedOrg(org);
+            return;
+        }
+        if (action === 'view-subscription') {
+            setSelectedOrg(org);
+            setIsOpenSubscription(true);
             return;
         }
 
@@ -406,10 +413,23 @@ const OrganizationMain = () => {
                 description="Detailed information about the organization and management actions."
                 open={isOpenExtendTrial}
                 onOpenChange={setIsOpenExtendTrial}
-                size="lg"
+                size="full"
             >
                 {selectedOrg && <ExtendTrialForm selectedOrg={selectedOrg} onConfirm={handleConfirmExtendTrial} />}
             </DialogPopup>
+
+            <DialogPopup
+                title="Organization Subscription"
+                description="View and manage the organization's subscription details."
+                open={isOpenSubscription}
+                onOpenChange={setIsOpenSubscription}
+                size="lg"
+            >
+
+                {selectedOrg?.id && <ViewSubscription id={selectedOrg?.id ?? ""} />}
+            </DialogPopup>
+
+
         </div>
     );
 };

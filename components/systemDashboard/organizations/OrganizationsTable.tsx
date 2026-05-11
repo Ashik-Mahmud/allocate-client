@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Building2, CheckCircle2, Clock, Coins, Copy, Edit, Eye, MoreHorizontal, ShieldAlert, Trash, Trash2, Verified, XCircle } from "lucide-react";
+import { Building2, CheckCircle2, Clock, Coins, Copy, Edit, Eye, MoreHorizontal, Receipt, ShieldAlert, Trash, Trash2, Verified, XCircle } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -152,6 +152,11 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 label: "View details",
                                                 onClick: () => onAction("view", org),
                                                 icon: Eye,
+                                            },
+                                            {
+                                                label: "View Subscription",
+                                                onClick: () => onAction("view-subscription", org),
+                                                icon: Receipt,
                                             },
                                             {
                                                 label: "Copy organization ID",
