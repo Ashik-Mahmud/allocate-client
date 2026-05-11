@@ -15,6 +15,7 @@ import AllocateConfirmationAlert from "@/components/shared/TriggerConfirmation";
 import { set } from "date-fns";
 import ExtendTrialForm from "./ExtendTrialForm";
 import ViewSubscription from "./ViewSubscription";
+import DeleteOrganizationDialog from "./DeleteOrganizationDialog";
 
 const defaultFilters: OrganizationListFilters = {
     organizationId: "",
@@ -40,6 +41,8 @@ const OrganizationMain = () => {
     const [actionType, setActionType] = useState<OrgTableActionTypes>(null);
     const [isOpenExtendTrial, setIsOpenExtendTrial] = useState(false);
     const [isOpenSubscription, setIsOpenSubscription] = useState(false);
+    const [isOpenDeleteOrg, setIsOpenDeleteOrg] = useState(false);
+
 
     const { data, isLoading, isFetching, refetch } = useFetchOrganizations(appliedFilters);
     const updateOrgMutation = useUpdateOrganizationMutation();
@@ -130,7 +133,7 @@ const OrganizationMain = () => {
             return;
         }
         if (action === 'delete') {
-            setIsConfirmingAction(true);
+            setIsOpenDeleteOrg(true);
             setSelectedOrg(org);
             return;
         }
@@ -424,10 +427,39 @@ const OrganizationMain = () => {
                 open={isOpenSubscription}
                 onOpenChange={setIsOpenSubscription}
                 size="lg"
-            >
 
+            >
                 {selectedOrg?.id && <ViewSubscription id={selectedOrg?.id ?? ""} />}
             </DialogPopup>
+
+
+            <DialogPopup
+                title=""
+                description=""
+                open={isOpenDeleteOrg}
+                onOpenChange={setIsOpenDeleteOrg}
+                size="md"
+
+            >
+                <DeleteOrganizationDialog
+                    id={selectedOrg?.id ?? ""}
+                    orgName={selectedOrg?.name ?? ""}
+                    onClose={() => {
+                        setIsOpenDeleteOrg(false);
+                        setSelectedOrg(null);
+                        setActionType(null);
+                    }}
+                    onSuccess={() => {
+                        setIsOpenDeleteOrg(false);
+                        setSelectedOrg(null);
+                        setActionType(null);
+                        refetch();
+                    }}
+                />
+            </DialogPopup>
+
+
+
 
 
         </div>

@@ -48,6 +48,10 @@ export const fetchOrganizationById = async (id: string) => {
     return apiRequest<ApiResponse<Organizations>>(`/admin/organizations/${id}`, { method: "GET" });
 }
 
+// Service to delete an organization
+export const deleteOrganization = async (id: string) => {
+    return apiRequest<ApiResponse<null>>(`/admin/organizations/${id}/delete`, { method: "DELETE" });
+}
 // Service to verify an organization
 export const updateOrganization = async (payload: { id: string, updateOrganization: Partial<UpdateOrganizationPayload> }) => {
     return apiRequest<ApiResponse<null>>(`/admin/organizations/${payload.id}`,
