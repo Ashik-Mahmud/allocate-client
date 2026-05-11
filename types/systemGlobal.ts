@@ -27,17 +27,17 @@ export interface SystemSettingsData {
 
 export interface OrganizationListFilters {
   organizationId?: string;
-  name: string;
-  verified: boolean;
-  page: number;
-  limit: number;
-  search: string;
+  name?: string;
+  verified?: boolean;
+  page?: number;
+  limit?: number;
+  search?: string;
 }
 
 export interface BroadcastAnnouncementPayload {
   title: string,
   message: string,
-  userIds: string[],
+  orgIds: string[],
   type: 'SYSTEM_ALERT' | 'MAINTENANCE_NOTICE'
   metadata: Record<string, any>,
   receiverType: 'ALL' | 'ORG' | 'STAFF' | 'INDIVIDUAL',

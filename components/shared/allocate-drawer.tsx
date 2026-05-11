@@ -40,35 +40,35 @@ const AllocateDrawer = ({
     showHandler = true,
 }: Props) => {
     return (
-        <Drawer open={open} onOpenChange={onOpenChange} direction={position} shouldScaleBackground={false} 
-        
+        <Drawer open={open} onOpenChange={onOpenChange} direction={position} shouldScaleBackground={false}
+
         >
             <DrawerContent className={cn("mx-auto max-w-2xl h-dvh rounded-none border-none dark:bg-slate-900", className)} showHandler={showHandler}>
                 {/* Top Handle is included by Shadcn by default, but we add a close button for better UX */}
                 <div className="flex h-full flex-col">
-                    
-                        <DrawerHeader className={
-                            cn("text-left px-6 pt-5 border-b dark:border-b-slate-700", !showHeader && "hidden")
-                        }>
-                            <div className="flex items-center justify-between">
-                                <div className='flex flex-col space-y-0.5'>
-                                    <DrawerTitle className="text-xl text-left font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                                        {title}
-                                    </DrawerTitle>
-                                    {description && (
-                                        <DrawerDescription className="text-left text-slate-500 text-sm dark:text-slate-400">
-                                            {description}
-                                        </DrawerDescription>
-                                    )}
-                                </div>
-                                <DrawerClose asChild>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                                        <X className="size-4" />
-                                    </Button>
-                                </DrawerClose>
-                            </div>
 
-                        </DrawerHeader>
+                    <DrawerHeader className={
+                        cn("text-left px-6 pt-5 border-b dark:border-b-slate-700", !showHeader && "hidden")
+                    }>
+                        <div className="flex items-center justify-between">
+                            <div className='flex flex-col space-y-0.5'>
+                                <DrawerTitle className="text-xl text-left font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                                    {title}
+                                </DrawerTitle>
+                                {description && (
+                                    <DrawerDescription className="text-left text-slate-500 text-sm dark:text-slate-400">
+                                        {description}
+                                    </DrawerDescription>
+                                )}
+                            </div>
+                            <DrawerClose asChild>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                                    <X className="size-4" />
+                                </Button>
+                            </DrawerClose>
+                        </div>
+
+                    </DrawerHeader>
 
                     {/* Content Area */}
                     <div className=" overflow-y-auto no-scrollbar flex-1 ">
@@ -76,13 +76,15 @@ const AllocateDrawer = ({
                     </div>
 
                     {/* Footer Area */}
-                    <DrawerFooter className="px-6 pb-5 pt-4 dark:bg-gray-900 border-t dark:border-gray-700" >
-                        {footer || (
-                            <DrawerClose asChild>
-                                <Button variant="outline" className="w-full rounded-xl">Cancel</Button>
-                            </DrawerClose>
-                        )}
-                    </DrawerFooter>
+                    {
+                        footer ? <DrawerFooter className="px-6 pb-5 pt-4 dark:bg-gray-900 border-t dark:border-gray-700" >
+                            {footer || (
+                                <DrawerClose asChild>
+                                    <Button variant="outline" className="w-full rounded-xl">Cancel</Button>
+                                </DrawerClose>
+                            )}
+                        </DrawerFooter> : null
+                    }
                 </div>
             </DrawerContent>
         </Drawer>

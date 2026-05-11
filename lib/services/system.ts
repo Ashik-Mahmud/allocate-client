@@ -22,7 +22,7 @@ export const getSystemSettings = async () => {
 
 // Broadcaster for system-wide announcements or alerts
 export const broadcastSystemAnnouncement = async (payload: BroadcastAnnouncementPayload) => {
-    return apiRequest<ApiResponse<null>>("/admin/system-announcement", {
+    return apiRequest<ApiResponse<null>>("/admin/announcements", {
         method: "POST",
         body: JSON.stringify(payload),
     });
@@ -33,10 +33,17 @@ export const fetchOrganizations = async (filters: OrganizationListFilters) => {
     if (filters.organizationId) queryParams.append("organizationId", filters.organizationId);
     if (filters.name) queryParams.append("name", filters.name);
     if (filters.verified !== undefined) queryParams.append("verified", String(filters.verified));
-    queryParams.append("page", String(filters.page));
-    queryParams.append("limit", String(filters.limit));
+    if (filters.page) queryParams.append("page", String(filters.page));
+    if (filters.limit) queryParams.append("limit", String(filters.limit));
     if (filters.search) queryParams.append("search", filters.search);
     return apiRequest<PaginatedResponse<Organizations>>(`/admin/organizations?${queryParams?.toString() || ''}`, { method: "GET" });
+}
+
+// Service to search users/staff by name or email
+export const searchUsers = async (searchValue: string) => {
+    const queryParams = new URLSearchParams();
+    if (searchValue) queryParams.append("search", searchValue);
+    return apiRequest<ApiResponse<any[]>>(`/admin/users/search?${queryParams.toString()}`, { method: "GET" });
 }
 
 

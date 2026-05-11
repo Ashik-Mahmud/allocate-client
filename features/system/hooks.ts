@@ -1,6 +1,6 @@
-import { OrganizationListFilters, SystemSettingsData } from "@/types/systemGlobal";
+import { BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData } from "@/types/systemGlobal";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations } from "@/lib/services/system";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, searchUsers, broadcastSystemAnnouncement } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
 
@@ -45,5 +45,27 @@ export const useFetchOrganizations = (filters: OrganizationListFilters) => {
     return useQuery({
         queryKey: SystemKeys.organizations(filters),
         queryFn: () => fetchOrganizations(filters),
+    });
+};
+
+// hook to search users/staff by name or email
+export const useSearchUsers = (searchValue: string) => {
+    return useQuery({
+        queryKey: ["system", "users", "search", searchValue],
+        queryFn: () => searchUsers(searchValue),
+        enabled: searchValue.trim().length > 0, // Only run query if search value is not empty
+    });
+};
+
+
+// Hook to send broadcast announcement
+export const useBroadcastAnnouncement = () => {
+    const queryClient = new QueryClient();
+    return useMutation({
+        mutationFn: (payload: BroadcastAnnouncementPayload) => broadcastSystemAnnouncement(payload),
+        onSuccess: () => {
+            // Invalidate the system settings query to refetch the updated settings
+            // queryClient.invalidateQueries({ queryKey: SystemKeys.settings });
+        },
     });
 };

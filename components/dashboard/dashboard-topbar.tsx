@@ -116,7 +116,7 @@ const planStyles = {
                     }
 
 
-                    {isThemeMode ? <ThemeToggle
+                    {isThemeMode || user?.role === Role.ADMIN ? <ThemeToggle
                         floating={false}
                         className="hidden sm:grid h-10 w-10 rounded-xl border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                     /> : null}

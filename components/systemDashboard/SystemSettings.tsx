@@ -5,10 +5,18 @@ import {
   FileJson, Save, AlertTriangle, Power, CheckCircle2,
   Globe, Info, AlertOctagon, Check,
   PersonStanding,
-  Loader
+  Loader,
+  MessageCircle,
+  ChevronDown,
+  X,
+  ArrowRight,
+  Send
 } from 'lucide-react';
 import { useGetSystemSettings, useUpdateSystemSettings } from '@/features/system/hooks';
 import { toast } from 'sonner';
+import AnnoucementNotification from './AnnoucementNotification';
+import { cn } from '@/lib/utils/cn';
+import AllocateDrawer from '../shared/allocate-drawer';
 
 // --- TypeScript Interfaces ---
 export type AlertType = 'info' | 'warning' | 'error' | 'success';
@@ -63,7 +71,7 @@ const SystemSettings = () => {
 
   // 1. State Management for the entire application settings
   const [settings, setSettings] = useState<SystemSettingsData>(defaultSettings);
-
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
 
   // 2. Universal Change Handlers
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -352,6 +360,49 @@ const SystemSettings = () => {
               </div>
             </section>
 
+
+
+
+            <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[2.5rem] shadow-sm transition-all duration-300">
+
+              {/* Header & Toggle Button */}
+              <div className="flex flex-col  gap-6 mb-0">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <MessageCircle size={16} />
+                    <h3 className="text-[10px] font-black uppercase tracking-widest">
+                      Send System Alert
+                    </h3>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h4 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+                      Broadcast Announcement
+                    </h4>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md leading-relaxed">
+                      Quickly deploy global notifications or maintenance notices to all users or specific organizations.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action Button */}
+                <button
+                  onClick={() => setShowAnnouncement(!showAnnouncement)}
+                  className={cn(
+                    "flex items-center justify-center cursor-pointer gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-md active:scale-95",
+                    showAnnouncement
+                      ? "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"
+                      : "bg-primary text-white hover:bg-primary shadow-blue-200 dark:shadow-none"
+                  )}
+                >
+
+                  Send Announcement
+                  <Send size={16} />
+
+                </button>
+              </div>
+            </section>
+
             {/* Support Config */}
             <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[2.5rem] shadow-sm space-y-4">
               <div className="flex items-center gap-2 text-slate-400 mb-2">
@@ -375,6 +426,17 @@ const SystemSettings = () => {
 
         </div>
       </div>
+      <AllocateDrawer
+        open={showAnnouncement}
+        onOpenChange={setShowAnnouncement}
+        title="Broadcast Announcement"
+        showHeader={false}
+        position="left"
+        footer={false}
+      >
+        <AnnoucementNotification onCancel={()=> setShowAnnouncement(false)}  />
+      </AllocateDrawer>
+   
     </div>
   );
 };
