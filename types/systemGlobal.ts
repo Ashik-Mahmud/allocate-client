@@ -1,4 +1,5 @@
 import { TransactionType } from "./credits";
+import { PlanType } from "./organization";
 export type AlertType = 'info' | 'warning' | 'error' | 'success';
 
 export interface GlobalAlert {
@@ -32,6 +33,8 @@ export interface OrganizationListFilters {
   page?: number;
   limit?: number;
   search?: string;
+  planType?: PlanType | "all";
+  showDeletedOrg?: boolean;
 }
 
 export interface BroadcastAnnouncementPayload {

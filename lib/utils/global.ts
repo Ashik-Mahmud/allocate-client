@@ -44,6 +44,7 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
   [NotificationType.WEEKLY_REPORT]: { icon: ChartNoAxesCombined, color: 'text-blue-600', bgColor: 'bg-blue-100' },
 
   [NotificationType.BOOKING_RESCHEDULED]: { icon: RefreshCcw, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
+  [NotificationType.CONTACT_SALES]: { icon: UserPlus, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
 
 };
 

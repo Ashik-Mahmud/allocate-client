@@ -23,6 +23,7 @@ import { Organizations, PlanType } from "@/types/organization";
 import AllocateDropdown from "@/components/shared/dropdown";
 import { GoUnverified } from "react-icons/go";
 import { OrgTableActionTypes } from "./OrganizationMain";
+import { BiReset } from "react-icons/bi";
 
 interface OrganizationsTableProps {
     organizations: Organizations[];
@@ -195,10 +196,10 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 disabled: org.plan_type !== PlanType.FREE,
                                             },
                                             {
-                                                label: "Delete organization",
+                                                label: org?.deletedAt ? "Restore organization" : "Delete organization",
                                                 onClick: () => onAction("delete", org),
                                                 destructive: true,
-                                                icon: Trash2,
+                                                icon: org?.deletedAt ? BiReset : Trash2,
                                             },
 
 

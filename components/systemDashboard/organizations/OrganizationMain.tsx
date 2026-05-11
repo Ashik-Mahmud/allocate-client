@@ -22,6 +22,9 @@ const defaultFilters: OrganizationListFilters = {
     page: 1,
     limit: 10,
     search: "",
+    planType: "all",
+    showDeletedOrg: false
+
 };
 
 export type OrgTableActionTypes = "toggle-verify" | "toggle-active" | 'copy-id' | "view" | 'delete' | 'trial' | 'edit' | 'top-up-credits' | 'need-update' | 'extend-trial' | null;
@@ -47,6 +50,7 @@ const OrganizationMain = () => {
     };
 
     const handleApplyFilters = () => {
+       
         setAppliedFilters(draftFilters);
     };
 

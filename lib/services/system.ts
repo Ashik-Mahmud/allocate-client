@@ -36,6 +36,8 @@ export const fetchOrganizations = async (filters: OrganizationListFilters) => {
     if (filters.page) queryParams.append("page", String(filters.page));
     if (filters.limit) queryParams.append("limit", String(filters.limit));
     if (filters.search) queryParams.append("search", filters.search);
+    if (filters.planType && filters.planType !== "all") queryParams.append("planType", filters.planType);
+    if (filters.showDeletedOrg !== undefined) queryParams.append("showDeletedOrg", String(filters.showDeletedOrg));
     return apiRequest<PaginatedResponse<Organizations>>(`/admin/organizations?${queryParams?.toString() || ''}`, { method: "GET" });
 }
 
