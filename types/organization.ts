@@ -76,6 +76,10 @@ export interface Organizations {
   weeklyReportEnabled?: boolean | null;
   settings: OrgSettings | null;
   isVerified: boolean | null;
+  isTrialAllowed?: boolean | null;
+  hasUsedTrial?: boolean | null;
+  trialEndsAt?: Date | string | null;
+  trialStartAt?: Date | string | null;
   deletedAt: Date | string | null;
   createdAt: Date | string | null;
   updatedAt: Date | string | null;

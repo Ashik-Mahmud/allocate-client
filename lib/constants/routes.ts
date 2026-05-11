@@ -21,7 +21,7 @@ export const ROUTES = {
     billing: "/dashboard/billing",
   },
   dashboardStaff: {
-    requestSupport: "/dashboard/request-support",
+    // requestSupport: "/dashboard/request-support",
   },
   dashboardCommon: {
      staffOverview: "/dashboard/staff-overview",
@@ -31,6 +31,7 @@ export const ROUTES = {
     myBookings: "/dashboard/my-bookings",
     resources: "/dashboard/resources",
     profile: "/dashboard/profile",
+    community: "/dashboard/community",
     notifications: "/dashboard/notifications",
   },
 } as const;

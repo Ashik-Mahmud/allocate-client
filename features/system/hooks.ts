@@ -1,8 +1,10 @@
-import { BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData } from "@/types/systemGlobal";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations, searchUsers, broadcastSystemAnnouncement } from "@/lib/services/system";
+import { BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
+import { organizationKeys } from "../organization";
+import { staffKeys } from "../staff";
 
 export const SystemKeys = {
     settings: ["system", "settings"] as const,
@@ -47,25 +49,38 @@ export const useFetchOrganizations = (filters: OrganizationListFilters) => {
         queryFn: () => fetchOrganizations(filters),
     });
 };
-
-// hook to search users/staff by name or email
-export const useSearchUsers = (searchValue: string) => {
+// Hook to fetch organization by ID
+export const useFetchOrganizationById = (id: string) => {
     return useQuery({
-        queryKey: ["system", "users", "search", searchValue],
-        queryFn: () => searchUsers(searchValue),
-        enabled: searchValue.trim().length > 0, // Only run query if search value is not empty
+        queryKey: SystemKeys.organization(id),
+        queryFn: () => fetchOrganizationById(id),
+        enabled: Boolean(id),
     });
-};
-
-
+}
 // Hook to send broadcast announcement
 export const useBroadcastAnnouncement = () => {
-    const queryClient = new QueryClient();
     return useMutation({
         mutationFn: (payload: BroadcastAnnouncementPayload) => broadcastSystemAnnouncement(payload),
         onSuccess: () => {
             // Invalidate the system settings query to refetch the updated settings
             // queryClient.invalidateQueries({ queryKey: SystemKeys.settings });
+        },
+    });
+};
+
+// Hook to make verify organization API call
+export const useUpdateOrganizationMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: { id: string, updateOrganization: Partial<UpdateOrganizationPayload> }) => updateOrganization(payload),
+        onSuccess: (data, variables) => {
+            void Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: SystemKeys.organizations(),
+                    exact: false
+                }),
+                queryClient.invalidateQueries({ queryKey: SystemKeys.organization(variables.id) }),
+            ]);
         },
     });
 };

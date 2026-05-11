@@ -112,7 +112,7 @@ const planStyles = {
                     </div>
 
                     {
-                        user?.role !== Role.ADMIN && <NotificationPopover />
+                         <NotificationPopover />
                     }
 
 

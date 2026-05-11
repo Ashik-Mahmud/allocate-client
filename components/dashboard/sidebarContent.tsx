@@ -26,25 +26,13 @@ type NavItem = {
 };
 
 const navigation: NavItem[] = [
-    // {
-    //     label: "Workspace",
-    //     description: "Open your dashboard overview",
-    //     href: ROUTES.dashboardCommon.overview,
-    //     icon: LayoutDashboard,
-    // },
-
-    // {
-    //     label: "Public site",
-    //     description: "Jump back to the landing page",
-    //     href: ROUTES.home,
-    //     icon: Globe,
-    // },
-    // {
-    //     label: "Pricing",
-    //     description: "Review plans and limits",
-    //     href: ROUTES.pricing,
-    //     icon: Sparkles,
-    // },
+  
+     {
+        label: "Community",
+        description: "Submit support requests and track their status",
+        href: ROUTES.dashboardCommon.community,
+        icon: CalendarCheck,
+    },
 ];
 
 const adminNavigation: NavItem[] = [
@@ -111,12 +99,7 @@ const orgAdminNavigation: NavItem[] = [
         href: ROUTES.dashboardOrgAdmin.creditManagement,
         icon: Coins,
     },
-    // {
-    //     label: "Credit History",
-    //     description: "View credit transaction history",
-    //     href: ROUTES.dashboardOrgAdmin.creditHistory,
-    //     icon: CreditCard,
-    // },
+    
     {
         label: "Booking stats",
         description: "Track organization financial metrics",
@@ -138,12 +121,7 @@ const staffNavigation: NavItem[] = [
         href: ROUTES.dashboardCommon.overview,
         icon: LayoutDashboard,
     },
-    {
-        label: "Request Support",
-        description: "Submit support requests and track their status",
-        href: ROUTES.dashboardStaff.requestSupport,
-        icon: CalendarCheck,
-    },
+   
 ];
 
 const commonNavigation: NavItem[] = [
@@ -173,12 +151,7 @@ const commonNavigation: NavItem[] = [
         icon: CalendarCheck,
     },
 
-    // {
-    //     label: "Profile",
-    //     description: "Manage your profile details",
-    //     href: ROUTES.dashboardCommon.profile,
-    //     icon: UserCog,
-    // },
+   
 ];
 
 const OrgConditionalNavigation: NavItem[] = [

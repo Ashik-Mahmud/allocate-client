@@ -77,3 +77,14 @@ export interface ActivityLogFilters {
   page: number;
   limit: number;
 }
+
+export interface UpdateOrganizationPayload {
+  name: string;
+  isVerified?: boolean;
+  hasUsedTrial?: boolean;
+  isTrialAllowed?: boolean;
+  is_active?: boolean;
+  needUpdateOrg?: boolean;
+  trialEndsAt?: string;
+}
+  

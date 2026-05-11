@@ -1,7 +1,8 @@
 import React from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Button } from '../ui/button';
+import { cn } from '@/lib/utils/cn';
 
 type Props = {
     dropdownOptions: {
@@ -10,12 +11,17 @@ type Props = {
         destructive?: boolean;
         icon?: React.ComponentType<{ className?: string }>;
         disabled?: boolean;
+        isSeparator?: boolean;
     }[];
     children: React.ReactNode;
+    label?: string;
+    align?: "start" | "end" | "center";
+    className?: string;
+
 
 }
 
-const AllocateDropdown = ({ children, dropdownOptions }: Props) => {
+const AllocateDropdown = ({ children, dropdownOptions, label, align='end', className }: Props) => {
     return (
         <div>
             <DropdownMenu>
@@ -26,12 +32,17 @@ const AllocateDropdown = ({ children, dropdownOptions }: Props) => {
                         </Button>
                     )}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="dark:bg-slate-800 w-max" >
+                <DropdownMenuContent align={align} className={cn("dark:bg-slate-800 w-max", className)} >
+                     {label && <><DropdownMenuLabel>{label}</DropdownMenuLabel>  <DropdownMenuSeparator /></>}
                     {dropdownOptions.map((option, index) => (
 
                         <div key={index}>
                             {
-                                option.destructive && <DropdownMenuSeparator key={`separator-${index}`} className="bg-red-500/10" />
+                                option.isSeparator ? (
+                                    <DropdownMenuSeparator key={`separator-${index}`} />
+                                ) : ( null
+                                   // option.destructive && <DropdownMenuSeparator key={`separator-${index}`} className="bg-red-500/10" />
+                                )
                             }
                             <DropdownMenuItem
                                 key={index}

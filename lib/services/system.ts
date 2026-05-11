@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http";
-import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters } from "@/types/systemGlobal";
+import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload } from "@/types/systemGlobal";
 import { PaginatedResponse } from "@/types";
 import { Organizations } from "@/types/organization";
 
@@ -39,12 +39,6 @@ export const fetchOrganizations = async (filters: OrganizationListFilters) => {
     return apiRequest<PaginatedResponse<Organizations>>(`/admin/organizations?${queryParams?.toString() || ''}`, { method: "GET" });
 }
 
-// Service to search users/staff by name or email
-export const searchUsers = async (searchValue: string) => {
-    const queryParams = new URLSearchParams();
-    if (searchValue) queryParams.append("search", searchValue);
-    return apiRequest<ApiResponse<any[]>>(`/admin/users/search?${queryParams.toString()}`, { method: "GET" });
-}
 
 
 // Service to fetch a single organization by ID
@@ -53,8 +47,13 @@ export const fetchOrganizationById = async (id: string) => {
 }
 
 // Service to verify an organization
-export const verifyOrganization = async (id: string) => {
-    return apiRequest<ApiResponse<null>>(`/admin/organizations/${id}/verification`, { method: "PATCH" });
+export const updateOrganization = async (payload: { id: string, updateOrganization: Partial<UpdateOrganizationPayload> }) => {
+    return apiRequest<ApiResponse<null>>(`/admin/organizations/${payload.id}`,
+        {
+            method: "PATCH",
+            body: JSON.stringify(payload.updateOrganization),
+        }
+    );
 }
 
 // Service to Topup Credits for an organization

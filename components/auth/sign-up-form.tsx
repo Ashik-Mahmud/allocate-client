@@ -10,6 +10,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { getApiErrorMessage } from "@/lib/services";
 import type { RegisterPayload } from "@/types";
 import PasswordField from "../ui/passwordField";
+import { X, XCircle } from "lucide-react";
 
 type RegisterFormValues = RegisterPayload;
 
@@ -128,6 +129,15 @@ export function SignUpForm() {
         </label>
       </div>
       {errors.terms ? <p className="text-xs text-red-600">{errors.terms.message}</p> : null}
+
+      {
+        errorMessage && (
+         <div className="rounded-md bg-red-50 p-4 flex items-center gap-2">
+           <XCircle className="size-5 text-red-700" />
+           <p className="text-sm text-red-700">{errorMessage}</p>
+         </div>
+        )
+      }
 
       <Button type="submit" className="w-full cursor-pointer py-5!" disabled={registerMutation.isPending}>
         {registerMutation.isPending ? "Creating account..." : "Create account"}
