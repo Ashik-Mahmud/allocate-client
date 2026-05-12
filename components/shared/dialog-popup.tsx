@@ -46,7 +46,13 @@ const DialogPopup = ({
                 className
             )}>
                 {/* Header Section */}
-                {<DialogHeader className="p-4 pb-3 border-b bg-white dark:bg-slate-950 border-slate-100 dark:border-zinc-800">
+                {<DialogHeader className={
+                    cn(
+                        "p-4 pb-3 border-b bg-white dark:bg-slate-950 border-slate-100 dark:border-zinc-800",
+                        title ? "block" : "hidden"
+
+                    )
+                }>
 
                     <DialogTitle className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                         {title}

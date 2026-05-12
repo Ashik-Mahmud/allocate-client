@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http";
-import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload, CreditsTopUpPayload } from "@/types/systemGlobal";
+import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload, CreditsTopUpPayload, ActivityLog } from "@/types/systemGlobal";
 import { PaginatedResponse } from "@/types";
 import { Organizations } from "@/types/organization";
 
@@ -127,5 +127,5 @@ export const fetchActivityLogs = async (filters: ActivityLogFilters) => {
     if (filters.endDate) queryParams.append("endDate", filters.endDate);
     if (filters.page) queryParams.append("page", String(filters.page));
     if (filters.limit) queryParams.append("limit", String(filters.limit));
-    return apiRequest<PaginatedResponse<any>>(`/admin/activity-logs?${queryParams?.toString() || ''}`, { method: "GET" });
+    return apiRequest<PaginatedResponse<ActivityLog>>(`/admin/users/activity-logs?${queryParams?.toString() || ''}`, { method: "GET" });
 }

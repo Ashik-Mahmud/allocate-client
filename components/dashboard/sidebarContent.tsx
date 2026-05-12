@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
-import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LineChart, LogOut, PanelLeftOpen, PieChart, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, CalendarCheck, Cog, Coins, CoinsIcon, CreditCard, FileStack, LayoutDashboard, LineChart, LogOut, PanelLeftOpen, PieChart, Settings, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 import { cn } from '@/lib/utils/cn';
@@ -87,13 +87,13 @@ const adminNavigation: NavItem[] = [
                 label: "System Logs",
                 description: "Review system logs",
                 href: ROUTES.dashboardAdmin.systemLogs,
-                icon: LogOut,
+                icon: FileStack,
             },
             {
                 label: "Settings",
                 description: "Control platform-wide settings",
                 href: ROUTES.dashboardAdmin.settings,
-                icon: UserCog,
+                icon: Settings,
             },
         ]
     },

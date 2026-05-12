@@ -1,5 +1,6 @@
+import { User } from ".";
 import { TransactionType } from "./credits";
-import { PlanType } from "./organization";
+import { Organizations, PlanType } from "./organization";
 export type AlertType = 'info' | 'warning' | 'error' | 'success';
 
 export interface GlobalAlert {
@@ -95,4 +96,19 @@ export interface UpdateOrganizationPayload {
 export interface CreditsTopUpPayload {
   credits: number;
   amount: number;
+}
+
+
+export interface ActivityLog {
+  id: string;
+  org_id: string;
+  user_id: string;
+  action: string;
+  ipAddress: string;
+  userAgent: string;
+  metadata?: Record<string, any> | null;
+  createdAt: Date;
+  details?: string | null;
+  user?: Partial<User>
+  organization?: Partial<Organizations>
 }
