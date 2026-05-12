@@ -2,7 +2,8 @@ import { NotificationType } from '@/types/notification';
 import {
   CalendarClock, CheckCircle2, XCircle, BellRing,
   Coins, AlertCircle, UserPlus, CreditCard, ShieldAlert,
-  ChartNoAxesCombined
+  ChartNoAxesCombined,
+  ZapIcon
 } from 'lucide-react';
 import {
   ArrowUpCircle,
@@ -45,7 +46,9 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
 
   [NotificationType.BOOKING_RESCHEDULED]: { icon: RefreshCcw, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
   [NotificationType.CONTACT_SALES]: { icon: UserPlus, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
-
+  [NotificationType.TRIAL_ACTIVATED]: { icon: ZapIcon, color: 'text-green-600', bgColor: 'bg-green-100' },
+  [NotificationType.TRIAL_EXPIRING]: { icon: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-100' },
+  [NotificationType.TRIAL_EXPIRED]: { icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100' }
 };
 
 

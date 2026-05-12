@@ -147,3 +147,5 @@ export const SUBSCRIPTION_PRICING = {
         }
     },
 };
+
+export const FREE_TRIAL_DAYS = 7

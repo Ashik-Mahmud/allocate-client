@@ -10,3 +10,10 @@ export const createPaymentCheckoutService = async (payment: CreatePaymentCheckou
         body: JSON.stringify(payment),
     });
 }
+
+// service to start free trial
+export const startFreeTrialService = async () => {
+    return apiRequest<ApiResponse<null>>(`/payments/activate-trial`, {
+        method: "POST",
+    });
+}

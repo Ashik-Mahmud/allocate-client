@@ -15,6 +15,7 @@ import PlanLimitExceed from "@/components/shared/PlanLimitExceed";
 import GlobalAlertMessage from "@/components/shared/GlobalAlertMessage";
 import { Role } from "@/types";
 import MaintenanceAlert from "@/components/shared/MaintenanceAlert";
+import FreeTrialAlert from "@/components/shared/FreeTrialAlert";
 
 export default async function DashboardLayout({
   children,
@@ -52,7 +53,8 @@ export default async function DashboardLayout({
 
             <PlanLimitExceed />
             {session?.user?.role !== Role.ADMIN && <GlobalAlertMessage />}
-            {session?.user?.role !== Role.ADMIN && <MaintenanceAlert type="maintenance" view="detailed"  />}
+            {session?.user?.role !== Role.ADMIN && <FreeTrialAlert />}
+            {session?.user?.role !== Role.ADMIN && <MaintenanceAlert type="maintenance" view="detailed" />}
             <div className="h-full flex-1  p-4">
 
               <div className="h-full relative overflow-auto border rounded-2xl border-slate-200 bg-white  dark:border-slate-800 dark:bg-slate-950">
