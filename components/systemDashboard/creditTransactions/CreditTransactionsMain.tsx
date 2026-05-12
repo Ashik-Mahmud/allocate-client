@@ -31,6 +31,8 @@ import { DatePickerField } from "@/components/shared/datePickerField";
 import { cn } from "@/lib/utils/cn";
 import Build from "next/dist/build";
 import { fetchOrganizations } from "@/lib/services/system";
+import DialogPopup from "@/components/shared/dialog-popup";
+import ViewCreditDetail from "./ViewCreditDetail";
 
 // Helper to style transaction types
 const TRANSACTION_CONFIG: Record<TransactionType, { icon: any, color: string, label: string }> = {
@@ -57,6 +59,8 @@ const CreditTransactionsMain = () => {
   const items = (data?.data as CreditTransaction[]) || []
   const totalRevenue = data?.metadata?.totalRevenue || 0;
   const [searchedOrgs, setSearchedOrgs] = useState<{ value: string; label: string }[]>([]);
+  const [viewDetailsModal, setViewDetailsModal] = useState(false);
+  const [selectedCredit, setSelectedCredit] = useState<CreditTransaction | null>(null);
   // Update filters handler
   const updateFilter = (newFilters: Partial<TransactionListFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
@@ -282,8 +286,12 @@ const CreditTransactionsMain = () => {
                         <Button
                           variant="ghost"
                           size="icon"
+
                           className="rounded-full cursor-pointer hover:bg-white hover:shadow-md transition-all h-8 w-8 text-slate-400 hover:text-blue-600"
-                          onClick={() => {/* Trigger View Details Modal/Drawer */ }}
+                          onClick={() => {
+                            setSelectedCredit(item);
+                            setViewDetailsModal(true);
+                          }}
                         >
                           <Eye size={16} />
                         </Button>
@@ -296,6 +304,15 @@ const CreditTransactionsMain = () => {
           </div>
         </CardContent>
       </Card>
+      {/* View Transaction Details */}
+      <DialogPopup
+        // title="View Transaction Details"
+        open={viewDetailsModal}
+        onOpenChange={setViewDetailsModal}
+        size="lg"
+      >
+        <ViewCreditDetail credit={selectedCredit as CreditTransaction} onClose={() => setViewDetailsModal(false)} />
+      </DialogPopup>
     </div>
   )
 }

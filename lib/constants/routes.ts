@@ -3,6 +3,7 @@ export const ROUTES = {
   pricing: "/pricing",
   signIn: "/sign-in",
   signUp: "/sign-up",
+  docs: "/docs",
   termsAndConditions: "/terms-conditions",
   dashboard: "/dashboard",
   dashboardAdmin: {

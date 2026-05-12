@@ -225,7 +225,7 @@ const SidebarContent = ({
     signingOut,
     compact,
 }: Props) => {
-    const { isMaintenanceMode } = useGlobalSettings()
+    const { isMaintenanceMode, supportEmail } = useGlobalSettings()
     const initials = getInitials(user);
     const role = user?.role ?? null;
 
@@ -465,12 +465,43 @@ const SidebarContent = ({
                     </span>
                     <PanelLeftOpen className="size-4 opacity-60" />
                 </Button>
+                <div className="mt-auto ">
+                    {/* Subtle Divider */}
+                    <div className="h-px w-full bg-linear-to-r from-transparent via-slate-200 to-transparent dark:via-slate-800 mb-4" />
 
-                <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
+                    <div className="space-y-2 px-1">
+                        {/* Resource Sentence */}
+                        <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
+                            Need help? Contact{" "}
+                            <a
+                                href={supportEmail ? `mailto:${supportEmail}` : "#"}
+                                className="font-bold text-slate-700 hover:text-blue-600 dark:text-slate-200 transition-colors underline decoration-slate-200 dark:decoration-slate-700 underline-offset-2"
+                            >
+                                {supportEmail ? supportEmail : "Support Team  "}
+                            </a>
+                            {" "}or check our{" "}
+                            <Link
+                                href={ROUTES.docs}
+                                className="font-bold text-slate-700 hover:text-slate-900 dark:text-slate-200 transition-colors underline decoration-slate-200 dark:decoration-slate-700 underline-offset-2"
+                            >
+                                Docs
+                            </Link> for guides and FAQs.
+                        </p>
+
+                        {/* Version & Marketing */}
+                        <div className="flex items-center justify-between pt-1">
+                            <p className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">
+                                v2.4.0 • <a href="/" className="hover:text-slate-600 dark:hover:text-slate-300">Marketplace</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
                     Need public pages? Jump back to the marketing site from the quick links above.
-                </p>
+                </p> */}
             </div>
-        </div>
+        </div >
     );
 }
 

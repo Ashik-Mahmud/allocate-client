@@ -79,6 +79,16 @@ export function getNotificationRedirectRoute(
     return ROUTES.dashboardCommon.notifications;
   }
 
+  if (notificationType === NotificationType.CONTACT_SALES) {
+    return ROUTES.dashboardAdmin.salesInquiries;
+  }
+
+  if (notificationType === NotificationType.SUBSCRIPTION_CANCELLED || notificationType === NotificationType.SUBSCRIPTION_RENEWED || notificationType === NotificationType.SUBSCRIPTION_EXPIRED || notificationType === NotificationType.SUBSCRIPTION_EXPIRING || notificationType === NotificationType.UPGRADE_PLAN_REMINDER) {
+    if (role === APP_ROLES.ORG_ADMIN) {
+      return ROUTES.dashboardOrgAdmin.billing;
+    }
+    return ROUTES.dashboardCommon.notifications;
+  }
   // Fallback to notifications page
   return ROUTES.dashboardCommon.notifications;
 }

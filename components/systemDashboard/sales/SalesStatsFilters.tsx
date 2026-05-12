@@ -23,6 +23,8 @@ import {
 import { cn } from "@/lib/utils/cn"
 import { fetchOrganizations } from "@/lib/services/system";
 import { toast } from "sonner";
+import { SearchableSelect } from "@/components/shared/searchable-select";
+import { DatePickerField } from "@/components/shared/datePickerField";
 
 type SalesStatsFiltersProps = {
     filters: SalesStatsFiltersDto
@@ -70,100 +72,32 @@ const SalesStatsFilters = ({ filters, onChange, onReset }: SalesStatsFiltersProp
                 </Button>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-3">
                 {/* Organization Searchable Selector */}
-                <div className="md:col-span-2 flex flex-col gap-1.5">
-                    <Label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">Organization</Label>
-                    <Popover open={open} onOpenChange={setOpen}>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={open}
-                                className="w-full justify-between rounded-xl border-slate-200 h-11 px-4 text-slate-600 hover:bg-slate-50 shadow-none font-medium"
-                            >
-                                {selectedOrgName ? selectedOrgName : "Select organization..."}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-2xl shadow-xl border-slate-100" align="start">
-                            <Command className="rounded-2xl" shouldFilter={true}>
-                                {/* 
-                  shouldFilter={true} allows the Command component to filter internally 
-                  based on the 'value' prop provided in CommandItem.
-                */}
-                                <CommandInput
-                                    placeholder="Search organization..."
-                                    className="h-11"
-                                    onValueChange={onChangeSearch} // Trigger API search on type
-                                />
-                                <CommandList>
-                                    {isLoading && (
-                                        <div className="flex items-center justify-center py-6">
-                                            <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
-                                        </div>
-                                    )}
-                                    <CommandEmpty>No organization found.</CommandEmpty>
-                                    <CommandGroup>
-                                        {searchedOrg.map((org: any) => (
-                                            <CommandItem
-                                                key={org.id}
-                                                // CRITICAL: value must be unique and usually stringified for Command internal filtering
-                                                value={org.name}
-                                                onSelect={() => {
-                                                    // Update parent filters state with the selected ID
-                                                    onChange({ org_id: org.id })
-                                                    setOpen(false)
-                                                }}
-                                                className="rounded-lg m-1 py-2 cursor-pointer"
-                                            >
-                                                <Check
-                                                    className={cn(
-                                                        "mr-2 h-4 w-4 text-blue-600",
-                                                        filters.org_id === org.id ? "opacity-100" : "opacity-0"
-                                                    )}
-                                                />
-                                                <span className="font-medium text-slate-700">{org.name}</span>
-                                            </CommandItem>
-                                        ))}
-                                    </CommandGroup>
-                                </CommandList>
-                            </Command>
-                        </PopoverContent>
-                    </Popover>
-                </div>
+                <SearchableSelect
+                    isMulti={false}
+                    label="Organization"
+                    placeholder="Select organization"
+                    onChange={(value) => onChange({ org_id: value })}
+                    value={filters.org_id}
+                    options={searchedOrg.map((org: any) => ({ value: org.id, label: org.name }))}
+                    emptyMessage='Search for organization by name...'
+                    onSearchChange={onChangeSearch}
+                />
 
-                {/* Date Filter: From */}
-                <div className="flex flex-col gap-1.5">
-                    <Label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">From Date</Label>
-                    <input
-                        type="date"
-                        className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
-                        value={filters.startDate ? new Date(filters.startDate).toISOString().split('T')[0] : ''}
-                        onChange={(event) => onChange({ startDate: new Date(event.target.value)?.toISOString() || undefined })}
-                    />
-                </div>
-
-                {/* Date Filter: To */}
-                <div className="flex flex-col gap-1.5">
-                    <Label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">To Date</Label>
-                    <input
-                        type="date"
-                        className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
-                        value={filters.endDate ? new Date(filters.endDate).toISOString().split('T')[0] : ''}
-                        onChange={(event) => {
-                            // Ensure end date is always greater than or equal to start date
-                            const selectedEndDate = new Date(event.target.value)
-                            const currentStartDate = filters.startDate ? new Date(filters.startDate) : new Date()
-                            if (selectedEndDate >= currentStartDate) onChange({ endDate: selectedEndDate.toISOString() || undefined })
-                            else {
-                                toast.error("End date cannot be before start date.", {
-                                    description: "Please select a valid end date.",
-                                })
-                            }
-                        }}
-                    />
-                </div>
+                <DatePickerField
+                    label="From Date"
+                    value={filters.startDate ? new Date(filters.startDate) : undefined}
+                    onChange={(date) => onChange({ startDate: date ? new Date(date).toISOString() : undefined })}
+                    inputClassName="justify-start"
+                />
+                <DatePickerField
+                    label="To Date"
+                    value={filters.endDate ? new Date(filters.endDate) : undefined}
+                    onChange={(date) => onChange({ endDate: date ? new Date(date).toISOString() : undefined })}
+                    inputClassName="justify-start"
+                />
+           
             </div>
         </section>
     )
