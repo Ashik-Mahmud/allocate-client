@@ -18,6 +18,7 @@ import { fetchOrganizations } from '@/lib/services/system';
 import MultiSelector, { SelectableItem } from '@/components/shared/multi-selector';
 import { BroadcastAnnouncementPayload } from '@/types/systemGlobal';
 import { toast } from 'sonner';
+import { SearchableSelect } from '../shared/searchable-select';
 
 // 1. Your Schema
 export const BroadcastAnnouncementSchema = z.object({
@@ -42,6 +43,8 @@ type props = {
 
 const AnnoucementNotification = ({ onCancel }: props) => {
   const [selectedOrganizations, setSelectedOrganizations] = useState<SelectedOrganization[]>([]);
+  const [searchedOrganizations, setSearchedOrganizations] = useState<{ label: string, value: string }[]>([]);
+  const [selectedOrgs, setSelectedOrgs] = useState<string[]>([]);
   // 2. Setup Hook Form
   const {
     register,
@@ -64,26 +67,22 @@ const AnnoucementNotification = ({ onCancel }: props) => {
 
 
   // Handler for searching organizations - callback from MultiSelector
-  const handleOrganizationSearch = async (searchValue: string): Promise<SelectedOrganization[]> => {
+  const handleOrganizationSearch = async (searchValue: string) => {
     try {
-      if (!searchValue.trim()) {
-        return [];
-      }
-
       // Call the service directly to search users
       const response = await fetchOrganizations({ name: searchValue, limit: 10, showDeletedOrg: false });
 
       // Transform API response to match SelectableItem interface
-      if (response?.data && Array.isArray(response.data)) {
-        return response.data.map((org: any) => ({
-          id: org.id,
-          name: `${org?.name} (${org?._count?.users || 0} users)`,
-        }));
-      }
-      return [];
+      const options = response?.data?.map((org: any) => ({
+        value: org.id,
+        label: `${org.name} (${org._count?.users || 0} users)`
+      })) || [];
+
+      setSearchedOrganizations(options);
+
     } catch (error) {
       console.error('Error searching users:', error);
-      return [];
+
     }
   };
 
@@ -174,13 +173,29 @@ const AnnoucementNotification = ({ onCancel }: props) => {
           {/* Conditional Field: Organization Selection (only if INDIVIDUAL is selected) */}
           {selectedReceiver === 'INDIVIDUAL' && (
             <div className="animate-in fade-in slide-in-from-top-2">
-              <MultiSelector
+              {/* <MultiSelector
                 label="Select Recipients"
                 placeholder="Search by name or email..."
                 onSearch={handleOrganizationSearch}
                 selectedItems={selectedOrganizations}
                 onSelectionChange={handleOrganizationSelectionChange}
                 error={errors.orgIds?.message}
+              /> */}
+              <SearchableSelect
+                label="Select Recipients"
+                placeholder="Select Recipients"
+                value={selectedOrgs}
+                onChange={(value) => {
+                  setValue('orgIds', value);
+                  setSelectedOrgs(value);
+                }}
+                options={searchedOrganizations}
+                emptyMessage='Search for recipients by name or email...'
+                isMulti={true}
+                inputClassName="text-left "
+                onSearchChange={handleOrganizationSearch}
+                icon={<Users className="h-4 w-4 text-slate-400 dark:text-slate-600" />}
+                labelClassName="text-sm! font-semibold text-slate-700 dark:text-slate-300 capitalize!"
               />
               <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">
                 Select one or more organizations to send the announcement to.
@@ -235,7 +250,7 @@ const AnnoucementNotification = ({ onCancel }: props) => {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting || selectedReceiver === 'INDIVIDUAL' && selectedOrganizations.length === 0}
+            disabled={isSubmitting || selectedReceiver === 'INDIVIDUAL' && selectedOrgs.length === 0}
             className="flex-2 flex items-center justify-center gap-2 cursor-pointer bg-slate-900 dark:bg-primary text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 dark:shadow-slate-800 disabled:opacity-50"
           >
             <Send size={16} />
