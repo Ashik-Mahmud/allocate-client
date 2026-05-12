@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import type { Session } from "next-auth";
 import { CurrentUserProvider } from "@/features/auth/current-user-context";
+import { OrganizationDeletedBlocker } from "@/features/auth/organization-deleted-blocker";
 import { NotificationRealtimeSync } from "@/features/notifications/notification-realtime-sync";
 import { RealtimeSocketProvider } from "@/features/realtime";
 import { TooltipProvider } from "../ui/tooltip";
@@ -46,6 +47,7 @@ export function Providers({ children, session }: ProvidersProps) {
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
             <CurrentUserProvider>
+              <OrganizationDeletedBlocker />
               <RealtimeSocketProvider>
                 <NotificationRealtimeSync />
                 {children}

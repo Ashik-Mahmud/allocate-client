@@ -42,7 +42,7 @@ export const AdminRecommendations = ({ recommendations }: AdminRecommendationsPr
             </div>
 
             <div className="space-y-3">
-                {recommendations.map((rec, idx) => (
+                {recommendations?.map((rec, idx) => (
                     <div
                         key={idx}
                         className={`p-4 rounded-lg border bg-linear-to-r ${getRecommendationColor(idx)} hover:shadow-md transition-all animate-in fade-in slide-in-from-left-2`}
