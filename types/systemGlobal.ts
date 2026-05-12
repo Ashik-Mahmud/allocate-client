@@ -48,11 +48,11 @@ export interface BroadcastAnnouncementPayload {
 
 export interface AdminUserFilters {
   organizationId?: string;
-  name: string;
-  email: string;
-  role: "ORG_ADMIN" | "STAFF";
-  page: number;
-  limit: number;
+  name?: string;
+  email?: string;
+  role?: "ORG_ADMIN" | "STAFF";
+  page?: number;
+  limit?: number;
   search?: string;
 }
 

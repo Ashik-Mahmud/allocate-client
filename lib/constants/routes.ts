@@ -6,11 +6,12 @@ export const ROUTES = {
   termsAndConditions: "/terms-conditions",
   dashboard: "/dashboard",
   dashboardAdmin: {
-   
     users: "/dashboard/users",
     organizations: "/dashboard/organizations",
     settings: "/dashboard/settings",
     subscriptions: "/dashboard/subscriptions",
+    salesInquiries: "/dashboard/sales-inquiries",
+    salesInquiriesStats: "/dashboard/sales-stats",
   },
   dashboardOrgAdmin: {
     bookingManagement: "/dashboard/booking-management",

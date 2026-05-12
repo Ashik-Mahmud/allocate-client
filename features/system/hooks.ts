@@ -1,6 +1,6 @@
-import { BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
+import { AdminUserFilters, BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization } from "@/lib/services/system";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization, fetchUsers } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
 import { organizationKeys } from "../organization";
@@ -12,7 +12,7 @@ export const SystemKeys = {
     organizations: (filters?: OrganizationListFilters) => ["system", "organizations", filters] as const,
     organization: (id: string) => ["system", "organization", id] as const,
     toupCredits: ["system", "topup-credits"] as const,
-    users: ["system", "users"] as const,
+    users: (filters?: AdminUserFilters) => ["system", "users", filters] as const,
     resetPassword: (userId: string) => ["system", "reset-password", userId] as const,
     transactionList: ["system", "transactions"] as const,
     revenueAnalysis: ["system", "revenue-analysis"] as const,
@@ -81,8 +81,8 @@ export const useRestoreOrganizationMutation = () => {
                 queryClient.invalidateQueries({ queryKey: SystemKeys.organizations() }),
             ]);
         }
-        });
-    };
+    });
+};
 
 // Hook to send broadcast announcement
 export const useBroadcastAnnouncement = () => {
@@ -111,3 +111,12 @@ export const useUpdateOrganizationMutation = () => {
         },
     });
 };
+
+
+// Hook to get all the users in the system (for admin user management)
+export const useFetchAllUsers = (filters: AdminUserFilters) => {
+    return useQuery({
+        queryKey: SystemKeys.users(filters),
+        queryFn: () => fetchUsers(filters),
+    });
+}

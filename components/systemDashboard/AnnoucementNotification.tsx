@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { useBroadcastAnnouncement, useFetchOrganizations } from '@/features/system/hooks';
-import { fetchOrganizations, searchUsers } from '@/lib/services/system';
+import { fetchOrganizations } from '@/lib/services/system';
 import MultiSelector, { SelectableItem } from '@/components/shared/multi-selector';
 import { BroadcastAnnouncementPayload } from '@/types/systemGlobal';
 import { toast } from 'sonner';

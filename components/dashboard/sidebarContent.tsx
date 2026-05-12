@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
-import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LineChart, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 import { cn } from '@/lib/utils/cn';
@@ -20,14 +20,15 @@ type Props = {
 
 type NavItem = {
     label: string;
-    description: string;
+    description?: string;
     href: string;
     icon: React.ComponentType<{ className?: string }>;
+    children?: NavItem[];
 };
 
 const navigation: NavItem[] = [
-  
-     {
+
+    {
         label: "Community",
         description: "Submit support requests and track their status",
         href: ROUTES.dashboardCommon.community,
@@ -59,6 +60,26 @@ const adminNavigation: NavItem[] = [
         description: "Review active subscription plans",
         href: ROUTES.dashboardAdmin.subscriptions,
         icon: Sparkles,
+    },
+    {
+        label: 'Sales Inquiries',
+        description: 'View and manage sales inquiries',
+        href: '#',
+        icon: CreditCard,
+        children: [
+            {
+                label: 'Sales Inquiries',
+                description: 'View and manage sales inquiries',
+                href: ROUTES.dashboardAdmin.salesInquiries,
+                icon: CreditCard,
+            },
+            {
+                label: 'Sales Inquiries Stats',
+                description: 'View sales inquiries statistics',
+                href: ROUTES.dashboardAdmin.salesInquiriesStats,
+                icon: LineChart,
+            }
+        ]
     },
     {
         label: "Settings",
@@ -99,7 +120,7 @@ const orgAdminNavigation: NavItem[] = [
         href: ROUTES.dashboardOrgAdmin.creditManagement,
         icon: Coins,
     },
-    
+
     {
         label: "Booking stats",
         description: "Track organization financial metrics",
@@ -121,11 +142,11 @@ const staffNavigation: NavItem[] = [
         href: ROUTES.dashboardCommon.overview,
         icon: LayoutDashboard,
     },
-   
+
 ];
 
 const commonNavigation: NavItem[] = [
-    
+
     {
         label: "Resources",
         description: "Browse shared resources",
@@ -151,7 +172,7 @@ const commonNavigation: NavItem[] = [
         icon: CalendarCheck,
     },
 
-   
+
 ];
 
 const OrgConditionalNavigation: NavItem[] = [
@@ -171,7 +192,7 @@ const SidebarContent = ({
     signingOut,
     compact,
 }: Props) => {
-    const {isMaintenanceMode} = useGlobalSettings()
+    const { isMaintenanceMode } = useGlobalSettings()
     const initials = getInitials(user);
     const role = user?.role ?? null;
 
@@ -209,11 +230,11 @@ const SidebarContent = ({
                 {!compact ? (
                     <span className={
                         cn("inline-flex rounded-2xl items-center gap-2 border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300",
-                                isMaintenanceMode ? "border-red-200 bg-red-50 text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300" : "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300"
+                            isMaintenanceMode ? "border-red-200 bg-red-50 text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300" : "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300"
                         )
                     }>
                         <span className={isMaintenanceMode ? "h-1.5 w-1.5 rounded-full bg-red-500" : "h-1.5 w-1.5 rounded-full bg-emerald-500"} />
-                        {isMaintenanceMode ? 'Maintenance': 'Live'}
+                        {isMaintenanceMode ? 'Maintenance' : 'Live'}
                     </span>
                 ) : (
                     <Link href={ROUTES.dashboardOrgAdmin.billing} onClick={onNavigate} className={
@@ -236,12 +257,59 @@ const SidebarContent = ({
                     }
                     {[...roleNavigation, ...navigation].map((item) => {
                         const Icon = item.icon;
-                        const active = isActiveRoute(pathname, item.href);
-
+                        const active = isActiveRoute(pathname, item?.href);
+                        if (item?.children?.length) {
+                            return (
+                                <div key={item.href} className='space-y-1'>
+                                    <p className="sticky top-0 z-10 bg-white/90 px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 backdrop-blur-sm dark:bg-slate-950/80 dark:text-slate-400">
+                                        {item.label}
+                                    </p>
+                                    {item.children.map((child) => {
+                                        const ChildIcon = child.icon;
+                                        const childActive = isActiveRoute(pathname, child?.href);
+                                        return (
+                                            <Link
+                                                key={child.href}
+                                                href={child?.href}
+                                                onClick={onNavigate}
+                                                className={cn(
+                                                    "group flex items-center gap-3 border px-3 py-3 transition-all duration-200 rounded-lg",
+                                                    childActive
+                                                        ? "border-primary bg-primary text-white shadow-lg shadow-slate-900/15 dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900"
+                                                        : "border-transparent bg-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-800 dark:hover:bg-slate-900/60 dark:hover:text-slate-100"
+                                                )}
+                                            >
+                                                <span
+                                                    className={cn(
+                                                        "flex h-10 w-10 items-center justify-center rounded-2xl transition-colors",
+                                                        childActive
+                                                            ? "bg-white/10 text-white dark:bg-slate-900 dark:text-slate-100"
+                                                            : "bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                                                    )}
+                                                >
+                                                    <ChildIcon className="size-4" />
+                                                </span>
+                                                <span className="min-w-0 flex-1">
+                                                    <span className="block text-sm font-medium">{child.label}</span>
+                                                    <span
+                                                        className={cn(
+                                                            "block truncate text-xs transition-colors",
+                                                            childActive ? "text-white/75 dark:text-slate-600" : "text-slate-500 dark:text-slate-400"
+                                                        )}
+                                                    >
+                                                        {child.description}
+                                                    </span>
+                                                </span>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
                         return (
                             <Link
                                 key={item.href}
-                                href={item.href}
+                                href={item?.href}
                                 onClick={onNavigate}
                                 className={cn(
                                     "group flex items-center gap-3 border px-3 py-3 transition-all duration-200 rounded-lg",

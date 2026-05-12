@@ -178,7 +178,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 label: 'Extend trial',
                                                 onClick: () => onAction("extend-trial", org),
                                                 icon: Clock,
-                                                disabled: org.plan_type !== PlanType.FREE,
+                                                disabled: !org?.trialEndsAt || new Date(org?.trialEndsAt) < new Date(),
                                             },
                                             {
                                                 label: isVerified ? "Mark as unverified" : "Mark as verified",
@@ -202,7 +202,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                             },
                                             {
                                                 label: org?.deletedAt ? "Restore organization" : "Delete organization",
-                                                onClick: () => onAction(org?.deletedAt? 'restore' : 'delete', org),
+                                                onClick: () => onAction(org?.deletedAt ? 'restore' : 'delete', org),
                                                 destructive: true,
                                                 icon: org?.deletedAt ? BiReset : Trash2,
                                             },
@@ -229,6 +229,8 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                 {organizations.map((org) => {
                     const isVerified = !!org.isVerified;
                     const isActive = !!org.is_active;
+                    const isAllowTrial = !!org.isTrialAllowed;
+                    const needUpdate = !!org.needUpdateOrg;
                     return (
                         <div key={org.id} className="rounded-xl border border-border bg-card dark:bg-slate-700 dark:border-slate-600 p-3 shadow-sm transition-colors">
                             <div className="mb-2 flex items-start justify-between gap-2">
@@ -236,26 +238,76 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                     <p className="text-sm font-semibold text-foreground dark:text-white">{org.name}</p>
                                     <p className="text-xs text-muted-foreground">{org.id}</p>
                                 </div>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="default" size="icon-sm" aria-label="Organization actions" className="dark:text-white!">
-                                            <MoreHorizontal className="size-4 dark:text-white" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-48 min-w-48">
-                                        <DropdownMenuLabel>Organization Actions</DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem onClick={() => onAction("view", org)}>View details</DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onAction("copy-id", org)}>Copy organization ID</DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem onClick={() => onAction("toggle-verify", org)}>
-                                            {isVerified ? "Mark as unverified" : "Mark as verified"}
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onAction("toggle-active", org)}>
-                                            {isActive ? "Deactivate" : "Activate"}
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <AllocateDropdown dropdownOptions={[
+                                    {
+                                        label: "View details",
+                                        onClick: () => onAction("view", org),
+                                        icon: Eye,
+                                    },
+                                    {
+                                        label: "View Subscription",
+                                        onClick: () => onAction("view-subscription", org),
+                                        icon: Receipt,
+                                    },
+                                    {
+                                        label: "Copy organization ID",
+                                        onClick: () => onAction("copy-id", org),
+                                        icon: Copy,
+
+                                    },
+                                    {
+                                        label: needUpdate ? 'Disable edit organization' : 'Enable edit organization',
+                                        onClick: () => onAction("need-update", org),
+                                        icon: Edit,
+                                    },
+                                    {
+                                        label: 'Top up credits',
+                                        onClick: () => onAction("top-up-credits", org),
+                                        icon: Coins,
+                                    },
+                                    {
+                                        label: 'Extend trial',
+                                        onClick: () => onAction("extend-trial", org),
+                                        icon: Clock,
+                                        disabled: !org?.trialEndsAt || new Date(org?.trialEndsAt) < new Date(),
+                                    },
+                                    {
+                                        label: isVerified ? "Mark as unverified" : "Mark as verified",
+                                        onClick: () => onAction("toggle-verify", org),
+                                        destructive: isVerified,
+                                        icon: isVerified ? GoUnverified : Verified,
+                                        isSeparator: true,
+                                    },
+                                    {
+                                        label: isActive ? "Deactivate" : "Activate",
+                                        onClick: () => onAction("toggle-active", org),
+                                        destructive: isActive,
+                                        icon: isActive ? XCircle : CheckCircle2,
+                                    },
+                                    {
+                                        label: !isAllowTrial ? "Allow Trial" : "Disallow Trial",
+                                        onClick: () => onAction("trial", org),
+                                        icon: isAllowTrial ? CheckCircle2 : XCircle,
+                                        destructive: isAllowTrial,
+                                        disabled: org.plan_type !== PlanType.FREE,
+                                    },
+                                    {
+                                        label: org?.deletedAt ? "Restore organization" : "Delete organization",
+                                        onClick: () => onAction(org?.deletedAt ? 'restore' : 'delete', org),
+                                        destructive: true,
+                                        icon: org?.deletedAt ? BiReset : Trash2,
+                                    },
+
+
+                                ]}
+                                    label="Organization Actions"
+                                    align="end"
+                                    className="w-48 min-w-48"
+                                >
+                                    <Button variant="ghost" size="icon-sm" aria-label="Organization actions">
+                                        <MoreHorizontal className="size-4" />
+                                    </Button>
+                                </AllocateDropdown>
 
                             </div>
 
