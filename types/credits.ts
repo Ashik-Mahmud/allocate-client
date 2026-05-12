@@ -1,4 +1,5 @@
 import { User } from "next-auth";
+import { Organizations } from "./organization";
 
 export enum TransactionType {
     FREE_ALLOCATION = "FREE_ALLOCATION",
@@ -30,6 +31,7 @@ export interface CreditTransaction {
     createdAt: Date;
     user?: Partial<User>;
     metadata?: Record<string, any> | null;
+    organization?: Partial<Organizations>;
 }
 
 /**
