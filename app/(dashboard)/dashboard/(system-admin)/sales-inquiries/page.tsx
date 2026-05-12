@@ -1,11 +1,8 @@
 import React from 'react'
+import SalesInquiryMain from '@/components/systemDashboard/sales/SalesInquiryMain'
 
-type Props = {}
-
-const SalesInquiries = (props: Props) => {
-  return (
-    <div>SalesInquiries</div>
-  )
+const SalesInquiries = () => {
+  return <SalesInquiryMain />
 }
 
 export default SalesInquiries

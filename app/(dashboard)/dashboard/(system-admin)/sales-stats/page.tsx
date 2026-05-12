@@ -1,10 +1,9 @@
 import React from 'react'
+import SalesStatsMain from '@/components/systemDashboard/sales/SalesStatsMain'
 
-type Props = {}
-
-const SalesInquiriesStats = (props: Props) => {
+const SalesInquiriesStats = () => {
   return (
-    <div>SalesInquiriesStats</div>
+    <SalesStatsMain />
   )
 }
 

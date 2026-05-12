@@ -1,5 +1,5 @@
 import { ApiResponse, PaginatedResponse } from "@/types";
-import { CreateSalesInquiryDto, SalesInquiry, SalesInquiryFiltersDto, SalesStatsFiltersDto } from "@/types/sales";
+import { CreateSalesInquiryDto, SalesInquiry, SalesInquiryFiltersDto, SalesStatsFiltersDto, SalesStatsResponse, UpdateSalesInquiryDto } from "@/types/sales";
 import { apiRequest } from "./http";
 
 
@@ -32,7 +32,7 @@ export const fetchSalesInquiryById = async (id: string) => {
 }
 
 // Service to update a sales inquiry
-export const updateSalesInquiry = async (id: string, data: Partial<CreateSalesInquiryDto>) => {
+export const updateSalesInquiry = async (id: string, data: UpdateSalesInquiryDto) => {
     return apiRequest<ApiResponse<SalesInquiry>>(`/sales-inquiry/admin/${id}`, {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -46,10 +46,10 @@ export const deleteSalesInquiry = async (id: string) => {
 
 // Service to fetch sales statistics
 export const fetchSalesStats = async (filters?: SalesStatsFiltersDto) => {
-    const params = new URLSearchParams();   
-    if (filters?.org_id) params.set("org_id", filters.org_id);
-    if (filters?.startDate) params.set("startDate", filters.startDate);
-    if (filters?.endDate) params.set("endDate", filters.endDate);
- 
-    return apiRequest<PaginatedResponse<SalesInquiry>>(`/sales-inquiry/stats?${params.toString()}`, { method: "GET" });
+    const queryString = new URLSearchParams();
+    if (filters?.org_id) queryString.set("org_id", filters.org_id);
+    if (filters?.startDate) queryString.set("startDate", filters.startDate);
+    if (filters?.endDate) queryString.set("endDate", filters.endDate);
+    const url = `/sales-inquiry/admin/stats${queryString ? `?${queryString}` : ""}`;
+    return apiRequest<ApiResponse<SalesStatsResponse>>(url, { method: "GET" });
 }   

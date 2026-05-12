@@ -71,13 +71,13 @@ const AnnoucementNotification = ({ onCancel }: props) => {
       }
 
       // Call the service directly to search users
-      const response = await fetchOrganizations({ search: searchValue });
+      const response = await fetchOrganizations({ name: searchValue, limit: 10, showDeletedOrg: false });
 
       // Transform API response to match SelectableItem interface
       if (response?.data && Array.isArray(response.data)) {
         return response.data.map((org: any) => ({
           id: org.id,
-          name: `${org?.name} (${org?.users?.length || 0} users)`,
+          name: `${org?.name} (${org?._count?.users || 0} users)`,
         }));
       }
       return [];

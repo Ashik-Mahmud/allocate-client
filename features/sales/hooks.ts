@@ -1,5 +1,5 @@
 import { createSalesInquiry, deleteSalesInquiry, fetchSalesInquiries, fetchSalesInquiryById, fetchSalesStats, updateSalesInquiry } from "@/lib/services/sales";
-import { CreateSalesInquiryDto, SalesInquiryFiltersDto, SalesStatsFiltersDto } from "@/types/sales";
+import { CreateSalesInquiryDto, SalesInquiryFiltersDto, SalesStatsFiltersDto, UpdateSalesInquiryDto } from "@/types/sales";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const ContactSalesKeys = {
@@ -24,27 +24,27 @@ export const useCreateSalesInquiry = () => {
 };
 
 // Hook to update an existing sales inquiry
-export const useUpdateSalesInquiry = (id: string) => {
+export const useUpdateSalesInquiry = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data: Partial<CreateSalesInquiryDto>) => updateSalesInquiry(id, data),
+        mutationFn: (payload: { id: string; data: UpdateSalesInquiryDto }) => updateSalesInquiry(payload.id, payload.data),
         onSuccess: async () => {
             return await Promise.all([
                 queryClient.invalidateQueries({ queryKey: ContactSalesKeys.details() }),
-                queryClient.invalidateQueries({ queryKey: ContactSalesKeys.lists() }),
+                queryClient.invalidateQueries({ queryKey: ContactSalesKeys.all }),
             ]);
         }
     });
 };
 
 // Hook to delete a sales inquiry
-export const useDeleteSalesInquiry = (id: string) => {
+export const useDeleteSalesInquiry = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: () => deleteSalesInquiry(id),
+        mutationFn: (id: string) => deleteSalesInquiry(id),
         onSuccess: async () => {
             return await Promise.all([
-                queryClient.invalidateQueries({ queryKey: ContactSalesKeys.lists() }),
+                queryClient.invalidateQueries({ queryKey: ContactSalesKeys.all }),
             ]);
         }
     });
@@ -63,7 +63,7 @@ export const useSalesInquiries = (filters?: SalesInquiryFiltersDto) => {
 // Hook to get single sales inquiry details by ID
 export const useSalesInquiryDetails = (id: string,) => {
     return useQuery({
-        queryKey: ContactSalesKeys.details(),
+        queryKey: [...ContactSalesKeys.details(), id] as const,
         queryFn: () => fetchSalesInquiryById(id),
         enabled: Boolean(id),
     });

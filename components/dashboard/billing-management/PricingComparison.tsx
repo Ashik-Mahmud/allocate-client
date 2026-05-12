@@ -45,7 +45,7 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPla
                         plan={plan}
                         isCurrent={plan.plan === currentPlan}
                         currentPlan={currentPlan}
-                        isTrialAvailable={isTrialAvailable || false}
+                        isTrialAvailable={isTrialAvailable && currentPlan === PlanType.FREE || false}
                         onClick={(type) => {
                             if (type === PlanType.ENTERPRISE) {
                                 setIsOpenContactSales(true)
@@ -54,7 +54,7 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPla
                             } else if (type === PlanType.PRO) {
                                 // setIsOpenPaymentMethod(true)
                                 onUpgrade && onUpgrade?.(type)
-                            } else if (type === 'trial') {
+                            } else if (type === 'trial' && isTrialAvailable && currentPlan === PlanType.FREE) {
                                 setIsOpenTrialConfirmation(true)
                             }
                         }} // Replace with actual click handler if needed
