@@ -1,26 +1,14 @@
 "use client";
 
 import { useFetchActivityLogs } from '@/features/system/hooks';
-import { ActivityLogFilters } from '@/types/systemGlobal';
+import { ActivityLog, ActivityLogFilters } from '@/types/systemGlobal';
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { ActivityLogsFilters } from './ActivityLogsFilters';
 import { ActivityLogsTable } from './ActivityLogsTable';
 import { ActivityLogsPagination } from './ActivityLogsPagination';
 
-interface ActivityLog {
-  id: string;
-  userId: string;
-  userName?: string;
-  organizationId: string;
-  organizationName?: string;
-  action: string;
-  resource: string;
-  changes?: Record<string, any>;
-  ipAddress?: string;
-  userAgent?: string;
-  createdAt: string;
-}
+
 
 interface PaginatedResponse<T> {
   items: T[];
@@ -69,20 +57,20 @@ const SystemLogsMain = (props: Props) => {
     });
     setDateRange({});
   };
- 
+
   const handleExport = () => {
     const csvContent = generateCSV(logsData?.data || []);
     downloadCSV(csvContent);
   };
 
   const generateCSV = (data: ActivityLog[]) => {
-    const headers = ['ID', 'User', 'Organization', 'Action', 'Resource', 'Date', 'IP Address'];
+    const headers = ['ID', 'User', 'Organization', 'Action', 'User Agent', 'Date', 'IP Address'];
     const rows = data.map(log => [
       log.id,
-      log.userName || log.userId,
-      log.organizationName || log.organizationId,
+      log.user?.name,
+      log.organization?.name || log.org_id || 'System Admin',
       log.action,
-      log.resource,
+      log.userAgent,
       format(new Date(log.createdAt), 'dd/MM/yyyy HH:mm'),
       log.ipAddress || '-',
     ]);

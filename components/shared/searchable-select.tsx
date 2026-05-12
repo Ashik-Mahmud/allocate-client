@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, Loader2, X } from "lucide-react"
+import { Check, ChevronsUpDown, DatabaseSearch, Loader2, X } from "lucide-react"
 
 
 
@@ -39,6 +39,9 @@ interface SearchableSelectProps {
     isMulti?: boolean
     className?: string
     onSearchChange?: (search: string) => void
+    inputClassName?: string
+    labelClassName?: string,
+    icon?: React.ReactNode
 }
 
 export function SearchableSelect({
@@ -53,6 +56,9 @@ export function SearchableSelect({
     isMulti = false,
     className,
     onSearchChange,
+    inputClassName,
+    labelClassName,
+    icon,
 }: SearchableSelectProps) {
     const [open, setOpen] = React.useState(false)
 
@@ -88,15 +94,15 @@ export function SearchableSelect({
                         return (
                             <div
                                 key={v}
-                                className="rounded-md px-1 font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 border-none"
+                                className="rounded-md px-1.5 font-medium bg-slate-200 py-0.5 text-slate-700 hover:bg-slate-200 border-none flex items-center gap-1"
                             >
                                 {opt?.label || v}
-                                <button
-                                    className="ml-1 rounded-full outline-none hover:bg-slate-300"
+                                <span
+                                    className="ml-1 rounded-full outline-none hover:bg-slate-300 cursor-pointer"
                                     onClick={(e) => handleRemove(e, v)}
                                 >
                                     <X className="h-3 w-3" />
-                                </button>
+                                </span>
                             </div>
                         )
                     })}
@@ -114,7 +120,7 @@ export function SearchableSelect({
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
             {label && (
-                <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">
+                <label className={cn("text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1", labelClassName)}>
                     {label}
                 </label>
             )}
@@ -127,13 +133,15 @@ export function SearchableSelect({
                         aria-expanded={open}
                         className={cn(
                             "h-auto min-h-11 w-full justify-between rounded-xl border-slate-200 px-4 py-2 text-left font-medium shadow-none hover:bg-slate-50 transition-all",
-                            open && "border-slate-300 ring-2 ring-slate-100"
+                            open && "border-slate-300 ring-2 ring-slate-100",
+                            inputClassName
                         )}
                     >
-                        <div className="flex flex-wrap gap-1 items-center overflow-hidden">
+                        {icon && <div className="mr-2 h-4 w-4">{icon}</div>}
+                        <div className="flex flex-wrap gap-1 items-center overflow-hidden  w-full">
                             {renderDisplay()}
                         </div>
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 " />
                     </Button>
                 </PopoverTrigger>
 
@@ -150,7 +158,10 @@ export function SearchableSelect({
                                     <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
                                 </div>
                             )}
-                            <CommandEmpty>{emptyMessage}</CommandEmpty>
+                            <CommandEmpty className="text-slate-600 dark:text-slate-300 flex flex-col items-center justify-center gap-2">
+                                <DatabaseSearch className="mr-2 size-7" />
+                                <p> {emptyMessage}</p>
+                            </CommandEmpty>
                             <CommandGroup className="max-h-64 overflow-auto p-1">
                                 {options.map((option) => {
                                     const isSelected = isMulti
