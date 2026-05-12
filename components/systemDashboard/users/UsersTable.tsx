@@ -50,17 +50,17 @@ export function UsersTable({ users, isLoading, onAction }: UsersTableProps) {
     return (
         <>
             {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto rounded-xl border border-border bg-card shadow-sm dark:bg-slate-800/50 dark:border-slate-700">
+            <div className="hidden md:block overflow-x-auto max-h-[60dvh] rounded-xl border border-border bg-card shadow-sm dark:bg-slate-800/50 dark:border-slate-700">
                 <table className="w-full text-sm">
                     <thead className="border-b border-border bg-muted dark:bg-slate-700/50 dark:border-slate-700">
                         <tr>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Name</th>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Verified</th>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Last login</th>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Role</th>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Organization</th>
-                            <th className="px-4 py-3 text-left font-semibold text-foreground">Created</th>
-                            <th className="px-4 py-3 text-center font-semibold text-foreground">Actions</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Name</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Verified</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Last login</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Role</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Organization</th>
+                            <th className="px-4 py-3 text-left font-semibold text-foreground dark:text-white">Created</th>
+                            <th className="px-4 py-3 text-center font-semibold text-foreground dark:text-white">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,12 +83,12 @@ export function UsersTable({ users, isLoading, onAction }: UsersTableProps) {
                                                 <UserIcon className=" inline-block size-10 text-muted-foreground" />
                                             )
                                         }
-                                        <div>
+                                        <div className="dark:text-white">
                                             <span className="text-base">
                                                 {user.name || "—"}
                                             </span>
                                             <div className="flex items-center gap-1">
-                                                <span className="text-slate-600 text-xs">{user.email}</span>
+                                                <span className="text-slate-600 dark:text-slate-400 text-xs">{user.email}</span>
                                                 <button
                                                     onClick={() => copyToClipboard(user.email, "Email")}
                                                     className="rounded p-1 hover:bg-background dark:hover:bg-slate-700"

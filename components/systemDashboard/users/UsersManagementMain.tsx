@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 
-import { useFetchAllUsers } from "@/features/system/hooks";
+import { useFetchAllUsers, useResetUserPasswordMutation } from "@/features/system/hooks";
 import { Button } from "@/components/ui/button";
 import { AdminUserFilters } from "@/types/systemGlobal";
 import { UsersFilters } from "./UsersFilters";
@@ -12,6 +12,7 @@ import { User } from "@/types";
 import { toast } from "sonner";
 import DialogPopup from "@/components/shared/dialog-popup";
 import ViewUserDetail from "./ViewUserDetail";
+import AllocateConfirmationAlert from "@/components/shared/TriggerConfirmation";
 
 const DEFAULT_FILTERS: AdminUserFilters = {
     page: 1,
@@ -28,8 +29,10 @@ const UsersManagementMain = () => {
     const [appliedFilters, setAppliedFilters] = useState<AdminUserFilters>(DEFAULT_FILTERS);
     const [showFilters, setShowFilters] = useState(false);
     const [showUserDetail, setShowUserDetail] = useState<{ open: boolean; user?: User }>({ open: false });
+    const [showResetPassword, setShowResetPassword] = useState<{ open: boolean; userId?: string }>({ open: false });
 
     const { data: usersResponse, isLoading, isFetching } = useFetchAllUsers(appliedFilters);
+    const resetPwdMutation = useResetUserPasswordMutation();
     const users = (usersResponse as any)?.data || [];
     const pagination = (usersResponse as any)?.pagination || {};
 
@@ -79,13 +82,28 @@ const UsersManagementMain = () => {
                 setShowUserDetail({ open: true, user });
                 break;
             case "reset-password":
-                toast.success(`Password reset link sent to ${user.email}`);
+                setShowResetPassword({ open: true, userId: user.id });
                 break;
 
             default:
                 break;
         }
     };
+
+    // Handle reset password confirmation 
+    const handleResetPasswordConfirm = async () => {
+        if (!showResetPassword.userId) return;
+        try {
+            const result = await resetPwdMutation.mutateAsync(showResetPassword.userId);
+            if (result?.success) {
+                toast.success(`Password reset link sent to user's email`);
+            }
+        } catch (error) {
+            toast.error(`Failed to reset password. Please try again.`);
+        } finally {
+            setShowResetPassword({ open: false, userId: "" });
+        }
+    }
 
     const currentPage = appliedFilters.page ?? 1;
     const currentLimit = appliedFilters.limit ?? 20;
@@ -98,8 +116,8 @@ const UsersManagementMain = () => {
             <div className="rounded-2xl border border-border bg-card p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800/40">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-foreground">Users Management</h1>
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <h1 className="text-2xl font-bold tracking-tight text-foreground dark:text-slate-100">Users Management</h1>
+                        <p className="mt-1 text-sm text-muted-foreground dark:text-slate-400">
                             Filter and manage platform users with role-based controls.
                         </p>
                     </div>
@@ -113,7 +131,14 @@ const UsersManagementMain = () => {
                             onClick={() => setShowFilters((prev) => !prev)}
                         >
                             <SlidersHorizontal className="mr-2 h-4 w-4" />
-                            {showFilters ? "Hide Filters" : "Show Filters"}
+                            {showFilters ? "Hide Filters" : "Show Filters"} {
+                                !showFilters ? activeFilterCount > 0 && (
+                                    <span className="ml-2 rounded-full bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground dark:bg-slate-700/60">
+                                        {activeFilterCount}
+                                    </span>
+                                )
+                                    : null
+                            }
                         </Button>
                     </div>
                 </div>
@@ -133,9 +158,9 @@ const UsersManagementMain = () => {
             <div className="rounded-2xl border border-border bg-card p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/40">
                 <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <p className="text-sm text-muted-foreground">
-                        Showing <span className="font-semibold text-foreground">{from}</span> to{" "}
-                        <span className="font-semibold text-foreground">{to}</span> of{" "}
-                        <span className="font-semibold text-foreground">{total}</span>
+                        Showing <span className="font-semibold text-foreground dark:text-slate-400">{from}</span> to{" "}
+                        <span className="font-semibold text-foreground dark:text-slate-400">{to}</span> of{" "}
+                        <span className="font-semibold text-foreground dark:text-slate-400">{total}</span>
                     </p>
 
                     <div className="flex items-center gap-2">
@@ -148,7 +173,7 @@ const UsersManagementMain = () => {
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
-                        <span className="min-w-16 text-center text-sm font-medium text-foreground">
+                        <span className="min-w-16 text-center text-sm font-medium text-foreground dark:text-white">
                             Page {currentPage}
                         </span>
                         <Button
@@ -167,15 +192,28 @@ const UsersManagementMain = () => {
             </div>
             <DialogPopup
                 open={showUserDetail.open}
-                onOpenChange={()=>{
+                onOpenChange={() => {
                     setShowUserDetail({ open: false, user: undefined });
                 }}
                 size="xl"
             >
                 <ViewUserDetail user={showUserDetail.user as User} // Just show the first user as an example, you can enhance this to show the selected user's details
-                    
+
                 />
             </DialogPopup>
+            <AllocateConfirmationAlert
+                open={showResetPassword.open}
+                onOpenChange={(open) => setShowResetPassword({ open, userId: "" })}
+                title="Reset User Password"
+                description={`Are you sure you want to reset the password for this user? An email with reset instructions will be sent to the user's registered email address.`}
+                confirmText="Yes, Reset Password"
+                onConfirm={() => {
+                    // Call the reset password API using the userId from state
+                    // You can use the useResetUserPasswordMutation hook here to perform the mutation
+                    handleResetPasswordConfirm();
+                    setShowResetPassword({ open: false, userId: "" });
+                }}
+            />
         </div>
     );
 };

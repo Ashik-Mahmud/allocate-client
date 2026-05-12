@@ -1,6 +1,6 @@
 import { AdminUserFilters, BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization, fetchUsers } from "@/lib/services/system";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization, fetchUsers, resetUserPassword } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
 import { organizationKeys } from "../organization";
@@ -118,5 +118,16 @@ export const useFetchAllUsers = (filters: AdminUserFilters) => {
     return useQuery({
         queryKey: SystemKeys.users(filters),
         queryFn: () => fetchUsers(filters),
+    });
+}
+
+// Hook to reset user password (for admin user management)
+export const useResetUserPasswordMutation = () => {
+    return useMutation({
+        mutationFn: (userId: string) => resetUserPassword(userId),
+        onSuccess: () => {
+            // Invalidate the system settings query to refetch the updated settings
+            // queryClient.invalidateQueries({ queryKey: SystemKeys.settings });
+        },
     });
 }

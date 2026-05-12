@@ -35,7 +35,7 @@ export function UsersFilters({
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
-          <h3 className="text-sm font-semibold text-foreground">User Filters</h3>
+          <h3 className="text-sm font-semibold text-foreground dark:text-white">User Filters</h3>
         </div>
         <span className="rounded-full bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground dark:bg-slate-700/60">
           {activeFilterCount} active
