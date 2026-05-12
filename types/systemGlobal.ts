@@ -91,3 +91,8 @@ export interface UpdateOrganizationPayload {
   trialEndsAt?: string;
 }
   
+
+export interface CreditsTopUpPayload {
+  credits: number;
+  amount: number;
+}

@@ -12,6 +12,11 @@ export const ROUTES = {
     subscriptions: "/dashboard/subscriptions",
     salesInquiries: "/dashboard/sales-inquiries",
     salesInquiriesStats: "/dashboard/sales-stats",
+    systemLogs: "/dashboard/system-logs",
+    revenueAnalysis: "/dashboard/revenue-analysis",
+    creditTransaction: "/dashboard/credit-transactions",
+    
+
   },
   dashboardOrgAdmin: {
     bookingManagement: "/dashboard/booking-management",

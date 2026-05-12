@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http";
-import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload } from "@/types/systemGlobal";
+import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload, CreditsTopUpPayload } from "@/types/systemGlobal";
 import { PaginatedResponse } from "@/types";
 import { Organizations } from "@/types/organization";
 
@@ -68,7 +68,7 @@ export const updateOrganization = async (payload: { id: string, updateOrganizati
 }
 
 // Service to Topup Credits for an organization
-export const topupOrganizationCredits = async (id: string, payload: { credits: number, amount: number }) => {
+export const topupOrganizationCredits = async (id: string, payload: CreditsTopUpPayload) => {
     return apiRequest<ApiResponse<null>>(`/admin/organizations/${id}/credits`, {
         method: "POST",
         body: JSON.stringify(payload),

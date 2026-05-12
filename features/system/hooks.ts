@@ -1,6 +1,6 @@
-import { AdminUserFilters, BroadcastAnnouncementPayload, OrganizationListFilters, SystemSettingsData, UpdateOrganizationPayload } from "@/types/systemGlobal";
+import { ActivityLogFilters, AdminUserFilters, BroadcastAnnouncementPayload, CreditsTopUpPayload, OrganizationListFilters, RevenueAnalyticsFilters, SystemSettingsData, TransactionListFilters, UpdateOrganizationPayload } from "@/types/systemGlobal";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization, fetchUsers, resetUserPassword } from "@/lib/services/system";
+import { getSystemSettings, updateSystemSettings, fetchOrganizations, broadcastSystemAnnouncement, fetchOrganizationById, updateOrganization, deleteOrganization, restoreOrganization, fetchUsers, resetUserPassword, topupOrganizationCredits, fetchTransactionList, fetchRevenueAnalytics, fetchActivityLogs } from "@/lib/services/system";
 import { apiRequest } from "@/lib/services/http";
 import { ApiResponse } from "@/types";
 import { organizationKeys } from "../organization";
@@ -14,9 +14,9 @@ export const SystemKeys = {
     toupCredits: ["system", "topup-credits"] as const,
     users: (filters?: AdminUserFilters) => ["system", "users", filters] as const,
     resetPassword: (userId: string) => ["system", "reset-password", userId] as const,
-    transactionList: ["system", "transactions"] as const,
-    revenueAnalysis: ["system", "revenue-analysis"] as const,
-    activityLogsById: (id: string) => ["system", "activity-logs", id] as const,
+    transactionList: (filters?: TransactionListFilters) => ["system", "transactions", filters] as const,
+    revenueAnalysis: (filters?: RevenueAnalyticsFilters) => ["system", "revenue-analysis", filters] as const,
+    activityLogs: (filters?: ActivityLogFilters) => ["system", "activity-logs", filters] as const,
 
 
 };
@@ -129,5 +129,43 @@ export const useResetUserPasswordMutation = () => {
             // Invalidate the system settings query to refetch the updated settings
             // queryClient.invalidateQueries({ queryKey: SystemKeys.settings });
         },
+    });
+}
+
+// Hook to top up credits for an organization
+export const useTopUpCreditsMutation = () => {
+    return useMutation({
+        mutationFn: (payload: { orgId: string, data: CreditsTopUpPayload }) => {
+            return topupOrganizationCredits(payload.orgId, payload.data);
+        },
+        onSuccess: () => {
+            // Invalidate the system settings query to refetch the updated settings
+            // queryClient.invalidateQueries({ queryKey: SystemKeys.settings });
+        },
+    });
+}
+
+// Hook to fetch transaction list with filters
+export const useFetchTransactionList = (filters: TransactionListFilters) => {
+    return useQuery({
+        queryKey: SystemKeys.transactionList(filters),
+        queryFn: () => fetchTransactionList(filters),
+    });
+}
+
+// Hook to get revenue analytics data with filters
+export const useFetchRevenueAnalytics = (filters: RevenueAnalyticsFilters) => {
+    return useQuery({
+        queryKey: SystemKeys.revenueAnalysis(filters),
+        queryFn: () => fetchRevenueAnalytics(filters),
+    });
+}
+
+// Hook to fetch activity logs by ID
+export const useFetchActivityLogs = (filters: ActivityLogFilters) => {
+    return useQuery({
+        queryKey: SystemKeys.activityLogs(filters),
+        queryFn: () => fetchActivityLogs(filters),
+       
     });
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { APP_ROLES } from "@/lib/constants/roles";
 import { ROUTES } from "@/lib/constants/routes";
-import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LineChart, LogOut, PanelLeftOpen, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
+import { ArrowRight, BriefcaseBusiness, CalendarCheck, Coins, CoinsIcon, CreditCard, LayoutDashboard, LineChart, LogOut, PanelLeftOpen, PieChart, ShieldCheck, Sparkles, UserCog, Users } from 'lucide-react';
 import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 import { cn } from '@/lib/utils/cn';
@@ -55,38 +55,71 @@ const adminNavigation: NavItem[] = [
         href: ROUTES.dashboardAdmin.users,
         icon: Users,
     },
+
     {
-        label: "Subscriptions",
-        description: "Review active subscription plans",
-        href: ROUTES.dashboardAdmin.subscriptions,
+        label: "Transactions & Revenue",
+        description: "Review subscription and booking transactions, analyze revenue trends",
+        href: '#transactions',
         icon: Sparkles,
+        children: [
+            {
+                label: "Manual Top-up & Credits",
+                description: "View and manage manual credit transactions",
+                href: ROUTES.dashboardAdmin.creditTransaction,
+                icon: LineChart,
+            },
+            {
+                label: "Revenue Analysis",
+                description: "Analyze revenue trends",
+                href: ROUTES.dashboardAdmin.revenueAnalysis,
+                icon: PieChart,
+            }
+        ]
     },
+
+    {
+        label: "Settings & Logs",
+        description: "Manage system settings and logs",
+        href: '#settings',
+        icon: UserCog,
+        children: [
+            {
+                label: "System Logs",
+                description: "Review system logs",
+                href: ROUTES.dashboardAdmin.systemLogs,
+                icon: LogOut,
+            },
+            {
+                label: "Settings",
+                description: "Control platform-wide settings",
+                href: ROUTES.dashboardAdmin.settings,
+                icon: UserCog,
+            },
+        ]
+    },
+
     {
         label: 'Sales Inquiries',
         description: 'View and manage sales inquiries',
-        href: '#',
+        href: '#sales-inquiries',
         icon: CreditCard,
         children: [
+            {
+                label: 'Sales Inquiries Insights',
+                description: 'View sales inquiries statistics',
+                href: ROUTES.dashboardAdmin.salesInquiriesStats,
+                icon: LineChart,
+            },
             {
                 label: 'Sales Inquiries',
                 description: 'View and manage sales inquiries',
                 href: ROUTES.dashboardAdmin.salesInquiries,
                 icon: CreditCard,
             },
-            {
-                label: 'Sales Inquiries Stats',
-                description: 'View sales inquiries statistics',
-                href: ROUTES.dashboardAdmin.salesInquiriesStats,
-                icon: LineChart,
-            }
+
         ]
     },
-    {
-        label: "Settings",
-        description: "Control platform-wide settings",
-        href: ROUTES.dashboardAdmin.settings,
-        icon: UserCog,
-    },
+
 ];
 
 const orgAdminNavigation: NavItem[] = [
@@ -255,7 +288,7 @@ const SidebarContent = ({
                             </p>
                         )
                     }
-                    {[...roleNavigation, ...navigation].map((item) => {
+                    {[...navigation, ...roleNavigation,].map((item) => {
                         const Icon = item.icon;
                         const active = isActiveRoute(pathname, item?.href);
                         if (item?.children?.length) {
