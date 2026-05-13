@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http";
-import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload, CreditsTopUpPayload, ActivityLog } from "@/types/systemGlobal";
+import { SystemSettingsData, BroadcastAnnouncementPayload, OrganizationListFilters, AdminUserFilters, TransactionListFilters, RevenueAnalyticsFilters, ActivityLogFilters, UpdateOrganizationPayload, CreditsTopUpPayload, ActivityLog, RevenueAnalyticsData } from "@/types/systemGlobal";
 import { PaginatedResponse } from "@/types";
 import { Organizations } from "@/types/organization";
 
@@ -114,8 +114,8 @@ export const fetchRevenueAnalytics = async (filters: RevenueAnalyticsFilters) =>
     if (filters.startDate) queryParams.append("startDate", filters.startDate);
     if (filters.endDate) queryParams.append("endDate", filters.endDate);
     if (filters.organizationId) queryParams.append("organizationId", filters.organizationId);
-    queryParams.append("groupBy", filters.groupBy);
-    return apiRequest<ApiResponse<any>>(`/admin/analytics/revenue?${queryParams?.toString() || ''}`, { method: "GET" });
+    if (filters.groupBy) queryParams.append("groupBy", filters.groupBy);
+    return apiRequest<ApiResponse<RevenueAnalyticsData>>(`/admin/analytics/revenue?${queryParams?.toString() || ''}`, { method: "GET" });
 }
 
 // Service to activity logs

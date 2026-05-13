@@ -67,12 +67,40 @@ export interface TransactionListFilters {
 }
 
 export interface RevenueAnalyticsFilters {
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   organizationId?: string;
-  groupBy: "day" | "week" | "month";
+  groupBy?: "day" | "week" | "month";
 }
 
+export interface RevenueAnalyticsData {
+  filters: RevenueAnalyticsFilters;
+  summary: {
+    totalRevenue: number;
+    totalTransactions: number;
+    activePayingOrganizations: number;
+    avgTransactionValue: number;
+    avgRevenuePerPayingOrganization: number;
+  };
+  subscribers: {
+    totalOrganizations: number;
+    free: number;
+    pro: number;
+    enterprise: number;
+    paid: number;
+  };
+  grouped: Array<{
+    period: string;
+    revenue: number;
+    transactionCount: number;
+    activeOrganizations: number;
+    revenueByPlan: {
+      free: number;
+      pro: number;
+      enterprise: number;
+    };
+  }>;
+}
 export interface ActivityLogFilters {
   organizationId?: string;
   userId?: string;
@@ -91,7 +119,7 @@ export interface UpdateOrganizationPayload {
   needUpdateOrg?: boolean;
   trialEndsAt?: string;
 }
-  
+
 
 export interface CreditsTopUpPayload {
   credits: number;
