@@ -1,184 +1,4 @@
 
-// "use client"
-
-// import React, { useState, useEffect } from 'react'
-// import {
-//     Search,
-//     CreditCard,
-//     Building2,
-//     ChevronRight,
-//     ArrowLeft,
-//     CheckCircle2,
-//     DollarSign
-// } from 'lucide-react'
-// import { cn } from '@/lib/utils/cn'
-// import { fetchOrganizations } from '@/lib/services/system';
-// import { useTopUpCreditsMutation } from '@/features/system/hooks';
-// import { SearchableSelect } from '@/components/shared/searchable-select';
-
-// type Props = {
-//     onSuccess?: () => void;
-//     orgId?: string;
-// }
-
-// const ManualTopUp = ({ orgId, onSuccess }: Props) => {
-//     // State management
-//     const [step, setStep] = useState<'form' | 'summary'>('form');
-//     const [loading, setLoading] = useState(false);
-//     const [selectedOrg, setSelectedOrg] = useState<{ value: string; label: string } | null>(null);
-//     const [formData, setFormData] = useState({ credits: 0, amount: 0 });
-//     const [searchedOrgs, setSearchedOrgs] = useState<{ value: string; label: string }[]>([]);
-//     const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
-
-//     // Handle initial orgId from props
-//     useEffect(() => {
-//         if (orgId) {
-//             // In a real scenario, you'd fetch the label for this ID
-//             setSelectedOrg({ value: orgId, label: "Loading Organization..." });
-//             handleSearch("");
-//         }
-//     }, [orgId]);
-
-//     const topUpMutation = useTopUpCreditsMutation();
-
-//     // Search organizations for the dropdown
-//     const handleSearch = async (search: string) => {
-//         try {
-//             const result = await fetchOrganizations({
-//                 name: search,
-//                 ...(orgId && { organizationId: orgId }),
-//                 limit: 10,
-//                 showDeletedOrg: false
-//             })
-//             const proccessedOrgs = result?.data?.map((org: any) => ({
-//                 value: org.id,
-//                 label: org.name
-//             }));
-//             setSearchedOrgs(proccessedOrgs || []);
-//         } catch (error) {
-//             console.error('Error fetching organizations:', error);
-//             return [];
-//         }
-//     }
-
-//     const handleFinalSubmit = async () => {
-//         setLoading(true);
-//         // await topUpMutation.mutateAsync({ orgId: selectedOrg?.value, ...formData });
-//         setLoading(false);
-//         onSuccess?.();
-//     }
-
-//     if (step === 'summary') {
-//         return (
-//             <div className="space-y-6 p-8 animate-in fade-in zoom-in-95 duration-200">
-//                 <div className="flex items-center gap-2 text-slate-400 mb-2">
-//                     <button onClick={() => setStep('form')} className="cursor-pointer hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-//                         <ArrowLeft size={16} />
-//                     </button>
-//                     <span className="text-[10px] font-bold uppercase tracking-widest">Confirm Transaction</span>
-//                 </div>
-
-//                 <div className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-6 space-y-4">
-//                     <SummaryRow label="Organization" value={selectedOrg?.label} icon={Building2} />
-//                     <SummaryRow label="Credits to Add" value={`${formData.credits} CR`} icon={CreditCard} />
-//                     <SummaryRow label="Billing Amount" value={`$${formData.amount}`} icon={DollarSign} isLast />
-
-//                     <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
-//                         <button
-//                             onClick={handleFinalSubmit}
-//                             disabled={loading}
-//                             className="cursor-pointer w-full py-3 bg-slate-900 dark:bg-blue-600 text-white rounded-xl font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-//                         >
-//                             {loading ? "Processing..." : "Confirm & Top Up"}
-//                             {!loading && <CheckCircle2 size={16} />}
-//                         </button>
-//                     </div>
-//                 </div>
-//             </div>
-//         )
-//     }
-
-//     return (
-//         <div className="space-y-6 animate-in fade-in duration-200 p-6">
-//             <header>
-//                 <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Manual Top-Up</h2>
-//                 <p className="text-xs font-medium text-slate-400">Add credits manually to an organization account.</p>
-//             </header>
-
-//             <div className="space-y-4">
-//                 {/* Organization Search */}
-//                 <div className="space-y-2">
-//                     <SearchableSelect
-//                         options={searchedOrgs}
-//                         value={selectedOrgId || orgId || undefined}
-//                         onChange={(value) => setSelectedOrgId(value)}
-//                         onChangeWithOption={(option) => setSelectedOrg(option as { value: string; label: string })}
-//                         placeholder="Select organization"
-//                         isMulti={false}
-//                         inputClassName="text-left w-full  py-3 rounded-xl border! border-slate-100! dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none focus:ring-2 ring-blue-500/10 transition-all"
-//                         onSearchChange={handleSearch}
-//                         label="Target Organization"
-//                         icon={<Building2 className="h-4 w-4 text-slate-400 dark:text-slate-600" />}
-//                     />
-//                     {/* Selected Indicator */}
-//                     {selectedOrg && (
-//                         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 w-fit">
-//                             <Building2 size={14} className="text-blue-600" />
-//                             <span className="text-xs font-bold text-blue-700 dark:text-blue-300">{selectedOrg.label}</span>
-//                         </div>
-//                     )}
-//                 </div>
-
-//                 {/* Credits & Amount Grid */}
-//                 <div className="grid grid-cols-2 gap-4">
-//                     <div className="space-y-2">
-//                         <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Credits</label>
-//                         <input
-//                             type="number"
-//                             placeholder="0"
-//                             onChange={(e) => setFormData({ ...formData, credits: Number(e.target.value) })}
-//                             className="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none focus:ring-2 ring-blue-500/10"
-//                         />
-//                     </div>
-//                     <div className="space-y-2">
-//                         <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Amount (USD)</label>
-//                         <input
-//                             type="number"
-//                             placeholder="0.00"
-//                             onChange={(e) => setFormData({ ...formData, amount: Number(e.target.value) })}
-//                             className="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm outline-none focus:ring-2 ring-blue-500/10"
-//                         />
-//                     </div>
-//                 </div>
-
-//                 <button
-//                     onClick={() => setStep('summary')}
-//                     disabled={!selectedOrg || !formData.credits}
-//                     className="w-full cursor-pointer mt-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
-//                 >
-//                     Review Summary
-//                     <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-//                 </button>
-//             </div>
-//         </div>
-//     )
-// }
-
-// // Minimalist Row for Summary
-// const SummaryRow = ({ label, value, icon: Icon, isLast }: any) => (
-//     <div className={cn("flex items-center justify-between py-2", !isLast && "border-b border-slate-100 dark:border-slate-800/50")}>
-//         <div className="flex items-center gap-3">
-//             <div className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
-//                 <Icon size={14} className="text-slate-400" />
-//             </div>
-//             <span className="text-xs font-medium text-slate-500">{label}</span>
-//         </div>
-//         <span className="text-sm font-black text-slate-900 dark:text-white">{value}</span>
-//     </div>
-// )
-
-// export default ManualTopUp;
-
 "use client"
 
 import React, { useState, useEffect } from 'react'
@@ -223,7 +43,8 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
             const result = await fetchOrganizations({
                 name: search,
                 limit: 10,
-                showDeletedOrg: false
+                showDeletedOrg: false,
+                ...(orgId ? { organizationId: orgId } : {})
             });
             const processed = result?.data?.map((org: Organizations) => ({
                 value: org.id,
@@ -233,6 +54,7 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                 }
             }));
             setSearchedOrgs(processed || []);
+
         } catch (error) {
             console.error('Error fetching organizations:', error);
         }
@@ -241,7 +63,21 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
     // Initial search to populate dropdown
     useEffect(() => {
         handleSearch("");
+
     }, []);
+
+    useEffect(() => {
+        if (orgId && searchedOrgs.length > 0) {
+            const preselected = searchedOrgs.find(org => org.value === orgId);
+            if (preselected) {
+                setSelectedOrg(preselected);
+                setFormData(p => ({
+                    ...p,
+                    extendDate: preselected.metadata?.end_date ? new Date(preselected.metadata.end_date) : undefined
+                }));
+            }
+        }
+    }, [orgId, searchedOrgs]);
 
     const handleFinalSubmit = async () => {
         if (!selectedOrg && !orgId) return;
@@ -343,12 +179,14 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                                 label="Credit Count"
                                 icon={RefreshCcw}
                                 placeholder="1000"
+                                value={formData.credits}
                                 onChange={(v: any) => setFormData(p => ({ ...p, credits: Number(v) }))}
                             />
                             <InputBlock
                                 label="Charge Amount"
                                 icon={DollarSign}
                                 placeholder="10.00"
+                                value={formData.price}
                                 onChange={(v: any) => setFormData(p => ({ ...p, price: Number(v) }))}
                             />
                         </div>
@@ -391,8 +229,7 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                             <button
                                 onClick={() => {
                                     setStep('form');
-                                    setFormData({ credits: 0, price: 0, extendDate: undefined });
-                                    setSelectedOrg(null);
+
                                 }}
                                 disabled={loading}
                                 className="w-full py-2 text-slate-400 text-xs font-bold hover:text-slate-900 dark:hover:text-slate-200 transition-colors flex items-center justify-center gap-1.5"
@@ -409,7 +246,13 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                             The transfer was successful. <span className="font-bold text-slate-900 dark:text-white">{formData.credits} credits</span> have been added to the balance exchange of ${formData.price.toFixed(2)}.
                         </p>
                         <button
-                            onClick={() => setStep('form')}
+                            onClick={() => {
+                                setStep('form')
+                                setFormData({ credits: 0, price: 0, extendDate: undefined })
+                                setSelectedOrg(null)
+                                handleSearch("");
+
+                            }}
                             className="mt-10 px-10 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-2xl font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-[0.95]"
                         >
                             Top up another account
@@ -436,7 +279,7 @@ const StepDot = ({ active, done }: { active: boolean; done: boolean }) => (
     )} />
 )
 
-const InputBlock = ({ label, icon: Icon, placeholder, onChange }: any) => (
+const InputBlock = ({ label, icon: Icon, placeholder, onChange, value }: any) => (
     <div className="space-y-2">
         <label className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 ml-1">{label}</label>
         <div className="relative group">
@@ -444,6 +287,7 @@ const InputBlock = ({ label, icon: Icon, placeholder, onChange }: any) => (
             <input
                 type="number"
                 placeholder={placeholder}
+                value={value}
                 onChange={(e) => onChange(e.target.value)}
                 className="w-full pl-10 pr-4 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-sm font-black outline-none focus:ring-4 ring-blue-500/5 focus:border-blue-500/20 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-700"
                 min={0}

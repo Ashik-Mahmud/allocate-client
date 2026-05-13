@@ -16,6 +16,8 @@ import { set } from "date-fns";
 import ExtendTrialForm from "./ExtendTrialForm";
 import ViewSubscription from "./ViewSubscription";
 import DeleteOrganizationDialog from "./DeleteOrganizationDialog";
+import AllocateDrawer from "@/components/shared/allocate-drawer";
+import ManualTopUp from "../creditTransactions/ManualTopUp";
 
 const defaultFilters: OrganizationListFilters = {
     organizationId: "",
@@ -42,6 +44,7 @@ const OrganizationMain = () => {
     const [isOpenExtendTrial, setIsOpenExtendTrial] = useState(false);
     const [isOpenSubscription, setIsOpenSubscription] = useState(false);
     const [isOpenDeleteOrg, setIsOpenDeleteOrg] = useState(false);
+    const [isOpenManualTopup, setIsOpenManualTopup] = useState(false);
 
 
     const { data, isLoading, isFetching, refetch } = useFetchOrganizations(appliedFilters);
@@ -130,7 +133,7 @@ const OrganizationMain = () => {
         }
         if (action === 'top-up-credits') {
             setSelectedOrg(org);
-            setIsDetailsOpen(true);
+            setIsOpenManualTopup(true);
             return;
         }
         if (action === 'delete') {
@@ -485,6 +488,22 @@ const OrganizationMain = () => {
                     }}
                 />
             </DialogPopup>
+
+            <AllocateDrawer
+                open={isOpenManualTopup}
+                onOpenChange={setIsOpenManualTopup}
+                title="Top up Credits"
+                position="right"
+                showHeader={false}
+                
+            >
+                <ManualTopUp
+                    orgId={selectedOrg?.id}
+                    onSuccess={() => {
+                        setIsOpenManualTopup(false);
+                        refetch();
+                    }} />
+            </AllocateDrawer>
 
 
 
