@@ -13,6 +13,7 @@ import {
   Lock
 } from 'lucide-react';
 import { ThemeToggle } from '../shared/theme-toggle';
+import useGlobalSettings from '@/hooks/use-global-settings';
 
 const GLOBAL_CONFIG = {
     FREE_PLAN_DURATION_DAYS: 30,
@@ -29,8 +30,9 @@ const GLOBAL_CONFIG = {
 type Props = {}
 
 const TermsAndServiceComponent = (props: Props) => {
+    const {supportEmail} = useGlobalSettings();
     const companyName = "Allocate";
-    const contactEmail = "ashikmahmud187@gmail.com";
+    const contactEmail = supportEmail || "ashikmahmud187@gmail.com";
     const [activeSection, setActiveSection] = useState('agreement');
 
     // Smooth scroll handler

@@ -23,6 +23,7 @@ type DatePickerFieldProps = {
     disabled?: boolean
     inputClassName?: string
     labelClassName?: string
+    disableDays?: (date: Date) => boolean
 }
 
 export const DatePickerField = ({
@@ -34,12 +35,13 @@ export const DatePickerField = ({
     inputClassName,
     labelClassName,
     disabled = false,
+    disableDays,
 }: DatePickerFieldProps) => {
     const handleClear = (e: React.MouseEvent) => {
         e.stopPropagation()
         onChange(undefined)
     }
-
+ 
     return (
         <div className={cn("flex flex-col gap-2 w-full", className)}>
             {label && (
@@ -79,12 +81,13 @@ export const DatePickerField = ({
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 rounded-2xl border-slate-100 shadow-xl" align="start">
+                    {}
                     <Calendar
                         mode="single"
-                        selected={value}
+                        selected={new Date(value || new Date())}
                         onSelect={onChange}
-                         
-                        disabled={disabled}
+                        // disabled past dates
+                        disabled={disableDays}
                         className="rounded-2xl"
                     />
                 </PopoverContent>

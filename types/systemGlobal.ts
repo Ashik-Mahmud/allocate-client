@@ -95,7 +95,8 @@ export interface UpdateOrganizationPayload {
 
 export interface CreditsTopUpPayload {
   credits: number;
-  amount: number;
+  price: number;
+  extendDate?: string | undefined;
 }
 
 

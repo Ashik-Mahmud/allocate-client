@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils/cn";
 export type Option = {
     label: string
     value: string
+    metadata?: Record<string, any>
 }
 
 interface SearchableSelectProps {
@@ -36,6 +37,7 @@ interface SearchableSelectProps {
     // Selection Logic
     value?: string | string[] // Supports single string or array of strings
     onChange: (value: any) => void
+    onChangeWithOption?: (option: Option | Option[] | null) => void // Callback with full option(s)
     isMulti?: boolean
     className?: string
     onSearchChange?: (search: string) => void
@@ -53,6 +55,7 @@ export function SearchableSelect({
     loading = false,
     value,
     onChange,
+    onChangeWithOption,
     isMulti = false,
     className,
     onSearchChange,
@@ -70,9 +73,11 @@ export function SearchableSelect({
                 ? currentValues.filter((v) => v !== optionValue)
                 : [...currentValues, optionValue]
             onChange(newValue)
+            onChangeWithOption?.(options.find((o) => o.value === optionValue) || null)
         } else {
             onChange(optionValue)
             setOpen(false)
+            onChangeWithOption?.(options.find((o) => o.value === optionValue) || null)
         }
     }
 

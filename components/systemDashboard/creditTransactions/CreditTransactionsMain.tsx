@@ -33,6 +33,8 @@ import Build from "next/dist/build";
 import { fetchOrganizations } from "@/lib/services/system";
 import DialogPopup from "@/components/shared/dialog-popup";
 import ViewCreditDetail from "./ViewCreditDetail";
+import AllocateDrawer from "@/components/shared/allocate-drawer";
+import ManualTopUp from "./ManualTopUp";
 
 // Helper to style transaction types
 const TRANSACTION_CONFIG: Record<TransactionType, { icon: any, color: string, label: string }> = {
@@ -61,6 +63,7 @@ const CreditTransactionsMain = () => {
   const [searchedOrgs, setSearchedOrgs] = useState<{ value: string; label: string }[]>([]);
   const [viewDetailsModal, setViewDetailsModal] = useState(false);
   const [selectedCredit, setSelectedCredit] = useState<CreditTransaction | null>(null);
+  const [isOpenManualTopup, setIsOpenManualTopup] = useState(false);
   // Update filters handler
   const updateFilter = (newFilters: Partial<TransactionListFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
@@ -109,7 +112,9 @@ const CreditTransactionsMain = () => {
             {isFetching ? "Refreshing..." : "Refresh"}
           </Button>
           <Button
-            onClick={() => {/* Trigger Manual Topup Drawer */ }}
+            onClick={() => {
+              setIsOpenManualTopup(true);
+            }}
             className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold h-11 px-6 shadow-lg shadow-slate-200 transition-all active:scale-95"
           >
             <Plus className="mr-2 h-4 w-4 stroke-3" />
@@ -313,6 +318,22 @@ const CreditTransactionsMain = () => {
       >
         <ViewCreditDetail credit={selectedCredit as CreditTransaction} onClose={() => setViewDetailsModal(false)} />
       </DialogPopup>
+      <AllocateDrawer
+        open={isOpenManualTopup}
+        onOpenChange={setIsOpenManualTopup}
+        title="Top up Credits"
+        position="bottom"
+        showHeader={false}
+        className="h-[70dvh]!"
+
+      >
+        <ManualTopUp
+
+          onSuccess={() => {
+            setIsOpenManualTopup(false);
+            refetch();
+          }} />
+      </AllocateDrawer>
     </div>
   )
 }

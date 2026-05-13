@@ -41,9 +41,10 @@ const AllocateDrawer = ({
 }: Props) => {
     return (
         <Drawer open={open} onOpenChange={onOpenChange} direction={position} shouldScaleBackground={false}
+           
 
         >
-            <DrawerContent className={cn("mx-auto max-w-2xl h-dvh rounded-none border-none dark:bg-slate-900", className)} showHandler={showHandler}>
+            <DrawerContent  className={cn("mx-auto max-w-2xl h-dvh rounded-none border-none dark:bg-slate-900", className)} showHandler={showHandler}>
                 {/* Top Handle is included by Shadcn by default, but we add a close button for better UX */}
                 <div className="flex h-full flex-col">
 
