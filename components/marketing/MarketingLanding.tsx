@@ -5,9 +5,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { CheckCircle2, Globe2, Sparkles, Workflow } from "lucide-react";
-import type { Locale } from "@/lib/i18n";
 import { MarketingLocaleNav } from "@/components/marketing/MarketingLocaleNav";
-import { getMarketingLocaleContent } from "@/lib/marketing-content";
+import { useLocale, useTranslations } from "next-intl";
+import { LocaleSwitcher } from "../shared/LanguageToggler";
 
 const featureIconMap = {
   workflow: Workflow,
@@ -24,13 +24,9 @@ const sectionFade: Variants = {
   },
 };
 
-type MarketingLandingProps = {
-  locale: Locale;
-};
-
-export function MarketingLanding({ locale }: MarketingLandingProps) {
-  const content = getMarketingLocaleContent(locale);
-  const { landing, nav, language } = content;
+export function MarketingLanding() {
+  const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <main
@@ -45,20 +41,13 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
         <header className="mb-14 flex flex-wrap items-center justify-between gap-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 shadow-sm backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/55 dark:text-slate-200">
             <Globe2 className="size-3.5" aria-hidden="true" />
-            {landing.badge}
+            {t("landing.badge")}
           </div>
 
           <MarketingLocaleNav
-            locale={locale}
             pathSuffix=""
-            labels={{
-              pricing: nav.pricing,
-              about: nav.about,
-              docs: nav.docs,
-              signIn: nav.signIn,
-            }}
-            language={language}
           />
+         
         </header>
 
         <motion.section
@@ -69,13 +58,13 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
         >
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-300">
-              {landing.languageLabel}: {language.name}
+              {t("landing.languageLabel")}: {t("language.name")}
             </p>
             <h1 className="text-balance text-4xl font-black leading-tight text-slate-900 sm:text-5xl lg:text-6xl dark:text-slate-100">
-              {landing.heroTitle}
+              {t("landing.heroTitle")}
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg dark:text-slate-300">
-              {landing.heroSubtitle}
+              {t("landing.heroSubtitle")}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -83,18 +72,18 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
                 href="/sign-up"
                 className="rounded-full bg-linear-to-r from-primary via-primary to-brand-secondary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-xl shadow-primary/35 transition hover:scale-[1.02]"
               >
-                {landing.heroPrimary}
+                {t("landing.heroPrimary")}
               </Link>
               <Link
                 href={`/${locale}/pricing`}
                 className="rounded-full border border-primary/35 bg-white/75 px-6 py-3 text-sm font-semibold text-slate-900 backdrop-blur transition hover:border-primary dark:border-primary/50 dark:bg-slate-900/60 dark:text-slate-100"
               >
-                {landing.heroSecondary}
+                {t("landing.heroSecondary")}
               </Link>
             </div>
 
             <div className="mt-9 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
-              {landing.stats.map((stat) => (
+              {t.raw("landing.stats").map((stat: any) => (
                 <StatCard key={stat.label} value={stat.value} label={stat.label} />
               ))}
             </div>
@@ -127,12 +116,12 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
           className="mt-24"
         >
           <h2 className="text-pretty text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">
-            {landing.trustTitle}
+            {t("landing.trustTitle")}
           </h2>
-          <p className="mt-3 max-w-3xl text-slate-700 dark:text-slate-300">{landing.trustSubtitle}</p>
+          <p className="mt-3 max-w-3xl text-slate-700 dark:text-slate-300">{t("landing.trustSubtitle")}</p>
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {landing.brands.map((brand) => (
+            {t.raw("landing.brands").map((brand: string) => (
               <div
                 key={brand}
                 className="rounded-2xl border border-slate-300/70 bg-white/75 px-4 py-5 text-center text-sm font-semibold text-slate-700 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"
@@ -150,12 +139,12 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
           variants={sectionFade}
           className="mt-24"
         >
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{landing.featureTitle}</h2>
-          <p className="mt-3 text-slate-700 dark:text-slate-300">{landing.featureSubtitle}</p>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{t("landing.featureTitle")}</h2>
+          <p className="mt-3 text-slate-700 dark:text-slate-300">{t("landing.featureSubtitle")}</p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {landing.features.map((feature, idx) => {
-              const Icon = featureIconMap[feature.icon];
+            {t.raw("landing.features").map((feature: any, idx: number) => {
+              const Icon = featureIconMap[feature.icon as keyof typeof featureIconMap];
               return (
                 <motion.article
                   key={feature.title}
@@ -184,10 +173,10 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
           className="mt-24 grid gap-6 rounded-[2rem] border border-slate-300/70 bg-white/75 p-8 shadow-xl backdrop-blur dark:border-slate-700 dark:bg-slate-900/70 md:grid-cols-3"
         >
           <div className="md:col-span-3">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{landing.workflowTitle}</h2>
-            <p className="mt-2 text-slate-700 dark:text-slate-300">{landing.workflowSubtitle}</p>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t("landing.workflowTitle")}</h2>
+            <p className="mt-2 text-slate-700 dark:text-slate-300">{t("landing.workflowSubtitle")}</p>
           </div>
-          {landing.workflow.map((step, idx) => (
+          {t.raw("landing.workflow").map((step: any, idx: number) => (
             <div key={step.title} className="rounded-2xl border border-slate-300/70 bg-white/70 p-5 dark:border-slate-700 dark:bg-slate-950/40">
               <p className="mb-2 inline-block rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">
                 {String(idx + 1).padStart(2, "0")}
@@ -205,9 +194,9 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
           variants={sectionFade}
           className="mt-24"
         >
-          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{landing.testimonialTitle}</h2>
+          <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{t("landing.testimonialTitle")}</h2>
           <div className="mt-7 grid gap-4 md:grid-cols-2">
-            {landing.testimonials.map((item) => (
+            {t.raw("landing.testimonials").map((item: any) => (
               <blockquote
                 key={item.name}
                 className="rounded-3xl border border-slate-300/70 bg-white/80 p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900/65"
@@ -230,18 +219,18 @@ export function MarketingLanding({ locale }: MarketingLandingProps) {
           variants={sectionFade}
           className="mt-24 rounded-[2rem] border border-primary/30 bg-linear-to-r from-primary to-brand-secondary p-8 text-white shadow-2xl shadow-primary/35 sm:p-10"
         >
-          <h2 className="text-2xl font-black sm:text-3xl">{landing.ctaTitle}</h2>
-          <p className="mt-3 max-w-2xl text-white/90">{landing.ctaSubtitle}</p>
+          <h2 className="text-2xl font-black sm:text-3xl">{t("landing.ctaTitle")}</h2>
+          <p className="mt-3 max-w-2xl text-white/90">{t("landing.ctaSubtitle")}</p>
           <Link
             href="/sign-up"
             className="mt-6 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
           >
-            {landing.ctaButton}
+            {t("landing.ctaButton")}
           </Link>
         </motion.section>
 
         <footer className="mt-12 border-t border-slate-300/70 py-8 text-sm text-slate-700 dark:border-slate-700 dark:text-slate-300">
-          {landing.footerCopy}
+          {t("landing.footerCopy")}
         </footer>
       </div>
     </main>

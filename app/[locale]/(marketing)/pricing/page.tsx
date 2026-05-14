@@ -1,41 +1,10 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
 import { PricingSection } from "@/components/marketing/Pricing";
 import { MarketingLocaleNav } from "@/components/marketing/MarketingLocaleNav";
-import { isLocale } from "@/lib/i18n";
-import { getMarketingLocaleContent } from "@/lib/marketing-content";
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[lang]/pricing">): Promise<Metadata> {
-  const { lang } = await params;
 
-  if (!isLocale(lang)) return {};
 
-  return {
-    title: "Pricing | Allocate",
-    description: "Choose the Allocate plan that fits your organization.",
-    alternates: {
-      canonical: "/en/pricing",
-      languages: {
-        "en-US": "/en/pricing",
-      },
-    },
-  };
-}
-
-export default async function LocalizedPricingPage({
-  params,
-}: PageProps<"/[lang]/pricing">) {
-  const { lang } = await params;
-
-  if (!isLocale(lang)) notFound();
-
-  if (lang === "bn") {
-    redirect("/en/pricing");
-  }
-
-  const content = getMarketingLocaleContent("en");
+export default async function LocalizedPricingPage() {
 
   return (
     <main className="relative overflow-hidden">
@@ -46,18 +15,12 @@ export default async function LocalizedPricingPage({
           <h1 className="text-3xl font-black text-slate-900 sm:text-4xl dark:text-slate-100">
             Pricing Designed For Predictable Growth
           </h1>
-        <MarketingLocaleNav
-          locale="en"
-          pathSuffix="/pricing"
-          labels={{
-            pricing: content.nav.pricing,
-            about: content.nav.about,
-            docs: content.nav.docs,
-            signIn: content.nav.signIn,
-          }}
-          language={content.language}
-        />
-      </div>
+          <MarketingLocaleNav
+
+            pathSuffix="/pricing"
+
+          />
+        </div>
         <p className="max-w-3xl text-slate-700 dark:text-slate-300">
           Compare plans, choose your billing cycle, and scale your operations stack without re-platforming later.
         </p>
