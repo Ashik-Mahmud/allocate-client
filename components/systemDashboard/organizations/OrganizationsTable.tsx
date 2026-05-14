@@ -168,17 +168,19 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 label: needUpdate ? 'Disable edit organization' : 'Enable edit organization',
                                                 onClick: () => onAction("need-update", org),
                                                 icon: Edit,
+                                                disabled: org?.is_active === false || !!org?.deletedAt,
                                             },
                                             {
                                                 label: 'Top up credits',
                                                 onClick: () => onAction("top-up-credits", org),
                                                 icon: Coins,
+                                                disabled: org?.is_active === false || !!org?.deletedAt,
                                             },
                                             {
                                                 label: 'Extend trial',
                                                 onClick: () => onAction("extend-trial", org),
                                                 icon: Clock,
-                                                disabled: !org?.trialEndsAt || new Date(org?.trialEndsAt) < new Date(),
+                                                disabled: !org?.trialEndsAt || new Date(org?.trialEndsAt) < new Date() || org?.is_active === false || !!org?.deletedAt,
                                             },
                                             {
                                                 label: isVerified ? "Mark as unverified" : "Mark as verified",
@@ -186,6 +188,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 destructive: isVerified,
                                                 icon: isVerified ? GoUnverified : Verified,
                                                 isSeparator: true,
+                                                disabled: org?.is_active === false || !!org?.deletedAt,
                                             },
                                             {
                                                 label: isActive ? "Deactivate" : "Activate",
@@ -198,7 +201,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                                                 onClick: () => onAction("trial", org),
                                                 icon: isAllowTrial ? CheckCircle2 : XCircle,
                                                 destructive: isAllowTrial,
-                                                disabled: org.plan_type !== PlanType.FREE,
+                                                disabled: org.plan_type !== PlanType.FREE || !!org?.deletedAt || org?.is_active === false,
                                             },
                                             {
                                                 label: org?.deletedAt ? "Restore organization" : "Delete organization",

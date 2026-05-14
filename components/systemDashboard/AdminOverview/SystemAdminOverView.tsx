@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertCircle, BarChart3, Building2 } from 'lucide-react';
 import MetricsGrid from './MetricsGrid';
 import RevenueTrendChart from './RevenueTrendChart';
@@ -11,6 +11,7 @@ import { MOCK_DASHBOARD_INSIGHTS } from './constants';
 import type { DashboardInsights } from './types';
 import { useSystemInsights } from '@/features/dashboard/hooks';
 import TenantAndUsagesMain from './TenantAndUsagesMain';
+import Loader from '@/components/shared/loader';
 
 type TabType = 'overview' | 'revenue' | 'tenants-usages' | 'health';
 
@@ -27,6 +28,23 @@ const SystemAdminOverView = () => {
     { id: 'tenants-usages', label: 'Tenants & Usages Monitoring', icon: <Building2 className="w-4 h-4" /> },
     { id: 'health', label: 'System Health', icon: <AlertCircle className="w-4 h-4" /> },
   ];
+
+
+  // Store tab state in localStorage to persist across refreshes
+  useEffect(() => {
+    const storedTab = localStorage.getItem('adminDashboardActiveTab') as TabType;
+    if (storedTab) {
+      setActiveTab(storedTab);
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="grid place-items-center h-full">
+        <Loader type="component" componentName="Preparing Platform Dashboard..." />
+      </div>
+    );
+  }
 
   return (
     <main className="space-y-6">
@@ -45,7 +63,10 @@ const SystemAdminOverView = () => {
         {tabs?.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              localStorage.setItem('adminDashboardActiveTab', tab.id);
+            }}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors cursor-pointer ${activeTab === tab.id
               ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
               : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'

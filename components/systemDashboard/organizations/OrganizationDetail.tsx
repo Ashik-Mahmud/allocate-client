@@ -85,12 +85,12 @@ const OrganizationDetail = ({ id }: Props) => {
           </Button>
           <Button
             size="sm"
-            onClick={() => toast.info(`${org.isVerified ? "Unverify" : "Verify"} requested`)}
+              variant={org.isVerified ? "outline" : "destructive"}
           >
             {org.isVerified ? (
               <><CheckCircle2 className="mr-2 size-4 text-emerald-500" /> Verified</>
             ) : (
-              <>Mark Verify</>
+              <><XCircle className="mr-2 size-4 text-rose-500" /> Unverified</>
             )}
           </Button>
         </div>
@@ -127,7 +127,7 @@ const OrganizationDetail = ({ id }: Props) => {
               <div>{org.address?.country}</div>
             </div>
           )}
-      </div>
+        </div>
       </section>
 
       <section className="rounded-2xl border border-border bg-card p-4 transition-colors">
@@ -166,13 +166,13 @@ const OrganizationDetail = ({ id }: Props) => {
               </div>
             </div>
           ))}
-            {org?.users && org.users.length > 4 && (
-              <Link href={ROUTES.dashboardAdmin.users} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background p-3 col-span-2">
-                <div>
-                  <p className="text-sm font-medium text-foreground">+{org?.users?.length - 4} more</p>
-                </div>
-              </Link>
-            )}
+          {org?.users && org.users.length > 4 && (
+            <Link href={ROUTES.dashboardAdmin.users} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background p-3 col-span-2">
+              <div>
+                <p className="text-sm font-medium text-foreground">+{org?.users?.length - 4} more</p>
+              </div>
+            </Link>
+          )}
         </div>
       </section>
     </div>
