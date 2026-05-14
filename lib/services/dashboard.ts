@@ -1,6 +1,7 @@
 import { ApiResponse } from "@/types";
 import { apiRequest } from "./http"
-import { StaffDashboardData, TdashboardFilter,  TdashboardOverviewResponse } from "@/types/dashboard";
+import { StaffDashboardData, TdashboardFilter, TdashboardOverviewResponse } from "@/types/dashboard";
+import { PlatformInsights } from "@/types/systemGlobal";
 
 // Service to fetch staff insights for the dashboard;
 export const fetchStaffInsights = (payload: TdashboardFilter) => {
@@ -18,7 +19,7 @@ export const fetchOrganizationInsights = (payload: TdashboardFilter) => {
 
 // Service to fetch System insights for the dashboard;
 export const fetchSystemInsights = (payload: TdashboardFilter) => {
-    return apiRequest<TdashboardOverviewResponse<{}>>(`/dashboard/system-insights`, {
+    return apiRequest<TdashboardOverviewResponse<PlatformInsights>>(`/dashboard/system-insights`, {
         method: "GET",
     });
 }

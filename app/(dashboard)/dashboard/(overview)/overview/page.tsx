@@ -1,8 +1,8 @@
 import { auth } from '@/auth'
-import SystemAdminOverView from '@/components/dashboard/AdminOverview/SystemAdminOverView';
 import OrgDashboardMain from '@/components/dashboard/OrgOverview/OrgDashboardMain';
 import OrgDashboardOverview from '@/components/dashboard/OrgOverview/OrgOverview';
 import StaffDashboardOverview from '@/components/dashboard/StaffOverview/StaffOverview';
+import SystemAdminOverView from '@/components/systemDashboard/AdminOverview/SystemAdminOverView';
 import { Role } from '@/types';
 import React from 'react'
 

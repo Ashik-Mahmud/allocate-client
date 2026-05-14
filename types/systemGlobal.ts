@@ -1,6 +1,6 @@
 import { User } from ".";
 import { TransactionType } from "./credits";
-import { Organizations, PlanType } from "./organization";
+import { Organizations, PlanType, Subscription } from "./organization";
 export type AlertType = 'info' | 'warning' | 'error' | 'success';
 
 export interface GlobalAlert {
@@ -141,4 +141,129 @@ export interface ActivityLog {
   details?: string | null;
   user?: Partial<User>
   organization?: Partial<Organizations>
+}
+
+/**
+ * Main response object for the dashboard insights
+ */
+export interface PlatformDashboardResponse {
+  insights: PlatformInsights;
+  message: string;
+}
+
+export interface PlatformInsights {
+  scope: string;
+  platformSummary: PlatformSummary;
+  revenueAndGrowth: RevenueAndGrowth;
+  tenantAndUsageMonitoring: TenantAndUsageMonitoring;
+  systemHealthAndSecurity: SystemHealthAndSecurity;
+  administrativeControls: AdministrativeControls;
+  dataNotes: DataNotes;
+}
+
+// --- Platform Summary ---
+
+export interface PlatformSummary {
+  totalOrganizations: number;
+  totalPlatformUsers: number;
+  totalRevenue: TotalRevenue;
+  globalCreditsSold: number;
+}
+
+export interface TotalRevenue {
+  /** Derived from TOP_UP credit transactions */
+  lifetimeCreditSales: number;
+  monthlyCreditSales: number;
+  completedSubscriptionSalesCount: number;
+  completedPaidSubscriptionSalesCount: number;
+}
+
+export interface RevenueAndGrowth {
+  revenueTrends: RevenueTrends;
+  planDistribution: PlanDistribution[];
+  newSignups: Signups;
+}
+
+export interface RevenueTrends {
+  daily: Array<{ date: string; amount: number }>;
+  weekly: Array<{ weekKey: string; amount: number }>;
+}
+
+export interface PlanDistribution {
+  planType: PlanType;
+  count: number;
+  ratio: number;
+}
+
+export interface Signups {
+  last7Days: number;
+  last30Days: number;
+}
+
+
+export interface TenantAndUsageMonitoring {
+  top5Organizations: Organization[];
+  expiringSubscriptions:  Partial<Subscription>[]; // Adjust type if detailed objects exist
+  inactiveOrganizations: Partial<Organizations>[]; // Adjust type if detailed objects exist
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  planType: PlanType;
+  createdAt: string;
+  staffCount: number;
+  creditConsumption: number;
+  totalAssignedCredits: number;
+  creditPool: number;
+}
+
+
+export interface SystemHealthAndSecurity {
+  criticalErrorLogs: SystemErrorLog[];
+  failedTransactions: any[];
+  systemStatus: SystemStatus;
+}
+
+export interface SystemErrorLog {
+  id: string;
+  action: 'SYSTEM_ERROR' | string;
+  details: string;
+  createdAt: string;
+  org_id: 'SYSTEM' | string;
+  user_id: string;
+}
+
+export interface SystemStatus {
+  database: 'UP' | 'DOWN';
+  api: 'UP' | 'DOWN';
+  checkedAt: string;
+}
+
+
+export interface AdministrativeControls {
+  globalAnnouncementStatus: GlobalAnnouncementStatus;
+  pendingSupportRequests: number;
+}
+
+export interface GlobalAnnouncementStatus {
+  maintenanceMode: boolean;
+  activeBanner: ActiveBanner;
+  updatedAt: string;
+}
+
+export interface ActiveBanner {
+  body: string;
+  show: boolean;
+  type: 'success' | 'warning' | 'error' | 'info';
+  title: string;
+  buttonLink: string;
+  buttonText: string;
+}
+
+export interface DataNotes {
+  /** Monetary revenue fields are derived from TOP_UP credit transactions; subscription model currently has no amount column. */
+  revenueComputation: string;
+  /** Pending support requests are derived from ActivityLog action containing SUPPORT_REQUEST_PENDING. */
+  supportRequestsComputation: string;
 }
