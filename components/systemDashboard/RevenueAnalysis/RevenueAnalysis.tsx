@@ -20,9 +20,14 @@ const RevenueAnalysisMain = () => {
   const { data, isLoading } = useFetchRevenueAnalytics(filters as RevenueAnalyticsFilters);
 
 
-  if (isLoading) return <div className="p-8 text-center text-slate-500">
-    <Loader type="component" componentName="Generating Revenue Analytics" />
-  </div>;
+
+  if (isLoading) {
+    return (
+      <div className="grid place-items-center h-full">
+        <Loader type="component" componentName="Preparing Revenue Analytics..." />
+      </div>
+    );
+  }
   if (!data?.data) return null;
 
   const { summary, subscribers, grouped } = data.data;
@@ -149,8 +154,8 @@ const RevenueAnalysisMain = () => {
             <div className="h-75 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={grouped} margin={{ top: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9"  />
-                  <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }}  />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend verticalAlign="top" align="center" iconType="rect" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />

@@ -5,9 +5,9 @@ type Props = {}
 
 const RevenueAnalysis = (props: Props) => {
   return (
-    <div>
+ 
         <RevenueAnalysisMain />
-    </div>
+  
   )
 }
 

@@ -5,9 +5,9 @@ type Props = {}
 
 const CreditTransactions = (props: Props) => {
   return (
-    <div>
+  
         <CreditTransactionsMain />
-    </div>
+    
   )
 }
 

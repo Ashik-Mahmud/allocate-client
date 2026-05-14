@@ -35,6 +35,7 @@ import DialogPopup from "@/components/shared/dialog-popup";
 import ViewCreditDetail from "./ViewCreditDetail";
 import AllocateDrawer from "@/components/shared/allocate-drawer";
 import ManualTopUp from "./ManualTopUp";
+import Loader from "@/components/shared/loader";
 
 // Helper to style transaction types
 const TRANSACTION_CONFIG: Record<TransactionType, { icon: any, color: string, label: string }> = {
@@ -86,6 +87,15 @@ const CreditTransactionsMain = () => {
       console.error('Error fetching organizations:', error);
     }
 
+  }
+
+
+  if (isLoading) {
+    return (
+      <div className="grid place-items-center h-full">
+        <Loader type="component" componentName="Preparing Credit Transactions..." />
+      </div>
+    );
   }
   return (
     <div className="space-y-6">
@@ -342,7 +352,7 @@ const StatCard = ({ label, value, icon: Icon, trend, color }: any) => (
   <Card className="border-none shadow-sm bg-white dark:bg-slate-700 rounded-[2rem] overflow-hidden">
     <CardContent className="p-0 flex items-center gap-4">
       <div className={cn("p-3 rounded-2xl bg-slate-50 dark:bg-slate-600", color)}>
-        <Icon size={24}  />
+        <Icon size={24} />
       </div>
       <div className="flex-1">
         <p className="text-[10px] font-bold text-slate-400 dark:text-slate-300 uppercase tracking-[0.15em]">{label}</p>
