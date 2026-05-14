@@ -12,10 +12,20 @@ type Props = {
 }
 
 const TenantAndUsagesMain = ({ data }: Props) => {
+    const getDefaultSelectedTab = (): string => {
+        if (data?.expiringSubscriptions && data.expiringSubscriptions.length > 0) {
+            return "expiringSubscriptions";
+        } else if (data?.top5Organizations && data.top5Organizations.length > 0) {
+            return "topOrganizations";
+        } else if (data?.inactiveOrganizations && data.inactiveOrganizations.length > 0) {
+            return "inactiveOrganizations";
+        }
+        return "expiringSubscriptions"; // Default to expiring subscriptions if all are empty
+    }
     return (
         <div>
 
-            <Tabs defaultValue="expiringSubscriptions">
+            <Tabs defaultValue={getDefaultSelectedTab()}>
                 <TabsList
                     variant="default"
                     className="w-full flex justify-start overflow-x-auto no-scrollbar py-6! dark:bg-slate-800/50 rounded-lg mb-3"

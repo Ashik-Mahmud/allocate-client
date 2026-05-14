@@ -25,6 +25,8 @@ export interface SystemSettingsData {
   maintenance_mode: boolean;
   global_alert_message: GlobalAlert;
   features_flags: FeatureFlags;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface OrganizationListFilters {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { AlertCircle, BarChart3, Building2 } from 'lucide-react';
+import { AlertCircle, BarChart3, Building2, Lock, Power, ShieldAlert, Timer } from 'lucide-react';
 import MetricsGrid from './MetricsGrid';
 import RevenueTrendChart from './RevenueTrendChart';
 import TopOrganizations from './TopOrganizations';
@@ -12,6 +12,8 @@ import type { DashboardInsights } from './types';
 import { useSystemInsights } from '@/features/dashboard/hooks';
 import TenantAndUsagesMain from './TenantAndUsagesMain';
 import Loader from '@/components/shared/loader';
+import useGlobalSettings from '@/hooks/use-global-settings';
+import SystemMaintenanceMode from './SystemMaintenanceMode';
 
 type TabType = 'overview' | 'revenue' | 'tenants-usages' | 'health';
 
@@ -49,14 +51,18 @@ const SystemAdminOverView = () => {
   return (
     <main className="space-y-6">
       {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          Platform Dashboard
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          Monitor key metrics, revenue trends, and system health
-        </p>
+      <div className="flex items-center justify-between flex-wrap">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Platform Dashboard
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            Monitor key metrics, revenue trends, and system health
+          </p>
+        </div>
+
       </div>
+      <SystemMaintenanceMode />
 
       {/* Tab Navigation */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
