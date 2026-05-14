@@ -33,15 +33,7 @@ type SalesStatsFiltersProps = {
 }
 
 const SalesStatsFilters = ({ filters, onChange, onReset }: SalesStatsFiltersProps) => {
-    const [open, setOpen] = React.useState(false)
-
-    // Local state to handle the search input for the API call
-    // Note: If your API is fast, you can sync this with CommandInput
     const [searchedOrg, setSearchedOrg] = useState<any[]>([])
-    const [isLoading, setIsLoading] = useState(false)
-
-
-
 
     const onChangeSearch = async (value: string) => {
         // Call the service directly to search users
@@ -49,17 +41,12 @@ const SalesStatsFilters = ({ filters, onChange, onReset }: SalesStatsFiltersProp
         setSearchedOrg(response?.data || []);
     }
 
-    // Memoize the selected organization name to display on the button trigger
-    const selectedOrgName = React.useMemo(() => {
-        if (!filters.org_id) return null
-        return searchedOrg.find((org: any) => org.id === filters.org_id)?.name
-    }, [filters.org_id, searchedOrg])
 
     return (
-        <section className="rounded-[2rem] border border-slate-100 bg-white p-5 shadow-sm shadow-slate-200/50 transition-colors">
+        <section className="rounded-[2rem] border border-slate-100 bg-white dark:bg-slate-900 dark:border-slate-800 p-5 shadow-sm shadow-slate-200/50 transition-colors">
             <div className="mb-6 flex items-center justify-between">
                 <div>
-                    <h2 className="text-base font-bold tracking-tight text-slate-800">Analytics Filters</h2>
+                    <h2 className="text-base font-bold tracking-tight text-slate-800 dark:text-slate-300">Analytics Filters</h2>
                     <p className="text-xs text-slate-400 font-medium">Refine lead statistics by organization and date range.</p>
                 </div>
                 <Button

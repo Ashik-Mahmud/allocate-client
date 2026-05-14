@@ -27,13 +27,13 @@ type ViewSalesInquiryProps = {
 }
 
 const StatCard = ({ icon: Icon, label, value, className }: any) => (
-  <div className={cn("p-4 rounded-2xl bg-slate-50/50 border border-slate-100 flex items-start gap-3", className)}>
-    <div className="p-2 bg-white rounded-xl border border-slate-100 text-slate-400 shadow-sm">
+  <div className={cn("p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50 dark:border-slate-800 border border-slate-100 flex items-start gap-3", className)}>
+    <div className="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 text-slate-400 shadow-sm">
       <Icon size={16} />
     </div>
     <div className="space-y-0.5 overflow-hidden">
-      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{label}</p>
-      <p className="text-sm font-semibold text-slate-700 truncate">{value || "-"}</p>
+      <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{label}</p>
+      <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 truncate">{value || "-"}</p>
     </div>
   </div>
 )
@@ -57,7 +57,7 @@ const ViewSalesInquiry = ({
   const footer = useMemo(() => {
     if (!inquiry) return null
     return (
-      <div className="flex w-full items-center justify-between gap-4">
+      <div className="flex w-full items-center justify-between gap-4 ">
         <p className="text-[10px] text-muted-foreground italic hidden sm:block">
           Last updated: {inquiry.updatedAt ? format(new Date(inquiry.updatedAt), 'PPp') : 'N/A'}
         </p>
@@ -86,6 +86,7 @@ const ViewSalesInquiry = ({
       footer={inquiry ? footer : undefined}
       size="lg"
       className="max-h-[95vh] overflow-hidden flex flex-col"
+      
     >
       <div className="space-y-6 py-2 overflow-y-auto pr-2 custom-scrollbar">
         {/* Quick Header Stats */}
@@ -101,24 +102,24 @@ const ViewSalesInquiry = ({
             <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
               <Building2 size={14} /> Business Context
             </h3>
-            <div className="space-y-3 p-4 rounded-3xl bg-slate-50 border border-slate-100">
+            <div className="space-y-3 p-4 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
               <div className="flex items-center justify-between py-1">
                 <span className="text-xs text-slate-500 font-medium">Organization</span>
-                <span className="text-sm font-bold text-slate-700">{inquiry?.organization?.name || inquiry?.org_id || "N/A"}</span>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{inquiry?.organization?.name || inquiry?.org_id || "N/A"}</span>
               </div>
               <div className="flex items-center justify-between py-1 border-t border-slate-200/50">
                 <span className="text-xs text-slate-500 font-medium">Team Size</span>
-                <span className="text-sm font-bold text-slate-700">{inquiry?.team_size || "Personal"}</span>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{inquiry?.team_size || "Personal"}</span>
               </div>
               <div className="flex items-center justify-between py-1 border-t border-slate-200/50">
                 <span className="text-xs text-slate-500 font-medium">Location</span>
-                <span className="text-sm font-bold text-slate-700 flex items-center gap-1">
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
                    {inquiry?.country} <ArrowUpRight size={12} className="text-slate-400" />
                 </span>
               </div>
               <div className="flex items-center justify-between py-1 border-t border-slate-200/50">
                 <span className="text-xs text-slate-500 font-medium">Submitted</span>
-                <span className="text-sm font-bold text-slate-700">{inquiry?.createdAt ? format(new Date(inquiry.createdAt), 'MMM dd, yyyy') : "-"}</span>
+                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{inquiry?.createdAt ? format(new Date(inquiry.createdAt), 'MMM dd, yyyy') : "-"}</span>
               </div>
             </div>
           </div>
@@ -130,11 +131,11 @@ const ViewSalesInquiry = ({
             </h3>
             <div className={cn(
               "p-6 rounded-3xl border-2 transition-all duration-300",
-              draftStatus === inquiry?.status ? "bg-white border-slate-100 shadow-sm" : "bg-blue-50/30 border-blue-200 shadow-md"
+              draftStatus === inquiry?.status ? "bg-white border-slate-100 shadow-sm dark:bg-slate-900 dark:border-slate-800" : "bg-blue-50/30 border-blue-200 shadow-md"
             )}>
               <Label className="text-[10px] font-bold text-slate-400 uppercase mb-3 block">Update Pipeline Status</Label>
               <Select value={draftStatus} onValueChange={(value) => setDraftStatus(value as SaleInquiryStatus)}>
-                <SelectTrigger className="w-full bg-white h-12 rounded-xl border-slate-200 font-bold text-slate-700 shadow-none">
+                <SelectTrigger className="w-full bg-white dark:bg-slate-800 dark:border-slate-700 h-12 rounded-xl border-slate-200 font-bold text-slate-700 dark:text-slate-300 shadow-none">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
@@ -155,7 +156,7 @@ const ViewSalesInquiry = ({
         {/* Message Content */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-black text-slate-300 dark:text-white uppercase tracking-widest flex items-center gap-2">
               <MessageSquare size={14} /> Inquiry Message
             </h3>
             <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">
@@ -167,7 +168,7 @@ const ViewSalesInquiry = ({
             <Textarea 
               value={inquiry?.message} 
               readOnly 
-              className="relative min-h-40 rounded-2xl bg-white border-slate-200 text-slate-600 leading-relaxed focus-visible:ring-0 resize-none p-4 shadow-sm italic"
+              className="relative min-h-40 rounded-2xl bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 border-slate-200 text-slate-600 leading-relaxed focus-visible:ring-0 resize-none p-4 shadow-sm italic"
             />
           </div>
         </div>

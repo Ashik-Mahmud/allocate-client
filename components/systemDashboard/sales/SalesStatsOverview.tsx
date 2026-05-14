@@ -83,11 +83,11 @@ const SalesStatsOverview = ({ stats, isLoading = false }: SalesStatsOverviewProp
                   <span className={cn("px-2 py-0.5 rounded-md", STATUS_META[status]?.className)}>
                     {STATUS_META[status]?.label}
                   </span>
-                  <span className="text-slate-600">{count}</span>
+                  <span className="text-slate-600 dark:text-slate-300">{count}</span>
                 </div>
-                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-slate-900 transition-all duration-500" 
+                    className="h-full bg-slate-900 dark:bg-slate-500 transition-all duration-500" 
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
@@ -105,9 +105,9 @@ const SalesStatsOverview = ({ stats, isLoading = false }: SalesStatsOverviewProp
                 <div key={country} className="space-y-1.5">
                   <div className="flex justify-between text-xs font-bold text-slate-500 uppercase">
                     <span>{country}</span>
-                    <span className="text-slate-900">{count as number}</span>
+                    <span className="text-slate-900 dark:text-slate-300">{count as number}</span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-blue-500 transition-all duration-500" 
                       style={{ width: `${percentage}%` }}
@@ -129,12 +129,12 @@ const SalesStatsOverview = ({ stats, isLoading = false }: SalesStatsOverviewProp
               return (
                 <div key={bucket} className="flex items-center gap-3">
                    <div className="w-10 text-[10px] font-black text-slate-400">{bucket}</div>
-                   <div className="flex-1 h-8 bg-slate-50 rounded-lg border relative border-slate-100 flex items-center px-3 justify-between">
+                   <div className="flex-1 h-8 bg-slate-50 dark:bg-slate-900 rounded-lg border relative border-slate-100 dark:border-slate-800 flex items-center px-3 justify-between">
                       <div 
-                        className="absolute h-full bg-slate-200/50 left-0 top-0 rounded-lg" 
+                        className="absolute h-full bg-slate-200/50 dark:bg-slate-700/50 left-0 top-0 rounded-lg" 
                         style={{ width: `${getPercentage(count, stats.totalLeads)}%` }}
                       />
-                      <span className="relative z-10 text-xs font-bold text-slate-700">{count}</span>
+                      <span className="relative z-10 text-xs font-bold text-slate-700 dark:text-slate-300">{count}</span>
                       <Users size={12} className="relative z-10 text-slate-300" />
                    </div>
                 </div>
@@ -149,14 +149,14 @@ const SalesStatsOverview = ({ stats, isLoading = false }: SalesStatsOverviewProp
 
 // Reusable Small Stat Card
 const StatCard = ({ title, value, icon: Icon, color }: any) => (
-  <Card className="border-none shadow-sm bg-white rounded-3xl overflow-hidden">
+  <Card className="border-none shadow-sm bg-white dark:bg-slate-900 dark:border-slate-800 rounded-3xl overflow-hidden">
     <CardContent className="p-5 flex items-center gap-4">
       <div className={cn("p-3 rounded-2xl bg-slate-50", color)}>
         <Icon size={20} />
       </div>
       <div>
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{title}</p>
-        <p className="text-2xl font-black text-slate-900">{value}</p>
+        <p className="text-2xl font-black text-slate-900 dark:text-slate-300">{value}</p>
       </div>
     </CardContent>
   </Card>
@@ -164,9 +164,9 @@ const StatCard = ({ title, value, icon: Icon, color }: any) => (
 
 // Reusable Detailed Section Card
 const DetailCard = ({ title, children }: any) => (
-  <Card className="border-none shadow-sm bg-white rounded-[2rem] p-2">
+  <Card className="border-none shadow-sm bg-white dark:bg-slate-900 dark:border-slate-800 rounded-[2rem] p-2">
     <CardHeader className="pb-2">
-      <CardTitle className="text-sm font-black uppercase tracking-[0.15em] text-slate-400">{title}</CardTitle>
+      <CardTitle className="text-sm font-black uppercase tracking-[0.15em] text-slate-400 dark:text-slate-300">{title}</CardTitle>
     </CardHeader>
     <CardContent className="space-y-5">
       {children}

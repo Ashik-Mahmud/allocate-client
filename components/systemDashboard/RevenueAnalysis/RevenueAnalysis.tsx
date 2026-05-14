@@ -59,8 +59,8 @@ const RevenueAnalysisMain = () => {
 
       <div className="grid gap-6 md:grid-cols-7">
         {/* 2. Main Analytics Chart: Revenue vs Transactions */}
-        <Card className="md:col-span-4 border-none shadow-sm rounded-2xl overflow-hidden dark:bg-slate-700">
-          <CardHeader className="bg-white dark:bg-slate-700 border-b border-slate-50 dark:border-b-slate-600">
+        <Card className="md:col-span-4 border-none shadow-sm rounded-2xl overflow-hidden dark:bg-slate-800">
+          <CardHeader className="bg-white dark:bg-slate-800 border-b border-slate-50 dark:border-b-slate-600">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
               Revenue vs Transaction Volume
@@ -70,12 +70,12 @@ const RevenueAnalysisMain = () => {
             <div className="h-75 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={grouped}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} dy={10} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={true} stroke="#f1f5f9" />
+                  <XAxis dataKey="period" axisLine={false} tickLine={true} tick={{ fontSize: 11, fill: '#94a3b8' }} dy={10} />
                   <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
                   <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
+                  <Legend verticalAlign="top" align="center" iconType="rect" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
                   <Area
                     yAxisId="left"
                     name="Revenue"
@@ -85,6 +85,7 @@ const RevenueAnalysisMain = () => {
                     fillOpacity={0.05}
                     stroke="#10b981"
                     strokeWidth={3}
+                    dot={{ r: 4, fill: '#10b981' }}
                   />
                   <Line
                     yAxisId="right"
@@ -93,7 +94,7 @@ const RevenueAnalysisMain = () => {
                     dataKey="transactionCount"
                     stroke="#6366f1"
                     strokeWidth={2}
-                    dot={{ r: 4, fill: '#6366f1' }}
+                    dot={{ r: 2, fill: '#6366f1' }}
                   />
                 </ComposedChart>
               </ResponsiveContainer>
@@ -102,7 +103,7 @@ const RevenueAnalysisMain = () => {
         </Card>
 
         {/* 3. Subscription Distribution Card */}
-        <Card className="md:col-span-3 border-none shadow-sm rounded-2xl dark:bg-slate-700">
+        <Card className="md:col-span-3 border-none shadow-sm rounded-2xl dark:bg-slate-800">
           <CardHeader className="border-b border-slate-50 dark:border-slate-600 ">
             <CardTitle className="text-sm font-semibold dark:text-white">Subscriber Composition</CardTitle>
           </CardHeader>
@@ -123,7 +124,7 @@ const RevenueAnalysisMain = () => {
               ))}
 
               <div className="pt-6 border-t border-slate-100 dark:border-slate-600 mt-6">
-                <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl flex justify-between items-center">
+                <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-2xl flex justify-between items-center">
                   <div>
                     <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Conversion Rate</p>
                     <p className="text-xl font-black text-slate-800 dark:text-white">
@@ -140,19 +141,19 @@ const RevenueAnalysisMain = () => {
         </Card>
 
         {/* 4. Plan Revenue Breakdown (Stacked Bar) */}
-        <Card className="md:col-span-7 border-none shadow-sm rounded-2xl overflow-hidden dark:bg-slate-700">
-          <CardHeader className="bg-white dark:bg-slate-700 border-b border-slate-50 dark:border-b-slate-600">
+        <Card className="md:col-span-7 border-none shadow-sm rounded-2xl overflow-hidden dark:bg-slate-800">
+          <CardHeader className="bg-white dark:bg-slate-800 border-b border-slate-50 dark:border-b-slate-600">
             <CardTitle className="text-sm font-semibold">Revenue Stream Breakdown</CardTitle>
           </CardHeader>
           <CardContent className="p-6">
             <div className="h-75 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={grouped} margin={{ top: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9"  />
+                  <XAxis dataKey="period" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }}  />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend verticalAlign="top" align="right" iconType="rect" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
+                  <Legend verticalAlign="top" align="center" iconType="rect" wrapperStyle={{ paddingBottom: '20px', fontSize: '12px' }} />
                   <Bar name="Pro Revenue" dataKey="revenueByPlan.pro" stackId="a" fill="#3b82f6" radius={[0, 0, 0, 0]} barSize={40} />
                   <Bar name="Enterprise Revenue" dataKey="revenueByPlan.enterprise" stackId="a" fill="#8b5cf6" radius={[6, 6, 0, 0]} barSize={40} />
                 </BarChart>

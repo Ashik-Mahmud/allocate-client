@@ -324,7 +324,7 @@ const CreditTransactionsMain = () => {
         title="Top up Credits"
         position="bottom"
         showHeader={false}
-        className="h-[70dvh]!"
+        className="h-[90dvh]!"
 
       >
         <ManualTopUp

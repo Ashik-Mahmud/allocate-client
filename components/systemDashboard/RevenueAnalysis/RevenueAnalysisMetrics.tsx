@@ -40,7 +40,7 @@ const RevenueAnalysisMetrics = ({ summary, subscribers }: Props) => {
         <div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {metrics.map((item, i) => (
-                    <Card key={i} className="border-none shadow-sm rounded-2xl dark:bg-slate-700">
+                    <Card key={i} className="border-none shadow-sm rounded-2xl dark:bg-slate-800">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.title}</CardTitle>
                             {item.icon}

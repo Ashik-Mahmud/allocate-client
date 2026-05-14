@@ -19,8 +19,9 @@ import { SearchableSelect } from '@/components/shared/searchable-select'
 import { fetchOrganizations } from '@/lib/services/system'
 import { useTopUpCreditsMutation } from '@/features/system/hooks'
 import { DatePickerField } from '@/components/shared/datePickerField';
-import { Organizations } from '@/types/organization';
+import { Organizations, PlanType } from '@/types/organization';
 import { format } from 'date-fns';
+import { form } from 'framer-motion/client';
 
 type Props = {
     orgId?: string;
@@ -32,7 +33,7 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
     const [step, setStep] = useState<'form' | 'summary' | 'success'>('form');
     const [loading, setLoading] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<{ value: string; label: string; metadata?: Record<string, any> } | null>(null);
-    const [formData, setFormData] = useState({ credits: 0, price: 0, extendDate: undefined as Date | undefined });
+    const [formData, setFormData] = useState({ credits: 0, price: 0, extendDate: undefined as Date | undefined, planType: undefined as PlanType | undefined });
     const [searchedOrgs, setSearchedOrgs] = useState<{ value: string; label: string; metadata?: Record<string, any> }[]>([]);
 
     const topUpMutation = useTopUpCreditsMutation();
@@ -73,7 +74,8 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                 setSelectedOrg(preselected);
                 setFormData(p => ({
                     ...p,
-                    extendDate: preselected.metadata?.end_date ? new Date(preselected.metadata.end_date) : undefined
+                    extendDate: preselected.metadata?.end_date ? new Date(preselected.metadata.end_date) : undefined,
+                    planType: preselected.metadata?.plan_name || undefined
                 }));
             }
         }
@@ -88,7 +90,8 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                 data: {
                     credits: formData.credits,
                     price: formData.price,
-                    extendDate: formData.extendDate ? formData.extendDate.toISOString() : undefined
+                    extendDate: formData.extendDate ? formData.extendDate.toISOString() : undefined,
+                    planType: formData.planType
                 }
             });
             if (result?.success) {
@@ -146,7 +149,11 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                                 onSearchChange={handleSearch}
                                 onChangeWithOption={(opt: any) => {
                                     setSelectedOrg(opt as any);
-                                    setFormData(p => ({ ...p, extendDate: opt?.metadata?.end_date ? new Date(opt?.metadata?.end_date) : undefined })) // reset price when org changes
+                                    setFormData(p => ({ 
+                                        ...p, 
+                                        extendDate: opt?.metadata?.end_date ? new Date(opt?.metadata?.end_date) : undefined,
+                                        planType: opt?.metadata?.plan_name || undefined
+                                     })) // reset price when org changes
                                 }}
                                 onChange={(value) => { }}
                                 emptyMessage="Search to select an orgnaization"
@@ -172,6 +179,21 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                                     </p>
                                 )
                             }
+                        </div>
+
+                        <div>
+                            <SearchableSelect
+                                label="Plan Type"
+                                placeholder="Select Plan Type"
+                                options={Object.values(PlanType).map((t: any) => ({ label: t?.replace('_', ' '), value: t })) || []}
+                                value={formData.planType}
+                                onChange={(val) => setFormData(p => ({ ...p, planType: val }))}
+                            />
+                            {selectedOrg?.metadata?.plan_name && (
+                                <p className="mt-1 text-xs text-rose-800 dark:text-slate-400">
+                                    Current Plan: {selectedOrg.metadata.plan_name?.replace('_', ' ')} 
+                                </p>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -205,12 +227,14 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                 {step === 'summary' && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-3 duration-300">
                         <div className="rounded-3xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/30 overflow-hidden shadow-sm">
-                            <div className="p-6 space-y-1">
+                            <div className="p-6 ">
                                 <SummaryRow label="Entity" value={selectedOrg?.label || "Selected Organization"} icon={Building2} />
                                 <SummaryRow label="Credit Package" value={`${formData.credits.toLocaleString()} CR`} icon={CreditCard} />
                                 {
                                     formData.extendDate && <SummaryRow label="Expiry Date" value={`${formData.extendDate ? format(formData.extendDate, "MMMM dd, yyyy") : 'N/A'}`} icon={Calendar} />
                                 }
+
+                                <SummaryRow label="Plan Type" value={`${formData.planType?.replace('_', ' ') || 'N/A'}`} icon={CreditCard} />
 
                                 <SummaryRow label="Total Value" value={`$${formData.price.toFixed(2)}`} icon={DollarSign} isLast />
                             </div>
@@ -248,7 +272,7 @@ const ManualTopUp = ({ orgId, onSuccess }: Props) => {
                         <button
                             onClick={() => {
                                 setStep('form')
-                                setFormData({ credits: 0, price: 0, extendDate: undefined })
+                                setFormData({ credits: 0, price: 0, extendDate: undefined, planType: undefined })
                                 setSelectedOrg(null)
                                 handleSearch("");
 
@@ -297,7 +321,7 @@ const InputBlock = ({ label, icon: Icon, placeholder, onChange, value }: any) =>
 )
 
 const SummaryRow = ({ label, value, icon: Icon, isLast }: any) => (
-    <div className={cn("flex items-center justify-between py-4", !isLast && "border-b border-slate-50 dark:border-slate-800/40")}>
+    <div className={cn("flex items-center justify-between py-3", !isLast && "border-b border-slate-50 dark:border-slate-800/40")}>
         <div className="flex items-center gap-4">
             <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-slate-400 border border-slate-100/50 dark:border-slate-800">
                 <Icon size={18} />

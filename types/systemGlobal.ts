@@ -125,6 +125,7 @@ export interface CreditsTopUpPayload {
   credits: number;
   price: number;
   extendDate?: string | undefined;
+  planType?: PlanType | undefined;
 }
 
 

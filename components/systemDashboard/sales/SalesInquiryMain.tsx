@@ -159,11 +159,11 @@ const SalesInquiryMain = () => {
 
     return (
         <div className="space-y-5">
-            <section className="rounded-3xl border border-border bg-card p-4 shadow-sm shadow-black/5 transition-colors md:p-5">
+            <section className="rounded-3xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800  p-4 shadow-sm shadow-black/5 transition-colors md:p-5">
                 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div className="space-y-1">
                         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Sales</p>
-                        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Sales inquiries</h1>
+                        <h1 className="text-2xl font-semibold tracking-tight text-foreground dark:text-slate-300">Sales inquiries</h1>
                         <p className="max-w-2xl text-sm text-muted-foreground">
                             Review inbound leads, inspect the message, and move the status forward without leaving the page.
                         </p>
@@ -300,7 +300,7 @@ const SalesInquiryMain = () => {
                 </div>
             ) : null}
 
-            <section className="rounded-3xl border border-border bg-card shadow-sm shadow-black/5 transition-colors">
+            <section className="rounded-3xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 shadow-sm shadow-black/5 transition-colors">
                 {isLoading ? (
                     <div className="p-4 md:p-5">
                         <div className="animate-pulse space-y-3">
@@ -322,30 +322,32 @@ const SalesInquiryMain = () => {
                         <div className="rounded-full border border-dashed border-border bg-muted/40 p-3 text-muted-foreground">
                             <Search className="size-5" />
                         </div>
-                        <p className="text-sm font-medium text-foreground">No inquiries found</p>
-                        <p className="max-w-sm text-xs text-muted-foreground">
+                        <p className="text-sm font-medium text-foreground dark:text-slate-300">
+                            No inquiries found
+                        </p>
+                        <p className="max-w-sm text-xs text-muted-foreground dark:text-slate-400">
                             Try a wider search or clear a filter to see more results.
                         </p>
                     </div>
                 ) : (
                     <div>
                         <div className="hidden md:block">
-                            <Table>
+                            <Table className="dark:border-slate-500">
                                 <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead>Email</TableHead>
-                                        <TableHead>Phone</TableHead>
-                                        <TableHead>Org</TableHead>
-                                        <TableHead>Country</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Created</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
+                                    <TableRow className="dark:border-slate-500">
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Name</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Email</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Phone</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Org</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Country</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Status</TableHead>
+                                        <TableHead className="dark:text-slate-400 uppercase font-semibold font-mono text-sm">Created</TableHead>
+                                        <TableHead className="text-right dark:text-slate-300 uppercase font-semibold font-mono text-sm">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
-                                <TableBody>
+                                <TableBody >
                                     {inquiries.map((inquiry) => (
-                                        <TableRow key={inquiry.id}>
+                                        <TableRow key={inquiry.id} className="dark:border-slate-800">
                                             <TableCell className="max-w-50 whitespace-normal font-medium">{inquiry.name}</TableCell>
                                             <TableCell className="max-w-55 whitespace-normal text-muted-foreground">
                                                 {inquiry.business_email}
@@ -407,7 +409,7 @@ const SalesInquiryMain = () => {
 
                         <div className="grid gap-3 p-3 md:hidden">
                             {inquiries.map((inquiry) => (
-                                <Card key={inquiry.id} className="border-border/70 shadow-none">
+                                <Card key={inquiry.id} className="border-border/70 dark:border-slate-800 shadow-none">
                                     <CardHeader className="pb-3">
                                         <div className="flex items-start justify-between gap-3">
                                             <div className="space-y-1">

@@ -43,7 +43,7 @@ const FilterRevenueAnalysis = ({ onFilterChange, filters }: Props) => {
                 <div className="flex items-center gap-4">
 
                     {/* By Date Range */}
-                    <div className="flex items-center gap-3 bg-white dark:bg-slate-700 dark:border-slate-600 p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex items-center gap-3 bg-white dark:bg-slate-800 dark:border-slate-600 p-2 rounded-2xl shadow-sm border border-slate-100">
                         <DatePickerField
                             label=""
                             value={filters.startDate ? new Date(filters.startDate) : undefined}
@@ -63,7 +63,7 @@ const FilterRevenueAnalysis = ({ onFilterChange, filters }: Props) => {
                     </div>
 
                     {/* By Orgnization */}
-                    <div className="flex items-center gap-3 bg-white dark:bg-slate-700 dark:border-slate-600 p-2 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex items-center gap-3 bg-white dark:bg-slate-800 dark:border-slate-600 p-2 rounded-2xl shadow-sm border border-slate-100">
                         <SearchableSelect
                             label=""
                             placeholder="Filter by organization"
@@ -79,7 +79,7 @@ const FilterRevenueAnalysis = ({ onFilterChange, filters }: Props) => {
                     </div>
 
                     {/* Group By */}
-                    <div className="flex items-center gap-3 bg-white dark:bg-slate-700 dark:border-slate-600 p-3.5 rounded-2xl shadow-sm border border-slate-100">
+                    <div className="flex items-center gap-3 bg-white dark:bg-slate-800 dark:border-slate-600 p-3.5 rounded-2xl shadow-sm border border-slate-100">
                         <span className="text-xs font-medium text-slate-400 ml-2">Group By</span>
                         <Select
                             value={filters.groupBy}
@@ -96,7 +96,7 @@ const FilterRevenueAnalysis = ({ onFilterChange, filters }: Props) => {
                         </Select>
                     </div>
                     {/* Reset Filters */}
-                    <div className="flex items-center gap-2 bg-white dark:bg-slate-700 dark:border-slate-600 py-5 px-4 active:scale-95 rounded-2xl shadow-sm border border-slate-100 cursor-pointer" onClick={() => onFilterChange({ groupBy: 'month', organizationId: undefined, startDate: undefined, endDate: undefined })}>
+                    <div className="flex items-center gap-2 bg-white dark:bg-slate-800 dark:border-slate-600 py-5 px-4 active:scale-95 rounded-2xl shadow-sm border border-slate-100 cursor-pointer" onClick={() => onFilterChange({ groupBy: 'month', organizationId: undefined, startDate: undefined, endDate: undefined })}>
                         <RefreshCw className="h-4 w-4 text-slate-400 dark:text-slate-200" />
                         <span className="text-xs font-medium text-slate-400 dark:text-slate-200 ">Reset</span>
                     </div>

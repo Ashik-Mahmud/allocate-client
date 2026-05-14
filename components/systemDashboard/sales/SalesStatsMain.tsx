@@ -38,11 +38,11 @@ const SalesStatsMain = () => {
 
     return (
         <div className="space-y-5">
-            <section className="rounded-3xl border border-border bg-card p-4 shadow-sm shadow-black/5 transition-colors md:p-5">
+            <section className="rounded-3xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 shadow-sm shadow-black/5 transition-colors md:p-5">
                 <div className="flex flex-wrap items-end justify-between gap-3">
                     <div className="space-y-1">
                         <p className="text-xs uppercase tracking-[0.28em] text-muted-foreground">Sales</p>
-                        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Sales stats</h1>
+                        <h1 className="text-2xl font-semibold tracking-tight text-foreground dark:text-slate-300">Sales stats</h1>
                         <p className="text-sm text-muted-foreground">Overview of lead pipeline status, countries, and team-size distribution.</p>
                     </div>
 
