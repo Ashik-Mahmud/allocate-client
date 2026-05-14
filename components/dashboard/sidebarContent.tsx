@@ -8,6 +8,7 @@ import type { User } from '@/types';
 import { PlanType } from '@/types/organization';
 import { cn } from '@/lib/utils/cn';
 import useGlobalSettings from '@/hooks/use-global-settings';
+import { useLocale } from 'next-intl';
 
 type Props = {
     user: User | null;
@@ -228,6 +229,7 @@ const SidebarContent = ({
     const { isMaintenanceMode, supportEmail } = useGlobalSettings()
     const initials = getInitials(user);
     const role = user?.role ?? null;
+    const locale = useLocale();
 
     const roleNavigation =
         role === APP_ROLES.ADMIN
@@ -290,7 +292,7 @@ const SidebarContent = ({
                     }
                     {[...navigation, ...roleNavigation,].map((item) => {
                         const Icon = item.icon;
-                        const active = isActiveRoute(pathname, item?.href);
+                        const active = isActiveRoute(pathname, item?.href, locale);
                         if (item?.children?.length) {
                             return (
                                 <div key={item.href} className='space-y-1'>
@@ -299,7 +301,7 @@ const SidebarContent = ({
                                     </p>
                                     {item.children.map((child) => {
                                         const ChildIcon = child.icon;
-                                        const childActive = isActiveRoute(pathname, child?.href);
+                                        const childActive = isActiveRoute(pathname, child?.href, locale);
                                         return (
                                             <Link
                                                 key={child.href}
@@ -384,7 +386,7 @@ const SidebarContent = ({
                             </p>
                             {[...(role === APP_ROLES.ORG_ADMIN ? OrgConditionalNavigation : []), ...commonNavigation].map((item) => {
                                 const Icon = item.icon;
-                                const active = isActiveRoute(pathname, item.href);
+                                const active = isActiveRoute(pathname, item.href, locale);
 
                                 return (
                                     <Link
@@ -516,12 +518,12 @@ function getInitials(user: User | null) {
     return source.slice(0, 2).toUpperCase();
 }
 
-function isActiveRoute(pathname: string, href: string) {
+function isActiveRoute(pathname: string, href: string, locale: string) {
     if (href === ROUTES.home) {
         return pathname === href;
     }
-
-    return pathname === href || pathname.startsWith(`${href}/`);
+    const localizedHref = pathname?.includes(locale) ?  `/${locale}${href}` : `${href}`;
+    return pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
 }
 
 export default SidebarContent

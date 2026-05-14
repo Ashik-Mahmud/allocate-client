@@ -1,18 +1,20 @@
 import React from 'react'
 import {
-  Wrench,
-  Plus,
-  Search,
-  Filter,
-  History,
-  ShieldCheck,
-  ArrowRight,
-  Hammer,
-  Construction
+    Wrench,
+    Plus,
+    Search,
+    Filter,
+    History,
+    ShieldCheck,
+    ArrowRight,
+    Hammer,
+    Construction
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 type Props = {}
 
 const CommunityMain = (props: Props) => {
+    const t = useTranslations("dashboard.community");
     return (
         <div>
             <div className="min-h-screen bg-slate-50 dark:bg-[#020617] p-4 md:p-8 text-slate-900 dark:text-slate-100">
@@ -25,12 +27,12 @@ const CommunityMain = (props: Props) => {
                                 <Wrench className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                             </div>
                             <div>
-                                <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">Scheduled Maintenance</p>
-                                <p className="text-xs text-amber-700 dark:text-amber-400">Request submission will be offline this Sunday from 2:00 AM to 4:00 AM EST.</p>
+                                <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">{t("title")}</p>
+                                <p className="text-xs text-amber-700 dark:text-amber-400">{t("description")}</p>
                             </div>
                         </div>
                         <button className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 hover:underline">
-                            Details
+                            {t("cta")}
                         </button>
                     </div>
                 </div>

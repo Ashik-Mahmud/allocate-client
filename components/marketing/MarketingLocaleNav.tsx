@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { useLocale, useTranslations } from "next-intl";
 import { LocaleSwitcher } from "../shared/LanguageToggler";
+import { Link } from "@/lib/navigation";
 
 type MarketingLocaleNavProps = {
   pathSuffix?: "" | "/pricing" | "/about-us";
@@ -18,14 +18,14 @@ export function MarketingLocaleNav({ pathSuffix = "" }: MarketingLocaleNavProps)
       <ThemeToggle floating={false} />
 
       <Link
-        href={`/${locale}/pricing`}
+        href={`/pricing`}
         className="rounded-full border border-primary/25 bg-white/75 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm backdrop-blur transition hover:border-primary dark:border-primary/35 dark:bg-slate-900/70 dark:text-slate-200"
       >
         {t("nav.pricing")}
       </Link>
 
       <Link
-        href={`/${locale}/about-us`}
+        href={`/about-us`}
         className="rounded-full border border-primary/25 bg-white/75 px-4 py-2 text-sm font-medium text-slate-800 shadow-sm backdrop-blur transition hover:border-primary dark:border-primary/35 dark:bg-slate-900/70 dark:text-slate-200"
       >
         {t("nav.about")}

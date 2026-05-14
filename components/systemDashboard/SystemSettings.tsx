@@ -40,6 +40,7 @@ export interface SystemSettingsData {
   features_flags: {
     can_export_logs: boolean;
     ui_dark_mode: boolean;
+    language_changer: boolean;
   };
 }
 
@@ -58,6 +59,7 @@ const defaultSettings: SystemSettingsData = {
   features_flags: {
     can_export_logs: false,
     ui_dark_mode: true,
+    language_changer: false,
   },
 };
 
@@ -133,6 +135,7 @@ const SystemSettings = () => {
         features_flags: {
           can_export_logs: systemSettings.features_flags?.can_export_logs ?? defaultSettings.features_flags.can_export_logs,
           ui_dark_mode: systemSettings.features_flags?.ui_dark_mode ?? defaultSettings.features_flags.ui_dark_mode,
+          language_changer: systemSettings.features_flags?.language_changer ?? defaultSettings.features_flags.language_changer,
         },
       });
     }
@@ -339,7 +342,8 @@ const SystemSettings = () => {
               <div className="space-y-4">
                 {[
                   { id: 'can_export_logs', label: 'Export System Logs', icon: <FileJson size={16} /> },
-                  { id: 'ui_dark_mode', label: 'Enable App-wide Dark Mode', icon: <Moon size={16} /> }
+                  { id: 'ui_dark_mode', label: 'Enable App-wide Dark Mode', icon: <Moon size={16} /> },
+                  { id: 'language_changer', label: 'Enable Language Changer', icon: <Globe size={16} /> },
                 ].map((flag) => (
                   <div
                     key={flag.id}

@@ -2,40 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MarketingLocaleNav } from "@/components/marketing/MarketingLocaleNav";
-import { isLocale } from "@/lib/i18n";
-import { getMarketingLocaleContent } from "@/lib/marketing-content";
+import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[lang]/about-us">): Promise<Metadata> {
-  const { lang } = await params;
 
-  if (!isLocale(lang)) return {};
+export default async function AboutUsPage() {
+  const t = await getTranslations("about");
+  const values = t.raw("values");
 
-  const content = getMarketingLocaleContent(lang);
-
-  return {
-    title: content.about.metadataTitle,
-    description: content.about.metadataDescription,
-    alternates: {
-      canonical: `/${lang}/about-us`,
-      languages: {
-        "en-US": "/en/about-us",
-        "bn-BD": "/bn/about-us",
-      },
-    },
-  };
-}
-
-export default async function AboutUsPage({
-  params,
-}: PageProps<"/[lang]/about-us">) {
-  const { lang } = await params;
-
-  if (!isLocale(lang)) notFound();
-
-  const content = getMarketingLocaleContent(lang);
-  const { about, nav, language } = content;
 
   return (
     <main className="relative overflow-hidden">
@@ -43,21 +16,15 @@ export default async function AboutUsPage({
 
       <section className="mx-auto w-full max-w-7xl px-6 py-10">
         <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-3xl font-black text-slate-900 sm:text-4xl dark:text-slate-100">{about.title}</h1>
+          <h1 className="text-3xl font-black text-slate-900 sm:text-4xl dark:text-slate-100">{t("title")}</h1>
           <MarketingLocaleNav
-            locale={lang}
+
             pathSuffix="/about-us"
-            labels={{
-              pricing: nav.pricing,
-              about: nav.about,
-              docs: nav.docs,
-              signIn: nav.signIn,
-            }}
-            language={language}
+
           />
         </div>
 
-        <p className="max-w-3xl text-lg leading-relaxed text-slate-700 dark:text-slate-300">{about.subtitle}</p>
+        <p className="max-w-3xl text-lg leading-relaxed text-slate-700 dark:text-slate-300">{t("subtitle")}</p>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
           <Image
@@ -70,12 +37,12 @@ export default async function AboutUsPage({
           />
 
           <article className="rounded-3xl border border-primary/20 bg-white/75 p-6 shadow-sm backdrop-blur dark:bg-slate-900/70">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{about.storyTitle}</h2>
-            <p className="mt-3 leading-relaxed text-slate-700 dark:text-slate-300">{about.storyBody}</p>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t("storyTitle")}</h2>
+            <p className="mt-3 leading-relaxed text-slate-700 dark:text-slate-300">{t("storyBody")}</p>
 
-            <h3 className="mt-8 text-xl font-bold text-slate-900 dark:text-slate-100">{about.valuesTitle}</h3>
+            <h3 className="mt-8 text-xl font-bold text-slate-900 dark:text-slate-100">{t("valuesTitle")}</h3>
             <ul className="mt-3 space-y-2 text-slate-700 dark:text-slate-300">
-              {about.values.map((item) => (
+              {values?.map((item: string) => (
                 <li key={item} className="rounded-xl border border-primary/15 bg-white/70 px-4 py-3 dark:bg-slate-950/40">
                   {item}
                 </li>
@@ -85,8 +52,8 @@ export default async function AboutUsPage({
         </div>
 
         <section className="mt-10 rounded-3xl border border-primary/25 bg-linear-to-r from-primary to-brand-secondary p-7 text-white shadow-xl shadow-primary/30">
-          <h2 className="text-2xl font-black">{about.missionTitle}</h2>
-          <p className="mt-3 max-w-3xl text-white/90">{about.missionBody}</p>
+          <h2 className="text-2xl font-black">{t("missionTitle")}</h2>
+          <p className="mt-3 max-w-3xl text-white/90">{t("missionBody")}</p>
         </section>
       </section>
     </main>

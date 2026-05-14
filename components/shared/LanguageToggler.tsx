@@ -110,7 +110,7 @@ export function LocaleSwitcher({ variant = "full-dropdown", className }: LocaleS
                     )}
 
                     {variant === "minimal-code" && (
-                        <span className="text-xs font-bold uppercase">{locale}</span>
+                        <span className="text-xs font-bold uppercase dark:text-slate-400 dark:hover:text-slate-300">{locale}</span>
                     )}
                 </Button>
             </DropdownMenuTrigger>

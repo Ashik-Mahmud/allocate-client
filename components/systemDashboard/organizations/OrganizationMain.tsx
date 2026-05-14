@@ -336,7 +336,7 @@ const OrganizationMain = () => {
     }, [searchParams])
     return (
         <div className="space-y-4">
-            <section className="rounded-2xl border border-border bg-card dark:bg-slate-800 dark:border-slate-700 p-5 shadow-sm transition-colors">
+            <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-5 shadow-sm transition-colors">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <div className="mb-1 inline-flex items-center gap-2 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary dark:text-white">
@@ -359,7 +359,7 @@ const OrganizationMain = () => {
                 </div>
             </section>
 
-            <section className="rounded-2xl border border-border bg-card dark:bg-slate-700 dark:border-slate-800 p-3 shadow-sm transition-colors">
+            <section className="rounded-2xl border border-border bg-card dark:bg-slate-800 dark:border-slate-700 p-3 shadow-sm transition-colors">
                 <button
                     type="button"
                     onClick={() => setIsFiltersOpen((prev) => !prev)}
@@ -395,7 +395,7 @@ const OrganizationMain = () => {
 
             <OrganizationsTable organizations={organizations} isLoading={isLoading} onAction={handleAction} />
 
-            <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card dark:bg-slate-700 dark:border-slate-600 p-4 transition-colors sm:flex-row sm:items-center sm:justify-between">
+            <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                     Page <span className="font-semibold text-foreground dark:text-white">{currentPage}</span> of <span className="font-semibold text-foreground dark:text-white">{totalPages}</span>
                 </p>
@@ -461,8 +461,8 @@ const OrganizationMain = () => {
                 }}
             />
             <DialogPopup
-                title="Organization Details"
-                description="Detailed information about the organization and management actions."
+                title="Extend Trial"
+                description="Select a new trial end date to extend the organization's trial period."
                 open={isOpenExtendTrial}
                 onOpenChange={setIsOpenExtendTrial}
                 size="full"

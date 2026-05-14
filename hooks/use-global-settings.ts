@@ -10,6 +10,7 @@ type GlobalSettings = {
     global_alert_message: GlobalAlert;
     supportEmail: string;
     functionalities: any;
+    languageChanger: boolean;
     isLoading: boolean;
     createdAt: string;
     updatedAt: string;
@@ -25,6 +26,7 @@ const useGlobalSettings = () => {
     global_alert_message: data?.data?.global_alert_message || '',
     supportEmail: data?.data?.support_email || '',
     functionalities: data?.data,
+    languageChanger: data?.data?.features_flags?.language_changer || false,
     createdAt: data?.data?.createdAt || '',
     updatedAt: data?.data?.updatedAt || '',
     isLoading,

@@ -110,5 +110,12 @@
       "subtitle": "Start free, scale with confidence, and keep scheduling performance predictable as your team expands."
     },
     "billingLabel": "Billing cycle"
+  },
+  "dashboard": {
+    "community":{
+      "title": "Join the Allocate Community",
+      "description": "Connect with other operations professionals, share best practices, and get support from our team.",
+      "cta": "Join now"
+    }
   }
 }

@@ -23,7 +23,7 @@ const formatDate = (v?: string | Date | null) => {
 const KeyValue = ({ k, v }: { k: string; v?: React.ReactNode }) => (
   <div className="flex flex-col gap-1">
     <span className="text-xs text-muted-foreground">{k}</span>
-    <span className="text-sm font-medium text-foreground">{v ?? "-"}</span>
+    <span className="text-sm font-medium text-foreground dark:text-white">{v ?? "-"}</span>
   </div>
 );
 
@@ -42,7 +42,7 @@ const OrganizationDetail = ({ id }: Props) => {
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-center">
+      <div className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-6 text-center">
         <Loader className="mx-auto mb-2 animate-spin text-primary" />
         <p className="text-sm text-muted-foreground">Loading organization...</p>
       </div>
@@ -51,9 +51,9 @@ const OrganizationDetail = ({ id }: Props) => {
 
   if (isError || !org) {
     return (
-      <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center">
+      <div className="rounded-2xl border border-dashed border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-6 text-center">
         <XCircle className="mx-auto mb-2 size-6 text-rose-500" />
-        <p className="text-sm font-medium text-foreground">Organization not found</p>
+        <p className="text-sm font-medium text-foreground dark:text-white">Organization not found</p>
         <p className="text-xs text-muted-foreground">It may have been removed or you do not have access.</p>
       </div>
     );
@@ -61,9 +61,9 @@ const OrganizationDetail = ({ id }: Props) => {
 
   return (
     <div className="space-y-4">
-      <header className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 transition-colors sm:flex-row sm:items-center sm:justify-between">
+      <header className="flex flex-col gap-3 rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/50 dark:text-primary-foreground">
             {org.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={org.photo} alt={org.name || "org"} className="h-10 w-10 rounded-md object-cover" />
@@ -72,8 +72,8 @@ const OrganizationDetail = ({ id }: Props) => {
             )}
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-foreground">{org.name}</h2>
-            <p className="text-xs text-muted-foreground">{org.tagline ?? org.slug ?? "Organization"}</p>
+            <h2 className="text-lg font-semibold text-foreground dark:text-white">{org.name}</h2>
+            <p className="text-xs text-muted-foreground dark:text-slate-400">{org.tagline ?? org.slug ?? "Organization"}</p>
           </div>
         </div>
 
@@ -96,8 +96,8 @@ const OrganizationDetail = ({ id }: Props) => {
         </div>
       </header>
 
-      <section className="rounded-2xl border border-border bg-card p-4 transition-colors">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Overview</h3>
+      <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors">
+        <h3 className="mb-3 text-sm font-semibold text-foreground dark:text-white">Overview</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <KeyValue k="Business Email" v={org.business_email} />
           <KeyValue k="Type" v={org.org_type ?? "-"} />
@@ -114,13 +114,13 @@ const OrganizationDetail = ({ id }: Props) => {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-border bg-card p-4 transition-colors">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Address</h3>
-        <div className="text-sm text-foreground">
+      <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors">
+        <h3 className="mb-3 text-sm font-semibold text-foreground dark:text-white">Address</h3>
+        <div className="text-sm text-foreground dark:text-slate-400">
           {typeof org.address === "string" ? (
             <p>{org.address}</p>
           ) : (
-            <div className="space-y-1 text-sm text-foreground">
+            <div className="space-y-1 text-sm text-foreground dark:text-slate-400">
               <div>{org.address?.street}</div>
               <div>{org.address?.line2}</div>
               <div>{org.address?.city}, {org.address?.state} {org.address?.postalCode}</div>
@@ -130,8 +130,8 @@ const OrganizationDetail = ({ id }: Props) => {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-border bg-card p-4 transition-colors">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Settings & Trial</h3>
+      <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors">
+        <h3 className="mb-3 text-sm font-semibold text-foreground dark:text-white">Settings & Trial</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <KeyValue k="Weekly Report" v={org.weeklyReportEnabled ? "Enabled" : "Disabled"} />
           <KeyValue k="Trial Allowed" v={(org as any).isTrialAllowed ? "Yes" : "No"} />
@@ -139,26 +139,26 @@ const OrganizationDetail = ({ id }: Props) => {
           <KeyValue k="Trial Start" v={formatDate((org as any).trialStartAt)} />
           <KeyValue k="Trial End" v={formatDate((org as any).trialEndsAt)} />
           <div className="col-span-1 sm:col-span-2 lg:col-span-1">
-            <div className="text-xs text-muted-foreground">Notification Preferences</div>
+            <div className="text-xs text-muted-foreground dark:text-slate-400">Notification Preferences</div>
             <div className="mt-1 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs">Email: <strong className="ml-1">{org.settings?.notificationPreference?.email ? 'On' : 'Off'}</strong></span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs">SMS: <strong className="ml-1">{org.settings?.notificationPreference?.sms ? 'On' : 'Off'}</strong></span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs">Push: <strong className="ml-1">{org.settings?.notificationPreference?.push ? 'On' : 'Off'}</strong></span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs">InApp: <strong className="ml-1">{org.settings?.notificationPreference?.inApp ? 'On' : 'Off'}</strong></span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs dark:text-slate-400">Email: <strong className="ml-1">{org.settings?.notificationPreference?.email ? 'On' : 'Off'}</strong></span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs dark:text-slate-400">SMS: <strong className="ml-1">{org.settings?.notificationPreference?.sms ? 'On' : 'Off'}</strong></span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs dark:text-slate-400">Push: <strong className="ml-1">{org.settings?.notificationPreference?.push ? 'On' : 'Off'}</strong></span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-muted/20 px-2 py-1 text-xs dark:text-slate-400">InApp: <strong className="ml-1">{org.settings?.notificationPreference?.inApp ? 'On' : 'Off'}</strong></span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-border bg-card p-4 transition-colors">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Users ({org?.users?.length ?? 0})</h3>
+      <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 transition-colors">
+        <h3 className="mb-3 text-sm font-semibold text-foreground dark:text-white">Users ({org?.users?.length ?? 0})</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {org?.users?.slice(0, 4)?.map((u) => (
-            <div key={u.id} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background p-3">
+            <div key={u.id} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background dark:bg-slate-800 dark:border-slate-700 p-3">
               <div>
-                <p className="text-sm font-medium text-foreground">{u.name || u.email}</p>
-                <p className="text-xs text-muted-foreground">{u.email}</p>
-                <p className="text-xs text-muted-foreground">Role: {u.role}</p>
+                <p className="text-sm font-medium text-foreground dark:text-white">{u.name || u.email}</p>
+                <p className="text-xs text-muted-foreground dark:text-slate-400">{u.email}</p>
+                <p className="text-xs text-muted-foreground dark:text-slate-400">Role: {u.role}</p>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="text-xs text-muted-foreground">Credits: {u.personal_credits ?? 0}</div>
