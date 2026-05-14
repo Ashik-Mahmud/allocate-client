@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Building2, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,16 +18,19 @@ import ViewSubscription from "./ViewSubscription";
 import DeleteOrganizationDialog from "./DeleteOrganizationDialog";
 import AllocateDrawer from "@/components/shared/allocate-drawer";
 import ManualTopUp from "../creditTransactions/ManualTopUp";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ROUTES } from "@/lib/constants/routes";
 
 const defaultFilters: OrganizationListFilters = {
     organizationId: "",
     name: "",
     verified: undefined,
     page: 1,
-    limit: 10,
+    is_active: undefined,
     search: "",
     planType: "all",
-    showDeletedOrg: false
+    showDeletedOrg: false,
+    limit: 10,
 
 };
 
@@ -45,6 +48,10 @@ const OrganizationMain = () => {
     const [isOpenSubscription, setIsOpenSubscription] = useState(false);
     const [isOpenDeleteOrg, setIsOpenDeleteOrg] = useState(false);
     const [isOpenManualTopup, setIsOpenManualTopup] = useState(false);
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+   
 
 
     const { data, isLoading, isFetching, refetch } = useFetchOrganizations(appliedFilters);
@@ -316,6 +323,17 @@ const OrganizationMain = () => {
         appliedFilters.verified !== undefined ? String(appliedFilters.verified) : "",
     ].filter(Boolean).length;
 
+    useEffect(() => {
+        const is_active = searchParams.get("is_active");
+        if(is_active !== null){
+            const activeValue = is_active === "true" ? true : is_active === "false" ? false : undefined;
+            const next = { ...defaultFilters, is_active: activeValue };
+            setIsFiltersOpen(true);
+            setDraftFilters(next);
+            setAppliedFilters(next);
+            router.replace(ROUTES.dashboardAdmin.organizations, { scroll: false });
+        }
+    }, [searchParams])
     return (
         <div className="space-y-4">
             <section className="rounded-2xl border border-border bg-card dark:bg-slate-800 dark:border-slate-700 p-5 shadow-sm transition-colors">
@@ -495,7 +513,7 @@ const OrganizationMain = () => {
                 title="Top up Credits"
                 position="right"
                 showHeader={false}
-                
+
             >
                 <ManualTopUp
                     orgId={selectedOrg?.id}

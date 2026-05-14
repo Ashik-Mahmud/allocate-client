@@ -38,6 +38,7 @@ export const fetchOrganizations = async (filters: OrganizationListFilters) => {
     if (filters.search) queryParams.append("search", filters.search);
     if (filters.planType && filters.planType !== "all") queryParams.append("planType", filters.planType);
     if (filters.showDeletedOrg !== undefined) queryParams.append("showDeletedOrg", String(filters.showDeletedOrg));
+    if (filters.is_active !== undefined) queryParams.append("is_active", String(filters.is_active));
     return apiRequest<PaginatedResponse<Organizations>>(`/admin/organizations?${queryParams?.toString() || ''}`, { method: "GET" });
 }
 

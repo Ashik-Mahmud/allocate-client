@@ -36,6 +36,7 @@ export interface OrganizationListFilters {
   search?: string;
   planType?: PlanType | "all";
   showDeletedOrg?: boolean;
+  is_active?: boolean;
 }
 
 export interface BroadcastAnnouncementPayload {

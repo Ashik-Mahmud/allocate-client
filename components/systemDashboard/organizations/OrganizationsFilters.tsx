@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { OrganizationListFilters } from "@/types/systemGlobal";
 import { PlanType } from "@/types/organization";
+import is from "zod/v4/locales/is.js";
 
 type VerifiedFilterValue = "all" | "true" | "false";
 
@@ -26,6 +27,8 @@ const OrganizationsFilters = ({
 }: OrganizationsFiltersProps) => {
     const verifiedValue: VerifiedFilterValue =
         filters.verified === undefined ? "all" : filters.verified ? "true" : "false";
+const is_active: VerifiedFilterValue =
+        filters.is_active === undefined ? "all" : filters.is_active ? "true" : "false";
 
     return (
         <section className="rounded-2xl border border-border bg-card dark:bg-slate-800 dark:border-slate-500 p-4 shadow-sm transition-colors">
@@ -91,6 +94,25 @@ const OrganizationsFilters = ({
                 </div>
 
                 <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground dark:text-white/50">Organization Preference (Active/Inactive)</label>
+                    <select
+                        value={is_active}
+                        onChange={(e) => {
+                            const value = e.target.value as VerifiedFilterValue;
+                            onChange({
+                                is_active: value === "all" ? undefined : value === "true",
+                                page: 1,
+                            });
+                        }}
+                        className="h-8 w-full rounded-lg border border-input bg-background px-2.5 py-1 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30 dark:scheme-dark"
+                    >
+                        <option value="all">All</option>
+                        <option value="true">Active Only</option>
+                        <option value="false">Inactive Only</option>
+                    </select>
+                </div>
+
+                <div className="space-y-1.5">
                     <label className="text-xs font-medium text-muted-foreground dark:text-white/50">Organization Preference</label>
                     <select
                         value={
@@ -145,19 +167,7 @@ const OrganizationsFilters = ({
                     />
                 </div>
 
-                <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-muted-foreground dark:text-white/50">Rows Per Page</label>
-                    <select
-                        value={filters.limit ?? 10}
-                        onChange={(e) => onChange({ limit: Number(e.target.value), page: 1 })}
-                        className="h-8 w-full rounded-lg border border-input bg-background px-2.5 py-1 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30 dark:scheme-dark"
-                    >
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                    </select>
-                </div>
+
             </div>
 
             <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
