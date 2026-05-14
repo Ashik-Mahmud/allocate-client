@@ -1,0 +1,214 @@
+{
+  "locales": {
+    "en": {
+      "language": {
+        "code": "en",
+        "name": "English",
+        "switchToEnglishAria": "Switch language to English",
+        "switchToBanglaAria": "Switch language to Bangla",
+        "switcherEnglish": "EN",
+        "switcherBangla": "বাংলা"
+      },
+      "nav": {
+        "pricing": "Pricing",
+        "about": "About us",
+        "docs": "Docs",
+        "signIn": "Sign in"
+      },
+      "homeMetadata": {
+        "title": "Allocate | Resource Scheduling for Modern Teams",
+        "description": "Allocate helps organizations plan shifts, assign resources, and run predictable operations with real-time visibility.",
+        "jsonLdDescription": "Bilingual resource scheduling and booking platform for modern operations teams."
+      },
+      "landing": {
+        "badge": "Resource Intelligence Platform",
+        "languageLabel": "Language",
+        "heroTitle": "Run Your Team Calendar Like A Product",
+        "heroSubtitle": "Allocate helps operations teams plan shifts, assign resources, and monitor delivery in real-time. One clean command center for modern organizations.",
+        "heroPrimary": "Start free trial",
+        "heroSecondary": "Explore pricing",
+        "stats": [
+          { "label": "Schedule reliability", "value": "99.9%" },
+          { "label": "Manual work reduced", "value": "42%" },
+          { "label": "Avg. onboarding", "value": "2 days" }
+        ],
+        "trustTitle": "Built for teams that cannot afford scheduling chaos",
+        "trustSubtitle": "From clinics to field services, Allocate keeps every booking, shift, and availability signal synchronized.",
+        "brands": ["Nexa Health", "Blue Orbit", "FieldCraft", "Prime Logistics"],
+        "featureTitle": "Everything Your Ops Team Needs",
+        "featureSubtitle": "Purpose-built modules for planning, staffing, notifications, and analytics.",
+        "features": [
+          {
+            "title": "Smart Shift Assignment",
+            "description": "Auto-match staff by role, availability, and workload balance.",
+            "icon": "workflow"
+          },
+          {
+            "title": "Live Booking Visibility",
+            "description": "Track capacity and slot demand in one real-time timeline.",
+            "icon": "sparkles"
+          },
+          {
+            "title": "Policy-safe Scheduling",
+            "description": "Enforce booking windows, limits, and team rules automatically.",
+            "icon": "checkCircle"
+          }
+        ],
+        "workflowTitle": "How Allocate Works",
+        "workflowSubtitle": "Three simple steps to move from spreadsheet confusion to predictable operations.",
+        "workflow": [
+          {
+            "title": "Connect your team",
+            "description": "Invite staff and define roles in less than ten minutes."
+          },
+          {
+            "title": "Set rules once",
+            "description": "Configure booking limits, resource logic, and coverage rules."
+          },
+          {
+            "title": "Operate with confidence",
+            "description": "Use dashboards and alerts to catch issues before they escalate."
+          }
+        ],
+        "testimonialTitle": "Teams that switched to Allocate now move faster",
+        "testimonials": [
+          {
+            "name": "Ayesha Rahman",
+            "role": "Operations Lead, CityCare Clinics",
+            "quote": "Allocate replaced three disconnected tools. Our managers finally trust the schedule."
+          },
+          {
+            "name": "Mahfuz Karim",
+            "role": "Head of Delivery, Rapid Service Co",
+            "quote": "The capacity view alone helped us reduce booking conflicts by almost half."
+          }
+        ],
+        "ctaTitle": "Ready to turn operations into a competitive advantage?",
+        "ctaSubtitle": "Launch in minutes, invite your team, and let automation handle the repetitive work.",
+        "ctaButton": "Create my workspace",
+        "footerCopy": "Allocate. Plan confidently. Deliver consistently."
+      },
+      "about": {
+        "metadataTitle": "About Us | Allocate",
+        "metadataDescription": "Learn why Allocate was built, how we work, and what we believe about modern operations.",
+        "title": "About Allocate",
+        "subtitle": "We are building an operations platform that helps teams make clear decisions instead of managing scheduling chaos.",
+        "storyTitle": "Our Story",
+        "storyBody": "Allocate began with one repeated pain: scheduling, resource, and staffing data lived in disconnected tools. We built a command center where every operational decision can be fast, visible, and reliable.",
+        "valuesTitle": "Our Principles",
+        "values": [
+          "Operations first: beautiful interfaces that solve real execution work",
+          "Visibility by default: real-time signal on bookings, capacity, and team status",
+          "Scale without friction: same confidence from small teams to enterprise orgs"
+        ],
+        "missionTitle": "Our Mission",
+        "missionBody": "Turn scheduling into a strategic capability so every team can execute with confidence from planning to delivery."
+      }
+    },
+    "bn": {
+      "language": {
+        "code": "bn",
+        "name": "বাংলা",
+        "switchToEnglishAria": "ইংরেজি ভাষায় পরিবর্তন করুন",
+        "switchToBanglaAria": "বাংলা ভাষায় পরিবর্তন করুন",
+        "switcherEnglish": "EN",
+        "switcherBangla": "বাংলা"
+      },
+      "nav": {
+        "pricing": "প্রাইসিং",
+        "about": "আমাদের সম্পর্কে",
+        "docs": "ডকস",
+        "signIn": "সাইন ইন"
+      },
+      "homeMetadata": {
+        "title": "Allocate | আধুনিক টিমের জন্য রিসোর্স শিডিউলিং",
+        "description": "Allocate আপনার প্রতিষ্ঠানকে শিফট পরিকল্পনা, রিসোর্স অ্যাসাইন এবং রিয়েল-টাইম অপারেশন চালাতে সাহায্য করে।",
+        "jsonLdDescription": "বাংলা ও ইংরেজি সমর্থিত রিসোর্স শিডিউলিং প্ল্যাটফর্ম।"
+      },
+      "landing": {
+        "badge": "রিসোর্স ইন্টেলিজেন্স প্ল্যাটফর্ম",
+        "languageLabel": "ভাষা",
+        "heroTitle": "আপনার টিম ক্যালেন্ডার চালান প্রোডাক্টের মতো",
+        "heroSubtitle": "Allocate অপারেশন টিমকে শিফট পরিকল্পনা, রিসোর্স অ্যাসাইন, এবং রিয়েল-টাইম ডেলিভারি ট্র্যাক করতে সাহায্য করে। আধুনিক প্রতিষ্ঠানের জন্য একটি পরিষ্কার কমান্ড সেন্টার।",
+        "heroPrimary": "ফ্রি ট্রায়াল শুরু করুন",
+        "heroSecondary": "প্রাইসিং দেখুন",
+        "stats": [
+          { "label": "শিডিউল নির্ভরযোগ্যতা", "value": "৯৯.৯%" },
+          { "label": "ম্যানুয়াল কাজ কমে", "value": "৪২%" },
+          { "label": "গড় অনবোর্ডিং", "value": "২ দিন" }
+        ],
+        "trustTitle": "যে দল শিডিউল বিশৃঙ্খলা সহ্য করতে পারে না, তাদের জন্য তৈরি",
+        "trustSubtitle": "ক্লিনিক থেকে ফিল্ড সার্ভিস পর্যন্ত, Allocate সব বুকিং, শিফট এবং অ্যাভেইলেবিলিটি সিগন্যাল সমন্বিত রাখে।",
+        "brands": ["Nexa Health", "Blue Orbit", "FieldCraft", "Prime Logistics"],
+        "featureTitle": "আপনার অপারেশন টিমের জন্য প্রয়োজনীয় সবকিছু",
+        "featureSubtitle": "পরিকল্পনা, স্টাফিং, নোটিফিকেশন এবং অ্যানালিটিক্সের জন্য উদ্দেশ্যমূলক মডিউল।",
+        "features": [
+          {
+            "title": "স্মার্ট শিফট অ্যাসাইনমেন্ট",
+            "description": "রোল, অ্যাভেইলেবিলিটি এবং ওয়ার্কলোড অনুযায়ী স্টাফ অটো-ম্যাচ করুন।",
+            "icon": "workflow"
+          },
+          {
+            "title": "লাইভ বুকিং ভিজিবিলিটি",
+            "description": "একটি রিয়েল-টাইম টাইমলাইনে ক্যাপাসিটি ও স্লট ডিমান্ড দেখুন।",
+            "icon": "sparkles"
+          },
+          {
+            "title": "পলিসি-সেইফ শিডিউলিং",
+            "description": "বুকিং উইন্ডো, সীমা এবং টিম রুলস স্বয়ংক্রিয়ভাবে প্রয়োগ করুন।",
+            "icon": "checkCircle"
+          }
+        ],
+        "workflowTitle": "Allocate কীভাবে কাজ করে",
+        "workflowSubtitle": "স্প্রেডশিটের বিভ্রান্তি থেকে নির্ভরযোগ্য অপারেশনে যেতে তিনটি সহজ ধাপ।",
+        "workflow": [
+          {
+            "title": "টিম যুক্ত করুন",
+            "description": "দশ মিনিটের কম সময়ে স্টাফ ইনভাইট করে রোল সেট করুন।"
+          },
+          {
+            "title": "একবার রুল সেট করুন",
+            "description": "বুকিং সীমা, রিসোর্স লজিক ও কভারেজ রুল কনফিগার করুন।"
+          },
+          {
+            "title": "আত্মবিশ্বাসের সাথে চালান",
+            "description": "ড্যাশবোর্ড ও অ্যালার্ট ব্যবহার করে সমস্যা আগে ধরুন।"
+          }
+        ],
+        "testimonialTitle": "Allocate ব্যবহার করে টিম এখন দ্রুত কাজ করে",
+        "testimonials": [
+          {
+            "name": "আয়েশা রহমান",
+            "role": "অপারেশনস লিড, সিটি কেয়ার ক্লিনিক",
+            "quote": "Allocate তিনটি আলাদা টুলকে এক করেছে। এখন আমাদের ম্যানেজাররা শিডিউলে ভরসা করেন।"
+          },
+          {
+            "name": "মাহফুজ করিম",
+            "role": "হেড অব ডেলিভারি, র‍্যাপিড সার্ভিস কো",
+            "quote": "শুধু ক্যাপাসিটি ভিউ ব্যবহার করে আমরা বুকিং কনফ্লিক্ট প্রায় অর্ধেক কমিয়েছি।"
+          }
+        ],
+        "ctaTitle": "অপারেশনকে প্রতিযোগিতামূলক সুবিধায় রূপ দিতে প্রস্তুত?",
+        "ctaSubtitle": "মিনিটে শুরু করুন, টিমকে আমন্ত্রণ দিন, আর পুনরাবৃত্ত কাজ অটোমেশনকে করতে দিন।",
+        "ctaButton": "আমার ওয়ার্কস্পেস তৈরি করুন",
+        "footerCopy": "Allocate. আত্মবিশ্বাসের সাথে পরিকল্পনা করুন। ধারাবাহিকভাবে ডেলিভার করুন।"
+      },
+      "about": {
+        "metadataTitle": "আমাদের সম্পর্কে | Allocate",
+        "metadataDescription": "Allocate কেন তৈরি হয়েছে, আমরা কীভাবে কাজ করি এবং আমাদের অপারেশন দর্শন জানুন।",
+        "title": "Allocate সম্পর্কে",
+        "subtitle": "আমরা এমন একটি অপারেশন প্ল্যাটফর্ম তৈরি করছি যা টিমকে বিশৃঙ্খলা নয়, পরিষ্কার সিদ্ধান্ত নিতে সাহায্য করে।",
+        "storyTitle": "আমাদের গল্প",
+        "storyBody": "Allocate শুরু হয় একটি সাধারণ সমস্যা থেকে: শিডিউল, রিসোর্স এবং স্টাফিং ডেটা অনেক টুলে ছড়িয়ে ছিল। আমরা একটি কমান্ড সেন্টার তৈরি করেছি যাতে প্রতিটি সিদ্ধান্ত দ্রুত, দৃশ্যমান এবং নির্ভরযোগ্য হয়।",
+        "valuesTitle": "আমাদের নীতিমালা",
+        "values": [
+          "অপারেশন আগে: সুন্দর UI এর সাথে বাস্তব কাজের উপযোগিতা",
+          "স্বচ্ছতা: বুকিং, ক্যাপাসিটি ও টিম স্ট্যাটাসে রিয়েল-টাইম ভিজিবিলিটি",
+          "স্কেলযোগ্যতা: ছোট দল থেকে বড় প্রতিষ্ঠানে একই অভিজ্ঞতা"
+        ],
+        "missionTitle": "আমাদের মিশন",
+        "missionBody": "শিডিউলিংকে একটি প্রতিযোগিতামূলক সক্ষমতায় রূপান্তর করা, যাতে প্রতিটি টিম পরিকল্পনা থেকে ডেলিভারি পর্যন্ত নিয়ন্ত্রণে থাকে।"
+      }
+    }
+  }
+}

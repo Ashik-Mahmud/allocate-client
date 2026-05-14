@@ -1,139 +1,217 @@
-"use client"
-import React from 'react';
-import { Check, X, Zap, Building2, Crown } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { SUBSCRIPTION_LIMITS, SUBSCRIPTION_PRICING } from '@/lib/constants/subscription';
-import { PlanType } from '@/types/organization';
-import { useDetectCountry } from '@/hooks/use-detect-country';
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { Check, X } from "lucide-react";
+import pricingContent from "@/data/marketing/pricing-content.json";
+import { SUBSCRIPTION_LIMITS } from "@/lib/constants/subscription";
+import { PlanType } from "@/types/organization";
+
+type BillingCycle = "monthly" | "yearly";
 
 type Plan = {
-  type: PlanType;
+  id: string;
   name: string;
-  price: typeof SUBSCRIPTION_PRICING[PlanType] | string;
   description: string;
-  icon: React.ReactNode;
-  limits: typeof SUBSCRIPTION_LIMITS[PlanType];
-  popular?: boolean;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  cta: string;
+  popular: boolean;
+  highlights: string[];
 };
 
-const pricingPlans: Plan[] = [
-  {
-    type: PlanType.FREE,
-    name: "Starter",
-    price: SUBSCRIPTION_PRICING[PlanType.FREE],
-    description: "Perfect for small teams or individuals.",
-    icon: <Zap className="w-5 h-5 text-blue-500" />,
-    limits: SUBSCRIPTION_LIMITS.FREE,
-  },
-  {
-    type: PlanType.PRO,
-    name: "Professional",
-    price: SUBSCRIPTION_PRICING[PlanType.PRO],
-    description: "Advanced tools for growing organizations.",
-    icon: <Crown className="w-5 h-5 text-amber-500" />,
-    limits: SUBSCRIPTION_LIMITS.PRO,
-    popular: true,
-  },
-  {
-    type: PlanType.ENTERPRISE,
-    name: "Enterprise",
-    price: "Custom",
-    description: "Full control for large scale operations.",
-    icon: <Building2 className="w-5 h-5 text-purple-500" />,
-    limits: SUBSCRIPTION_LIMITS.ENTERPRISE,
-  },
-];
+type CompareItem = {
+  label: string;
+  starter: boolean;
+  pro: boolean;
+  enterprise: boolean;
+};
 
-export const PricingSection = () => {
-  const { currency, currencySymbol } = useDetectCountry();
+const plans = pricingContent.plans as Plan[];
+const compareItems = pricingContent.compare.items as CompareItem[];
+
+export function PricingSection() {
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+
+  const displayPlans = useMemo(
+    () =>
+      plans.map((plan) => ({
+        ...plan,
+        displayPrice:
+          billingCycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice,
+      })),
+    [billingCycle]
+  );
 
   return (
-    <section className="py-20 px-4">
-      <div className="max-w-7xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Simple, Transparent Pricing</h2>
-        <p className="mt-4 text-muted-foreground text-lg">
-          Choose the plan that best fits your organization's needs.
-        </p>
-      </div>
+    <section className="relative overflow-hidden rounded-[2rem] border border-primary/20 bg-white/70 px-5 py-8 shadow-xl shadow-primary/10 backdrop-blur dark:bg-slate-900/60 sm:px-8 sm:py-10">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_15%,color-mix(in_oklab,var(--primary)_12%,transparent),transparent_30%),radial-gradient(circle_at_85%_10%,color-mix(in_oklab,var(--color-brand-secondary)_14%,transparent),transparent_35%)]" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {pricingPlans.map((plan: Plan) => {
-          const pricing: any = currency && typeof plan?.price === "object" ? plan?.price?.[currency as "USD" | "BDT"] : plan?.price;
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              {pricingContent.hero.eyebrow}
+            </p>
+            <h2 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl dark:text-slate-100">
+              {pricingContent.hero.title}
+            </h2>
+            <p className="mt-3 max-w-2xl text-slate-700 dark:text-slate-300">
+              {pricingContent.hero.subtitle}
+            </p>
+          </div>
 
+          <div className="rounded-full border border-primary/25 bg-white/80 p-1 dark:bg-slate-950/60">
+            <button
+              type="button"
+              onClick={() => setBillingCycle("monthly")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${billingCycle === "monthly"
+                ? "bg-primary text-primary-foreground"
+                : "text-slate-600 dark:text-slate-300"
+                }`}
+            >
+              {pricingContent.billing.monthly}
+            </button>
+            <button
+              type="button"
+              onClick={() => setBillingCycle("yearly")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${billingCycle === "yearly"
+                ? "bg-primary text-primary-foreground"
+                : "text-slate-600 dark:text-slate-300"
+                }`}
+            >
+              {pricingContent.billing.yearly}
+            </button>
+          </div>
+        </div>
 
-          return (<Card
-            key={plan.type}
-            className={`relative flex flex-col border-2 transition-all duration-300 hover:shadow-lg ${plan.popular ? 'border-primary shadow-md scale-105' : 'border-border'
-              }`}
-          >
-            {plan.popular && (
-              <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                Most Popular
-              </span>
-            )}
+        {billingCycle === "yearly" ? (
+          <p className="mb-6 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] text-primary">
+            {pricingContent.billing.yearlyBadge}
+          </p>
+        ) : null}
 
-            <CardHeader>
-              <div className="flex items-center gap-2 mb-2">
-                {plan.icon}
-                <CardTitle className="text-xl">{plan.name}</CardTitle>
-              </div>
-              <div className="flex items-baseline gap-1 mt-2">
-                <span className="text-4xl font-bold tracking-tight">
-                 {typeof pricing === "object" ? `${currencySymbol}${pricing?.monthly ?? 0}` : pricing}
+        <div className="grid gap-5 lg:grid-cols-3">
+          {displayPlans.map((plan) => (
+            <article
+              key={plan.id}
+              className={`relative rounded-3xl border bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 dark:bg-slate-950/65 ${plan.popular
+                ? "border-primary/45 shadow-lg shadow-primary/20"
+                : "border-slate-300/70 dark:border-slate-700"
+                }`}
+            >
+              {plan.popular ? (
+                <span className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-[11px] font-bold uppercase tracking-[0.13em] text-primary-foreground">
+                  Popular
                 </span>
-                {typeof pricing === "string" ? null : <span className="text-muted-foreground">/month</span>}
-              </div>
-              <CardDescription className="mt-2">{plan.description}</CardDescription>
-            </CardHeader>
+              ) : null}
 
-            <CardContent className="flex-1 space-y-4">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Limits</p>
-                <ul className="space-y-2 text-sm text-foreground">
-                  <FeatureItem label={`Up to ${plan.limits.MAX_USERS} Staffs`} />
-                  <FeatureItem label={`${plan.limits.MAX_RESOURCES} Resources`} />
-                  <FeatureItem label={`${plan.limits.INITIAL_CREDITS} Monthly Credits`} />
-                  <FeatureItem label={`${plan.limits.BOOKING_WINDOW_DAYS} Days Booking Window`} />
-                </ul>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">{plan.name}</h3>
+              <p className="mt-2 min-h-12 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                {plan.description}
+              </p>
+
+              <div className="mt-5 flex items-baseline gap-1">
+                <p className="text-4xl font-black text-slate-900 dark:text-slate-100">
+                  ${plan.displayPrice}
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  /{billingCycle === "monthly" ? "mo" : "yr"}
+                </p>
               </div>
 
-              <div className="pt-4 space-y-2 border-t border-border">
-                <p className="text-sm font-semibold uppercase text-muted-foreground tracking-wider">Features</p>
-                <ul className="space-y-2 text-sm">
-                  {Object.entries(plan.limits.FEATURES).map(([key, value]) => (
-                    <FeatureItem
-                      key={key}
-                      label={key.replace(/_/g, ' ')}
-                      included={value}
-                    />
-                  ))}
-                </ul>
-              </div>
-            </CardContent>
-
-            <CardFooter>
-              <Button
-                variant={plan.popular ? "default" : "outline"}
-                className="w-full text-md font-semibold h-11"
+              <Link
+                href={plan.id === "enterprise" ? "/en/about-us" : "/sign-up"}
+                className={`mt-5 inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold transition ${plan.popular
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:opacity-90"
+                  : "border border-primary/35 text-primary hover:bg-primary/10"
+                  }`}
               >
-                {plan.type === "FREE" ? "Get Started" : plan.type === "PRO" ? "Upgrade to Pro" : "Contact Sales"}
-              </Button>
-            </CardFooter>
-          </Card>)
-        })}
+                {plan.cta}
+              </Link>
+
+              <ul className="mt-5 space-y-2.5 text-sm">
+                {plan.highlights.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-slate-700 dark:text-slate-300">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-10 rounded-3xl border border-primary/20 bg-white/85 p-5 dark:bg-slate-950/60">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            {pricingContent.compare.title}
+          </h3>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-160 border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-slate-300/70 dark:border-slate-700">
+                  <th className="py-3 pr-4 font-semibold text-slate-700 dark:text-slate-300">Feature</th>
+                  <th className="px-3 py-3 font-semibold text-slate-700 dark:text-slate-300">Starter</th>
+                  <th className="px-3 py-3 font-semibold text-slate-700 dark:text-slate-300">Pro</th>
+                  <th className="px-3 py-3 font-semibold text-slate-700 dark:text-slate-300">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Map over the keys of the FEATURES object */}
+                {Object.keys(SUBSCRIPTION_LIMITS[PlanType.FREE].FEATURES as Record<string, boolean>).map((featureKey: string) => (
+                  <tr key={featureKey} className="border-b border-slate-200/70 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                    {/* 1. Feature Name: Convert SNAKE_CASE to Title Case */}
+                    <td className="py-3 pr-4 text-slate-800 dark:text-slate-200 font-medium capitalize">
+                      {featureKey.toLowerCase().replace(/_/g, " ")}
+                    </td>
+
+                    {/* 2. Free Plan Column */}
+                    <td className="px-3 py-3 text-center">
+                      {(SUBSCRIPTION_LIMITS as any)[PlanType.FREE]?.FEATURES[featureKey] ? <CheckMark /> : <CrossMark />}
+                    </td>
+
+                    {/* 3. Pro Plan Column */}
+                    <td className="px-3 py-3 text-center">
+                      {(SUBSCRIPTION_LIMITS as any)[PlanType.PRO]?.FEATURES[featureKey] ? <CheckMark /> : <CrossMark />}
+                    </td>
+
+                    {/* 4. Enterprise Plan Column */}
+                    <td className="px-3 py-3 text-center">
+                      {(SUBSCRIPTION_LIMITS as any)[PlanType.ENTERPRISE]?.FEATURES[featureKey] ? <CheckMark /> : <CrossMark />}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <h3 className="text-2xl font-black text-slate-900 dark:text-slate-100">
+            {pricingContent.faq.title}
+          </h3>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {pricingContent.faq.items.map((item) => (
+              <article
+                key={item.question}
+                className="rounded-2xl border border-slate-300/70 bg-white/90 p-4 dark:border-slate-700 dark:bg-slate-950/55"
+              >
+                <h4 className="font-semibold text-slate-900 dark:text-slate-100">{item.question}</h4>
+                <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
-};
+}
 
-const FeatureItem = ({ label, included = true }: { label: string; included?: boolean }) => (
-  <li className={`flex items-start gap-3 ${included ? 'text-foreground' : 'text-muted-foreground/50'}`}>
-    {included ? (
-      <Check className="w-4 h-4 mt-0.5 text-primary shrink-0" />
-    ) : (
-      <X className="w-4 h-4 mt-0.5 text-muted-foreground/50 shrink-0" />
-    )}
-    <span className="capitalize">{label.toLowerCase()}</span>
-  </li>
-);
+function CheckMark() {
+  return <Check className="size-4 text-primary" aria-label="Included" />;
+}
+
+function CrossMark() {
+  return <X className="size-4 text-slate-400" aria-label="Not included" />;
+}
