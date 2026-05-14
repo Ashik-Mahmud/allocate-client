@@ -241,7 +241,7 @@ const AnnoucementNotification = ({ onCancel }: props) => {
           </div>
         </div>
         {/* Buttons */}
-        <div className="flex items-center gap-3 p-4 sticky bottom-0 bg-white dark:bg-slate-800">
+        <div className="flex items-center gap-3 p-4 sticky bottom-0 bg-white dark:bg-slate-900">
           <button
             type="button"
             className="flex-1 px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-200 hover:bg-slate-100 transition-all"

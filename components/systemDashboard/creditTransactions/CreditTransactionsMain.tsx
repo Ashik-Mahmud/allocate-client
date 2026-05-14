@@ -92,8 +92,8 @@ const CreditTransactionsMain = () => {
       {/* Top Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-1">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Credit Ledger</h1>
-          <p className="text-sm font-medium text-slate-500">Monitor billing, allocations, and revenue</p>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-slate-200 tracking-tight">Credit Ledger</h1>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Monitor billing, allocations, and revenue</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -115,7 +115,7 @@ const CreditTransactionsMain = () => {
             onClick={() => {
               setIsOpenManualTopup(true);
             }}
-            className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold h-11 px-6 shadow-lg shadow-slate-200 transition-all active:scale-95"
+            className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold h-11 px-6 shadow-lg shadow-slate-200 dark:shadow-slate-600 transition-all active:scale-95"
           >
             <Plus className="mr-2 h-4 w-4 stroke-3" />
             Manual Top-up
@@ -125,7 +125,7 @@ const CreditTransactionsMain = () => {
       </div>
 
       {/* Filter Bar - Bento Style */}
-      <Card className="border-none shadow-sm bg-white rounded-[2rem] p-4">
+      <Card className="border-none shadow-sm bg-white dark:bg-slate-700 rounded-[2rem] p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 items-end">
           <SearchableSelect
             label="Organization"
@@ -158,7 +158,7 @@ const CreditTransactionsMain = () => {
           <Button
             onClick={() => updateFilter({ organizationId: undefined, type: undefined, startDate: undefined, endDate: undefined })}
             variant="outline"
-            className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-900"
+            className="rounded-xl border-slate-200 text-slate-700 dark:bg-slate-800 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900"
           >
             Clear Filters
           </Button>
@@ -172,24 +172,24 @@ const CreditTransactionsMain = () => {
           value={`$${totalRevenue.toLocaleString()}`}
           icon={TrendingUp}
           // trend="+12% from last month"
-          color="text-blue-600"
+          color="text-blue-600 dark:text-blue-300"
         />
         <StatCard
           label="Total Transactions"
           value={data?.pagination?.total || 0}
           icon={CreditCard}
-          color="text-slate-600"
+          color="text-slate-600 dark:text-indigo-300"
         />
 
       </div>
 
       {/* Main Table */}
-      <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
+      <Card className="border-none shadow-sm bg-white dark:bg-slate-700 rounded-[2rem] overflow-hidden">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-50 bg-slate-50/30">
+                <tr className="border-b border-slate-50 bg-slate-50/30 dark:bg-slate-700/30 dark:border-slate-600">
                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Payer / Method</th>
                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Organization</th>
                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Transaction ID</th>
@@ -201,7 +201,7 @@ const CreditTransactionsMain = () => {
                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-600">
                 {items.map((item) => {
                   const config = TRANSACTION_CONFIG[item.type]
                   const Icon = config.icon
@@ -212,11 +212,11 @@ const CreditTransactionsMain = () => {
                       {/* Payer & Method */}
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-white group-hover:shadow-sm transition-all">
+                          <div className="h-9 w-9 rounded-xl bg-slate-100 dark:bg-slate-600 flex items-center justify-center text-slate-400 group-hover:bg-white group-hover:shadow-sm transition-all">
                             <CreditCard size={16} />
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-xs font-bold text-slate-700">{item.user?.name || "System"}</span>
+                            <span className="text-xs font-bold text-slate-700 dark:text-slate-200">{item.user?.name || "System"}</span>
                             <span className="text-[10px] font-medium text-slate-400 uppercase tracking-tighter">
                               {item.payment_gateway || "Internal"}
                             </span>
@@ -229,7 +229,7 @@ const CreditTransactionsMain = () => {
                         <div className="flex items-center gap-2">
                           <Building2 className="size-6 text-slate-400 inline-block mr-1" />
                           <div className="flex flex-col">
-                            <span className="text-sm font-bold text-slate-700">{item.organization?.name || "N/A"}</span>
+                            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{item.organization?.name || "N/A"}</span>
                             <span className="text-[10px] font-medium text-slate-400 uppercase tracking-tighter">
                               {item?.organization?.org_type || "N/A"}
                             </span>
@@ -252,7 +252,7 @@ const CreditTransactionsMain = () => {
                       {/* Money (Price Paid) */}
                       <td className="px-6 py-4">
                         <div className="flex flex-col">
-                          <span className="text-sm font-black text-slate-900">
+                          <span className="text-sm font-black text-slate-900 dark:text-white">
                             {item.price_paid ? `$${item.price_paid}` : "--"}
                           </span>
                           <span className="text-[10px] font-bold text-slate-400 uppercase">{item.currency || 'USD'}</span>
@@ -339,15 +339,15 @@ const CreditTransactionsMain = () => {
 }
 
 const StatCard = ({ label, value, icon: Icon, trend, color }: any) => (
-  <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
+  <Card className="border-none shadow-sm bg-white dark:bg-slate-700 rounded-[2rem] overflow-hidden">
     <CardContent className="p-0 flex items-center gap-4">
-      <div className={cn("p-3 rounded-2xl bg-slate-50", color)}>
-        <Icon size={24} />
+      <div className={cn("p-3 rounded-2xl bg-slate-50 dark:bg-slate-600", color)}>
+        <Icon size={24}  />
       </div>
       <div className="flex-1">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">{label}</p>
+        <p className="text-[10px] font-bold text-slate-400 dark:text-slate-300 uppercase tracking-[0.15em]">{label}</p>
         <div className="flex items-baseline gap-2">
-          <h3 className="text-2xl font-black text-slate-900">{value}</h3>
+          <h3 className="text-2xl font-black text-slate-900 dark:text-white">{value}</h3>
           {trend && <span className="text-[10px] font-bold text-green-500">{trend}</span>}
         </div>
       </div>

@@ -119,7 +119,7 @@ export function SearchableSelect({
             return options.find((opt) => opt.value === value)?.label || placeholder
         }
 
-        return <span className="text-slate-400">{placeholder}</span>
+        return <span className="text-slate-400 dark:text-slate-300">{placeholder}</span>
     }
 
     return (
@@ -137,27 +137,27 @@ export function SearchableSelect({
                         role="combobox"
                         aria-expanded={open}
                         className={cn(
-                            "h-auto min-h-11 w-full justify-between rounded-xl border-slate-200 px-4 py-2 text-left font-medium shadow-none hover:bg-slate-50 transition-all",
+                            "h-auto min-h-11 w-full justify-between rounded-xl border-slate-200 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-900 px-4 py-2 text-left font-medium shadow-none hover:bg-slate-50 transition-all",
                             open && "border-slate-300 ring-2 ring-slate-100",
                             inputClassName
                         )}
                     >
-                        {icon && <div className="mr-2 h-4 w-4">{icon}</div>}
-                        <div className="flex flex-wrap gap-1 items-center overflow-hidden  w-full">
+                        {icon && <div className="mr-2 h-4 w-4 dark:text-white">{icon}</div>}
+                        <div className="flex flex-wrap gap-1 items-center overflow-hidden  w-full dark:text-slate-300">
                             {renderDisplay()}
                         </div>
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 " />
                     </Button>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-2xl shadow-xl border-slate-100" align="start">
-                    <Command shouldFilter={!onSearchChange}>
+                <PopoverContent className="w-[--radix-popover-trigger-width] p-0 rounded-2xl shadow-xl border-slate-100 dark:bg-slate-800" align="start">
+                    <Command shouldFilter={!onSearchChange} className="dark:bg-slate-800">
                         <CommandInput
                             placeholder={searchPlaceholder}
                             onValueChange={onSearchChange}
                             className="h-11"
                         />
-                        <CommandList>
+                        <CommandList >
                             {loading && (
                                 <div className="flex items-center justify-center py-6">
                                     <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
@@ -178,7 +178,7 @@ export function SearchableSelect({
                                             key={option.value}
                                             value={option.label}
                                             onSelect={() => handleSelect(option.value)}
-                                            className="rounded-lg m-1 py-2 cursor-pointer"
+                                            className="rounded-lg m-1 py-2 cursor-pointer dark:text-white dark:hover:bg-slate-700"
                                         >
                                             <Check
                                                 className={cn(
@@ -186,7 +186,7 @@ export function SearchableSelect({
                                                     isSelected ? "opacity-100" : "opacity-0"
                                                 )}
                                             />
-                                            <span className="font-medium text-slate-700">{option.label}</span>
+                                            <span className="font-medium text-slate-700 dark:text-white">{option.label}</span>
                                         </CommandItem>
                                     )
                                 })}

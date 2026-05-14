@@ -55,7 +55,7 @@ export const DatePickerField = ({
                         variant="outline"
                         disabled={disabled}
                         className={cn(
-                            "h-11 w-full justify-between rounded-xl border-slate-200 px-4 text-left font-medium shadow-none transition-all hover:bg-slate-50 hover:border-slate-300",
+                            "h-11 w-full justify-between rounded-xl border-slate-200 px-4 text-left font-medium shadow-none transition-all hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:border-slate-600",
                             !value && "text-slate-400",
                             "dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600",
                             disabled && "cursor-not-allowed opacity-50",

@@ -18,13 +18,13 @@ const ViewActivityLogs = ({ log, onClose }: Props) => {
   return (
     <div className="flex flex-col gap-6 ">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
             <Activity size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-800 tracking-tight">Log Details</h2>
+            <h2 className="text-lg font-bold text-slate-800 tracking-tight dark:text-white">Log Details</h2>
             <p className="text-xs font-medium text-slate-400">Transaction ID: {log.id}</p>
           </div>
         </div>
@@ -39,7 +39,7 @@ const ViewActivityLogs = ({ log, onClose }: Props) => {
       </div>
 
       {/* Primary Action & Status */}
-      <div className="rounded-2xl bg-slate-50 p-4 border border-slate-100">
+      <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 p-4 border border-slate-100 dark:border-slate-700">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="space-y-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Action Performed</p>
@@ -55,7 +55,7 @@ const ViewActivityLogs = ({ log, onClose }: Props) => {
           </div>
         </div>
         {log.details && (
-          <div className="mt-4 pt-4 border-t border-slate-200/60">
+          <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-700">
             <p className="text-sm text-slate-600 leading-relaxed italic">
               &ldquo;{log.details}&rdquo;
             </p>
@@ -66,19 +66,19 @@ const ViewActivityLogs = ({ log, onClose }: Props) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Dynamic Metadata Section */}
         <div className="space-y-3">
-          <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
             <Info size={16} className="text-blue-500" />
             Metadata
           </h3>
-          <div className="rounded-2xl border border-slate-100 p-1">
+          <div className="rounded-2xl border border-slate-100 dark:border-slate-700 p-1 dark:bg-slate-900">
             {metadataEntries.length > 0 ? (
-              <div className="divide-y divide-slate-50">
+              <div className="divide-y divide-slate-50 dark:divide-slate-700 ">
                 {metadataEntries.map(([key, value]) => (
-                  <div key={key} className="flex flex-col p-3 hover:bg-slate-50/50 transition-colors">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <div key={key} className="flex flex-col p-3 hover:bg-slate-50/50 dark:hover:bg-slate-700 dark:bg-slate-900 transition-colors">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-white">
                       {key.replace(/_/g, " ")}
                     </span>
-                    <span className="text-sm font-medium text-slate-700 break-all">
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 break-all">
                       {typeof value === 'string' ? value : JSON.stringify(value)}
                     </span>
                   </div>
@@ -92,21 +92,21 @@ const ViewActivityLogs = ({ log, onClose }: Props) => {
 
         {/* Network & Device Info */}
         <div className="space-y-3">
-          <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800">
+          <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-white">
             <Globe size={16} className="text-blue-500" />
             Network Info
           </h3>
           <div className="space-y-2">
-            <div className="flex items-center justify-between rounded-xl bg-white border border-slate-100 p-3">
+            <div className="flex items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 p-3">
               <span className="text-xs font-medium text-slate-500">IP Address</span>
-              <span className="text-xs font-mono font-bold text-slate-700">{log.ipAddress}</span>
+              <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">{log.ipAddress}</span>
             </div>
-            <div className="flex flex-col gap-2 rounded-xl bg-white border border-slate-100 p-3">
+            <div className="flex flex-col gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 p-3">
               <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
                 <Monitor size={14} />
                 User Agent
               </div>
-              <span className="text-[11px] text-slate-600 leading-normal wrap-break-word bg-slate-50 p-2 rounded-lg">
+              <span className="text-[11px] text-slate-600 leading-normal wrap-break-word bg-slate-50 dark:bg-slate-700 dark:text-slate-200 p-2 rounded-lg">
                 {log.userAgent || "Unknown Device"}
               </span>
             </div>
