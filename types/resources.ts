@@ -47,7 +47,7 @@ export interface Resource {
 	is_occupied?: boolean; // Computed property for frontend convenience
 	isAutoConfirm?: boolean
 	currentBooking?: Partial<Booking>; // Optional current booking info if occupied
-	resourcesRules?: ResourceRule[];
+	resourcesRules?: ResourceRule;
 	bookings?: Partial<Booking>[];
 	organization?: Partial<Organizations>
 }
@@ -122,7 +122,7 @@ export interface Resources {
     updatedAt: Date | string;
 
     // Relations (Optional based on your API response)
-    resourcesRules?: ResourcesRule[];
+    resourcesRules?: ResourcesRule;
     bookings?: any[]; // Replace 'any' with your Bookings interface
 }
 

@@ -81,7 +81,7 @@ const StaffResourcesMain = () => {
   };
 
   const onReserveResource = (resource: Resource) => {
-    const rules = resource?.resourcesRules?.[0];
+    const rules = resource?.resourcesRules;
     const current = getCalendarNow(timeZone);
     const todayKey = getCalendarDateKey(current.year, current.month, current.day);
     const openingHour = rules?.opening_hours ?? 9;

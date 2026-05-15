@@ -214,7 +214,7 @@ export function RealtimeSocketProvider({ children }: { children: React.ReactNode
   const subscriptionsRef = useRef<Set<RealtimeSubscription>>(new Set());
   const socketRef = useRef<Socket | null>(null);
   const namespaceMap = useRef<Map<string, { socket: Socket; connected: boolean }>>(new Map());
-
+  const isMounted = useRef(false);
   const accessToken = useMemo(() => {
     const sessionToken = session.data?.accessToken?.trim() ?? "";
 
@@ -224,6 +224,13 @@ export function RealtimeSocketProvider({ children }: { children: React.ReactNode
 
     return getAccessToken();
   }, [session.data?.accessToken]);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, [])
 
   useEffect(() => {
     const socket = getSocketInstance();
@@ -324,7 +331,9 @@ export function RealtimeSocketProvider({ children }: { children: React.ReactNode
       // forward all events into the global subscriptions as normalized envelopes
       s.onAny((ename, ...args) => {
         const envelope = normalizeRealtimeEvent(ename, args as unknown[]);
-        setLastEvent(envelope);
+        if (isMounted.current) {
+          setLastEvent(envelope);
+        }
         for (const subscription of subscriptionsRef.current) {
           if (matchesFilter(envelope, subscription.filter)) {
             subscription.listener(envelope);
