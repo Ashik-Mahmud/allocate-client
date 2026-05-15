@@ -522,7 +522,7 @@ function isActiveRoute(pathname: string, href: string, locale: string) {
     if (href === ROUTES.home) {
         return pathname === href;
     }
-    const localizedHref = pathname?.includes(locale) ?  `/${locale}${href}` : `${href}`;
+    const localizedHref = pathname?.split('/')?.includes(locale) ?  `/${locale}${href}` : `${href}`;
     return pathname === localizedHref || pathname.startsWith(`${localizedHref}/`);
 }
 
