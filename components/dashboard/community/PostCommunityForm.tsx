@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { CommunityHub, CommunityHubPostType, CommunityHubStatus, PostCommunityFormData, PostVisibility } from '@/types/community';
+import SharedRichEditor from '@/components/shared/RichEditor';
 
 
 
@@ -105,7 +106,7 @@ export const PostCommunityInnerForm = ({ onCancel, onSubmit, isSubmitting = fals
                 <Label htmlFor="content" className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
                     Content
                 </Label>
-                <Textarea
+                {/* <Textarea
                     id="content"
                     name="content"
                     value={formData.content}
@@ -114,6 +115,11 @@ export const PostCommunityInnerForm = ({ onCancel, onSubmit, isSubmitting = fals
                     rows={4}
                     required
                     className="border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-sm resize-none"
+                /> */}
+                <SharedRichEditor
+                    value={formData.content}
+                    onChange={(htmlValue) => setFormData({...formData, content: htmlValue})}
+                    placeholder="Provide the technical specifications or renewal deadlines for this resource request..."
                 />
             </div>
 
@@ -137,7 +143,7 @@ export const PostCommunityInnerForm = ({ onCancel, onSubmit, isSubmitting = fals
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                     <Label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                        Post Type 
+                        Post Type
                     </Label>
                     <Select
                         value={formData.postType || initialData?.postType || undefined}
@@ -158,7 +164,7 @@ export const PostCommunityInnerForm = ({ onCancel, onSubmit, isSubmitting = fals
 
                 <div className="space-y-1.5">
                     <Label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                        Status 
+                        Status
                     </Label>
                     <Select
                         value={formData.status || initialData?.status || CommunityHubStatus.DRAFT}

@@ -49,6 +49,7 @@ export const useCommunityPostQuery = (postId: string) => {
     return useQuery({
         queryKey: [...CommunityKeys.all, postId],
         queryFn: async () => fetchCommunityPostById(postId),
+        enabled: Boolean(postId),
     });
 }
 
@@ -117,14 +118,14 @@ export const useAcknowledgeCommunityPostMutation = () => {
 }
 
 // Hook to delete a comment from a community post
-export const useDeleteCommentFromCommunityPostMutation = (postId: string, commentId: string) => {
+export const useDeleteCommentFromCommunityPostMutation = ( ) => {
     // Implement the mutation logic here
     const client = useQueryClient();
     return useMutation({
-        mutationFn: async () => deleteCommentFromCommunityPost(commentId),
+        mutationFn: async (commentId: string) => deleteCommentFromCommunityPost(commentId),
         onSuccess: () => {
             // Invalidate and refetch the specific community post data to reflect the deleted comment
-            void client.invalidateQueries({ queryKey: [...CommunityKeys.all, postId] });
+            void client.invalidateQueries({ queryKey: [...CommunityKeys.all] });
         }
     });
 }

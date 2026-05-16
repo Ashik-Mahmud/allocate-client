@@ -73,8 +73,9 @@ const CommunityHeader = (props: Props) => {
                 open={isDialogOpen}
                 onOpenChange={() => setIsDialogOpen(false)}
                 title="Create New Community Post"
-                className="max-w-lg"
+             
                 footer={null}
+                size="full"
             >
                 <PostCommunityInnerForm
                     isSubmitting={communtionMutation.isPending}

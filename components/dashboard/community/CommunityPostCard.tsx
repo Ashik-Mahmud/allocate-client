@@ -13,6 +13,8 @@ import {
     Calendar
 } from 'lucide-react'
 import { CommunityHub, CommunityHubStatus } from '@/types/community';
+import { Link } from '@/lib/navigation';
+import { ROUTES } from '@/lib/constants/routes';
 
 // Adjust imports based on your actual types/enums file
 
@@ -37,7 +39,7 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
     });
 
     return (
-        <div className="group relative bg-white dark:bg-slate-900 border border-neutral-100 dark:border-slate-800/60 rounded-xl p-5 transition-all duration-200 hover:shadow-sm flex flex-col md:flex-row gap-5">
+        <Link href={ROUTES.dashboardCommon.community + `/${post?.id}`} className="group relative bg-white dark:bg-slate-900 border border-neutral-100 dark:border-slate-800/60 rounded-xl p-5 transition-all duration-200 hover:shadow-sm flex flex-col md:flex-row gap-5">
 
             {/* Post Image Thumbnail (Optional) */}
             {post.imageUrl && (
@@ -60,10 +62,10 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                         </span>
 
                         <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded ${post.status === 'PUBLISHED'
-                                ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400'
-                                : post.status === 'ARCHIVED'
-                                    ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400'
-                                    : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400'
+                            : post.status === 'ARCHIVED'
+                                ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400'
+                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400'
                             }`}>
                             {post.status}
                         </span>
@@ -81,8 +83,10 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                     </h3>
 
                     {/* Body Content Snip */}
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 font-normal leading-relaxed mb-4">
-                        {post.content}
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 font-normal leading-relaxed mb-4"
+                        dangerouslySetInnerHTML={{ __html: post.content }}
+                    >
+                       
                     </p>
                 </div>
 
@@ -108,8 +112,10 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" /> 0</span>
-                        <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5" /> 0</span>
+                        <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" />
+                            {post?.comments?.length || 0}
+                        </span>
+                        <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5" /> {post?.acknowledgments?.length || 0}</span>
                     </div>
                 </div>
             </div>
@@ -179,6 +185,6 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                     </>
                 )}
             </div>
-        </div>
+        </Link>
     )
 }

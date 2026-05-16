@@ -39,6 +39,8 @@ import { BsPostageFill } from 'react-icons/bs';
 import { formatDistanceToNow } from 'date-fns';
 import { useCurrentUser } from '@/features/auth';
 import { User } from '@/types';
+import { Link } from '@/lib/navigation';
+import { ROUTES } from '@/lib/constants/routes';
 
 // Extracted local enums for UI rendering sync
 enum PostTypeEnum {
@@ -150,7 +152,7 @@ const CommunityMain = (props: Props) => {
                         align="end"
                     >
                         {/* Filter Dropdown Layout Context Panel */}
-                        <div className="p-4 w-64 space-y-4 font-sans bg-white dark:bg-slate-950">
+                        <div className=" space-y-4 font-sans bg-white dark:bg-slate-950">
                             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Advanced Filter</span>
                                 <button
@@ -168,13 +170,13 @@ const CommunityMain = (props: Props) => {
                                     value={filters.postType || 'ALL'}
                                     onValueChange={(val) => updateFilterField('postType', val)}
                                 >
-                                    <SelectTrigger className="h-8 text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                                    <SelectTrigger className="h-8! w-full! text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                                         <SelectValue placeholder="All Types" />
                                     </SelectTrigger>
                                     <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
                                         <SelectItem value="ALL" className="text-xs">All Types</SelectItem>
                                         {Object.values(PostTypeEnum).map(type => (
-                                            <SelectItem key={type} value={type} className="text-xs">
+                                            <SelectItem key={type} value={type} className="text-xs capitalize">
                                                 {type.replace('_', ' ').toLowerCase()}
                                             </SelectItem>
                                         ))}
@@ -189,13 +191,13 @@ const CommunityMain = (props: Props) => {
                                     value={filters.status || 'ALL'}
                                     onValueChange={(val) => updateFilterField('status', val)}
                                 >
-                                    <SelectTrigger className="h-8 text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                                    <SelectTrigger className="h-8! w-full! text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                                         <SelectValue placeholder="All Status" />
                                     </SelectTrigger>
                                     <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
                                         <SelectItem value="ALL" className="text-xs">All Status</SelectItem>
                                         {Object.values(StatusEnum).map(status => (
-                                            <SelectItem key={status} value={status} className="text-xs">
+                                            <SelectItem key={status} value={status} className="text-xs capitalize">
                                                 {status.toLowerCase()}
                                             </SelectItem>
                                         ))}
@@ -210,7 +212,7 @@ const CommunityMain = (props: Props) => {
                                     value={filters.isPrivate === null ? 'ALL' : String(filters.isPrivate)}
                                     onValueChange={(val) => updateFilterField('isPrivate', val === 'ALL' ? null : val === 'true')}
                                 >
-                                    <SelectTrigger className="h-8 text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+                                    <SelectTrigger className="h-8! w-full! text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
                                         <SelectValue placeholder="All Access" />
                                     </SelectTrigger>
                                     <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
@@ -241,7 +243,6 @@ const CommunityMain = (props: Props) => {
                 <div className="grid grid-cols-1 gap-4">
                     {posts.map((post) => {
                         const initials = post.authorName ? post.authorName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U';
-
                         return (
                             <div
                                 key={post.id}
@@ -278,8 +279,10 @@ const CommunityMain = (props: Props) => {
                                         <h3 className="font-bold text-base leading-tight text-slate-900 dark:text-slate-50 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                             {post.title}
                                         </h3>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed pt-0.5">
-                                            {post.content}
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed pt-0.5"
+                                            dangerouslySetInnerHTML={{ __html: post.content }}
+                                        >
+                                            { }
                                         </p>
                                     </div>
 
@@ -347,9 +350,9 @@ const CommunityMain = (props: Props) => {
                                                 </>
                                             )}
                                         </button>
-                                        <span className="text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors cursor-pointer select-none ml-auto sm:ml-0">
+                                        <Link href={ROUTES.dashboardCommon.community + `/${post?.id}`} className="text-slate-400 dark:text-slate-500 font-medium flex items-center gap-1 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors cursor-pointer select-none ml-auto sm:ml-0">
                                             View Details <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                                        </span>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

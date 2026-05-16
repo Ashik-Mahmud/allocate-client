@@ -44,11 +44,12 @@ export interface PostVisibility {
 }
 
 export interface CommentStructure {
-    id: string;
-    authorId: string;
-    authorName: string;
-    text: string;
-    createdAt: string;
+    id: string, // Better than Date.now()
+    content: string,
+    authorName: string,
+    authorId: string,
+    email: string,
+    createdAt: string
 }
 
 export interface AcknowledgmentStructure {

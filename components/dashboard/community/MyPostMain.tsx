@@ -58,10 +58,10 @@ const MyPostMain = (props: Props) => {
                 title: post.title || '',
                 content: post.content || '',
                 imageUrl: post.imageUrl || '',
-                visibility: post.visibility ||  { showToAdmin: true, showToStaff: true, showToOrgAdmin: true },
+                visibility: post.visibility || { showToAdmin: true, showToStaff: true, showToOrgAdmin: true },
                 isPrivate: post.isPrivate || false,
                 postType: post.postType || CommunityHubPostType.OTHER,
-                status: post.status ||  CommunityHubStatus.DRAFT,
+                status: post.status || CommunityHubStatus.DRAFT,
             };
             const result = await updateCommunityMutation.mutateAsync({ postId: selectedPostData?.id!, data: updatedData });
             if (result?.success) {
@@ -335,7 +335,7 @@ const MyPostMain = (props: Props) => {
                 open={isDialogOpen}
                 onOpenChange={() => setIsDialogOpen(false)}
                 title={selectedPostData ? "Edit Community Post" : "Create New Community Post"}
-                className="max-w-lg"
+                size="full"
                 footer={null}
             >
                 <PostCommunityInnerForm
