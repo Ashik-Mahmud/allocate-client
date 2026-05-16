@@ -18,7 +18,6 @@ const CommunityMain = (props: Props) => {
     return (
         <div>
             <div className="min-h-screen bg-slate-50 dark:bg-[#020617] p-4 md:p-8 text-slate-900 dark:text-slate-100">
-
                 {/* Maintenance Banner */}
                 <div className=" mx-auto mb-6">
                     <div className="flex items-center justify-between gap-4 p-3 px-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl">
@@ -43,7 +42,7 @@ const CommunityMain = (props: Props) => {
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight">Support Queue</h1>
                             <p className="text-slate-500 dark:text-slate-400 mt-1">
-                                Connect with organization admins for hardware, software, or access requests.
+                                View and manage your support requests, track their status, and get help from our team.
                             </p>
                         </div>
                         <div className="flex gap-2">
