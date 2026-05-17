@@ -21,7 +21,7 @@ export const updateCommunityPost = async (postId: string, data: PostCommunityFor
 }
 
 // Service to fetch all community posts for the overview page
-export const fetchCommunityOverview = async (filter: CommunityPostFilter) => {
+export const fetchCommunityPostsOverview = async (filter: CommunityPostFilter) => {
     const query = new URLSearchParams();
     if (filter.postType) query.append("postType", filter.postType);
     if (filter.status) query.append("status", filter.status);
@@ -91,5 +91,12 @@ export const addCommentToCommunityPost = async (postId: string, commentText: str
 export const deleteCommentFromCommunityPost = async (commentId: string) => {
     return apiRequest<ApiResponse<{ success: boolean }>>(`/community/comment/${commentId}/delete`, {
         method: "DELETE",
+    });
+}
+
+// Service to get community overview data for the dashboard
+export const fetchCommunityOverview = async () => {
+    return apiRequest<ApiResponse<{authors: any, acknowledgedPosts: any}>>(`/community/community-activities`, {
+        method: "GET",
     });
 }

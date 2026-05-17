@@ -1,4 +1,4 @@
-import { acknowledgeCommunityPost, addCommentToCommunityPost, deleteCommentFromCommunityPost, deleteCommunityPost, fetchCommunityOverview, fetchCommunityPostById, fetchMyCommunityPosts, postCommunityPost, restoreCommunityPost, updateCommunityPost } from "@/lib/services/community";
+import { acknowledgeCommunityPost, addCommentToCommunityPost, deleteCommentFromCommunityPost, deleteCommunityPost, fetchCommunityOverview, fetchCommunityPostById, fetchCommunityPostsOverview, fetchMyCommunityPosts, postCommunityPost, restoreCommunityPost, updateCommunityPost } from "@/lib/services/community";
 import { CommunityPostFilter, PostCommunityFormData } from "@/types/community";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -40,7 +40,7 @@ export const useCommunityPostsQuery = (filter: CommunityPostFilter) => {
     // Implement the query logic here
     return useQuery({
         queryKey: [...CommunityKeys.overview(), filter],
-        queryFn: async () => fetchCommunityOverview(filter),
+        queryFn: async () => fetchCommunityPostsOverview(filter),
     });
 }
 
@@ -127,5 +127,13 @@ export const useDeleteCommentFromCommunityPostMutation = ( ) => {
             // Invalidate and refetch the specific community post data to reflect the deleted comment
             void client.invalidateQueries({ queryKey: [...CommunityKeys.all] });
         }
+    });
+}
+
+// Hook to fetch community overview data for the dashboard
+export const useCommunityOverviewQuery = () => {
+    return useQuery({
+        queryKey: CommunityKeys.overview(),
+        queryFn: async () => fetchCommunityOverview(),
     });
 }

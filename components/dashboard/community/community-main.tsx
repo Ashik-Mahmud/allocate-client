@@ -384,19 +384,7 @@ const CommunityMain = (props: Props) => {
                 </div>
             )}
 
-            {/* Maintenance Info Placeholder Footer block */}
-            <div className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-8 flex flex-col items-center justify-center text-center space-y-3 opacity-60 bg-slate-50/20 dark:bg-slate-900/5">
-                <div className="p-3 bg-slate-100 dark:bg-slate-900 rounded-full">
-                    <Construction className="w-6 h-6 text-slate-400 dark:text-slate-500" />
-                </div>
-                <div>
-                    <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200">Feature Coming Soon</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mt-0.5">
-                        The "Bulk Request" and "Drafts" system is currently under development.
-                    </p>
-                </div>
-            </div>
-
+          
         </div>
     )
 }
