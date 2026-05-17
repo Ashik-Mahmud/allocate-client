@@ -1,6 +1,6 @@
 "use client"
 import DialogPopup from '@/components/shared/dialog-popup';
-import { History, Plus } from 'lucide-react';
+import { History, Plus, ShieldCheck } from 'lucide-react';
 import React from 'react'
 import { PostCommunityInnerForm } from './PostCommunityForm';
 import { PostCommunityFormData } from '@/types/community';
@@ -9,11 +9,15 @@ import { toast } from 'sonner';
 import { Link } from '@/lib/navigation';
 import { ROUTES } from '@/lib/constants/routes';
 import { usePathname } from 'next/navigation';
+import useCommunityActivity from '@/hooks/use-community-activity';
+import FeatureGuard from '@/components/shared/FeatureGuard';
+import { CommunityTrialAlert } from './CommunityTrialAlert';
 
 type Props = {}
 
 const CommunityHeader = (props: Props) => {
 
+    const { isTrialExpired, trialEndDate } = useCommunityActivity()
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
     const communtionMutation = usePostCommunityMutation();
     const path = usePathname();
@@ -37,7 +41,7 @@ const CommunityHeader = (props: Props) => {
     return (
         <>
             <div>
-                {/* Header section */}
+                <CommunityTrialAlert isTrialExpired={isTrialExpired! || false} trialEndDate={trialEndDate} />
                 <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">Community Support</h1>
@@ -73,16 +77,21 @@ const CommunityHeader = (props: Props) => {
                 open={isDialogOpen}
                 onOpenChange={() => setIsDialogOpen(false)}
                 title="Create New Community Post"
-             
-                footer={null}
-                size="full"
-            >
-                <PostCommunityInnerForm
-                    isSubmitting={communtionMutation.isPending}
-                    onCancel={() => setIsDialogOpen(false)}
 
-                    onSubmit={onHandleSubmit}
-                />
+                footer={null}
+                size={isTrialExpired ? 'full' : "full"}
+            >
+                <FeatureGuard isPremium={!isTrialExpired} title="Community Support" description="Your trial period has expired. Upgrade to a premium plan to create and manage community support posts, track their status, and receive priority assistance from our team."
+                    showChildrenInBlur
+                >
+                    <PostCommunityInnerForm
+                        isSubmitting={communtionMutation.isPending}
+                        onCancel={() => setIsDialogOpen(false)}
+                        errorMessage={communtionMutation?.isError ? communtionMutation?.error?.message || "An error occurred" : null}
+                        onSubmit={onHandleSubmit}
+                    />
+                </FeatureGuard>
+
             </DialogPopup>
         </>
     )

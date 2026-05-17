@@ -30,7 +30,7 @@ type NavItem = {
 const navigation: NavItem[] = [
 
     {
-        label: "Community",
+        label: "Community Hub",
         description: "Submit support requests and track their status",
         href: ROUTES.dashboardCommon.community,
         icon: CalendarCheck,

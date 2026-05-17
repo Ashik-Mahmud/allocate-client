@@ -21,6 +21,7 @@ type InnerFormProps = {
     isSubmitting?: boolean;
     isEdit?: boolean;
     initialData?: CommunityHub | undefined;
+    errorMessage?: string | null;
 };
 
 export const PostCommunityInnerForm = ({
@@ -29,6 +30,7 @@ export const PostCommunityInnerForm = ({
     isSubmitting = false,
     isEdit = false,
     initialData,
+    errorMessage
 }: InnerFormProps) => {
 
 
@@ -89,17 +91,19 @@ export const PostCommunityInnerForm = ({
                 <Input
                     id="title"
                     placeholder="Give your post a title..."
-                    
+
                     className={
                         cn(
-                            "h-10 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-sm",
+                            "h-10 border-neutral-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-sm",
                             errors.title && "border-red-500 focus-visible:ring-red-400 dark:focus-visible:ring-red-700"
                         )
                     }
-                    {...register('title', { required: {
-                        value: true,
-                        message: 'Title is required'
-                    } })}
+                    {...register('title', {
+                        required: {
+                            value: true,
+                            message: 'Title is required'
+                        }
+                    })}
                 />
 
                 {errors.title && (
@@ -136,7 +140,7 @@ export const PostCommunityInnerForm = ({
                     id="imageUrl"
                     type="url"
                     placeholder="https://example.com/image.jpg"
-                    className="h-10 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-sm"
+                    className="h-10 border-neutral-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus-visible:ring-neutral-400 dark:focus-visible:ring-neutral-700 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-sm"
                     {...register('imageUrl')}
                 />
             </div>
@@ -152,10 +156,10 @@ export const PostCommunityInnerForm = ({
                         control={control}
                         render={({ field }) => (
                             <Select value={field.value} onValueChange={field.onChange}>
-                                <SelectTrigger className="h-10! w-full! border-neutral-200 capitalize! dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-neutral-400 dark:focus:ring-neutral-700 text-sm">
+                                <SelectTrigger className="h-10! w-full! border-neutral-200 capitalize! dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-neutral-400 dark:focus:ring-neutral-700 text-sm">
                                     <SelectValue placeholder="Select type" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800">
+                                <SelectContent className="bg-white dark:bg-slate-900 border-neutral-200 dark:border-slate-800">
                                     {Object.values(CommunityHubPostType).map((type) => (
                                         <SelectItem key={type} value={type} className="text-sm cursor-pointer capitalize">
                                             {type.replace(/_/g, ' ').toLowerCase()}
@@ -176,10 +180,10 @@ export const PostCommunityInnerForm = ({
                         control={control}
                         render={({ field }) => (
                             <Select value={field.value} onValueChange={field.onChange}>
-                                <SelectTrigger className="h-10! w-full! border-neutral-200 capitalize! dark:border-neutral-800 bg-white dark:bg-neutral-950 focus:ring-neutral-400 dark:focus:ring-neutral-700 text-sm">
+                                <SelectTrigger className="h-10! w-full! border-neutral-200 capitalize! dark:border-slate-800 bg-white dark:bg-slate-900 focus:ring-neutral-400 dark:focus:ring-neutral-700 text-sm">
                                     <SelectValue placeholder="Select status" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800">
+                                <SelectContent className="bg-white dark:bg-slate-900 border-neutral-200 dark:border-slate-800">
                                     {Object.values(CommunityHubStatus).map((status) => (
                                         <SelectItem key={status} value={status} className="text-sm cursor-pointer capitalize">
                                             {status.toLowerCase()}
@@ -197,7 +201,7 @@ export const PostCommunityInnerForm = ({
                 <Label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block">
                     Visible To
                 </Label>
-                <div className="flex flex-wrap items-center gap-y-3 gap-x-6 bg-neutral-50 dark:bg-neutral-900/50 p-3 rounded-lg border border-neutral-100 dark:border-neutral-800">
+                <div className="flex flex-wrap items-center gap-y-3 gap-x-6 bg-neutral-50 dark:bg-slate-900 p-3 rounded-lg border border-neutral-100 dark:border-slate-800">
                     {([
                         { name: 'visibility.showToStaff' as const, id: 'showToStaff', label: 'Staff' },
                         { name: 'visibility.showToOrgAdmin' as const, id: 'showToOrgAdmin', label: 'Org Admin' },
@@ -212,11 +216,11 @@ export const PostCommunityInnerForm = ({
                                         id={id}
                                         checked={field.value}
                                         onCheckedChange={field.onChange}
-                                        className="border-neutral-300 dark:border-neutral-700 data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-neutral-100"
+                                        className="border-neutral-300 dark:border-slate-700 data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-slate-100"
                                     />
                                 )}
                             />
-                            <label htmlFor={id} className="text-xs font-medium text-neutral-700 dark:text-neutral-300 cursor-pointer select-none">
+                            <label htmlFor={id} className="text-xs font-medium text-neutral-700 dark:text-slate-300 cursor-pointer select-none">
                                 {label}
                             </label>
                         </div>
@@ -238,26 +242,33 @@ export const PostCommunityInnerForm = ({
                         />
                     )}
                 />
-                <label htmlFor="isPrivate" className="text-xs font-medium text-neutral-800 dark:text-neutral-200 cursor-pointer select-none">
+                <label htmlFor="isPrivate" className="text-xs font-medium text-neutral-800 dark:text-slate-200 cursor-pointer select-none">
                     Restrict access (Make this post private)
                 </label>
             </div>
 
+            {
+                errorMessage && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
+                        <p className="text-sm">{errorMessage}</p>
+                    </div>
+                )
+            }
             {/* Actions */}
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4 border-t border-neutral-100 dark:border-slate-800">
                 <Button
                     type="button"
                     variant="outline"
                     onClick={onCancel}
                     disabled={isSubmitting}
-                    className="h-10 w-full cursor-pointer sm:w-auto border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900 text-sm font-medium"
+                    className="h-10 w-full cursor-pointer sm:w-auto border-neutral-200 dark:border-slate-800 text-neutral-600 dark:text-slate-400 hover:bg-neutral-50 dark:hover:bg-slate-900 text-sm font-medium"
                 >
                     Cancel
                 </Button>
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="h-10 w-full cursor-pointer sm:w-auto bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 text-sm font-medium shadow-sm transition-colors"
+                    className="h-10 w-full cursor-pointer sm:w-auto bg-neutral-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-neutral-800 dark:hover:bg-slate-200 text-sm font-medium shadow-sm transition-colors"
                 >
                     {isEdit
                         ? (isSubmitting ? "Updating..." : "Update Post")

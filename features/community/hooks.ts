@@ -57,7 +57,7 @@ export const useCommunityPostQuery = (postId: string) => {
 export const useDeleteCommunityMutation = () => {
     const client = useQueryClient();
     return useMutation({
-        mutationFn: async (postId: string) => deleteCommunityPost(postId),
+        mutationFn: async ({ postId, isPermanent }: { postId: string, isPermanent?: boolean }) => deleteCommunityPost(postId, isPermanent),
         onSuccess: async () => {
             // Invalidate and refetch community overview data
             await Promise.all([

@@ -59,8 +59,8 @@ export const fetchMyCommunityPosts = async (filter: CommunityPostFilter) => {
 }
 
 // Service to delete a community post
-export const deleteCommunityPost = async (postId: string) => {
-    return apiRequest<ApiResponse<{ success: boolean }>>(`/community/post/${postId}/delete`, {
+export const deleteCommunityPost = async (postId: string, isPermanent?: boolean) => {
+    return apiRequest<ApiResponse<{ success: boolean }>>(`/community/post/${postId}/delete?isPermanent=${isPermanent || false}`, {
         method: "DELETE",
     });
 }
@@ -96,7 +96,7 @@ export const deleteCommentFromCommunityPost = async (commentId: string) => {
 
 // Service to get community overview data for the dashboard
 export const fetchCommunityOverview = async () => {
-    return apiRequest<ApiResponse<{authors: any, acknowledgedPosts: any}>>(`/community/community-activities`, {
+    return apiRequest<ApiResponse<{authors: any, acknowledgedPosts: any, isExpired: boolean, isFree: boolean,trialEndDate: string}>>(`/community/community-activities`, {
         method: "GET",
     });
 }

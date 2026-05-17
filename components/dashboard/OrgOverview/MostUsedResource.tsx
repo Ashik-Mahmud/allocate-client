@@ -19,12 +19,12 @@ const MostUsedResource = ({ data }: Props) => {
   const maxBookings = Math.max(...(data?.map((item) => item?.bookings ?? 0) ?? [0]), 1);
 
   return (
-    <div className="w-full bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden">
+    <div className="w-full bg-white dark:bg-slate-900 border border-zinc-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-zinc-100 flex items-center justify-between">
+      <div className="px-6 py-5 border-b border-zinc-100 dark:border-slate-800 flex items-center justify-between">
         <div>
-          <h3 className="text-base font-bold text-zinc-900 tracking-tight">Resource Analytics</h3>
-          <p className="text-xs text-zinc-500 mt-0.5">Most booked assets this month</p>
+          <h3 className="text-base font-bold text-zinc-900 tracking-tight dark:text-white">Resource Analytics</h3>
+          <p className="text-xs text-zinc-500 mt-0.5 dark:text-slate-400">Most booked assets this month</p>
         </div>
         <div className="h-9 w-9 bg-zinc-50 rounded-xl flex items-center justify-center border border-zinc-100">
           <BarChart3 className="h-4 w-4 text-zinc-600" />
@@ -41,7 +41,7 @@ const MostUsedResource = ({ data }: Props) => {
                 className="flex items-center gap-4 p-4 rounded-xl hover:bg-zinc-50 transition-colors group"
               >
                 {/* Resource Photo */}
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-zinc-100 bg-zinc-50">
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-zinc-100 bg-zinc-50 dark:bg-slate-800 dark:border-slate-700">
                   {resource?.photo ? (
                     <img 
                       src={resource?.photo} 
@@ -50,7 +50,7 @@ const MostUsedResource = ({ data }: Props) => {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <Box className="h-6 w-6 text-zinc-300" />
+                      <Box className="h-6 w-6 text-zinc-300 dark:text-slate-500" />
                     </div>
                   )}
                 </div>
@@ -97,13 +97,13 @@ const MostUsedResource = ({ data }: Props) => {
       </div>
       
       {/* Subtle Footer */}
-      <div className="bg-zinc-50/50 px-6 py-3 border-t border-zinc-100">
+      <div className="bg-zinc-50/50 px-6 py-3 border-t border-zinc-100 dark:bg-slate-800/50 dark:border-slate-700 flex items-center justify-end">
          <button
           type="button"
           onClick={() => {
             router.push(ROUTES.dashboardOrgAdmin.resourcesManagement)
           }}
-          className="text-xs font-semibold text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer">
+          className="text-xs font-semibold text-zinc-500 hover:text-zinc-800 dark:hover:text-slate-400 transition-colors cursor-pointer">
             View resources →
          </button>
       </div>

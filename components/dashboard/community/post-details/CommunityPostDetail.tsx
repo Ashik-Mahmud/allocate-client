@@ -21,6 +21,7 @@ import { useCurrentUser } from '@/features/auth';
 import { useRefineNote } from '@/hooks/use-refine-note';
 import { PlanType } from '@/types/organization';
 import { Role } from '@/types';
+import { toast } from 'sonner';
 
 type Props = {
     postId: string;
@@ -79,9 +80,10 @@ const CommunityPostDetail = ({ postId }: Props) => {
         try {
             await acknowledgeMutation.mutateAsync(post.id);
             // Optionally show a success message or update local state to reflect the acknowledgment
-        } catch (error) {
-            console.error("Failed to acknowledge the post:", error);
+        } catch (error: any) {
+            console.error(error?.message || "Failed to acknowledge the post:", error);
             // Optionally show an error message to the user
+            toast.error(error?.message || "Failed to acknowledge the post. Please try again.");
         }
     };
 
@@ -95,8 +97,9 @@ const CommunityPostDetail = ({ postId }: Props) => {
         try {
             await addCommentMutation.mutateAsync(commentText);
             // Optionally show a success message or update local state to reflect the new comment
-        } catch (error) {
-            console.error("Failed to add comment:", error);
+        } catch (error: any) {
+            console.error(error?.message || "Failed to add comment:", error);
+
             // Optionally show an error message to the user
         }
     };
@@ -107,8 +110,9 @@ const CommunityPostDetail = ({ postId }: Props) => {
             const confirm = window.confirm("Are you sure you want to delete this comment? This action cannot be undone.");
             if (!confirm) return;
             await deleteCommentMutation.mutateAsync(commentId);
-        } catch (error) {
-            console.error("Failed to delete comment:", error);
+        } catch (error: any) {
+            console.error(error?.message || "Failed to delete comment:", error);
+            toast.error(error?.message || "Failed to delete comment. Please try again.");
             // Optionally show an error message to the user
         }
     }
@@ -269,6 +273,13 @@ const CommunityPostDetail = ({ postId }: Props) => {
                             </button>
                         )}
                     </div>
+                    {
+                        addCommentMutation?.isError && (
+                            <div className="text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/30 rounded-md p-2">
+                                {addCommentMutation?.error?.message || "Failed to add comment. Please try again."}
+                            </div>
+                        )
+                    }
 
                     <div className="flex items-center justify-between text-xs text-slate-400">
                         <div className="flex items-center gap-1.5">

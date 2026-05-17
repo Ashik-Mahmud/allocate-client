@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useCommunityOverviewQuery } from '@/features/community';
-import { Hammer, Award, MessageSquare, Flame, CheckCircle2 } from 'lucide-react';
+import { Hammer, Award, MessageSquare, Flame, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Link } from '@/lib/navigation';
 import { ROUTES } from '@/lib/constants/routes';
 
@@ -49,6 +49,7 @@ const CommunityRightStats = () => {
 
     return (
         <div className="space-y-6">
+           
             {/* 1. System Status Card (More Minimal & Refined) */}
             <div className="bg-linear-to-br from-slate-900 via-indigo-950 to-slate-950 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 rounded-2xl p-5 border border-slate-800 shadow-xs text-white">
                 <div className="flex items-center gap-2.5 mb-3">
@@ -124,7 +125,7 @@ const CommunityRightStats = () => {
                             const commentCount = post.comments?.length || 0;
 
                             return (
-                                <Link href={ROUTES.dashboardCommon.community+`/${post?.id}`} key={post.id} className="space-y-1.5 block cursor-pointer group">
+                                <Link href={ROUTES.dashboardCommon.community + `/${post?.id}`} key={post.id} className="space-y-1.5 block cursor-pointer group">
                                     <h4 className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-snug line-clamp-2 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">
                                         {post.title}
                                     </h4>

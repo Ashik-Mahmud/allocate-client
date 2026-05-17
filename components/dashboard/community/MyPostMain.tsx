@@ -20,6 +20,9 @@ import { toast } from 'sonner';
 import AllocateConfirmationAlert from '@/components/shared/TriggerConfirmation';
 import DialogPopup from '@/components/shared/dialog-popup';
 import { PostCommunityInnerForm } from './PostCommunityForm';
+import useCommunityActivity from '@/hooks/use-community-activity';
+import FeatureGuard from '@/components/shared/FeatureGuard';
+import { is } from 'zod/v4/locales/index.js';
 
 
 type Props = {}
@@ -35,6 +38,7 @@ const defaultFilter: CommunityPostFilter = {
 }
 
 const MyPostMain = (props: Props) => {
+    const { isTrialExpired } = useCommunityActivity();
     const [filter, setFilter] = React.useState<CommunityPostFilter>(defaultFilter);
     const { data, isLoading } = useMyCommunityPostsQuery(filter);
     const updateCommunityMutation = useUpdateCommunityMutation();
@@ -45,6 +49,7 @@ const MyPostMain = (props: Props) => {
     const [selectedPostId, setSelectedPostId] = React.useState<string | null>(null);
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
     const [selectedPostData, setSelectedPostData] = React.useState<CommunityHub | null>(null);
+    const [isPermanentDelete, setIsPermanentDelete] = React.useState(false);
 
     const posts: CommunityHub[] = data?.data || [];
     // Fallback pagination data safely handled if backend returns meta descriptors
@@ -76,11 +81,16 @@ const MyPostMain = (props: Props) => {
 
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id: string, isPermanent: boolean) => {
         try {
-            const result = await deleteCommunityMutation.mutateAsync(id);
+            const result = await deleteCommunityMutation.mutateAsync({
+                postId: id,
+                isPermanent: isPermanent
+            });
             if (result?.success) {
                 toast.success("Post deleted successfully!");
+                setSelectedPostId(null);
+                setIsConfirmationOpen(false);
             }
         } catch (error) {
             console.error("Failed to delete post for ID:", id, error);
@@ -93,6 +103,8 @@ const MyPostMain = (props: Props) => {
             const result = await restoreCommunityMutation.mutateAsync(id);
             if (result?.success) {
                 toast.success("Post restored successfully!");
+                setSelectedPostId(null);
+                setIsConfirmationOpen(false);
             }
         } catch (error) {
             console.error("Failed to restore post for ID:", id, error);
@@ -106,9 +118,9 @@ const MyPostMain = (props: Props) => {
             if (result?.success) {
                 toast.success(`Status updated to ${newStatus.toLowerCase()} successfully!`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to update status for ID:", id, error);
-            toast.error("Failed to update status.");
+            toast.error(error?.message || "Failed to update status.");
         }
     };
 
@@ -256,9 +268,10 @@ const MyPostMain = (props: Props) => {
                                 setSelectedPostData(data);
                                 setIsDialogOpen(true);
                             }}
-                            onDelete={(id: string) => {
+                            onDelete={(id: string, permanent?: boolean) => {
                                 setSelectedPostId(id);
                                 setIsConfirmationOpen(true);
+                                setIsPermanentDelete(permanent || false);
                             }}
                             onRestore={handleRestore}
                             onChangeStatus={handleChangeStatus}
@@ -321,14 +334,15 @@ const MyPostMain = (props: Props) => {
                 </div>
             )}
             <AllocateConfirmationAlert
-                title="Confirm Action"
+                title={isPermanentDelete ? "Delete Community Post Permanently" : "Confirm Action"}
                 description="You are about to perform an important action. Are you sure you want to proceed?"
+                errorMessage={deleteCommunityMutation?.isError ? deleteCommunityMutation?.error?.message : ''}
                 onOpenChange={setIsConfirmationOpen}
                 open={isConfirmationOpen}
                 cancelText="Cancel"
                 confirmText="Confirm"
                 onConfirm={() => {
-                    selectedPostId && handleDelete(selectedPostId)
+                    selectedPostId && handleDelete(selectedPostId, isPermanentDelete)
                 }}
             />
             <DialogPopup
@@ -338,14 +352,19 @@ const MyPostMain = (props: Props) => {
                 size="full"
                 footer={null}
             >
-                {selectedPostData && <PostCommunityInnerForm
-                    key={selectedPostData?.id || 'new'}
-                    isEdit={true}
-                    isSubmitting={updateCommunityMutation.isPending}
-                    onCancel={() => setIsDialogOpen(false)}
-                    initialData={selectedPostData || undefined}
-                    onSubmit={handleEdit}
-                />}
+                <FeatureGuard isPremium={!isTrialExpired} title="Community Support" description="Your trial period has expired. Upgrade to a premium plan to create and manage community support posts, track their status, and receive priority assistance from our team."
+                    showChildrenInBlur
+                >
+                    {selectedPostData && <PostCommunityInnerForm
+                        key={selectedPostData?.id || 'new'}
+                        isEdit={true}
+                        isSubmitting={updateCommunityMutation.isPending}
+                        onCancel={() => setIsDialogOpen(false)}
+                        initialData={selectedPostData || undefined}
+                        onSubmit={handleEdit}
+                        errorMessage={updateCommunityMutation?.isError ? updateCommunityMutation?.error?.message || "An error occurred" : null}
+                    />}
+                </FeatureGuard>
             </DialogPopup>
         </div>
     )
