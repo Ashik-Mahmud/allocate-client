@@ -39,7 +39,7 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
     });
 
     return (
-        <Link href={ROUTES.dashboardCommon.community + `/${post?.id}`} className="group relative bg-white dark:bg-slate-900 border border-neutral-100 dark:border-slate-800/60 rounded-xl p-5 transition-all duration-200 hover:shadow-sm flex flex-col md:flex-row gap-5">
+        <div className="group relative bg-white dark:bg-slate-900 border border-neutral-100 dark:border-slate-800/60 rounded-xl p-5 transition-all duration-200 hover:shadow-sm flex flex-col md:flex-row gap-5">
 
             {/* Post Image Thumbnail (Optional) */}
             {post.imageUrl && (
@@ -53,7 +53,7 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
             )}
 
             {/* Post Content Details */}
-            <div className="flex-1 flex flex-col justify-between min-w-0">
+            <Link href={ROUTES.dashboardCommon.community + `/${post?.id}`} className="flex-1 flex flex-col justify-between min-w-0">
                 <div>
                     {/* Badges Line */}
                     <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -118,7 +118,7 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                         <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5" /> {post?.acknowledgments?.length || 0}</span>
                     </div>
                 </div>
-            </div>
+            </Link>
 
             {/* Floating Three-Dot Actions Menu */}
             <div className="absolute top-4 right-4">
@@ -185,6 +185,6 @@ export const CommunityPostCard = ({ post, onEdit, onDelete, onRestore, onChangeS
                     </>
                 )}
             </div>
-        </Link>
+        </div>
     )
 }

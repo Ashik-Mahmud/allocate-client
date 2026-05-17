@@ -253,7 +253,7 @@ const MyPostMain = (props: Props) => {
                             key={post.id}
                             post={post}
                             onEdit={(data) => {
-                                setSelectedPostData(post);
+                                setSelectedPostData(data);
                                 setIsDialogOpen(true);
                             }}
                             onDelete={(id: string) => {
@@ -338,14 +338,14 @@ const MyPostMain = (props: Props) => {
                 size="full"
                 footer={null}
             >
-                <PostCommunityInnerForm
-                    key={selectedPostData ? selectedPostData.id : 'create-new-mode'}
+                {selectedPostData && <PostCommunityInnerForm
+                    key={selectedPostData?.id || 'new'}
+                    isEdit={true}
                     isSubmitting={updateCommunityMutation.isPending}
                     onCancel={() => setIsDialogOpen(false)}
-                    isEdit={!!selectedPostData}
                     initialData={selectedPostData || undefined}
                     onSubmit={handleEdit}
-                />
+                />}
             </DialogPopup>
         </div>
     )

@@ -184,44 +184,9 @@ const CommunityMain = (props: Props) => {
                                 </Select>
                             </div>
 
-                            {/* Filter Row: Publication Status */}
-                            <div className="space-y-1.5">
-                                <Label className="text-[11px] font-medium text-slate-500">Status</Label>
-                                <Select
-                                    value={filters.status || 'ALL'}
-                                    onValueChange={(val) => updateFilterField('status', val)}
-                                >
-                                    <SelectTrigger className="h-8! w-full! text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-                                        <SelectValue placeholder="All Status" />
-                                    </SelectTrigger>
-                                    <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
-                                        <SelectItem value="ALL" className="text-xs">All Status</SelectItem>
-                                        {Object.values(StatusEnum).map(status => (
-                                            <SelectItem key={status} value={status} className="text-xs capitalize">
-                                                {status.toLowerCase()}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                        
 
-                            {/* Filter Row: Privacy Options Selection */}
-                            <div className="space-y-1.5">
-                                <Label className="text-[11px] font-medium text-slate-500">Privacy Scope</Label>
-                                <Select
-                                    value={filters.isPrivate === null ? 'ALL' : String(filters.isPrivate)}
-                                    onValueChange={(val) => updateFilterField('isPrivate', val === 'ALL' ? null : val === 'true')}
-                                >
-                                    <SelectTrigger className="h-8! w-full! text-xs border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-                                        <SelectValue placeholder="All Access" />
-                                    </SelectTrigger>
-                                    <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
-                                        <SelectItem value="ALL" className="text-xs">All Access</SelectItem>
-                                        <SelectItem value="true" className="text-xs">Private Only</SelectItem>
-                                        <SelectItem value="false" className="text-xs">Public Only</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                         
                         </div>
                     </AllocatePopover>
                 </div>

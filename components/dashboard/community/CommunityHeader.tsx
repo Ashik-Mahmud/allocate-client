@@ -54,7 +54,7 @@ const CommunityHeader = (props: Props) => {
                                 </Link>
                             ) : <Link href={ROUTES.dashboardCommon.myPosts} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
                                 <History className="w-4 h-4" />
-                                View My Requests
+                                View My Posts
                             </Link>
                         }
 
