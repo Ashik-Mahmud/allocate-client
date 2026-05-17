@@ -20,6 +20,7 @@ import CommentSection from './CommentSection';
 import { useCurrentUser } from '@/features/auth';
 import { useRefineNote } from '@/hooks/use-refine-note';
 import { PlanType } from '@/types/organization';
+import { Role } from '@/types';
 
 type Props = {
     postId: string;
@@ -171,7 +172,7 @@ const CommunityPostDetail = ({ postId }: Props) => {
                                 {authorInitials}
                             </div>
                             <div>
-                                <div className="font-semibold text-slate-800 dark:text-slate-200">{post.authorName}</div>
+                                <div className="font-semibold text-slate-800 dark:text-slate-200"> {post?.authorRole === Role.ADMIN ? 'System Admin' : post.authorName}</div>
                                 <div className="text-[10px] text-slate-400 font-mono uppercase tracking-wider">{post.authorRole}</div>
                             </div>
                         </div>
