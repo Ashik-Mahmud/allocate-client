@@ -42,7 +42,8 @@ const PublicCommunityPostCard = ({ post, handleAcknowledge, userId }: Props) => 
                     // Clean, premium Admin overrides using native Tailwind priority syntax
                     post?.authorRole === Role.ADMIN
                         ? "border-rose-500/40! dark:border-rose-500/30! bg-rose-50/20! dark:bg-rose-950/10! shadow-[0_0_15px_-3px_rgba(244,63,94,0.05)]! hover:border-rose-500/60! dark:hover:border-rose-500/50!"
-                        : ""
+                        : "",
+                    post?.authorRole === Role.ORG_ADMIN ? "border-emerald-500/40! dark:border-emerald-500/30! bg-emerald-50/20! dark:bg-emerald-900/10! shadow-[0_0_15px_-3px_rgba(16,185,129,0.05)]! hover:border-emerald-500/60! dark:hover:border-emerald-500/50!" : ""
                 )}
             >
                 {/* Top accent gradient bar explicitly for system broadcasts */}
@@ -68,7 +69,7 @@ const PublicCommunityPostCard = ({ post, handleAcknowledge, userId }: Props) => 
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
                             <div className="space-y-1 min-w-0 flex-1">
-                                <div className="flex flex-wrap items-center gap-2">
+                                <div className="flex  flex-wrap items-center gap-2">
                                     <span className="text-xs font-mono text-slate-400 dark:text-slate-500">
                                         #{post.id.substring(3, 10).toUpperCase()}
                                     </span>
@@ -97,6 +98,22 @@ const PublicCommunityPostCard = ({ post, handleAcknowledge, userId }: Props) => 
                                             <Eye className="w-2.5 h-2.5" /> Your Post
                                         </span>
                                     )}
+                                    {
+                                        post.authorRole === Role.ORG_ADMIN && (
+                                            <span className="flex items-center gap-1 text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded">
+                                                <ShieldCheck className="w-2.5 h-2.5" />
+                                               Posted by Org Admin
+                                            </span>
+                                        )
+                                    }
+                                    {
+                                        post.authorRole === Role.ADMIN && (
+                                            <span className="flex items-center gap-1 text-[10px] font-medium bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded">
+                                                <ShieldAlert className="w-2.5 h-2.5" />
+                                               Posted by System Admin
+                                            </span>
+                                        )
+                                    }
                                 </div>
 
                                 {/* Post Title */}
