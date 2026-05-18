@@ -4,19 +4,20 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { notificationsKeys } from "./hooks";
-import { useNamespaceSocket, useRealtimeEvent, useRealtimeManager, useRealtimeSocket } from "@/features/realtime";
+import { REALTIME_EVENTS, REALTIME_NAMESPACE, useNamespaceSocket, useRealtimeEvent, useRealtimeManager, useRealtimeSocket } from "@/features/realtime";
 import { useSession } from "next-auth/react";
+
 
 export function NotificationRealtimeSync() {
     const { data: user } = useSession();
     const queryClient = useQueryClient();
 
     const { getNamespaceSocket, connected } = useRealtimeManager()
-    const { socket } = useNamespaceSocket('notifications')
+    const { socket } = useNamespaceSocket(REALTIME_NAMESPACE.NOTIFICATIONS)
 
     useEffect(() => {
         if (!connected) return;
-        getNamespaceSocket('notifications')?.on('notification:new', (data) => {
+        getNamespaceSocket(REALTIME_NAMESPACE.NOTIFICATIONS)?.on(REALTIME_EVENTS.NOTIFICATION_NEW, (data) => {
             queryClient.setQueriesData({ queryKey: notificationsKeys.all }, (oldData: any) => {
                 if (!oldData) return oldData;
                 return {
@@ -28,10 +29,10 @@ export function NotificationRealtimeSync() {
                     }
                 }
             })
-            socket?.emit('notification:acknowledge', { message: 'Notification acknowledged', notificationId: data.id });
+            socket?.emit(REALTIME_EVENTS.NOTIFICATION_ACKNOWLEDGE, { message: 'Notification acknowledged', notificationId: data.id });
         })
 
-        getNamespaceSocket("community")?.on('notification:new', (data) => {
+        getNamespaceSocket(REALTIME_NAMESPACE.COMMUNITY)?.on(REALTIME_EVENTS.NOTIFICATION_NEW, (data) => {
             const myIdMapping = data.idMap.find((idMap: any) => idMap.userId === user?.user?.id);
             queryClient.setQueriesData({ queryKey: notificationsKeys.all }, (oldData: any) => {
                 if (!oldData) return oldData;
@@ -51,8 +52,8 @@ export function NotificationRealtimeSync() {
         })
 
         return () => {
-            getNamespaceSocket('notifications')?.off('notification:new');
-            getNamespaceSocket("community")?.off('notification:new');
+            getNamespaceSocket(REALTIME_NAMESPACE.NOTIFICATIONS)?.off(REALTIME_EVENTS.NOTIFICATION_NEW);
+            getNamespaceSocket(REALTIME_NAMESPACE.COMMUNITY)?.off(REALTIME_EVENTS.NOTIFICATION_NEW);
         }
     }, [connected])
     return null;

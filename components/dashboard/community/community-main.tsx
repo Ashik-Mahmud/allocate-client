@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Wrench,
     Plus,
@@ -24,8 +24,8 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import CommunityHeader from './CommunityHeader';
-import { useAcknowledgeCommunityPostMutation, useCommunityPostsQuery } from '@/features/community';
-import { CommunityHub, CommunityPostFilter } from '@/types/community';
+import { CommunityKeys, useAcknowledgeCommunityPostMutation, useCommunityPostsQuery, useCommunityRealtime } from '@/features/community';
+import { CommunityHub, CommunityHubPostType, CommunityPostFilter } from '@/types/community';
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -49,25 +49,10 @@ import { div } from 'framer-motion/client';
 import { Button } from '@/components/ui/button';
 import PublicCommunityPostCard from './PublicCommunityPostCard';
 import CommunityPagination from './communityPagination';
+import { REALTIME_EVENTS, REALTIME_NAMESPACE, useNamespaceSocket, useRealtimeManager } from '@/features/realtime';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Extracted local enums for UI rendering sync
-enum PostTypeEnum {
-    ANNOUNCEMENT = 'ANNOUNCEMENT',
-    RESOURCE_SPOTLIGHT = 'RESOURCE_SPOTLIGHT',
-    USER_STORY = 'USER_STORY',
-    EVENT = 'EVENT',
-    ISSUES = 'ISSUES',
-    RESOLVED = 'RESOLVED',
-    GENERAL_DISCUSSION = 'GENERAL_DISCUSSION',
-    OTHER = 'OTHER',
-    SYSTEM_QUERY = 'SYSTEM_QUERY',
-}
-
-enum StatusEnum {
-    PUBLISHED = 'PUBLISHED',
-    DRAFT = 'DRAFT',
-    ARCHIVED = 'ARCHIVED',
-}
 
 type Props = {}
 
@@ -87,6 +72,8 @@ const CommunityMain = (props: Props) => {
     const [filters, setFilters] = React.useState<CommunityPostFilter>(defaultFilter);
     const { data, isLoading } = useCommunityPostsQuery(filters);
     const acknowledgeMutation = useAcknowledgeCommunityPostMutation();
+    // Initialize real-time updates for community posts
+    useCommunityRealtime();
 
     const posts: CommunityHub[] = data?.data || [];
     // Fallback pagination data safely handled if backend returns meta descriptors
@@ -116,6 +103,7 @@ const CommunityMain = (props: Props) => {
             // Optionally show an error message to the user
         }
     }
+
 
     return (
         <div className="w-full mx-auto  text-neutral-900 dark:text-neutral-100">
@@ -174,7 +162,7 @@ const CommunityMain = (props: Props) => {
                                     </SelectTrigger>
                                     <SelectContent className="dark:bg-slate-950 border-slate-200 dark:border-slate-800">
                                         <SelectItem value="ALL" className="text-xs">All Types</SelectItem>
-                                        {Object.values(PostTypeEnum).map(type => (
+                                        {Object.values(CommunityHubPostType).map(type => (
                                             <SelectItem key={type} value={type} className="text-xs capitalize">
                                                 {type.replace('_', ' ').toLowerCase()}
                                             </SelectItem>
