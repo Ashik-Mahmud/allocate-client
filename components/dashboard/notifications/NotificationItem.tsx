@@ -22,7 +22,7 @@ const NotificationItem = ({ notification, onMarkRead, onDelete }: ItemProps) => 
         <div className={cn(
             "group relative flex gap-4 rounded-2xl border p-4 transition-all duration-200",
             notification.is_read
-                ? "border-slate-100 bg-slate-50/50 dark:border-zinc-800/50 dark:bg-zinc-950/50 opacity-75"
+                ? "border-slate-100 bg-slate-50/50 dark:border-slate-800/50 dark:bg-slate-900 opacity-75"
                 : "border-indigo-100 bg-indigo-50/50 dark:border-indigo-500/20 dark:bg-indigo-500/5 shadow-sm"
         )}>
             {/* Category Icon */}

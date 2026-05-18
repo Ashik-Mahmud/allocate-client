@@ -22,6 +22,7 @@ import { useRefineNote } from '@/hooks/use-refine-note';
 import { PlanType } from '@/types/organization';
 import { Role } from '@/types';
 import { toast } from 'sonner';
+import { useCommunityCommentingRealTime } from '@/features/community/use-realtime-commenting';
 
 type Props = {
     postId: string;
@@ -39,6 +40,8 @@ const CommunityPostDetail = ({ postId }: Props) => {
     const addCommentMutation = useAddCommentToCommunityPostMutation(postId);
     const deleteCommentMutation = useDeleteCommentFromCommunityPostMutation();
     const [commentText, setCommentText] = useState('');
+    // Set up real-time updates for comments on this community post
+    useCommunityCommentingRealTime(postId);
 
     // Extract the inner payload safely
     const post: CommunityHub | undefined = data?.data;

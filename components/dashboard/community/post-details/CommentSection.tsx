@@ -12,6 +12,8 @@ type CommentSectionProps = {
 };
 
 const CommentSection = ({ comments, currentUserId, onDeleteComment }: CommentSectionProps) => {
+
+
     if (!comments || comments.length === 0) {
         return (
             <div className="text-center py-10 bg-slate-50/50 dark:bg-slate-900/10 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl max-w-none">
@@ -22,6 +24,8 @@ const CommentSection = ({ comments, currentUserId, onDeleteComment }: CommentSec
             </div>
         );
     }
+
+
 
     return (
         <div className="space-y-4">
@@ -50,7 +54,8 @@ const CommentSection = ({ comments, currentUserId, onDeleteComment }: CommentSec
                                 {/* Identity Block */}
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
-                                        {comment.authorName}
+                                        {comment.authorName} 
+                                        {isAuthor ? ' (You)' : ''}
                                     </span>
                                     <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate font-mono">
                                         {comment.email}
