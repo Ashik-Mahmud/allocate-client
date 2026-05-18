@@ -17,7 +17,7 @@ export default async function AuthLayout({
     <main className="flex min-h-screen items-center justify-center px-4">
       <ThemeToggle />
 
-      <section className="w-full max-w-xl rounded-2xl border border-slate-200/70 bg-white/85 p-6 shadow-xl shadow-slate-900/10 backdrop-blur-md dark:border-slate-700/60 dark:bg-slate-900/70 dark:shadow-black/35">
+      <section className="w-full max-w-4xl mx-auto rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 shadow-xl shadow-slate-900/10 backdrop-blur-md  dark:shadow-black/35">
    
           <MaintenanceAlert view="alert" className="mb-2" />
       
