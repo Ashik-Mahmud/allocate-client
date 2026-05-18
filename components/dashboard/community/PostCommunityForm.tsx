@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { CommunityHub, CommunityHubPostType, CommunityHubStatus, PostCommunityFormData } from '@/types/community';
 import SharedRichEditor from '@/components/shared/RichEditor';
 import { cn } from '@/lib/utils/cn';
+import AllocateTooltip from '@/components/shared/tooltip';
 
 type InnerFormProps = {
     onCancel: () => void;
@@ -201,7 +202,11 @@ export const PostCommunityInnerForm = ({
             {/* Visibility Controls */}
             <div className="space-y-2 pt-1">
                 <Label className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block">
-                    Visible To
+                    Visible To  <AllocateTooltip content={
+                        "Control post visibility within your organization's community hub. You can restrict access to staff, organization admins, or specific internal roles. Note that making a post 'Private' limits visibility exclusively to the author. However, global System Admins retain full visibility and overriding access view posts across the platform based on the permissions, regardless of organization or privacy settings"
+                    }>
+
+                    </AllocateTooltip>
                 </Label>
                 <div className="flex flex-wrap items-center gap-y-3 gap-x-6 bg-neutral-50 dark:bg-slate-900 p-3 rounded-lg border border-neutral-100 dark:border-slate-800">
                     {([
@@ -228,6 +233,7 @@ export const PostCommunityInnerForm = ({
                         </div>
                     ))}
                 </div>
+
             </div>
 
             {/* Allow Comments Toggle */}
