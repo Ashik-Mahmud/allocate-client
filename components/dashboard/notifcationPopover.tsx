@@ -36,7 +36,7 @@ const NotificationPopover = () => {
             markAsRead(notification.id);
         }
         // Get the redirect route based on user role and notification type
-        const redirectRoute = getNotificationRedirectRoute(notification.type, user?.role);
+        const redirectRoute = getNotificationRedirectRoute(notification.type, user?.role, {redirectId: notification.metadata?.postId});
         router.push(redirectRoute);
     };
 
