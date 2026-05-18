@@ -290,7 +290,7 @@ const SidebarContent = ({
                             </p>
                         )
                     }
-                    {[...navigation, ...roleNavigation,].map((item) => {
+                    {[ ...roleNavigation,...navigation,].map((item) => {
                         const Icon = item.icon;
                         const active = isActiveRoute(pathname, item?.href, locale);
                         if (item?.children?.length) {

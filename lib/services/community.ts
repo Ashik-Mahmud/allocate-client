@@ -31,7 +31,7 @@ export const fetchCommunityPostsOverview = async (filter: CommunityPostFilter) =
     if (filter.page) query.append("page", String(filter.page));
     if (filter.limit) query.append("limit", String(filter.limit));
 
-    return apiRequest<ApiResponse<CommunityHub[]>>(`/community/posts?${query.toString()}`, {
+    return apiRequest<PaginatedResponse<CommunityHub>>(`/community/posts?${query.toString()}`, {
         method: "GET",
     });
 }

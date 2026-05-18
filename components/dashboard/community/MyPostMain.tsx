@@ -23,6 +23,7 @@ import { PostCommunityInnerForm } from './PostCommunityForm';
 import useCommunityActivity from '@/hooks/use-community-activity';
 import FeatureGuard from '@/components/shared/FeatureGuard';
 import { is } from 'zod/v4/locales/index.js';
+import CommunityPagination from './communityPagination';
 
 
 type Props = {}
@@ -138,12 +139,12 @@ const MyPostMain = (props: Props) => {
     };
 
     return (
-        <div className="w-full mx-auto space-y-6">
+        <div className="w-full mx-auto ">
             {/* Header section */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100 dark:border-neutral-800">
                 <div>
                     <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-                        My Community Posts
+                        My Posts
                     </h1>
                     <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
                         Manage and check publication visibility rules for your articles.
@@ -259,79 +260,32 @@ const MyPostMain = (props: Props) => {
                     <p className="text-sm text-neutral-400 dark:text-neutral-500">No posts found matching criteria.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-4">
-                    {posts.map((post) => (
-                        <CommunityPostCard
-                            key={post.id}
-                            post={post}
-                            onEdit={(data) => {
-                                setSelectedPostData(data);
-                                setIsDialogOpen(true);
-                            }}
-                            onDelete={(id: string, permanent?: boolean) => {
-                                setSelectedPostId(id);
-                                setIsConfirmationOpen(true);
-                                setIsPermanentDelete(permanent || false);
-                            }}
-                            onRestore={handleRestore}
-                            onChangeStatus={handleChangeStatus}
-                        />
-                    ))}
+                <div className=" md:max-h-[56dvh] overflow-auto">
+                    <div className="grid grid-cols-1 gap-4">
+                        {posts.map((post) => (
+                            <CommunityPostCard
+                                key={post.id}
+                                post={post}
+                                onEdit={(data) => {
+                                    setSelectedPostData(data);
+                                    setIsDialogOpen(true);
+                                }}
+                                onDelete={(id: string, permanent?: boolean) => {
+                                    setSelectedPostId(id);
+                                    setIsConfirmationOpen(true);
+                                    setIsPermanentDelete(permanent || false);
+                                }}
+                                onRestore={handleRestore}
+                                onChangeStatus={handleChangeStatus}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
 
             {/* Pagination Container Controls */}
             {posts.length > 0 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 font-sans text-xs text-neutral-500 dark:text-neutral-400">
-
-                    {/* Limit / Size select field item controls */}
-                    <div className="flex items-center gap-2">
-                        <span>Show rows per page</span>
-                        <Select
-                            value={String(filter.limit || 10)}
-                            onValueChange={(val) => updateFilterField('limit', Number(val))}
-                        >
-                            <SelectTrigger className="w-16 h-8 text-xs border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800 min-w-16">
-                                {[5, 10, 20, 50].map(size => (
-                                    <SelectItem key={size} value={String(size)} className="text-xs cursor-pointer">
-                                        {size}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    {/* Pagination Navigation Page Toggle Triggers */}
-                    <div className="flex items-center gap-4">
-                        <span>
-                            Page <strong>{filter.page}</strong> of <strong>{totalPages}</strong>
-                        </span>
-
-                        <div className="flex items-center gap-1">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => updateFilterField('page', (filter.page || 1) - 1)}
-                                disabled={filter.page === 1}
-                                className="w-8 h-8 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 disabled:opacity-40"
-                            >
-                                <ChevronLeft className="w-3.5 h-3.5" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => updateFilterField('page', (filter.page || 1) + 1)}
-                                disabled={filter.page === totalPages}
-                                className="w-8 h-8 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 disabled:opacity-40"
-                            >
-                                <ChevronRight className="w-3.5 h-3.5" />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <CommunityPagination filters={filter} updateFilterField={updateFilterField} totalPages={totalPages} />
             )}
             <AllocateConfirmationAlert
                 title={isPermanentDelete ? "Delete Community Post Permanently" : "Confirm Action"}
