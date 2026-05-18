@@ -68,6 +68,7 @@ const MyPostMain = (props: Props) => {
                 isPrivate: post.isPrivate || false,
                 postType: post.postType || CommunityHubPostType.OTHER,
                 status: post.status || CommunityHubStatus.DRAFT,
+                allowComments: post.allowComments || false
             };
             const result = await updateCommunityMutation.mutateAsync({ postId: selectedPostData?.id!, data: updatedData });
             if (result?.success) {

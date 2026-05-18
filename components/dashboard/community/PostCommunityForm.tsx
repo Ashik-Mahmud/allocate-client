@@ -45,7 +45,7 @@ export const PostCommunityInnerForm = ({
         CommunityHubStatus.DRAFT;
 
 
-    const { register, handleSubmit, control, reset, formState: { errors } } = useForm<PostCommunityFormData>({
+    const { register, handleSubmit, control, reset, formState: { errors }, watch } = useForm<PostCommunityFormData>({
         defaultValues: {
             title: initialData?.title || '',
             content: initialData?.content || '',
@@ -58,6 +58,7 @@ export const PostCommunityInnerForm = ({
             isPrivate: Boolean(initialData?.isPrivate),
             postType: resolvedPostType,
             status: resolvedStatus,
+            allowComments: initialData?.allowComments ?? true,
         }
     });
 
@@ -76,6 +77,7 @@ export const PostCommunityInnerForm = ({
                 isPrivate: Boolean(initialData.isPrivate),
                 postType: resolvedPostType,
                 status: resolvedStatus,
+                allowComments: initialData.allowComments ?? true,
             });
         }
     }, [isEdit, initialData, reset]);
@@ -228,6 +230,25 @@ export const PostCommunityInnerForm = ({
                 </div>
             </div>
 
+            {/* Allow Comments Toggle */}
+            <div className="flex items-center space-x-2 py-1">
+                <Controller
+                    name="allowComments"
+                    control={control}
+                    render={({ field }) => (
+                        <Checkbox
+                            id="allowComments"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-neutral-300 dark:border-neutral-700 data-[state=checked]:bg-neutral-900 dark:data-[state=checked]:bg-neutral-100"
+                        />
+                    )}
+                />
+                <label htmlFor="allowComments" className="text-xs font-medium text-neutral-800 dark:text-slate-200 cursor-pointer select-none">
+                    Allow comments on this post {watch('allowComments') ? "(Currently Enabled)" : "(Currently Disabled)"}
+                </label>
+            </div>
+
             {/* Private Toggle */}
             <div className="flex items-center space-x-2 py-1">
                 <Controller
@@ -243,7 +264,10 @@ export const PostCommunityInnerForm = ({
                     )}
                 />
                 <label htmlFor="isPrivate" className="text-xs font-medium text-neutral-800 dark:text-slate-200 cursor-pointer select-none">
-                    Restrict access (Make this post private)
+                    Restrict access ({
+                        watch('isPrivate') ? "Only visible to author"
+                            : "Visible to all with access based on visibility settings"
+                    })
                 </label>
             </div>
 

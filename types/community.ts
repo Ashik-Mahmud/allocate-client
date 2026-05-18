@@ -35,6 +35,7 @@ export interface PostCommunityFormData {
     isPrivate: boolean;
     postType: CommunityHubPostType;
     status: CommunityHubStatus;
+    allowComments: boolean;
 }
 
 export interface PostVisibility {
@@ -50,6 +51,8 @@ export interface CommentStructure {
     authorId: string,
     email: string,
     createdAt: string
+    authorRole: Role | null;
+    postOwner?: string | null; // Optional field to indicate if the comment author is also the post owner (can be set when processing comments for display)
 }
 
 export interface AcknowledgmentStructure {
@@ -71,6 +74,7 @@ export interface CommunityHub {
 
     // JSON fields typed explicitly
     comments: CommentStructure[] | null;
+    allowComments?: boolean;
     acknowledgments: AcknowledgmentStructure[] | null;
     visibility: PostVisibility;
 
