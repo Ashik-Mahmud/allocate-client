@@ -17,6 +17,7 @@ export interface GlobalAlert {
 export interface FeatureFlags {
   can_export_logs: boolean;
   ui_dark_mode: boolean;
+  language_changer: boolean;
 }
 
 export interface SystemSettingsData {

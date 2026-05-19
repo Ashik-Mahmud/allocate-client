@@ -6,9 +6,13 @@ import { ROUTES } from "@/lib/constants/routes";
  * Determines the redirect route based on notification type and user role.
  * This enables role-based navigation when clicking on notifications.
  */
+type NotificationMetadataTypes ={
+  redirectId?: string; // e.g., postId for community posts
+}
 export function getNotificationRedirectRoute(
   notificationType: NotificationType | string,
-  userRole: AppRole | null | undefined
+  userRole: AppRole | null | undefined,
+  metadata: NotificationMetadataTypes = {}
 ): string {
   const role = userRole as AppRole | null;
 
@@ -88,6 +92,9 @@ export function getNotificationRedirectRoute(
       return ROUTES.dashboardOrgAdmin.billing;
     }
     return ROUTES.dashboardCommon.notifications;
+  }
+  if (notificationType === NotificationType.CREATE_COMMUNITY_POST || notificationType === NotificationType.PUBLISHED_COMMUNITY_POST) {
+    return ROUTES.dashboardCommon.community + (metadata.redirectId ? `/${metadata.redirectId}` : '');
   }
   // Fallback to notifications page
   return ROUTES.dashboardCommon.notifications;

@@ -1,0 +1,108 @@
+{
+  "hero": {
+    "eyebrow": "Pricing",
+    "title": "One Plan For Every Stage Of Growth",
+    "subtitle": "Start free, scale with confidence, and keep scheduling performance predictable as your team expands.",
+    "billingLabel": "Billing cycle"
+  },
+  "billing": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "yearlyBadge": "Save up to 17%"
+  },
+  "plans": [
+    {
+      "id": "FREE",
+      "name": "Starter",
+      "description": "For individuals and very small teams launching operations.",
+      "monthlyPrice": 0,
+      "yearlyPrice": 0,
+      "cta": "Start free",
+      "popular": false,
+      "highlights": [
+        "Up to 5 staff members",
+        "2 resources",
+        "7-day booking window",
+        "Email + in-app notifications"
+      ]
+    },
+    {
+      "id": "PRO",
+      "name": "Professional",
+      "description": "For growing teams that need stronger automation and analytics.",
+      "monthlyPrice": 9.99,
+      "yearlyPrice": 99.9,
+      "cta": "Upgrade to Pro",
+      "popular": true,
+      "highlights": [
+        "Up to 50 staff members",
+        "20 resources",
+        "30-day booking window",
+        "AI insights and advanced rules",
+        "Priority support"
+      ]
+    },
+    {
+      "id": "ENTERPRISE",
+      "name": "Enterprise",
+      "description": "For multi-team organizations with complex workflows and compliance.",
+      "monthlyPrice": 24.99,
+      "yearlyPrice": 249.9,
+      "cta": "Talk to sales",
+      "popular": false,
+      "highlights": [
+        "Unlimited staff and resources",
+        "Advanced analytics suite",
+        "SMS and WhatsApp notifications",
+        "Dedicated onboarding and support"
+      ]
+     
+    }
+  ],
+  "compare": {
+    "title": "What You Get",
+    "items": [
+      {
+        "label": "Real-time booking visibility",
+        "starter": true,
+        "pro": true,
+        "enterprise": true
+      },
+      {
+        "label": "AI-assisted scheduling insights",
+        "starter": false,
+        "pro": true,
+        "enterprise": true
+      },
+      {
+        "label": "Priority support",
+        "starter": false,
+        "pro": true,
+        "enterprise": true
+      },
+      {
+        "label": "Multi-channel notifications",
+        "starter": false,
+        "pro": false,
+        "enterprise": true
+      }
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "question": "Can I switch plans later?",
+        "answer": "Yes. You can upgrade or downgrade your plan from billing settings anytime."
+      },
+      {
+        "question": "Do you offer annual billing?",
+        "answer": "Yes. Annual billing reduces total cost and is ideal for stable operations teams."
+      },
+      {
+        "question": "Is there onboarding support?",
+        "answer": "Professional and Enterprise plans include guided onboarding and best-practice setup."
+      }
+    ]
+  }
+}

@@ -16,7 +16,7 @@ type ResourceCardProps = {
 const ResourceCard = ({ resource, onBook, onShowSlots, view }: ResourceCardProps) => {
     const isListView = view === 'list';
 
-    const rules = resource.resourcesRules ? resource.resourcesRules[0] : null; // Assuming one set of rules per resource for simplicity
+    const rules = resource.resourcesRules ? resource.resourcesRules : null; // Assuming one set of rules per resource for simplicity
 
     return (
         <div className={cn(

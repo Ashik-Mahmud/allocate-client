@@ -39,6 +39,7 @@ export const ROUTES = {
     resources: "/dashboard/resources",
     profile: "/dashboard/profile",
     community: "/dashboard/community",
+    myPosts: "/dashboard/community/my-posts",
     notifications: "/dashboard/notifications",
   },
 } as const;

@@ -42,6 +42,7 @@ export function Providers({ children, session }: ProvidersProps) {
       enableSystem
       disableTransitionOnChange
       storageKey="allocate.theme"
+      enableColorScheme={false}
     >
       <SessionProvider session={session} refetchOnWindowFocus={false}>
         <TooltipProvider>

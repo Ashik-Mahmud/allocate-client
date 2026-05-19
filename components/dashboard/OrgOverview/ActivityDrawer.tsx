@@ -1,4 +1,3 @@
-import BookingStatsPage from '@/app/(dashboard)/dashboard/(org-admin)/booking-stats/page';
 import { BOOKING_STATUS_CONFIG, BookingStatus } from '@/types/booking'
 import { X, Clock, User, Filter } from 'lucide-react'
 import React, { useState } from 'react'

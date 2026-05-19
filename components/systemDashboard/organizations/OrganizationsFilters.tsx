@@ -31,7 +31,7 @@ const is_active: VerifiedFilterValue =
         filters.is_active === undefined ? "all" : filters.is_active ? "true" : "false";
 
     return (
-        <section className="rounded-2xl border border-border bg-card dark:bg-slate-800 dark:border-slate-500 p-4 shadow-sm transition-colors">
+        <section className="rounded-2xl border border-border bg-card dark:bg-slate-900 dark:border-slate-800 p-4 shadow-sm transition-colors">
             <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-sm font-semibold text-foreground dark:text-white">
                     <SlidersHorizontal className="size-4" />

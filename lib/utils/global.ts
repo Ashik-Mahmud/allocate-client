@@ -48,7 +48,9 @@ export const NotificationConfig: Record<NotificationType, { icon: any, color: st
   [NotificationType.CONTACT_SALES]: { icon: UserPlus, color: 'text-indigo-600', bgColor: 'bg-indigo-100' },
   [NotificationType.TRIAL_ACTIVATED]: { icon: ZapIcon, color: 'text-green-600', bgColor: 'bg-green-100' },
   [NotificationType.TRIAL_EXPIRING]: { icon: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-100' },
-  [NotificationType.TRIAL_EXPIRED]: { icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100' }
+  [NotificationType.TRIAL_EXPIRED]: { icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100' },
+  [NotificationType.CREATE_COMMUNITY_POST]: { icon: Zap, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+  [NotificationType.PUBLISHED_COMMUNITY_POST]: { icon: CheckCircle2, color: 'text-emerald-600', bgColor: 'bg-emerald-100' },
 };
 
 

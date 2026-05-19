@@ -84,10 +84,10 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
 
     return (
         <div className="space-y-3">
-            <div className="hidden rounded-2xl border h-[50dvh] overflow-auto border-border bg-card dark:border-slate-800 dark:bg-slate-700 transition-colors md:block">
+            <div className="hidden rounded-2xl border h-[50dvh] overflow-auto border-border bg-card dark:border-slate-900 dark:bg-slate-900 transition-colors md:block">
                 <Table>
                     <TableHeader>
-                        <TableRow>
+                        <TableRow className="  dark:border-slate-800">
                             <TableHead className="dark:text-white">Organization</TableHead>
                             <TableHead className="dark:text-white">Type</TableHead>
                             <TableHead className="dark:text-white">Plan</TableHead>
@@ -109,7 +109,7 @@ const OrganizationsTable = ({ organizations, isLoading, onAction }: Organization
                             const isAllowTrial = !!org.isTrialAllowed;
                             const needUpdate = !!org.needUpdateOrg;
                             return (
-                                <TableRow key={org.id}>
+                                <TableRow key={org.id} className="hover:bg-primary/5 dark:hover:bg-white/5 data-[state=open]:bg-primary/10 dark:data-[state=open]:bg-white/10 dark:border-slate-700">
                                     <TableCell>
                                         <div className="flex min-w-55 items-center gap-2">
                                             <div className="rounded-md bg-primary/10 dark:bg-white/10 p-1.5 text-primary dark:text-white">

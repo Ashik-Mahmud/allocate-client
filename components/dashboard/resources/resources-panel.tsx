@@ -261,7 +261,7 @@ export function ResourcesPanel() {
             isSubmitting={rulesMutation.isPending}
             onSuccess={() => setRulesOpen(false)}
             className="space-y-4"
-            defaultValues={selectedResource?.resourcesRules?.[0]}
+            defaultValues={selectedResource?.resourcesRules}
           />
         ) : null}
       </DialogPopup>

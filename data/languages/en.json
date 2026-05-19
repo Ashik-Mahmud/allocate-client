@@ -1,0 +1,121 @@
+{
+  "language": {
+    "code": "en",
+    "name": "English",
+    "switchToEnglishAria": "Switch language to English",
+    "switchToBanglaAria": "Switch language to Bangla",
+    "switcherEnglish": "EN",
+    "switcherBangla": "বাংলা"
+  },
+  "nav": {
+    "pricing": "Pricing",
+    "about": "About us",
+    "docs": "Docs",
+    "signIn": "Sign in"
+  },
+  "homeMetadata": {
+    "title": "Allocate | Resource Scheduling for Modern Teams",
+    "description": "Allocate helps organizations plan shifts, assign resources, and run predictable operations with real-time visibility.",
+    "jsonLdDescription": "Bilingual resource scheduling and booking platform for modern operations teams."
+  },
+  "landing": {
+    "badge": "Resource Intelligence Platform",
+    "languageLabel": "Language",
+    "heroTitle": "Run Your Team Calendar Like A Product",
+    "heroSubtitle": "Allocate helps operations teams plan shifts, assign resources, and monitor delivery in real-time. One clean command center for modern organizations.",
+    "heroPrimary": "Start free trial",
+    "heroSecondary": "Explore pricing",
+    "stats": [
+      { "label": "Schedule reliability", "value": "99.9%" },
+      { "label": "Manual work reduced", "value": "42%" },
+      { "label": "Avg. onboarding", "value": "2 days" }
+    ],
+    "trustTitle": "Built for teams that cannot afford scheduling chaos",
+    "trustSubtitle": "From clinics to field services, Allocate keeps every booking, shift, and availability signal synchronized.",
+    "brands": ["Nexa Health", "Blue Orbit", "FieldCraft", "Prime Logistics"],
+    "featureTitle": "Everything Your Ops Team Needs",
+    "featureSubtitle": "Purpose-built modules for planning, staffing, notifications, and analytics.",
+    "features": [
+      {
+        "title": "Smart Shift Assignment",
+        "description": "Auto-match staff by role, availability, and workload balance.",
+        "icon": "workflow"
+      },
+      {
+        "title": "Live Booking Visibility",
+        "description": "Track capacity and slot demand in one real-time timeline.",
+        "icon": "sparkles"
+      },
+      {
+        "title": "Policy-safe Scheduling",
+        "description": "Enforce booking windows, limits, and team rules automatically.",
+        "icon": "checkCircle"
+      }
+    ],
+    "workflowTitle": "How Allocate Works",
+    "workflowSubtitle": "Three simple steps to move from spreadsheet confusion to predictable operations.",
+    "workflow": [
+      {
+        "title": "Connect your team",
+        "description": "Invite staff and define roles in less than ten minutes."
+      },
+      {
+        "title": "Set rules once",
+        "description": "Configure booking limits, resource logic, and coverage rules."
+      },
+      {
+        "title": "Operate with confidence",
+        "description": "Use dashboards and alerts to catch issues before they escalate."
+      }
+    ],
+    "testimonialTitle": "Teams that switched to Allocate now move faster",
+    "testimonials": [
+      {
+        "name": "Ayesha Rahman",
+        "role": "Operations Lead, CityCare Clinics",
+        "quote": "Allocate replaced three disconnected tools. Our managers finally trust the schedule."
+      },
+      {
+        "name": "Mahfuz Karim",
+        "role": "Head of Delivery, Rapid Service Co",
+        "quote": "The capacity view alone helped us reduce booking conflicts by almost half."
+      }
+    ],
+    "ctaTitle": "Ready to turn operations into a competitive advantage?",
+    "ctaSubtitle": "Launch in minutes, invite your team, and let automation handle the repetitive work.",
+    "ctaButton": "Create my workspace",
+    "footerCopy": "Allocate. Plan confidently. Deliver consistently."
+  },
+  "about": {
+    "metadataTitle": "About Us | Allocate",
+    "metadataDescription": "Learn why Allocate was built, how we work, and what we believe about modern operations.",
+    "title": "About Allocate",
+    "subtitle": "We are building an operations platform that helps teams make clear decisions instead of managing scheduling chaos.",
+    "storyTitle": "Our Story",
+    "storyBody": "Allocate began with one repeated pain: scheduling, resource, and staffing data lived in disconnected tools. We built a command center where every operational decision can be fast, visible, and reliable.",
+    "valuesTitle": "Our Principles",
+    "values": [
+      "Operations first: beautiful interfaces that solve real execution work",
+      "Visibility by default: real-time signal on bookings, capacity, and team status",
+      "Scale without friction: same confidence from small teams to enterprise orgs"
+    ],
+    "missionTitle": "Our Mission",
+    "missionBody": "Turn scheduling into a strategic capability so every team can execute with confidence from planning to delivery."
+  },
+  "pricing": {
+    "title": "Pricing Designed For Predictable Growth",
+    "hero": {
+      "eyebrow": "Pricing",
+      "title": "One Plan For Every Stage Of Growth",
+      "subtitle": "Start free, scale with confidence, and keep scheduling performance predictable as your team expands."
+    },
+    "billingLabel": "Billing cycle"
+  },
+  "dashboard": {
+    "community":{
+      "title": "Join the Allocate Community",
+      "description": "Connect with other operations professionals, share best practices, and get support from our team.",
+      "cta": "Join now"
+    }
+  }
+}
