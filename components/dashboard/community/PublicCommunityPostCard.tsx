@@ -47,9 +47,9 @@ const PublicCommunityPostCard = ({ post, handleAcknowledge, userId }: Props) => 
                 )}
             >
                 {/* Top accent gradient bar explicitly for system broadcasts */}
-                {post?.authorRole === Role.ADMIN && (
+                {/* {post?.authorRole === Role.ADMIN && (
                     <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-linear-to-r from-rose-500 to-pink-500 opacity-80 dark:opacity-60" />
-                )}
+                )} */}
 
 
                 <div className="flex flex-col sm:flex-row gap-5">
