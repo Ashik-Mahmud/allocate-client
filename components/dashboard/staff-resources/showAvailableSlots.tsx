@@ -61,7 +61,10 @@ const ShowAvailableSlots = ({
 
     const handleConfirm = () => {
         if (selectedSlot) {
-            onSlotConfirm(selectedSlot);
+            onSlotConfirm({
+                start: new Date(selectedSlot.start).toISOString(),
+                end: new Date(selectedSlot.end).toISOString()
+            });
             // This is where you'd trigger your "Open Next Popup" logic
         }
     };
