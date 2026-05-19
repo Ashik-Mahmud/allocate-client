@@ -8,6 +8,7 @@ import { Providers } from "@/components/shared/providers";
 import "./../globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import '../../bones/registry'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +52,7 @@ export default async function RootLayout({
             <div className="relative z-10 flex min-h-full flex-col">{children}</div>
           </Providers>
         </NextIntlClientProvider>
-
+        <SpeedInsights />
       </body>
     </html>
   );
