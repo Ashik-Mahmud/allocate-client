@@ -7,7 +7,6 @@ import RevenueTrendChart from './RevenueTrendChart';
 import TopOrganizations from './TopOrganizations';
 import SystemHealth from './SystemHealth';
 import PlanDistribution from './PlanDistribution';
-import { MOCK_DASHBOARD_INSIGHTS } from './constants';
 import type { DashboardInsights } from './types';
 import { useSystemInsights } from '@/features/dashboard/hooks';
 import TenantAndUsagesMain from './TenantAndUsagesMain';
@@ -22,7 +21,7 @@ const SystemAdminOverView = () => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   // In production, this would come from an API
-  const dashboardData: DashboardInsights = (data?.insights as DashboardInsights) || MOCK_DASHBOARD_INSIGHTS;
+  const dashboardData: DashboardInsights = (data?.insights as DashboardInsights) ;
 
   const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },

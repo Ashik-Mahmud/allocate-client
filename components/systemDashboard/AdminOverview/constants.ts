@@ -3,6 +3,7 @@
  * Mock data and default values for dashboard components
  */
 
+import { PlanType } from '@/types/organization';
 import type { DashboardInsights } from './types';
 
 export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
@@ -61,9 +62,9 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       ],
     },
     planDistribution: [
-      { planType: 'FREE', count: 1, ratio: 0.2 },
-      { planType: 'PRO', count: 3, ratio: 0.6 },
-      { planType: 'ENTERPRISE', count: 1, ratio: 0.2 },
+      { planType:  PlanType.FREE, count: 1, ratio: 0.2 },
+      { planType: PlanType.PRO, count: 3, ratio: 0.6 },
+      { planType: PlanType.ENTERPRISE, count: 1, ratio: 0.2 },
     ],
     newSignups: {
       last7Days: 5,
@@ -75,7 +76,7 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       {
         id: 'cmovulzsv0000s8v5atdhs0eo',
         name: 'Veriff Co Ltd.',
-        planType: 'PRO',
+        planType: PlanType.PRO,
         createdAt: '2026-05-07T18:57:32.287Z',
         staffCount: 6,
         creditConsumption: 6,
@@ -85,7 +86,7 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       {
         id: 'cmovv308y000ps8v5oiexgzbv',
         name: 'Nexus Mind',
-        planType: 'ENTERPRISE',
+        planType: PlanType.ENTERPRISE,
         createdAt: '2026-05-07T19:10:46.018Z',
         staffCount: 1,
         creditConsumption: 4,
@@ -95,7 +96,7 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       {
         id: 'cmp1nllji0002x4v50vo78da7',
         name: 'NovaAI',
-        planType: 'FREE',
+        planType: PlanType.FREE,
         createdAt: '2026-05-11T20:27:53.550Z',
         staffCount: 1,
         creditConsumption: 0,
@@ -105,7 +106,7 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       {
         id: 'cmoxt1eii0000w0v59ktr7abp',
         name: 'Begimin Ltd',
-        planType: 'PRO',
+        planType: PlanType.PRO,
         createdAt: '2026-05-09T03:49:04.315Z',
         staffCount: 0,
         creditConsumption: 0,
@@ -115,7 +116,7 @@ export const MOCK_DASHBOARD_INSIGHTS: DashboardInsights = {
       {
         id: 'cmp1wkpkm000328v504r25y3x',
         name: 'Wshu Industry Ltd',
-        planType: 'PRO',
+        planType: PlanType.PRO,
         createdAt: '2026-05-12T00:39:08.662Z',
         staffCount: 0,
         creditConsumption: 0,
