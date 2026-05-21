@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function SignInPage() {
   return (
-    <div className="space-y-2">
+    <div >
      <SignInForm />
     </div>
   );

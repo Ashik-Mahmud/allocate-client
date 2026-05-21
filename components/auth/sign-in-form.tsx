@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { Button } from '../ui/button';
 import { useSignInMutation } from '@/features/auth';
 import { ROUTES } from '@/lib/constants/routes';
 import { getApiErrorMessage } from '@/lib/services';
-import { Loader2, ShieldCheck, Activity, Layers, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '../ui/button';
+import { AuthShell } from './auth-shell';
 
 type Props = {};
 
@@ -34,164 +35,113 @@ const SignInForm = (props: Props) => {
         getApiErrorMessage(loginMutation.error, "Unable to sign in right now.");
 
     return (
-        <div className="grid md:grid-cols-12 rounded-2xl overflow-hidden shadow-xl shadow-slate-100/40 dark:shadow-none">
-            
-            {/* Left Column: Company Info & Platform Brand Identity */}
-            <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/40 p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200/60 dark:border-slate-800/60">
-                <div className="space-y-6">
-                    {/* Brand Logo & Name */}
-                    <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-                            A
+        <AuthShell
+            badge="Returning team"
+            title="Sign in to keep operations moving."
+            description="Resume bookings, credits, notifications, and staff workflows from the same workspace."
+            highlights={[
+                "Fast access to bookings, dashboards, and alerts.",
+                "Role-based visibility for admin and staff accounts.",
+                "Secure session handling with a clean handoff back to the product.",
+            ]}
+            image={{
+                src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80",
+                alt: "Allocate dashboard preview for returning users",
+            }}
+        >
+            <div className="mx-auto w-full max-w-md space-y-6">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary">Workspace access</p>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-950 dark:text-slate-50">Sign in</h1>
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                        Use your business email and password to continue.
+                    </p>
+                </div>
+
+                <form onSubmit={onSubmit} className="space-y-4" noValidate>
+                    {errorMessage && (
+                        <div className="rounded-2xl border border-rose-200/70 bg-rose-50/80 px-4 py-3 text-sm text-rose-700 shadow-sm dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-300">
+                            {errorMessage}
                         </div>
-                        <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100 uppercase">
-                            Allocate
-                        </span>
+                    )}
+
+                    <div className="space-y-1.5">
+                        <label htmlFor="email" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                            Business email
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            autoComplete="email"
+                            placeholder="name@company.com"
+                            className="w-full rounded-2xl border border-slate-200/90 bg-white/80 px-4 py-3 text-sm text-slate-950 shadow-sm outline-hidden transition focus:border-primary focus:ring-2 focus:ring-primary/10 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-50"
+                            disabled={loginMutation.isPending}
+                            {...register("email", {
+                                required: "Required",
+                                pattern: {
+                                    value: /^[\w.!#$%&'*+/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)+$/,
+                                    message: "Invalid email",
+                                },
+                            })}
+                        />
+                        {errors.email && <p className="pl-0.5 text-xs font-medium text-rose-500">{errors.email.message}</p>}
                     </div>
 
-                    {/* Value Proposition Description */}
-                    <div className="space-y-2.5">
-                        <h2 className="text-base font-semibold text-slate-800 dark:text-slate-200 leading-snug">
-                            Workforce Management & Smart Resource Optimization
-                        </h2>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                            A high-fidelity platform designed to orchestrate team operations, track real-time booking rules, and scale organizational productivity seamlessly.
-                        </p>
-                    </div>
-                </div>
-
-                {/* Micro Feature Highlights */}
-                <div className="space-y-3 pt-6 border-t border-slate-200/60 dark:border-slate-800/40 hidden md:block">
-                    <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                        <Layers className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                        <span>Credit-Based Booking Architecture</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                        <Activity className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <span>Granular Activity Audit Logs</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400 font-medium">
-                        <ShieldCheck className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                        <span>Enterprise Role Visibility Isolation</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Right Column: Interactive Minimalist Sign In UI */}
-            <div className="md:col-span-7 p-8 sm:p-10 flex flex-col justify-center bg-white dark:bg-slate-950">
-                <div className="w-full max-w-[320px] mx-auto space-y-6">
-                    <div className="space-y-1">
-                        <h1 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100">
-                            Workspace Access
-                        </h1>
-                        <p className="text-xs text-slate-400 dark:text-slate-500">
-                            Identify yourself to resume operations.
-                        </p>
-                    </div>
-
-                    <form onSubmit={onSubmit} className="space-y-4">
-                        {/* API Error Box */}
-                        {errorMessage && (
-                            <div className="text-[11px] font-medium text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/10 p-2.5 rounded-lg border border-rose-200/40 dark:border-rose-900/30 animate-fade-in">
-                                {errorMessage}
-                            </div>
-                        )}
-
-                        {/* Email Field */}
-                        <div className="space-y-1.5">
-                            <label htmlFor="email" className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                Business Email
-                            </label>
+                    <div className="space-y-1.5">
+                        <label htmlFor="password" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                            Password
+                        </label>
+                        <div className="relative flex items-center">
                             <input
-                                id="email"
-                                type="email"
-                                autoComplete="email"
-                                placeholder="name@company.com"
-                                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-950 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-700 outline-hidden focus:border-slate-400 dark:focus:border-slate-600 focus:ring-0 focus-visible:ring-0 focus-visible:outline-hidden transition-all disabled:opacity-50"
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
                                 disabled={loginMutation.isPending}
-                                {...register("email", {
+                                className="w-full rounded-2xl border border-slate-200/90 bg-white/80 px-4 py-3 pr-11 text-sm text-slate-950 shadow-sm outline-hidden transition focus:border-primary focus:ring-2 focus:ring-primary/10 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-50"
+                                {...register("password", {
                                     required: "Required",
-                                    pattern: {
-                                        value: /^[\w.!#$%&'*+/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)+$/,
-                                        message: "Invalid email",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Min 6 characters",
                                     },
                                 })}
                             />
-                            {errors.email && (
-                                <p className="text-[11px] font-medium text-rose-500 pl-0.5">{errors.email.message}</p>
-                            )}
-                        </div>
-
-                        {/* Completely Inlined Custom Minimal Password Field */}
-                        <div className="space-y-1.5">
-                            <div className="flex justify-between items-center">
-                                <label htmlFor="password" className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                    Password
-                                </label>
-                            </div>
-                            <div className="relative flex items-center">
-                                <input
-                                    id="password"
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    disabled={loginMutation.isPending}
-                                    className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-950 pl-3 pr-10 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-700 outline-hidden focus:border-slate-400 dark:focus:border-slate-600 focus:ring-0 focus-visible:ring-0 focus-visible:outline-hidden transition-all disabled:opacity-50"
-                                    {...register("password", {
-                                        required: "Required",
-                                        minLength: {
-                                            value: 6,
-                                            message: "Min 6 characters",
-                                        },
-                                    })}
-                                />
-                                <button
-                                    type="button"
-                                    tabIndex={-1}
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 text-slate-400 dark:text-slate-600 hover:text-slate-600 dark:hover:text-slate-400 transition-colors focus:outline-hidden"
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="w-4 h-4 stroke-[1.8]" />
-                                    ) : (
-                                        <Eye className="w-4 h-4 stroke-[1.8]" />
-                                    )}
-                                </button>
-                            </div>
-                            {errors.password && (
-                                <p className="text-[11px] font-medium text-rose-500 pl-0.5">{errors.password.message}</p>
-                            )}
-                        </div>
-
-                        {/* Submit Action */}
-                        <Button 
-                            type="submit" 
-                            className="w-full cursor-pointer h-10 text-xs font-semibold bg-primary text-white hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-200 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 mt-2" 
-                            disabled={loginMutation.isPending}
-                        >
-                            {loginMutation.isPending ? (
-                                <>
-                                    <Loader2 className="w-3.5 h-3.5 animate-spin stroke-[2.5]" />
-                                    <span>Authenticating...</span>
-                                </>
-                            ) : (
-                                "Sign In"
-                            )}
-                        </Button>
-
-                        {/* Footer Route */}
-                        <p className="text-xs text-center text-slate-400 dark:text-slate-500 pt-2">
-                            Need a space?{" "}
-                            <Link 
-                                href="/sign-up" 
-                                className="font-semibold text-slate-800 dark:text-slate-300 hover:underline underline-offset-4"
+                            <button
+                                type="button"
+                                tabIndex={-1}
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 inline-flex size-8 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus:outline-hidden dark:hover:bg-slate-900 dark:hover:text-slate-200"
                             >
-                                Request account
-                            </Link>
-                        </p>
-                    </form>
-                </div>
+                                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                            </button>
+                        </div>
+                        {errors.password && <p className="pl-0.5 text-xs font-medium text-rose-500">{errors.password.message}</p>}
+                    </div>
+
+                    <Button
+                        type="submit"
+                        className="mt-1 h-11 w-full rounded-full bg-slate-950 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-950 dark:hover:bg-slate-200"
+                        disabled={loginMutation.isPending}
+                    >
+                        {loginMutation.isPending ? (
+                            <>
+                                <Loader2 className="size-4 animate-spin" />
+                                <span>Authenticating...</span>
+                            </>
+                        ) : (
+                            "Sign in"
+                        )}
+                    </Button>
+
+                    <p className="pt-1 text-center text-xs text-slate-500 dark:text-slate-400">
+                        Need an account?{" "}
+                        <Link href={ROUTES.signUp} className="font-semibold text-slate-900 underline underline-offset-4 dark:text-slate-100">
+                            Request access
+                        </Link>
+                    </p>
+                </form>
             </div>
-        </div>
+        </AuthShell>
     );
 };
 

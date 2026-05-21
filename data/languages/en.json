@@ -10,6 +10,8 @@
   "nav": {
     "pricing": "Pricing",
     "about": "About us",
+    "features": "Features",
+    "caseStudy": "Case study",
     "docs": "Docs",
     "signIn": "Sign in"
   },
@@ -19,72 +21,216 @@
     "jsonLdDescription": "Bilingual resource scheduling and booking platform for modern operations teams."
   },
   "landing": {
-    "badge": "Resource Intelligence Platform",
-    "languageLabel": "Language",
-    "heroTitle": "Run Your Team Calendar Like A Product",
-    "heroSubtitle": "Allocate helps operations teams plan shifts, assign resources, and monitor delivery in real-time. One clean command center for modern organizations.",
-    "heroPrimary": "Start free trial",
-    "heroSecondary": "Explore pricing",
+    "badge": "Multi-tenant workspace operating system",
+    "hero": {
+      "eyebrow": "Smart resource booking for modern teams",
+      "title": "Run rooms, desks, bookings, credits, and reminders from one control plane.",
+      "subtitle": "Allocate helps organizations orchestrate spaces, staff access, and billing logic without spreadsheet drift.",
+      "primaryCta": "Explore features",
+      "secondaryCta": "View case study",
+      "note": "Availability rules and maintenance controls are enforced before a booking is confirmed."
+    },
     "stats": [
-      { "label": "Schedule reliability", "value": "99.9%" },
-      { "label": "Manual work reduced", "value": "42%" },
-      { "label": "Avg. onboarding", "value": "2 days" }
-    ],
-    "trustTitle": "Built for teams that cannot afford scheduling chaos",
-    "trustSubtitle": "From clinics to field services, Allocate keeps every booking, shift, and availability signal synchronized.",
-    "brands": ["Nexa Health", "Blue Orbit", "FieldCraft", "Prime Logistics"],
-    "featureTitle": "Everything Your Ops Team Needs",
-    "featureSubtitle": "Purpose-built modules for planning, staffing, notifications, and analytics.",
-    "features": [
       {
-        "title": "Smart Shift Assignment",
-        "description": "Auto-match staff by role, availability, and workload balance.",
-        "icon": "workflow"
+        "label": "Organizations onboarded",
+        "value": "240+",
+        "detail": "Multi-tenant teams use the same workspace with isolated data and policies."
       },
       {
-        "title": "Live Booking Visibility",
-        "description": "Track capacity and slot demand in one real-time timeline.",
-        "icon": "sparkles"
+        "label": "Monthly bookings",
+        "value": "18k",
+        "detail": "Rooms, desks, and service resources stay visible in one timeline."
       },
       {
-        "title": "Policy-safe Scheduling",
-        "description": "Enforce booking windows, limits, and team rules automatically.",
-        "icon": "checkCircle"
+        "label": "Credit accuracy",
+        "value": "99.8%",
+        "detail": "Top-ups, balances, and transaction history stay aligned across every org."
       }
     ],
-    "workflowTitle": "How Allocate Works",
-    "workflowSubtitle": "Three simple steps to move from spreadsheet confusion to predictable operations.",
-    "workflow": [
-      {
-        "title": "Connect your team",
-        "description": "Invite staff and define roles in less than ten minutes."
-      },
-      {
-        "title": "Set rules once",
-        "description": "Configure booking limits, resource logic, and coverage rules."
-      },
-      {
-        "title": "Operate with confidence",
-        "description": "Use dashboards and alerts to catch issues before they escalate."
-      }
-    ],
-    "testimonialTitle": "Teams that switched to Allocate now move faster",
-    "testimonials": [
-      {
-        "name": "Ayesha Rahman",
-        "role": "Operations Lead, CityCare Clinics",
-        "quote": "Allocate replaced three disconnected tools. Our managers finally trust the schedule."
-      },
-      {
-        "name": "Mahfuz Karim",
-        "role": "Head of Delivery, Rapid Service Co",
-        "quote": "The capacity view alone helped us reduce booking conflicts by almost half."
-      }
-    ],
-    "ctaTitle": "Ready to turn operations into a competitive advantage?",
-    "ctaSubtitle": "Launch in minutes, invite your team, and let automation handle the repetitive work.",
-    "ctaButton": "Create my workspace",
-    "footerCopy": "Allocate. Plan confidently. Deliver consistently."
+    "trust": {
+      "title": "Built for teams that need control without slowing down",
+      "subtitle": "From operations desks to distributed staff, Allocate keeps booking, notification, and billing signals in sync.",
+      "partners": ["Northwind Health", "FieldCraft", "Orbit Logistics", "Prime Studio"]
+    },
+    "features": {
+      "title": "Everything an operations team expects",
+      "subtitle": "Purpose-built modules for organization control, bookings, credits, notifications, and staff workflows.",
+      "items": [
+        {
+          "title": "Multi-tenant organization control",
+          "description": "Keep each organization isolated with its own rules, branding, resources, and subscriptions.",
+          "icon": "users",
+          "tag": "Org admin"
+        },
+        {
+          "title": "Flexible booking rules",
+          "description": "Protect availability with maintenance modes, limits, and scheduling logic that runs before confirmation.",
+          "icon": "workflow",
+          "tag": "Bookings"
+        },
+        {
+          "title": "Credits and subscriptions",
+          "description": "Track usage, top up balances, and keep subscription status visible for every account.",
+          "icon": "wallet",
+          "tag": "Billing"
+        },
+        {
+          "title": "Real-time notifications",
+          "description": "Deliver reminders, approvals, and service notices instantly to the right staff member.",
+          "icon": "inbox",
+          "tag": "Inbox"
+        }
+      ]
+    },
+    "workflow": {
+      "title": "How the platform works",
+      "subtitle": "Move from manual coordination to a predictable operating loop in a few steps.",
+      "steps": [
+        {
+          "title": "Model the organization",
+          "description": "Create tenants, assign roles, and map the resources each team can use.",
+          "metric": "Multi-tenant"
+        },
+        {
+          "title": "Apply booking policy",
+          "description": "Set availability windows, maintenance rules, and credit requirements once.",
+          "metric": "Rules engine"
+        },
+        {
+          "title": "Operate in real time",
+          "description": "Monitor notifications, balances, and usage as the day changes.",
+          "metric": "Live signals"
+        }
+      ]
+    },
+    "notifications": {
+      "title": "Real-time notifications and inbox",
+      "subtitle": "Keep admins and staff aligned with reminders, approvals, and service alerts.",
+      "inboxTitle": "Notification inbox",
+      "summary": "Every update is routed to the right audience with clear read and unread state.",
+      "highlights": ["Booking reminders", "Approval requests", "Service updates"],
+      "items": [
+        {
+          "title": "Upcoming booking reminder",
+          "description": "Meeting room A starts in 30 minutes and requires a quick confirmation.",
+          "state": "Unread"
+        },
+        {
+          "title": "Maintenance notice",
+          "description": "Training room 2 is in maintenance mode until the evening window ends.",
+          "state": "Important"
+        },
+        {
+          "title": "Staff assignment update",
+          "description": "A new staff member joined the queue and has been assigned the next task.",
+          "state": "Read"
+        }
+      ]
+    },
+    "billing": {
+      "title": "Payments, credits, and subscriptions",
+      "subtitle": "Keep usage and revenue aligned with a clear accounting view.",
+      "cards": [
+        {
+          "title": "Credit pool",
+          "description": "See remaining credits and how they are consumed across resources.",
+          "meta": "Usage"
+        },
+        {
+          "title": "Top-ups",
+          "description": "Add balance without interrupting ongoing bookings or staff work.",
+          "meta": "Payments"
+        },
+        {
+          "title": "Subscriptions",
+          "description": "Track plan status, renewal windows, and billing visibility for org admins.",
+          "meta": "Plans"
+        }
+      ],
+      "bullets": [
+        "Route subscription and credit activity to the same organization record.",
+        "Keep billing events visible for both administrators and finance staff.",
+        "Support predictable usage with maintainable limits and status checks."
+      ]
+    },
+    "dashboard": {
+      "title": "Dashboard preview for org admin and staff",
+      "subtitle": "Two perspectives, one platform: leaders get control, staff get clarity.",
+      "tabs": [
+        {
+          "id": "org-admin",
+          "label": "Org admin",
+          "eyebrow": "Operations command view",
+          "title": "See booking health across every tenant",
+          "subtitle": "Track approvals, credits, and availability before issues impact the day.",
+          "metrics": [
+            { "label": "Active tenants", "value": "14" },
+            { "label": "Pending approvals", "value": "6" },
+            { "label": "Credit pool", "value": "84%" }
+          ],
+          "cards": [
+            { "title": "Tenant policy drift", "description": "2 orgs need an updated maintenance rule." },
+            { "title": "Booking conflicts", "description": "3 overlapping requests are waiting for review." },
+            { "title": "Renewal watchlist", "description": "1 subscription is due inside the next 7 days." }
+          ],
+          "bars": [
+            { "label": "Confirmed bookings", "value": 78, "tone": "primary" },
+            { "label": "Credits consumed", "value": 62, "tone": "secondary" },
+            { "label": "Open notifications", "value": 38, "tone": "muted" }
+          ]
+        },
+        {
+          "id": "staff",
+          "label": "Staff",
+          "eyebrow": "Daily work queue",
+          "title": "Give staff a clear view of what to do next",
+          "subtitle": "Show bookings, reminders, and assigned tasks in a fast, focused workspace.",
+          "metrics": [
+            { "label": "Today’s tasks", "value": "9" },
+            { "label": "Unread alerts", "value": "4" },
+            { "label": "Next booking", "value": "11:30" }
+          ],
+          "cards": [
+            { "title": "Start shift check-in", "description": "Review your first assignment before the next booking window opens." },
+            { "title": "Acknowledge reminder", "description": "Read the room change notice and confirm the new time slot." },
+            { "title": "Complete task", "description": "Finish the assigned service step and mark the queue item as done." }
+          ],
+          "bars": [
+            { "label": "Queue completion", "value": 84, "tone": "primary" },
+            { "label": "Schedule readiness", "value": 71, "tone": "secondary" },
+            { "label": "Unread notices", "value": 24, "tone": "muted" }
+          ]
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "question": "Can Allocate support multiple organizations in one workspace?",
+          "answer": "Yes. The platform is designed for multi-tenant operations, so each organization keeps its own resources, policies, and billing state."
+        },
+        {
+          "question": "How do staff and org admins see different views?",
+          "answer": "Roles control what each user sees. Org admins get oversight dashboards, while staff get focused queues, reminders, and their own bookings."
+        },
+        {
+          "question": "Can I block bookings during maintenance?",
+          "answer": "Yes. Maintenance mode and availability rules can be applied before confirmation to keep resources safe and usable."
+        },
+        {
+          "question": "How are credits and subscriptions tracked?",
+          "answer": "Balances, top-ups, and subscription status stay attached to the organization so finance and operations can review the same data."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Turn scheduling into a controlled operating system",
+      "subtitle": "Launch Allocate, invite your team, and keep every booking, credit, and notification in sync.",
+      "primaryCta": "Start free trial",
+      "secondaryCta": "Explore pricing"
+    },
+    "footerCopy": "Allocate. Visibility for operations, control for admins, clarity for staff."
   },
   "about": {
     "metadataTitle": "About Us | Allocate",
@@ -101,6 +247,156 @@
     ],
     "missionTitle": "Our Mission",
     "missionBody": "Turn scheduling into a strategic capability so every team can execute with confidence from planning to delivery."
+  },
+  "features": {
+    "page": {
+      "eyebrow": "Platform features",
+      "title": "Everything you need to manage resources and bookings",
+      "subtitle": "Allocate gives admins and staff one place to manage scheduling, credits, notifications, and organizational workflows.",
+      "categories": [
+        { "title": "Authentication and access control", "description": "Secure sign-in, role-aware access, and user permissions that match each workspace need.", "tag": "Access", "icon": "auth" },
+        { "title": "Organization management", "description": "Create isolated tenants, track org settings, and keep operational data scoped correctly.", "tag": "Org", "icon": "organization" },
+        { "title": "Resource management", "description": "Maintain rooms, desks, and bookable assets with clear states and ownership.", "tag": "Resources", "icon": "resources" },
+        { "title": "Availability rules", "description": "Apply maintenance mode, booking windows, and policy checks before a slot is confirmed.", "tag": "Rules", "icon": "rules" },
+        { "title": "Booking lifecycle management", "description": "Create, update, approve, reschedule, and cancel bookings with consistent status tracking.", "tag": "Bookings", "icon": "bookings" },
+        { "title": "Payments, credits, and subscriptions", "description": "Keep balances, top-ups, and plan status visible across every organization.", "tag": "Billing", "icon": "billing" },
+        { "title": "Notifications and inbox", "description": "Send reminders, notices, and approval updates in real time to the right people.", "tag": "Inbox", "icon": "notifications" },
+        { "title": "Dashboard and analytics", "description": "Surface operational health for org admins, staff, and platform operators.", "tag": "Insights", "icon": "dashboard" },
+        { "title": "Community and collaboration", "description": "Let users share updates, questions, and operational feedback in one place.", "tag": "Community", "icon": "community" },
+        { "title": "Admin and platform control", "description": "Manage system-level controls, plans, reports, and operational guardrails.", "tag": "Admin", "icon": "admin" }
+      ],
+      "roleTitle": "Role-based access and support",
+      "roleSubtitle": "Each role gets the tools it needs without exposing more than necessary.",
+      "roles": [
+        {
+          "id": "admin",
+          "label": "Admin",
+          "eyebrow": "Platform control",
+          "title": "Own the full operating picture",
+          "description": "Admins manage organization health, system settings, and support workflows across tenants.",
+          "support": ["System settings", "Cross-tenant oversight", "Operational support"]
+        },
+        {
+          "id": "org-admin",
+          "label": "Org admin",
+          "eyebrow": "Team operations",
+          "title": "Control resources for one organization",
+          "description": "Org admins manage bookings, credits, users, and policies inside a single workspace.",
+          "support": ["Bookings", "Credit pool", "Staff access"]
+        },
+        {
+          "id": "staff",
+          "label": "Staff",
+          "eyebrow": "Daily execution",
+          "title": "Stay focused on the next task",
+          "description": "Staff see their queue, notifications, and available resources without unnecessary noise.",
+          "support": ["My bookings", "Notification inbox", "Available slots"]
+        }
+      ],
+      "foundationTitle": "Integrations and technical foundation",
+      "foundationSubtitle": "The product is built around predictable services and visible data flows.",
+      "foundation": [
+        { "title": "Scoped data model", "description": "Every organization, resource, and booking stays isolated by tenant." },
+        { "title": "Realtime notifications", "description": "Operational updates move quickly so teams react before issues grow." },
+        { "title": "Credit-aware billing", "description": "Usage tracking stays aligned with balances, top-ups, and plan changes." },
+        { "title": "Supportable workflows", "description": "Admin tools, staff views, and reports all follow the same operating rules." }
+      ],
+      "supportTitle": "Security and control",
+      "supportSubtitle": "Built-in guardrails keep access and usage predictable.",
+      "supportBody": "Allocate combines access control, availability rules, and org-scoped data to keep operations controlled without adding friction.",
+      "supportRows": [
+        { "label": "Access control", "admin": "Full", "orgAdmin": "Workspace scope", "staff": "Personal scope" },
+        { "label": "Booking control", "admin": "All tenants", "orgAdmin": "Own org", "staff": "Own requests" },
+        { "label": "Credits and billing", "admin": "Platform view", "orgAdmin": "Org view", "staff": "Read only" },
+        { "label": "Notifications", "admin": "Broadcast", "orgAdmin": "Org alerts", "staff": "Inbox" }
+      ],
+      "ctaEyebrow": "Ready to scan the full product surface?",
+      "ctaTitle": "See how each module fits into the Allocate workflow.",
+      "ctaSubtitle": "Review the platform with your team, then decide which workspace and access model fits best.",
+      "ctaPrimary": "Start free trial",
+      "ctaSecondary": "Read case study"
+    }
+  },
+  "caseStudy": {
+    "page": {
+      "eyebrow": "Case study",
+      "title": "A focused product story for modern operations teams",
+      "subtitle": "Allocate replaces disconnected spreadsheets with a single platform for bookings, credits, notifications, and role-based control.",
+      "metrics": [
+        { "label": "Operational scope", "value": "Multi-tenant", "detail": "One system for many organizations without data overlap." },
+        { "label": "Coordination time", "value": "Less manual", "detail": "Teams spend less time chasing availability and approval updates." },
+        { "label": "Visibility", "value": "Real time", "detail": "Admins and staff see the same live operational state from different views." }
+      ],
+      "problem": {
+        "eyebrow": "The challenge",
+        "title": "Teams needed one system to manage bookings, usage, billing, and notifications",
+        "paragraphs": [
+          "Organizations were switching between booking tools, chat threads, and billing spreadsheets just to keep work moving.",
+          "That created duplicated effort, unclear accountability, and too much time spent verifying whether a room, desk, or resource was actually available.",
+          "Allocate was shaped to remove that friction by keeping every operational signal in one workspace."
+        ]
+      },
+      "solution": {
+        "eyebrow": "The solution",
+        "title": "An organization-scoped platform with rules, resources, payments, and inbox support",
+        "subtitle": "The design keeps the system understandable for both leaders and staff.",
+        "points": [
+          "Multi-tenant organization workflows keep each workspace isolated and manageable.",
+          "Resource availability and booking rules reduce manual coordination before a slot is confirmed.",
+          "Credit-based billing makes usage tracking simple for both admins and finance teams.",
+          "Real-time notifications improve responsiveness when bookings, approvals, or maintenance change.",
+          "Admin and staff dashboards show the right level of visibility for each role."
+        ]
+      },
+      "features": {
+        "eyebrow": "What was delivered",
+        "title": "Key capabilities built into the product",
+        "subtitle": "The experience stays focused on the exact workflows the platform supports.",
+        "items": [
+          { "title": "Access control", "tag": "Auth", "description": "Role-aware sign-in and protected workspace access." },
+          { "title": "Resource management", "tag": "Resources", "description": "Rooms, desks, and bookable assets with visible state." },
+          { "title": "Booking rules", "tag": "Rules", "description": "Availability checks, maintenance mode, and clear booking lifecycle states." },
+          { "title": "Billing visibility", "tag": "Credits", "description": "Balances, top-ups, and subscription state in one account view." }
+        ]
+      },
+      "flow": {
+        "eyebrow": "UX flow",
+        "title": "A simple path from setup to daily use",
+        "subtitle": "The product flow is short on ceremony and long on clarity.",
+        "steps": [
+          { "title": "Set the organization", "metric": "1", "description": "Create the workspace, assign roles, and map usable resources." },
+          { "title": "Configure policy", "metric": "2", "description": "Define booking windows, maintenance mode, and approval boundaries." },
+          { "title": "Operate in context", "metric": "3", "description": "Review notifications, bookings, and credit activity in real time." }
+        ]
+      },
+      "outcomes": {
+        "eyebrow": "Outcome",
+        "title": "The result is faster scheduling and clearer oversight",
+        "metrics": [
+          { "label": "Less back-and-forth", "value": "High" },
+          { "label": "Operational visibility", "value": "Clear" },
+          { "label": "Support load", "value": "Lower" }
+        ],
+        "quote": "Allocate keeps the operational story compact: one platform, one policy layer, and one view of what is happening now.",
+        "quoteAttribution": "Product narrative aligned to the platform's scheduling, billing, and notification model."
+      },
+      "notes": {
+        "eyebrow": "Implementation notes",
+        "title": "What mattered most in the product design",
+        "points": [
+          "Keep the booking experience short and predictable.",
+          "Make roles visible so every user sees only the tools they need.",
+          "Treat notifications and billing as part of the workflow, not separate systems."
+        ]
+      },
+      "cta": {
+        "eyebrow": "Next step",
+        "title": "Review the full product, then choose the right workspace model.",
+        "subtitle": "If you want a closer look at the feature set, move from the story into the module overview.",
+        "primary": "Start free trial",
+        "secondary": "View features"
+      }
+    }
   },
   "pricing": {
     "title": "Pricing Designed For Predictable Growth",
