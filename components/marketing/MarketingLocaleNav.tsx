@@ -1,3 +1,4 @@
+
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Link } from "@/lib/navigation";
 import { cn } from "@/lib/utils/cn";
@@ -26,13 +27,13 @@ export function MarketingLocaleNav({ activePath, ctaLabel = "Try app", ctaHref =
     <nav className="flex flex-wrap items-center gap-2 sm:gap-3">
       <ThemeToggle floating={false} />
 
-      {menuItems.map((item) => (
+      {menuItems.map((item: any) => (
         <Link
           key={item.href}
           href={item.href}
           className={cn(
             "rounded-full border px-4 py-2 text-sm font-medium shadow-sm backdrop-blur transition",
-            item.hiddenOnMobile && "hidden sm:inline-block",
+            item?.hiddenOnMobile && "hidden sm:inline-block",
             activePath === item.href
               ? "border-primary bg-primary text-primary-foreground shadow-primary/20"
               : "border-primary/25 bg-white/75 text-slate-800 hover:border-primary dark:border-primary/35 dark:bg-slate-900/70 dark:text-slate-200"
