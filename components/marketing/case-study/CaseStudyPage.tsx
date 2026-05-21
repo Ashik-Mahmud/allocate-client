@@ -25,7 +25,8 @@ const caseStudyFeatureVisuals = {
   },
 } as const;
 
-const youtubeEmbedUrl = "https://www.youtube.com/embed/E1y2lpMlJ1I?si=y3pJL1BG1d1TfGBd";
+const youtubeEmbedUrl = "https://www.youtube.com/embed/kF0jRowGTrs?si=DxqepdnHb9d0Ptgt";
+const youtubePlaylistUrl = "https://www.youtube.com/playlist?list=PLZIy9w9kI_IAiKcTP-JRTRvonSjcXr-4U";
 
 export async function CaseStudyPage() {
   const t = await getTranslations("caseStudy");
@@ -70,6 +71,7 @@ export async function CaseStudyPage() {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="p-5 pt-4">
+                    
                     <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
                       <div className="relative aspect-video">
                         <iframe
@@ -78,12 +80,26 @@ export async function CaseStudyPage() {
                           className="absolute inset-0 h-full w-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowFullScreen
+
                         />
                       </div>
+                      <div className="border-t border-slate-200 px-4 py-3 dark:border-slate-800">
+                        <Link
+                          href={youtubePlaylistUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 transition hover:underline"
+                        >
+                          Watch the full Allocate playlist tutorial
+                          <ArrowRight className="size-4" />
+                        </Link>
+                      </div>
+
                     </div>
                     <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                       Use this video slot for a founder demo, a screen-recorded product tour, or a recruitment presentation.
                     </p>
+                      
                   </div>
                 </DialogContent>
               </Dialog>
@@ -96,7 +112,7 @@ export async function CaseStudyPage() {
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Product walkthrough</p>
                   <CardTitle className="pt-2 text-2xl font-black text-slate-950 dark:text-slate-50">
-                        Allocate command center
+                    Allocate command center
                   </CardTitle>
                 </div>
                 <span className="rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Open video demo</span>
@@ -149,6 +165,17 @@ export async function CaseStudyPage() {
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                               />
+                            </div>
+                            <div className="border-t border-slate-200 px-4 py-3 dark:border-slate-800">
+                              <Link
+                                href={youtubePlaylistUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 transition hover:underline"
+                              >
+                                Watch the full Allocate playlist tutorial
+                                <ArrowRight className="size-4" />
+                              </Link>
                             </div>
                           </div>
                         </div>
