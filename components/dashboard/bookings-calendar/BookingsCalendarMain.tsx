@@ -17,6 +17,7 @@ import { Resource } from '@/types/resources'
 import { toast } from 'sonner'
 import { ROUTES } from '@/lib/constants/routes'
 import { useRouter } from 'next/navigation'
+import Loader from '@/components/shared/loader';
 
 const BookingsCalendarMain = () => {
     const router = useRouter()
@@ -103,6 +104,14 @@ const BookingsCalendarMain = () => {
                 router.push(ROUTES.dashboardCommon.myBookings);
             }, 2000);
         }
+    }
+
+    if (resourcesLoading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <Loader type="component" componentName="Resource Availability Preparing..." />
+            </div>
+        )
     }
 
     return (

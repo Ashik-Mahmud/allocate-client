@@ -1,12 +1,15 @@
-import { auth } from '@/auth'
+import { auth } from '@/auth';
 import OrgDashboardMain from '@/components/dashboard/OrgOverview/OrgDashboardMain';
-import OrgDashboardOverview from '@/components/dashboard/OrgOverview/OrgOverview';
 import StaffDashboardOverview from '@/components/dashboard/StaffOverview/StaffOverview';
 import SystemAdminOverView from '@/components/systemDashboard/AdminOverview/SystemAdminOverView';
 import { Role } from '@/types';
-import React from 'react'
 
 type Props = {}
+
+export const metadata = {
+    title: "Dashboard Overview",
+    description: "Welcome to your dashboard overview, where you can quickly access insights and key features tailored to your role. Stay informed and manage your activities efficiently from this central hub.",
+}
 
 const SystemAdminOverviewPage = async (props: Props) => {
   // show overview based on role

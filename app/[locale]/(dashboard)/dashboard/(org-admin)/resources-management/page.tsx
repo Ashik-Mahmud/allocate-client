@@ -1,10 +1,10 @@
-"use client"
-import { auth } from "@/auth";
-import { ResourcesPanel } from "@/components/dashboard/resources";
 import ResourcesMain from "@/components/dashboard/resources/resources-main";
-import VerifyLoggedInUser from "@/components/shared/verify-user";
-import { useCurrentUserContext } from "@/features/auth";
 
+
+export const metadata = {
+  title: "Resources Management",
+  description: "Access and manage staff resources efficiently with our comprehensive dashboard, designed to streamline your workflow and enhance productivity.",
+}
 export default  function ResourcesManagementPage() {
   return <ResourcesMain />;
 }

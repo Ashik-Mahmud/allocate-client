@@ -1,8 +1,11 @@
 import CommunityMain from '@/components/dashboard/community/community-main';
-import React from 'react'
 
 type Props = {}
 
+export const metadata = {
+  title: "Community Hub",
+  description: "Engage with your community through our interactive hub, designed to foster connections and facilitate communication among members.",
+}
 const CommunityHubPage = (props: Props) => {
   return (
     <div>
