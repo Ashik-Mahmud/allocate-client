@@ -25,7 +25,7 @@ const caseStudyFeatureVisuals = {
   },
 } as const;
 
-const youtubeEmbedUrl = "https://www.youtube.com/embed/E1y2lpMlJ1I?si=y3pJL1BG1d1TfGBd";
+const youtubeEmbedUrl = "https://www.youtube.com/embed/kF0jRowGTrs?si=DxqepdnHb9d0Ptgt";
 
 export async function CaseStudyPage() {
   const t = await getTranslations("caseStudy");
@@ -78,6 +78,7 @@ export async function CaseStudyPage() {
                           className="absolute inset-0 h-full w-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           allowFullScreen
+                          
                         />
                       </div>
                     </div>

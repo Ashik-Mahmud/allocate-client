@@ -263,7 +263,8 @@
         { "title": "Notifications and inbox", "description": "Send reminders, notices, and approval updates in real time to the right people.", "tag": "Inbox", "icon": "notifications" },
         { "title": "Dashboard and analytics", "description": "Surface operational health for org admins, staff, and platform operators.", "tag": "Insights", "icon": "dashboard" },
         { "title": "Community and collaboration", "description": "Let users share updates, questions, and operational feedback in one place.", "tag": "Community", "icon": "community" },
-        { "title": "Admin and platform control", "description": "Manage system-level controls, plans, reports, and operational guardrails.", "tag": "Admin", "icon": "admin" }
+        { "title": "Admin and platform control", "description": "Manage system-level controls, plans, reports, and operational guardrails.", "tag": "Admin", "icon": "admin" },
+        { "title": "Booking Availability Calendar", "description": "Visualize available time slots, maintenance windows, and booking status in a shared calendar view.", "tag": "Calendar", "icon": "calendar" }
       ],
       "roleTitle": "Role-based access and support",
       "roleSubtitle": "Each role gets the tools it needs without exposing more than necessary.",

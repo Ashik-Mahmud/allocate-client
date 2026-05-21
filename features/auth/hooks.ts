@@ -5,13 +5,13 @@ import { signIn as nextAuthSignIn, signOut as nextAuthSignOut, useSession } from
 
 import { changePasswordService, login, register, sendVerificationEmail, UpdateProfileService } from "@/lib/services/auth";
 
+import type { User } from "@/types";
+import { currentUserQueryKey, useCurrentUserContext } from "./current-user-context";
 import {
     buildAuthSession,
     clearAuthSession,
     saveAuthSession,
 } from "./storage";
-import type { User } from "@/types";
-import { currentUserQueryKey, useCurrentUserContext } from "./current-user-context";
 
 export type CurrentUser = User;
 
@@ -92,4 +92,3 @@ export const useChangePassword = () => {
         },
     });
 }
-// Implement the API call to change the password
