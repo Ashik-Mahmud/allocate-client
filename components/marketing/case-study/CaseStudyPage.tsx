@@ -1,6 +1,7 @@
 import { MarketingHeader } from "@/components/marketing/MarketingHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ChartNoAxesCombined, CircleCheckBig, GalleryVerticalEnd, LucideQuote, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowRight, ChartNoAxesCombined, CircleCheckBig, GalleryVerticalEnd, LucideQuote, Play, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,6 +24,8 @@ const caseStudyFeatureVisuals = {
     alt: "Credits and billing product preview",
   },
 } as const;
+
+const youtubeEmbedUrl = "https://www.youtube.com/embed/E1y2lpMlJ1I?si=y3pJL1BG1d1TfGBd";
 
 export async function CaseStudyPage() {
   const t = await getTranslations("caseStudy");
@@ -52,9 +55,38 @@ export async function CaseStudyPage() {
                 View feature overview
                 <ArrowRight className="size-4" />
               </Link>
-              <Link href="/features" className="inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/75 px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm backdrop-blur transition hover:border-primary dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200">
-                Try app
-              </Link>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="inline-flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/75 px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm backdrop-blur transition hover:border-primary dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200">
+                    <Play className="size-4 fill-current" />
+                    Watch walkthrough
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="overflow-hidden border-slate-200 bg-white p-0 dark:border-slate-800 dark:bg-slate-950">
+                  <DialogHeader className="px-5 pt-5">
+                    <DialogTitle className="text-2xl font-black text-slate-950 dark:text-slate-50">Allocate product walkthrough</DialogTitle>
+                    <DialogDescription className="text-slate-700 dark:text-slate-300">
+                      A short walkthrough of how Allocate brings bookings, credits, notifications, and dashboards into one flow.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="p-5 pt-4">
+                    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
+                      <div className="relative aspect-video">
+                        <iframe
+                          src={youtubeEmbedUrl}
+                          title="Allocate product walkthrough"
+                          className="absolute inset-0 h-full w-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                      Use this video slot for a founder demo, a screen-recorded product tour, or a recruitment presentation.
+                    </p>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
@@ -62,26 +94,66 @@ export async function CaseStudyPage() {
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Try the app</p>
-                  <CardTitle className="pt-2 text-2xl font-black text-slate-950 dark:text-slate-50">Dashboard screenshot slot</CardTitle>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Product walkthrough</p>
+                  <CardTitle className="pt-2 text-2xl font-black text-slate-950 dark:text-slate-50">
+                        Allocate command center
+                  </CardTitle>
                 </div>
-                <span className="rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Share your screen</span>
+                <span className="rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Open video demo</span>
               </div>
-              <CardDescription className="text-slate-700 dark:text-slate-300">Replace this image with your dashboard screenshot when you want to share the product story with a recruiter.</CardDescription>
+              <CardDescription className="text-slate-700 dark:text-slate-300">
+                Watch a short walkthrough to see the dashboard, bookings, credits, and notifications in context.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-slate-50 shadow-inner dark:border-slate-800 dark:bg-slate-950">
                 <div className="relative aspect-16/10">
                   <Image
                     src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80"
-                    alt="Sample dashboard preview for Allocate"
+                    alt="Allocate dashboard preview"
                     fill
                     sizes="(min-width: 1024px) 45vw, 100vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-linear-to-tr from-slate-950/75 via-slate-950/20 to-transparent" />
+
                   <div className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
-                    Placeholder dashboard image
+                    <span className="size-2 rounded-full bg-primary" />
+                    Live dashboard
+                  </div>
+                  <div className="absolute inset-0 grid place-items-center">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label="Watch product walkthrough"
+                          className="inline-flex size-16 items-center justify-center rounded-full border border-white/20 bg-white/15 text-white shadow-2xl shadow-black/25 backdrop-blur transition hover:scale-105 hover:bg-white/20"
+                        >
+                          <Play className="size-6 fill-current" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="overflow-hidden border-slate-200 bg-white p-0 dark:border-slate-800 dark:bg-slate-950">
+                        <DialogHeader className="px-5 pt-5">
+                          <DialogTitle className="text-2xl font-black text-slate-950 dark:text-slate-50">Allocate product walkthrough</DialogTitle>
+                          <DialogDescription className="text-slate-700 dark:text-slate-300">
+                            See the booking, credit, and alert flow in a short video demo.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="p-5 pt-4">
+                          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
+                            <div className="relative aspect-video">
+                              <iframe
+                                src={youtubeEmbedUrl}
+                                title="Allocate product walkthrough"
+                                className="absolute inset-0 h-full w-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 grid gap-3 sm:grid-cols-3">
                     {[

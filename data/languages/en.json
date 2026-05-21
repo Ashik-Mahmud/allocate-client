@@ -329,11 +329,13 @@
       ],
       "problem": {
         "eyebrow": "The challenge",
-        "title": "Teams needed one system to manage bookings, usage, billing, and notifications",
+        "title": "Teams needed one system to manage bookings, usage, billing, refund credits based on availability and notifications",
         "paragraphs": [
           "Organizations were switching between booking tools, chat threads, and billing spreadsheets just to keep work moving.",
           "That created duplicated effort, unclear accountability, and too much time spent verifying whether a room, desk, or resource was actually available.",
-          "Allocate was shaped to remove that friction by keeping every operational signal in one workspace."
+          "Allocate was shaped to remove that friction by keeping every operational signal in one workspace.",
+          "Refund credits based on the policy and availability rules that run before a booking is confirmed, so teams can trust the system to enforce their rules without manual review.",
+          "Having issues to get IPN notification from SSLCOMMERZ in the local environment was a major"
         ]
       },
       "solution": {
