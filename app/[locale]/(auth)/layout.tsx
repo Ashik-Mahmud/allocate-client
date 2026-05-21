@@ -14,15 +14,20 @@ export default async function AuthLayout({
     redirect(ROUTES.dashboardCommon.overview);
   }
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <ThemeToggle />
+    <main className="relative min-h-screen overflow-hidden ">
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_12%,color-mix(in_oklab,var(--primary)_12%,transparent),transparent_28%),radial-gradient(circle_at_82%_18%,color-mix(in_oklab,var(--color-brand-secondary)_10%,transparent),transparent_26%),linear-gradient(180deg,rgba(248,250,252,1)_0%,rgba(241,245,249,0.96)_44%,rgba(226,232,240,0.88)_100%)] dark:bg-[radial-gradient(circle_at_18%_12%,color-mix(in_oklab,var(--primary)_20%,transparent),transparent_28%),radial-gradient(circle_at_82%_18%,color-mix(in_oklab,var(--color-brand-secondary)_16%,transparent),transparent_26%),linear-gradient(180deg,rgba(2,6,23,1)_0%,rgba(15,23,42,0.98)_52%,rgba(3,7,18,1)_100%)]" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-linear-to-b from-white/70 to-transparent dark:from-slate-950/50" />
 
-      <section className="w-full max-w-4xl mx-auto rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 shadow-xl shadow-slate-900/10 backdrop-blur-md  dark:shadow-black/35">
-   
-          <MaintenanceAlert view="alert" className="mb-2" />
-      
-        {children}
-      </section>
+      <div className="absolute right-5 top-5 z-20 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
+
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-7xl items-center justify-center">
+        <section className="w-full">
+          <MaintenanceAlert view="alert" className="mb-4" />
+          {children}
+        </section>
+      </div>
     </main>
   );
 }

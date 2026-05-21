@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Link from "next/link";
-import { Check, X } from "lucide-react";
 import pricingContent from "@/data/marketing/pricing-content.json";
 import { SUBSCRIPTION_LIMITS } from "@/lib/constants/subscription";
 import { PlanType } from "@/types/organization";
+import { Check, X } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type BillingCycle = "monthly" | "yearly";
 
@@ -111,13 +111,16 @@ export function PricingSection() {
                 {plan.description}
               </p>
 
+
               <div className="mt-5 flex items-baseline gap-1">
                 <p className="text-4xl font-black text-slate-900 dark:text-slate-100">
-                  ${plan.displayPrice}
+                  {plan.id === PlanType.ENTERPRISE ? "Custom" : `$${plan.displayPrice.toFixed(2)}`}
                 </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  /{billingCycle === "monthly" ? "mo" : "yr"}
-                </p>
+                {
+                  plan?.id !== PlanType.ENTERPRISE &&
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    /{billingCycle === "monthly" ? "mo" : "yr"}
+                  </p>}
               </div>
 
               <Link

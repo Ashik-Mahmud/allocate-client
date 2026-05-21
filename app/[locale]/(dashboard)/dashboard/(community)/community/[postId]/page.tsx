@@ -1,6 +1,5 @@
 // app/community/[postId]/page.tsx
 import CommunityPostDetail from '@/components/dashboard/community/post-details/CommunityPostDetail';
-import React from 'react'
 
 
 type Props = {
@@ -8,6 +7,8 @@ type Props = {
         postId: string
     }>
 }
+
+
 
 // Next.js page components receive a `params` prop automatically
 const PostDetailPage = async ({ params }: Props) => {

@@ -1,10 +1,10 @@
 "use client"
 
-import React from 'react'
-import { Crown } from 'lucide-react'
-import { cn } from '@/lib/utils/cn'
-import { PaymentStatus, PlanType } from '@/types/organization'
-import { RenewalCountdown } from './RenewalCountdown'
+import { cn } from '@/lib/utils/cn';
+import { PaymentStatus, PlanType } from '@/types/organization';
+import { Crown } from 'lucide-react';
+import React from 'react';
+import { RenewalCountdown } from './RenewalCountdown';
 
 interface BillingHeaderProps {
     currentPlan: PlanType
@@ -37,7 +37,7 @@ export const BillingHeader: React.FC<BillingHeaderProps> = ({ currentPlan, billi
                         </div>
                         <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">Simple billing, clear choices</h1>
                         <p className="mt-2 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
-                            A compact view of your current plan and the three upgrade paths, designed to stay readable on both desktop and mobile.
+                            Manage your billing information, view invoices, and update payment methods with our comprehensive billing management dashboard,
                         </p>
                     </div>
 

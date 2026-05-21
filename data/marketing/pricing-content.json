@@ -23,7 +23,8 @@
         "Up to 5 staff members",
         "2 resources",
         "7-day booking window",
-        "Email + in-app notifications"
+        "Email + in-app notifications",
+        "Access to community hub (1 Month Free)"
       ]
     },
     {
@@ -39,22 +40,25 @@
         "20 resources",
         "30-day booking window",
         "AI insights and advanced rules",
-        "Priority support"
+        "Priority support",
+        "Full access to community hub"
       ]
     },
     {
       "id": "ENTERPRISE",
       "name": "Enterprise",
       "description": "For multi-team organizations with complex workflows and compliance.",
-      "monthlyPrice": 24.99,
-      "yearlyPrice": 249.9,
+      "monthlyPrice": 0,
+      "yearlyPrice": 0,
       "cta": "Talk to sales",
       "popular": false,
       "highlights": [
+
         "Unlimited staff and resources",
         "Advanced analytics suite",
         "SMS and WhatsApp notifications",
-        "Dedicated onboarding and support"
+        "Dedicated onboarding and support",
+        "Full access to community hub"
       ]
      
     }

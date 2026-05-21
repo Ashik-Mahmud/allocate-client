@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { MarketingLocaleNav } from "@/components/marketing/MarketingLocaleNav";
+import { MarketingHeader } from "@/components/marketing/MarketingHeader";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 
 export default async function AboutUsPage() {
@@ -15,13 +13,10 @@ export default async function AboutUsPage() {
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_10%,color-mix(in_oklab,var(--primary)_18%,transparent),transparent_32%),radial-gradient(circle_at_80%_15%,color-mix(in_oklab,var(--color-brand-secondary)_18%,transparent),transparent_38%)]" />
 
       <section className="mx-auto w-full max-w-7xl px-6 py-10">
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
+        <MarketingHeader badge="About" activePath="/about-us" ctaLabel="Try app" ctaHref="/sign-up" />
+
+        <div className="mb-10">
           <h1 className="text-3xl font-black text-slate-900 sm:text-4xl dark:text-slate-100">{t("title")}</h1>
-          <MarketingLocaleNav
-
-            pathSuffix="/about-us"
-
-          />
         </div>
 
         <p className="max-w-3xl text-lg leading-relaxed text-slate-700 dark:text-slate-300">{t("subtitle")}</p>

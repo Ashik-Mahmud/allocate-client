@@ -1,17 +1,14 @@
 "use client"
 
-import React from 'react'
-import { SUBSCRIPTION_LIMITS } from '@/lib/constants/subscription'
-import { PlanType } from '@/types/organization'
-import { PLAN_CARDS } from './billing-constants'
-import { PlanCard } from './PlanCard'
 import DialogPopup from '@/components/shared/dialog-popup';
-import ContactSalesForm from './ContactSalesPopup';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/lib/constants/routes';
-import { useDetectCountry } from '@/hooks/use-detect-country';
-import { useCurrentUser } from '@/features/auth';
 import useTrialAvailable from '@/hooks/use-trial';
+import { ROUTES } from '@/lib/constants/routes';
+import { PlanType } from '@/types/organization';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { PLAN_CARDS } from './billing-constants';
+import ContactSalesForm from './ContactSalesPopup';
+import { PlanCard } from './PlanCard';
 import TrialConfirmationPopup from './TrialConfirmationPopup';
 
 interface PricingComparisonProps {
@@ -37,7 +34,7 @@ export const PricingComparison: React.FC<PricingComparisonProps> = ({ currentPla
     const [isOpenTrialConfirmation, setIsOpenTrialConfirmation] = React.useState(false)
     const { isTrialAvailable } = useTrialAvailable();
     return (
-        <SectionShell title="Plan comparison" subtitle="The essentials only, so the cards stay short and easy to compare.">
+        <SectionShell title="Plan comparison" subtitle="Compare our plans and choose the one that best fits your needs. Upgrade or contact sales for custom solutions.">
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {PLAN_CARDS.map((plan) => (
                     <PlanCard

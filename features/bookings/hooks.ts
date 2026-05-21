@@ -23,6 +23,7 @@ export const useCreateBooking = () => {
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.availability("", "") }),
                 queryClient.invalidateQueries({ queryKey: currentUserQueryKey }), // Invalidate all availability queries
             ]);
         }
@@ -39,6 +40,7 @@ export const useRescheduleBooking = () => {
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.availability("", "") }),
                 queryClient.invalidateQueries({ queryKey: currentUserQueryKey }), // Invalidate all availability queries
             ]);
         }
@@ -81,6 +83,7 @@ export const useUpdateBooking = () => {
                 queryClient.invalidateQueries({ queryKey: BookingKeys.lists() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.myBooking() }),
                 queryClient.invalidateQueries({ queryKey: BookingKeys.details() }),
+                queryClient.invalidateQueries({ queryKey: BookingKeys.availability("", "") }),
                 queryClient.invalidateQueries({ queryKey: currentUserQueryKey }),
             ]);
         }
