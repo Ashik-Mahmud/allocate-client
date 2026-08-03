@@ -1,76 +1,116 @@
-# Allocate Client
 
-Next.js App Router client organized for four core domains:
 
-- Marketing landing pages (public)
-- Authentication flows
-- Dashboard/product area (authenticated)
-- Shared utility/data layers
+# Allocate
 
-## Project Structure
+**Allocate** is a resource and workforce management platform that helps organizations handle shared assets, credit budgets, and team bookings in real time.
+
+It brings together administrative management, automated booking policies, realtime updates, and billing into a clean, operational dashboard.
+
+---
+
+## 🔗 Links
+
+* **Live Application:** [useallocate.vercel.app](https://useallocate.vercel.app/)
+* **Backend Repository:** [github.com/Ashik-Mahmud/allocate-server](https://github.com/Ashik-Mahmud/allocate-server)
+
+---
+
+
+
+## What Allocate Does
+
+Allocate solves the operational friction of sharing limited organization resources—from equipment to room slots—by automating how teams book, track, and pay for usage.
 
 ```text
-app/
-	(marketing)/
-		layout.tsx
-		page.tsx                  # /
-		pricing/
-			page.tsx                # /pricing
-	(auth)/
-		layout.tsx
-		sign-in/
-			page.tsx                # /sign-in
-		sign-up/
-			page.tsx                # /sign-up
-	(dashboard)/
-		layout.tsx
-		dashboard/
-			page.tsx                # /dashboard
-	globals.css
-	layout.tsx
+ Administrative Control              Smart Scheduling               Automated Lifecycle
+ ┌──────────────────────┐         ┌────────────────────┐         ┌──────────────────────┐
+ │ • Staff & Roles      │  ─────► │ • Calendar & Rules │  ─────► │ • Auto Check-in/out  │
+ │ • Credit Budgets     │         │ • Realtime Sync    │         │ • Notifications      │
+ └──────────────────────┘         └────────────────────┘         └──────────────────────┘
 
-components/
-	ui/                         # reusable primitives (buttons, inputs, modal)
-	shared/                     # app-wide composed components
-	marketing/                  # marketing-only presentational components
-	auth/                       # auth UI components/forms
-	dashboard/                  # dashboard widgets/layout pieces
-
-features/
-	marketing/                  # feature logic + hooks for marketing
-	auth/                       # auth feature logic (session, forms, actions)
-	dashboard/                  # dashboard feature logic (state, view models)
-
-lib/
-	constants/                  # routes, config constants, enums
-	utils/                      # pure helper functions
-	validators/                 # zod schemas and validation helpers
-	services/                   # API clients and server action wrappers
-
-data/
-	access/                     # repository-style data fetch/write functions
-	mappers/                    # API DTO -> UI model transforms
-	mock/                       # mocked datasets for development/tests
-
-hooks/                        # cross-feature reusable hooks
-types/                        # shared types/interfaces
-config/                       # runtime/app config modules
-styles/                       # non-global style modules/tokens as needed
-public/
 ```
 
-## Architecture Rules
+### 🗓️ Smart Resource Scheduling & Availability
 
-1. Keep route-specific UI in its domain (`components/auth`, `components/dashboard`, etc.).
-2. Keep business logic in `features/*` and keep view components dumb where possible.
-3. Use `data/access` for data reads/writes, and `data/mappers` for transform boundaries.
-4. Keep `lib/utils` pure and framework-agnostic when possible.
-5. Put shared contracts in `types` and avoid circular imports between features.
+* **Calendar-Based Booking:** Interactive calendars show live availability across all company assets to eliminate double-booking.
+* **Rules & Policy Engine:** Admins define booking rules, lock times, peak-demand buffers, and rescheduling limits.
+* **Active Timers & Countdown:** Live countdown timers keep staff aware of upcoming and active reservation windows.
 
-## Run
+### 💳 Credit Budgets & Usage Analytics
+
+* **Credit Allowance System:** Admins assign and track credit budgets per team member or department.
+* **Forecasting & Demand Insights:** Visual analytics track peak usage trends and forecast future credit consumption.
+* **Automated Low-Credit Alerts:** System triggers warnings before credit depletion halts team operations.
+
+### 🤖 AI-Assisted Operations
+
+* **Refined Notes & Reasons:** AI helps staff quickly draft clear booking notes and auto-generates structured cancellation reasons.
+* **Admin Insights:** Summarizes reservation patterns to help managers optimize resource distribution.
+
+### ⚡ Realtime Operations & Omnichannel Alerts
+
+* **Live Synchronization:** WebSockets keep schedules, status changes, and notifications updated instantly across all connected screens.
+* **Multi-Channel Delivery:** Keeps staff and admins in sync through In-App alerts, Email, SMS, WhatsApp, and Push notifications.
+* **Automated Life-Cycle Triggers:** Handles automatic check-ins, check-outs, pending approval reminders, and follow-ups in the background.
+
+### 🧾 Invoicing & Payment Processing
+
+* **Subscription Management:** Built to handle local and global payment gateways (SSLCommerz and Stripe) with proper IPN handling.
+* **PDF Invoice Generation:** Automatically creates downloadable invoices for billing cycles.
+
+---
+
+## Tech Stack
+
+* **Frontend:** React, Next.js (App Router), TypeScript, Tailwind CSS
+* **Backend:** NestJS, TypeScript
+* **Database:** PostgreSQL (Prisma ORM)
+* **Realtime:** Socket.IO
+* **Analytics:** Recharts
+* **Deployment:** Vercel (Client), Render (Backend)
+
+---
+
+## Engineering Highlights
+
+* **Centralized Realtime Provider:** Custom Socket.IO hooks normalize events and prevent memory leaks across screens.
+* **Robust Webhooks (IPN):** Safe payment callback handling for SSLCommerz and Stripe, including local development proxy setup.
+* **Clean Domain Structure:** Business logic is kept in `features/*` while keeping Next.js route components purely presentation-focused.
+
+---
+
+## 📸 Screenshots
+
+#### 📊 Pro Dashboard Overview
+![Pro Organization Dashboard](/public/assets/org/pro_org_dashboard.png "Pro Organization Dashboard")
+> Centralized view for organization stats, real-time activity, and resource usage.
+
+#### 📅 Booking Management
+![Booking Management Interface](/public/assets/org/booking_management.png "Booking Management Interface")
+> Administrative controls for active reservations, booking rules, and status updates.
+
+#### 💳 Billing & Credit Management
+| Billing Management | Credit Management |
+| :---: | :---: |
+| ![Billing Management](/public/assets/org/billing_management.png "Billing Management") | ![Credit Management Dashboard](/public/assets/org/credit_management.png "Credit Management Dashboard") |
+
+#### 🗓️ Staff Availability Calendar
+![Staff Availability Calendar](/public/assets/staff/availability_calendar.png "Staff Availability Calendar")
+> Interactive calendar view for staff members to check asset availability and reserve slots.
+
+## Local Development
 
 ```bash
+# Clone repository
+git clone https://github.com/Ashik-Mahmud/allocate-client.git
+cd allocate-client
+
+# Install dependencies
+pnpm install
+
+# Start local server
 pnpm dev
+
 ```
 
-Open http://localhost:3000.
+App runs locally at `
